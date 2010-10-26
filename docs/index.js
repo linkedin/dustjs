@@ -93,7 +93,7 @@ function runSuite() {
       });
     }
   });
-  coreSetup(suite, dustExamples.slice(1));
+  coreSetup(suite, dustExamples.slice(1), dust);
   suite.run();
 }
 
