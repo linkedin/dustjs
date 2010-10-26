@@ -1,0 +1,11 @@
+{
+  "name"          : "dust",
+  "version"       : "0.0.1",
+  "description"   : "Asynchronous templates for the browser and node.js",
+  "author"        : "Aleksander Williams",
+  "contributors"  : [],
+  "url"           : "http://akdubya.github.com/dustjs/",
+  "keywords"      : ["templates", "views"],
+  "main"          : "./lib/dust",
+  "scripts"       : { "test": "make test" }
+}
