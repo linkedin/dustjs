@@ -28,6 +28,6 @@ var suite = new uutest.Suite({
   }
 });
 
-coreSetup(suite, tests.slice(1));
+coreSetup(suite, tests.slice(1), dust);
 
 suite.run();
