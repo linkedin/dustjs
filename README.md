@@ -8,7 +8,7 @@ Dust
 Why?
 ----
 
-I like [Mustache](http://mustache.github.com) and variants but none of them offer quite what I need.
+I like [Mustache](http://mustache.github.com) and variants but none of them offers quite what I need.
 
 Use Dust if you want these things:
 
