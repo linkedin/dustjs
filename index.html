@@ -714,9 +714,14 @@ End
 
 <h3>Installation</h3>
 
-<p>To run Dust within Node.js, clone the repository and require <code>dust.js</code>:</p>
+<p>To run Dust within Node.js, first install via <a href="http://github.com/isaacs/npm">npm</a>:</p>
 
-<pre><code>var dust = require("path/to/dust/lib/dust");
+<pre><code>npm install dust
+</code></pre>
+
+<p>Then, within your Node script or the REPL:</p>
+
+<pre><code>var dust = require('dust');
 </code></pre>
 
 <p>This will import everything needed to parse, compile and render templates.</p>

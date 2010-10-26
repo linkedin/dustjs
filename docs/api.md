@@ -2,9 +2,13 @@ A pure JavaScript library, Dust is runs in both browser-side and server-side env
 
 ### Installation
 
-To run Dust within Node.js, clone the repository and require `dust.js`:
+To run Dust within Node.js, first install via [npm](http://github.com/isaacs/npm):
 
-    var dust = require("path/to/dust/lib/dust");
+    npm install dust
+
+Then, within your Node script or the REPL:
+
+    var dust = require('dust');
 
 This will import everything needed to parse, compile and render templates.
 
