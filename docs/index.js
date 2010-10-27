@@ -1,10 +1,10 @@
-dustExamples.forEach(function(ex) {
-  dust.loadSource(dust.compile(ex.source, ex.name));
-});
+jsDump.parsers['function'] = function(fn) {
+  return fn.toString();
+}
 
 function renderDemo() {
   var tmpl = dust.cache["demo"],
-  source = $('#input-context').val();
+      source = $('#input-context').val();
 
   $('#output-text').empty();
 
@@ -56,12 +56,33 @@ function setError(sel, err) {
 }
 
 function dump(obj) {
-  jsDump.parsers['function'] = function(fn) {
-    return fn.toString();
-  }
   return js_beautify(jsDump.parse(obj), {
     indent_size: 2
   });
+}
+
+function runSuite() {
+  var suite = new uutest.Suite({
+    start: function() {
+      $('#test-console').empty();
+    },
+    pass: function() {
+      $('#test-console').append(".");
+    },
+    fail: function() {
+      $('#test-console').append("F");
+    },
+    done: function(passed, failed, elapsed) {
+      $('#test-console').append("\n");
+      $('#test-console').append(passed + " passed " + failed + " failed " + "(" + elapsed + "ms)");
+      this.errors.forEach(function(err) {
+        $('#test-console').append("\n");
+        $('#test-console').append(dust.escapeHtml(dumpError(err)));
+      });
+    }
+  });
+  coreSetup(suite, dustExamples.slice(1), dust);
+  suite.run();
 }
 
 function dumpError(err) {
@@ -73,38 +94,23 @@ function dumpError(err) {
   return out + err.stack;
 }
 
-function runSuite() {
-  var suite = new uutest.Suite({
-    start: function() {
-      $("#test-console").empty();
-    },
-    pass: function() {
-      $("#test-console").append(".");
-    },
-    fail: function() {
-      $("#test-console").append("F");
-    },
-    done: function(passed, failed, elapsed) {
-      $("#test-console").append("\n");
-      $("#test-console").append(passed + " passed " + failed + " failed " + "(" + elapsed + "ms)");
-      this.errors.forEach(function(err) {
-        $("#test-console").append("\n");
-        $("#test-console").append(dust.escapeHtml(dumpError(err)));
-      });
-    }
-  });
-  coreSetup(suite, dustExamples.slice(1), dust);
-  suite.run();
-}
+$(document).ready(function() {
 
-$(document).ready(function(){
+  dustExamples.forEach(function(ex) {
+    dust.loadSource(dust.compile(ex.source, ex.name));
+  });
+
   runSuite();
 
-  $('#tagline').empty();
+  $('#tagline').empty().show().css({left: ($(window).width() * .02) + 125});
   dust.loadSource(dust.compile(dustExamples[0].source, "intro"));
-  dust.stream("intro", dustExamples[0].context()).on('data', function(data) {
-    $('#tagline').append(data);
-  });
+  dust.stream("intro", dustExamples[0].context())
+      .on('data', function(data) {
+        $('#tagline').append(data);
+      })
+      .on('end', function() {
+        $('#tagline').delay(500).fadeOut('slow');
+      });
 
   dust.render("select", {
     examples: dustExamples,
@@ -122,26 +128,12 @@ $(document).ready(function(){
     $('#input-source').change();
   });
 
-  $(".cwrap > h3 > span").click(function() {
-    var $console = $(this).closest(".cwrap").children(".console"),
-    $anchor = $(this).children("a");
-
-    if ($console.is(":visible")) {
-      $console.hide();
-      $anchor.html("show");
-    } else {
-      $console.show();
-      $anchor.html("hide");
-    }
-    return false;
-  });
-
   $('#input-source').change(function() {
     setPending('#input-source');
     try {
       var compiled = dust.compile($(this).val(), "demo");
       dust.loadSource(compiled);
-      $('#output-js').val(js_beautify(compiled, {
+      $('#output-js').text(js_beautify(compiled, {
         indent_size: 2
       }));
       setOkay('#input-source');
@@ -153,8 +145,6 @@ $(document).ready(function(){
   });
 
   $('#input-context').change(renderDemo);
-
-  $('#select > select').change();
 
   var sections = $("body > div");
   var cur_id;
@@ -173,15 +163,19 @@ $(document).ready(function(){
           sectionBottom = sectionTop + section.offsetHeight;
 
       if (scrollTop >= sectionTop && scrollTop < sectionBottom) {
-        var foof = $(section).find('.header').clone();
+        var $hdr = $(section).find('.header').clone();
         if (section.id !== cur_id) {
           cur_id = section.id;
           $('.docked').remove();
-          foof.appendTo('body');
-          foof.addClass('docked');
+          $hdr.appendTo('body');
+          $hdr.addClass('docked');
         }
         return false;
       }
     });
   });
+
+  $('#select > select').change();
+  $(window).scroll();
+
 });

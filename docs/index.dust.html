@@ -3,6 +3,7 @@
   <head>
     <title>dust</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="http://fonts.googleapis.com/css?family=Droid+Sans+Mono:regular&subset=latin" rel="stylesheet" type="text/css">
     {#inline names="index" ext="css"/}
     <script src="vendor/ecma.js"></script>
     <script src="vendor/jquery.min.js"></script>
@@ -36,7 +37,7 @@
           <textarea id="input-source" class="console"></textarea>
           <div class="status ok">Ready</div>
           <p>2. The compiled template registers itself by name:</p>
-          <textarea id="output-js" class="console"></textarea>
+          <pre class="console"><code id="output-js"></code></pre>
           <p>When you're done messing around have a look at the guide.</p>
         </div>
         <div class="col2">
@@ -44,7 +45,7 @@
           <textarea id="input-context" class="console"></textarea>
           <div class="status ok">Ready</div>
           <p>4. Render or stream the result:</p>
-          <textarea id="output-text" class="console"></textarea>
+          <pre id="output-text" class="console"></pre>
         </div>
       </div>
     </div>
@@ -68,7 +69,7 @@
         </div>
         <div class="col1">
           <p>If the console below indicates an error then we have a problem.</p>
-          <textarea id="test-console" class="console"></textarea>
+          <pre id="test-console" class="console"></pre>
         </div>
         <div class="col2">
           <p>Interested in seeing how Dust stacks up against similar templating engines? Have a look at the <a href="benchmark/index.html">live benchmarks</a>.</p>

@@ -1,4 +1,4 @@
-<!DOCTYPE HTML><html><head><title>dust</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style type="text/css">body {
+<!DOCTYPE HTML><html><head><title>dust</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link href="http://fonts.googleapis.com/css?family=Droid+Sans+Mono:regular&subset=latin" rel="stylesheet" type="text/css"><style type="text/css">body {
   font-family: 'Georgia', serif;
   font-size: 18px;
   margin: 0;
@@ -17,13 +17,10 @@ p, h4, h3, .content ul {
 }
 
 h1, h2 {
+  line-height: 48px;
   font-size: 32px;
   font-weight: normal;
-  margin: 12px 0 12px 2%;
-}
-
-h1 {
-  float: left;
+  margin: 8px 0 8px 2%;
 }
 
 h3 {
@@ -35,7 +32,7 @@ h4 {
 }
 
 h1, h2, pre, code, .console, .status, #nav, #tagline {
-  font-family: 'Bitstream Vera Sans Mono', 'DejaVu Sans Mono', Monaco, Courier, monospace;
+  font-family: 'Droid Sans Mono', 'Bitstream Vera Sans Mono', 'DejaVu Sans Mono', Monaco, Courier, monospace;
 }
 
 a:link, a:visited {
@@ -57,6 +54,19 @@ pre, .console {
   font-size: 16px;
   height: 270px;
   color: #dddddd;
+  margin-top: 26px;
+  margin-bottom: 26px;
+  border: 1px solid #888;
+  resize: auto;
+  overflow: auto;
+  padding: 2px;
+}
+
+textarea {
+  width: 100%;
+  display: block;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
 }
 
 #nav {
@@ -68,7 +78,7 @@ pre, .console {
 }
 
 #nav a:link, #nav a:visited {
-  color: #EAF2D9;
+  color: #eaf2d9;
 }
 
 #nav a {
@@ -81,13 +91,13 @@ pre, .console {
 }
 
 #tagline {
-  float: left;
-  margin-left: 10px;
-  margin-top: 24px;
+  position: absolute;
+  display: none;
+  top: 24px;
   font-size: 14px;
 }
 
-pre {
+#guide pre {
   font-size: 16px;
   line-height: 26px;
   color: #dddddd;
@@ -178,15 +188,6 @@ pre {
   left: 56%;
 }
 
-textarea {
-  width: 100%;
-  display: block;
-  margin-top: 26px;
-  margin-bottom: 26px;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-}
-
 .docked {
   position: fixed;
   width: 100%;
@@ -199,13 +200,13 @@ code .keyword              { font-weight: bold; color: #dd7522 }
 code .string, code .regexp { color: #669933 }
 code .class, code .special {  }
 code .number               { color: #eddd3d }
-code .comment              { color: grey }</style><script src="vendor/ecma.js"></script><script src="vendor/jquery.min.js"></script><script src="vendor/jsdump.js"></script><script src="vendor/beautify.js"></script><script src="lib/dust.js"></script><script src="lib/parser.js"></script><script src="lib/compiler.js"></script><script src="test/examples.js"></script><script src="test/uutest.js"></script><script src="test/core.js"></script><script type="text/javascript">(function(){dust.register("select",body_0);var blocks=null;function body_2(chk,ctx){return chk.reference(ctx.getPath(true,[]),ctx,"h",[]);}function body_1(chk,ctx){return chk.write("<option ").reference(ctx.get("selected"),ctx,"h",[]).write(" value=\"").helper("idx",ctx,{"block":body_2},null).write("\">").reference(ctx.get("name"),ctx,"h",[]).write("</option>");}function body_0(chk,ctx){ctx=ctx.shiftBlocks(blocks);return chk.write("<select style=\"clear: both;\">").section(ctx.get("examples"),ctx,{"block":body_1},null).write("</select>");}})();</script><script type="text/javascript">dustExamples.forEach(function(ex) {
-  dust.loadSource(dust.compile(ex.source, ex.name));
-});
+code .comment              { color: grey }</style><script src="vendor/ecma.js"></script><script src="vendor/jquery.min.js"></script><script src="vendor/jsdump.js"></script><script src="vendor/beautify.js"></script><script src="lib/dust.js"></script><script src="lib/parser.js"></script><script src="lib/compiler.js"></script><script src="test/examples.js"></script><script src="test/uutest.js"></script><script src="test/core.js"></script><script type="text/javascript">(function(){dust.register("select",body_0);var blocks=null;function body_2(chk,ctx){return chk.reference(ctx.getPath(true,[]),ctx,"h",[]);}function body_1(chk,ctx){return chk.write("<option ").reference(ctx.get("selected"),ctx,"h",[]).write(" value=\"").helper("idx",ctx,{"block":body_2},null).write("\">").reference(ctx.get("name"),ctx,"h",[]).write("</option>");}function body_0(chk,ctx){ctx=ctx.shiftBlocks(blocks);return chk.write("<select style=\"clear: both;\">").section(ctx.get("examples"),ctx,{"block":body_1},null).write("</select>");}})();</script><script type="text/javascript">jsDump.parsers['function'] = function(fn) {
+  return fn.toString();
+}
 
 function renderDemo() {
   var tmpl = dust.cache["demo"],
-  source = $('#input-context').val();
+      source = $('#input-context').val();
 
   $('#output-text').empty();
 
@@ -257,12 +258,33 @@ function setError(sel, err) {
 }
 
 function dump(obj) {
-  jsDump.parsers['function'] = function(fn) {
-    return fn.toString();
-  }
   return js_beautify(jsDump.parse(obj), {
     indent_size: 2
   });
+}
+
+function runSuite() {
+  var suite = new uutest.Suite({
+    start: function() {
+      $('#test-console').empty();
+    },
+    pass: function() {
+      $('#test-console').append(".");
+    },
+    fail: function() {
+      $('#test-console').append("F");
+    },
+    done: function(passed, failed, elapsed) {
+      $('#test-console').append("\n");
+      $('#test-console').append(passed + " passed " + failed + " failed " + "(" + elapsed + "ms)");
+      this.errors.forEach(function(err) {
+        $('#test-console').append("\n");
+        $('#test-console').append(dust.escapeHtml(dumpError(err)));
+      });
+    }
+  });
+  coreSetup(suite, dustExamples.slice(1), dust);
+  suite.run();
 }
 
 function dumpError(err) {
@@ -274,38 +296,23 @@ function dumpError(err) {
   return out + err.stack;
 }
 
-function runSuite() {
-  var suite = new uutest.Suite({
-    start: function() {
-      $("#test-console").empty();
-    },
-    pass: function() {
-      $("#test-console").append(".");
-    },
-    fail: function() {
-      $("#test-console").append("F");
-    },
-    done: function(passed, failed, elapsed) {
-      $("#test-console").append("\n");
-      $("#test-console").append(passed + " passed " + failed + " failed " + "(" + elapsed + "ms)");
-      this.errors.forEach(function(err) {
-        $("#test-console").append("\n");
-        $("#test-console").append(dust.escapeHtml(dumpError(err)));
-      });
-    }
-  });
-  coreSetup(suite, dustExamples.slice(1), dust);
-  suite.run();
-}
+$(document).ready(function() {
 
-$(document).ready(function(){
+  dustExamples.forEach(function(ex) {
+    dust.loadSource(dust.compile(ex.source, ex.name));
+  });
+
   runSuite();
 
-  $('#tagline').empty();
+  $('#tagline').empty().show().css({left: ($(window).width() * .02) + 125});
   dust.loadSource(dust.compile(dustExamples[0].source, "intro"));
-  dust.stream("intro", dustExamples[0].context()).on('data', function(data) {
-    $('#tagline').append(data);
-  });
+  dust.stream("intro", dustExamples[0].context())
+      .on('data', function(data) {
+        $('#tagline').append(data);
+      })
+      .on('end', function() {
+        $('#tagline').delay(500).fadeOut('slow');
+      });
 
   dust.render("select", {
     examples: dustExamples,
@@ -323,26 +330,12 @@ $(document).ready(function(){
     $('#input-source').change();
   });
 
-  $(".cwrap > h3 > span").click(function() {
-    var $console = $(this).closest(".cwrap").children(".console"),
-    $anchor = $(this).children("a");
-
-    if ($console.is(":visible")) {
-      $console.hide();
-      $anchor.html("show");
-    } else {
-      $console.show();
-      $anchor.html("hide");
-    }
-    return false;
-  });
-
   $('#input-source').change(function() {
     setPending('#input-source');
     try {
       var compiled = dust.compile($(this).val(), "demo");
       dust.loadSource(compiled);
-      $('#output-js').val(js_beautify(compiled, {
+      $('#output-js').text(js_beautify(compiled, {
         indent_size: 2
       }));
       setOkay('#input-source');
@@ -354,8 +347,6 @@ $(document).ready(function(){
   });
 
   $('#input-context').change(renderDemo);
-
-  $('#select > select').change();
 
   var sections = $("body > div");
   var cur_id;
@@ -374,18 +365,22 @@ $(document).ready(function(){
           sectionBottom = sectionTop + section.offsetHeight;
 
       if (scrollTop >= sectionTop && scrollTop < sectionBottom) {
-        var foof = $(section).find('.header').clone();
+        var $hdr = $(section).find('.header').clone();
         if (section.id !== cur_id) {
           cur_id = section.id;
           $('.docked').remove();
-          foof.appendTo('body');
-          foof.addClass('docked');
+          $hdr.appendTo('body');
+          $hdr.addClass('docked');
         }
         return false;
       }
     });
   });
-});</script></head><body><div id="dust" class="content"><div class="left"><div class="header"><h1>{dust}</h1><span id="tagline">asynchronous streaming templates for the browser and node.js</span></div><div id="nav"><a href="#dust">home</a><a href="#guide">guide</a><a href="#tests">tests</a><a href="#about">about</a><a href="http://github.com/akdubya/dustjs">code</a></div><div class="col1"><p>1. Select a template <span id="select"></span> or write your own:</p><textarea id="input-source" class="console"></textarea><div class="status ok">Ready</div><p>2. The compiled template registers itself by name:</p><textarea id="output-js" class="console"></textarea><p>When you're done messing around have a look at the guide.</p></div><div class="col2"><p>3. Control template behavior with contexts and helpers:</p><textarea id="input-context" class="console"></textarea><div class="status ok">Ready</div><p>4. Render or stream the result:</p><textarea id="output-text" class="console"></textarea></div></div></div><div id="guide" class="content"><div class="left"><div class="header"><h2>{guide}</h2></div><div id="syntax" class="col1"><p>Dust is a JavaScript templating engine designed to provide a clean separation between presentation and logic without sacrificing ease of use. It is particularly well-suited for asynchronous and streaming applications.</p>
+
+  $('#select > select').change();
+  $(window).scroll();
+
+});</script></head><body><div id="dust" class="content"><div class="left"><div class="header"><h1>{dust}</h1><span id="tagline">asynchronous streaming templates for the browser and node.js</span></div><div id="nav"><a href="#dust">home</a><a href="#guide">guide</a><a href="#tests">tests</a><a href="#about">about</a><a href="http://github.com/akdubya/dustjs">code</a></div><div class="col1"><p>1. Select a template <span id="select"></span> or write your own:</p><textarea id="input-source" class="console"></textarea><div class="status ok">Ready</div><p>2. The compiled template registers itself by name:</p><pre class="console"><code id="output-js"></code></pre><p>When you're done messing around have a look at the guide.</p></div><div class="col2"><p>3. Control template behavior with contexts and helpers:</p><textarea id="input-context" class="console"></textarea><div class="status ok">Ready</div><p>4. Render or stream the result:</p><pre id="output-text" class="console"></pre></div></div></div><div id="guide" class="content"><div class="left"><div class="header"><h2>{guide}</h2></div><div id="syntax" class="col1"><p>Dust is a JavaScript templating engine designed to provide a clean separation between presentation and logic without sacrificing ease of use. It is particularly well-suited for asynchronous and streaming applications.</p>
 
 <h3>Syntax</h3>
 
@@ -1046,7 +1041,7 @@ chunk.helper(name, context, bodies, params)
 <pre><code>dust.escapeJs
 </code></pre>
 
-<p>JavaScript string escape function used by <code>dust.filters.j</code>.</p></div></div></div><div id="tests" class="content"><div class="left"><div class="header"><h2>{tests}</h2></div><div class="col1"><p>If the console below indicates an error then we have a problem.</p><textarea id="test-console" class="console"></textarea></div><div class="col2"><p>Interested in seeing how Dust stacks up against similar templating engines? Have a look at the <a href="benchmark/index.html">live benchmarks</a>.</p></div></div></div><div id="about" class="content"><div class="left"><div class="header"><h2>{about}</h2></div><div class="col1"><p>Why Dust? Why another templating engine when there are so many alternatives? Dust is based on the philosophy that an ideal templating environment should be:</p>
+<p>JavaScript string escape function used by <code>dust.filters.j</code>.</p></div></div></div><div id="tests" class="content"><div class="left"><div class="header"><h2>{tests}</h2></div><div class="col1"><p>If the console below indicates an error then we have a problem.</p><pre id="test-console" class="console"></pre></div><div class="col2"><p>Interested in seeing how Dust stacks up against similar templating engines? Have a look at the <a href="benchmark/index.html">live benchmarks</a>.</p></div></div></div><div id="about" class="content"><div class="left"><div class="header"><h2>{about}</h2></div><div class="col1"><p>Why Dust? Why another templating engine when there are so many alternatives? Dust is based on the philosophy that an ideal templating environment should be:</p>
 
 <ul>
 <li><strong>Markup-like</strong>: <em>A templating syntax should not encompass operations that are better left to a programming language</em>. Templates should make it easy to format content for presentation while keeping application logic where it belongs: in the application.</li>
