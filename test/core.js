@@ -1,6 +1,6 @@
 (function(exports){
 
-exports.coreSetup = function(suite, auto, dust) {
+exports.coreSetup = function(suite, auto) {
   auto.forEach(function(test) {
     var name = test.name;
 

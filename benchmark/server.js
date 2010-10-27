@@ -24,6 +24,8 @@ function pad(amt, val, pre) {
 console.log("ops/ms");
 console.log("------");
 
+global.dust = dust;
+
 for (var key in dustBench.benches) {
   dustBench(suite, key);
 }
