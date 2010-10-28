@@ -705,7 +705,7 @@ End
 <p>The template above would render as follows:</p>
 
 <pre><code>Hello
-</code></pre></div><div id="api" class="col2"><p>A pure JavaScript library, Dust is runs in both browser-side and server-side environments. Dust templates are precompiled and then loaded where they are needed along with the <code>dust.js</code> runtime library. The library doesn't make any assumptions about how templates are loaded; you are free to integrate templating into your environment as you see fit.</p>
+</code></pre></div><div id="api" class="col2"><p>A pure JavaScript library, Dust is runs in both browser-side and server-side environments. Dust templates are compiled and then loaded where they are needed along with the runtime library. The library doesn't make any assumptions about how templates are loaded; you are free to integrate templating into your environment as you see fit.</p>
 
 <h3>Installation</h3>
 
@@ -719,9 +719,18 @@ End
 <pre><code>var dust = require('dust');
 </code></pre>
 
-<p>This will import everything needed to parse, compile and render templates.</p>
+<p>This will import everything needed to parse, compile and render templates. To render Dust templates in the browser, grab the runtime distribution and include it in your script tags along with your compiled templates:</p>
 
-<p>To render Dust templates in the browser, include the <code>dust.js</code> runtime in your script tags, along with your precompiled templates. You may run the parser and compiler within the browser if you like (as in the online demo), but precompilation is a much cleaner approach.</p>
+<pre><code>&lt;script src="dust-core-0.0.1.min.js"&gt;&lt;/script&gt;
+&lt;script src="compiled_templates.js"&gt;&lt;/script&gt;
+</code></pre>
+
+<p>Include the full distribution if you want to compile templates within the browser (as in the online demo):</p>
+
+<pre><code>&lt;script src="dust-full-0.0.1.min.js"&gt;&lt;/script&gt;
+</code></pre>
+
+<p>Precompilation is the recommended approach for general use.</p>
 
 <h3>Compiling Templates</h3>
 
