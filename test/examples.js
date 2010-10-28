@@ -149,7 +149,7 @@ exports.dustExamples = [
                   return chunk.map(function(chunk) {
                     setTimeout(function() {
                       chunk.end("Async");
-                    });
+                    }, 0);
                   });
                 }
               },
