@@ -1,4 +1,4 @@
-A pure JavaScript library, Dust is runs in both browser-side and server-side environments. Dust templates are precompiled and then loaded where they are needed along with the `dust.js` runtime library. The library doesn't make any assumptions about how templates are loaded; you are free to integrate templating into your environment as you see fit.
+A pure JavaScript library, Dust is runs in both browser-side and server-side environments. Dust templates are compiled and then loaded where they are needed along with the runtime library. The library doesn't make any assumptions about how templates are loaded; you are free to integrate templating into your environment as you see fit.
 
 ### Installation
 
@@ -10,9 +10,16 @@ Then, within your Node script or the REPL:
 
     var dust = require('dust');
 
-This will import everything needed to parse, compile and render templates.
+This will import everything needed to parse, compile and render templates. To render Dust templates in the browser, grab the runtime distribution and include it in your script tags along with your compiled templates:
 
-To render Dust templates in the browser, include the `dust.js` runtime in your script tags, along with your precompiled templates. You may run the parser and compiler within the browser if you like (as in the online demo), but precompilation is a much cleaner approach.
+    <script src="dust-core-0.0.1.min.js"></script>
+    <script src="compiled_templates.js"></script>
+
+Include the full distribution if you want to compile templates within the browser (as in the online demo):
+
+    <script src="dust-full-0.0.1.min.js"></script>
+
+Precompilation is the recommended approach for general use.
 
 ### Compiling Templates
 

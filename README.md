@@ -37,7 +37,13 @@ Composable templates?
 Installation
 ------------
 
+In Node:
+
     $ npm install dust
+
+To render compiled templates in the browser:
+
+    <script src="dust-core-0.0.1.min.js"></script>
 
 Demo & Guide
 ------------
