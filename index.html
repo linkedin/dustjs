@@ -800,7 +800,7 @@ friends[0] --&gt; { name: "Jorge", ... }
 <p>When looking up a key, Dust searches the context stack from the bottom up. There is no need to merge helper functions into the template data; instead, create a base context onto which you can push your local template data:</p>
 
 <pre><code>// Set up a base context with global helpers
-var base = dust.Context.base({
+var base = dust.makeBase({
   sayHello: function() { return "Hello!" }
 });
 
@@ -959,10 +959,10 @@ stream.on("error", listener(error))
 
 <h4>Contexts</h4>
 
-<pre><code>dust.Context.base(object)
+<pre><code>dust.makeBase(object)
 </code></pre>
 
-<p>Manufactures a <code>dust.Context</code> instance, with its global object set to <code>object</code>.</p>
+<p>Manufactures a <code>dust.Context</code> instance with its global object set to <code>object</code>.</p>
 
 <pre><code>context.get(key)
 </code></pre>
