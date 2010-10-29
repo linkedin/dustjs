@@ -82,7 +82,7 @@ The context is a special object that handles variable lookups and controls templ
 When looking up a key, Dust searches the context stack from the bottom up. There is no need to merge helper functions into the template data; instead, create a base context onto which you can push your local template data:
 
     // Set up a base context with global helpers
-    var base = dust.Context.base({
+    var base = dust.makeBase({
       sayHello: function() { return "Hello!" }
     });
 
@@ -224,9 +224,9 @@ Registers an event listener. Streams accept a single listener for a given event.
 
 #### Contexts
 
-    dust.Context.base(object)
+    dust.makeBase(object)
 
-Manufactures a `dust.Context` instance, with its global object set to `object`.
+Manufactures a `dust.Context` instance with its global object set to `object`.
 
     context.get(key)
 

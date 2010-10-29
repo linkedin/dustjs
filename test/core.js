@@ -19,6 +19,25 @@ exports.coreSetup = function(suite, auto) {
       });
     });
   });
+
+  suite.test("base context", function() {
+    var unit = this;
+    var base = dust.makeBase({
+      sayHello: function() { return "Hello!" }
+    });
+
+    dust.loadSource(dust.compile("{sayHello} {foo}", "base_context"));
+    dust.render("base_context", base.push({foo: "bar"}), function(err, out) {
+      try {
+        unit.ifError(err);
+        unit.equals(out, "Hello! bar");
+      } catch(err) {
+        unit.fail(err);
+        return;
+      }
+      unit.pass();
+    });
+  });
 }
 
 })(typeof exports !== "undefined" ? exports : window);
