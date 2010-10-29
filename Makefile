@@ -62,5 +62,6 @@ min: dust
 
 clean:
 	git rm dist/*
+	git rm index.html
 
 .PHONY: test docs bench
