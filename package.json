@@ -1,6 +1,6 @@
 {
   "name"          : "dust",
-  "version"       : "0.0.1",
+  "version"       : "0.1.0",
   "description"   : "Asynchronous templates for the browser and node.js",
   "author"        : "Aleksander Williams",
   "contributors"  : [],
