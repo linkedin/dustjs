@@ -69,8 +69,8 @@ path "path"
   / "." { return [true, []] }
 
 key "key"
-  = c:[a-zA-Z_]+
-  { return c.join('') }
+  = h:[a-zA-Z_$] t:[0-9a-zA-Z_$]*
+  { return h + t.join('') }
 
 inline "inline"
   = '"' '"'                 { return ["literal", ""] }
