@@ -17,6 +17,12 @@ docs:
 	node docs/build.js
 
 #
+# Build the parser
+#
+parser:
+	node src/build.js
+
+#
 # Build dust.js
 #
 
@@ -64,4 +70,4 @@ clean:
 	git rm dist/*
 	git rm index.html
 
-.PHONY: test docs bench
+.PHONY: test docs bench parser
