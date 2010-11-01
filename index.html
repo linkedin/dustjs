@@ -200,7 +200,7 @@ code .keyword              { font-weight: bold; color: #dd7522 }
 code .string, code .regexp { color: #669933 }
 code .class, code .special {  }
 code .number               { color: #eddd3d }
-code .comment              { color: grey }</style><script src="vendor/ecma.js"></script><script src="vendor/jquery.min.js"></script><script src="vendor/jsdump.js"></script><script src="vendor/beautify.js"></script><script src="lib/dust.js"></script><script src="lib/parser.js"></script><script src="lib/compiler.js"></script><script src="test/examples.js"></script><script src="test/uutest.js"></script><script src="test/core.js"></script><script type="text/javascript">(function(){dust.register("select",body_0);var blocks=null;function body_2(chk,ctx){return chk.reference(ctx.getPath(true,[]),ctx,"h",[]);}function body_1(chk,ctx){return chk.write("<option ").reference(ctx.get("selected"),ctx,"h",[]).write(" value=\"").helper("idx",ctx,{"block":body_2},null).write("\">").reference(ctx.get("name"),ctx,"h",[]).write("</option>");}function body_0(chk,ctx){ctx=ctx.shiftBlocks(blocks);return chk.write("<select style=\"clear: both;\">").section(ctx.get("examples"),ctx,{"block":body_1},null).write("</select>");}})();</script><script type="text/javascript">jsDump.parsers['function'] = function(fn) {
+code .comment              { color: grey }</style><script src="vendor/ecma.js"></script><script src="vendor/jquery.min.js"></script><script src="vendor/jsdump.js"></script><script src="vendor/beautify.js"></script><script src="lib/dust.js"></script><script src="lib/parser.js"></script><script src="lib/compiler.js"></script><script src="test/examples.js"></script><script src="test/uutest.js"></script><script src="test/core.js"></script><script type="text/javascript">(function(){dust.register("select",body_0);function body_0(chk,ctx){return chk.write("<select style=\"clear: both;\">").section(ctx.get("examples"),ctx,{"block":body_1},null).write("</select>");}function body_1(chk,ctx){return chk.write("<option ").reference(ctx.get("selected"),ctx,"h",[]).write(" value=\"").helper("idx",ctx,{"block":body_2},null).write("\">").reference(ctx.get("name"),ctx,"h",[]).write("</option>");}function body_2(chk,ctx){return chk.reference(ctx.getPath(true,[]),ctx,"h",[]);}})();</script><script type="text/javascript">jsDump.parsers['function'] = function(fn) {
   return fn.toString();
 }
 
@@ -721,13 +721,13 @@ End
 
 <p>This will import everything needed to parse, compile and render templates. To render Dust templates in the browser, grab the runtime distribution and include it in your script tags along with your compiled templates:</p>
 
-<pre><code>&lt;script src="dust-core-0.0.1.min.js"&gt;&lt;/script&gt;
+<pre><code>&lt;script src="dust-core-0.1.0.min.js"&gt;&lt;/script&gt;
 &lt;script src="compiled_templates.js"&gt;&lt;/script&gt;
 </code></pre>
 
 <p>Include the full distribution if you want to compile templates within the browser (as in the online demo):</p>
 
-<pre><code>&lt;script src="dust-full-0.0.1.min.js"&gt;&lt;/script&gt;
+<pre><code>&lt;script src="dust-full-0.1.0.min.js"&gt;&lt;/script&gt;
 </code></pre>
 
 <p>Precompilation is the recommended approach for general use.</p>

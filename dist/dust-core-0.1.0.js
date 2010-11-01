@@ -1,5 +1,5 @@
 //
-// Dust - Asynchronous Templating v0.0.1
+// Dust - Asynchronous Templating v0.1.0
 // http://akdubya.github.com/dustjs
 //
 // Copyright (c) 2010, Aleksander Williams
@@ -97,7 +97,7 @@ function Context(stack, global, blocks) {
   this.blocks = blocks;
 }
 
-Context.base = function(global) {
+dust.makeBase = function(global) {
   return new Context(new Stack(), global);
 }
 

@@ -43,7 +43,7 @@ In Node:
 
 To render compiled templates in the browser:
 
-    <script src="dust-core-0.0.1.min.js"></script>
+    <script src="dust-core-0.1.0.min.js"></script>
 
 Demo & Guide
 ------------
