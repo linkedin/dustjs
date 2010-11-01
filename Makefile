@@ -68,6 +68,11 @@ min: dust
 
 clean:
 	git rm dist/*
-	git rm index.html
+
+release: clean docs min
+	git add dist/*
+	git commit -a -m "release v${VERSION}"
+	git tag -a -m "version v${VERSION}" v${VERSION}
+	npm publish
 
 .PHONY: test docs bench parser
