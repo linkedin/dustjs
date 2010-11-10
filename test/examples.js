@@ -147,9 +147,9 @@ exports.dustExamples = [
     context:  {
                 type: function(chunk) {
                   return chunk.map(function(chunk) {
-                    setTimeout(function() {
+                    dust.nextTick(function() {
                       chunk.end("Async");
-                    }, 0);
+                    });
                   });
                 }
               },
