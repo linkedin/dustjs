@@ -1,5 +1,5 @@
 //
-// Dust - Asynchronous Templating v0.1.0
+// Dust - Asynchronous Templating v0.2.0
 // http://akdubya.github.com/dustjs
 //
 // Copyright (c) 2010, Aleksander Williams
@@ -23,7 +23,7 @@ dust.render = function(name, context, callback) {
 
 dust.stream = function(name, context) {
   var stream = new Stream();
-  setTimeout(function() {
+  dust.nextTick(function() {
     dust.load(name, stream.head, Context.wrap(context)).end();
   });
   return stream;

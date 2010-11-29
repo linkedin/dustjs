@@ -1,5 +1,5 @@
 //
-// Dust - Asynchronous Templating v0.1.0
+// Dust - Asynchronous Templating v0.2.0
 // http://akdubya.github.com/dustjs
 //
 // Copyright (c) 2010, Aleksander Williams
@@ -23,7 +23,7 @@ dust.render = function(name, context, callback) {
 
 dust.stream = function(name, context) {
   var stream = new Stream();
-  setTimeout(function() {
+  dust.nextTick(function() {
     dust.load(name, stream.head, Context.wrap(context)).end();
   });
   return stream;
@@ -516,24 +516,11 @@ dust.filterNode = function(context, node) {
   return dust.optimizers[node[0]](context, node);
 }
 
-function visit(context, node) {
-  var out = [node[0]];
-  for (var i=1, len=node.length; i<len; i++) {
-    var res = dust.filterNode(context, node[i]);
-    if (res) out.push(res);
-  }
-  return out;
-}
-
-function noop(context, node) { return node }
-
-function nullify(){}
-
 dust.optimizers = {
-  body:      visit,
+  body:      compactBuffers,
   buffer:    noop,
-  special:   noop,
-  format:    nullify,
+  special:   convertSpecial,
+  format:    nullify,        // TODO: convert format
   reference: visit,
   "#":       visit,
   "?":       visit,
@@ -552,6 +539,49 @@ dust.optimizers = {
   literal:   noop,
   comment:   nullify
 }
+
+function visit(context, node) {
+  var out = [node[0]];
+  for (var i=1, len=node.length; i<len; i++) {
+    var res = dust.filterNode(context, node[i]);
+    if (res) out.push(res);
+  }
+  return out;
+}
+
+// Compacts consecutive buffer nodes into a single node
+function compactBuffers(context, node) {
+  var out = [node[0]], memo;
+  for (var i=1, len=node.length; i<len; i++) {
+    var res = dust.filterNode(context, node[i]);
+    if (res) {
+      if (res[0] === 'buffer') {
+        if (memo) {
+          memo[1] += res[1];
+        } else {
+          memo = res;
+          out.push(res);
+        }
+      } else {
+        memo = null;
+        out.push(res);
+      }
+    }
+  }
+  return out;
+}
+
+var specialChars = {
+  "s": " ",
+  "n": "\n",
+  "r": "\r",
+  "lb": "{",
+  "rb": "}"
+};
+
+function convertSpecial(context, node) { return ['buffer', specialChars[node[1]]] }
+function noop(context, node) { return node }
+function nullify(){}
 
 function compile(ast, name) {
   var context = {
@@ -616,10 +646,6 @@ dust.nodes = {
 
   buffer: function(context, node) {
     return ".write(" + escape(node[1]) + ")";
-  },
-
-  special: function(context, node) {
-    return ".write(\"" + escapeSpecial(node[1]) + "\")";
   },
 
   format: function(context, node) {
@@ -751,17 +777,6 @@ function compileSection(context, node, cmd) {
 var escape = (typeof JSON === "undefined")
   ? function(str) { return "\"" + dust.escapeJs(str) + "\"" }
   : JSON.stringify;
-
-function escapeSpecial(ch) {
-  var chars = {
-    "s": " ",
-    "n": "\\n",
-    "r": "\\r",
-    "lb": "{",
-    "rb": "}"
-  }
-  return chars[ch];
-}
 
 })(typeof exports !== 'undefined' ? exports : window.dust);
 (function(dust){
