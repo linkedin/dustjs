@@ -12,12 +12,12 @@ Then, within your Node script or the REPL:
 
 This will import everything needed to parse, compile and render templates. To render Dust templates in the browser, grab the runtime distribution and include it in your script tags along with your compiled templates:
 
-    <script src="dust-core-0.1.0.min.js"></script>
+    <script src="dust-core-0.2.0.min.js"></script>
     <script src="compiled_templates.js"></script>
 
 Include the full distribution if you want to compile templates within the browser (as in the online demo):
 
-    <script src="dust-full-0.1.0.min.js"></script>
+    <script src="dust-full-0.2.0.min.js"></script>
 
 Precompilation is the recommended approach for general use.
 
