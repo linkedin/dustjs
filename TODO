@@ -1,4 +1,3 @@
-- Optimize consecutive buffer writes
 - Implement pragmas
 - Optimize static strings
-- Remove unnecessary block checks from compiled templates
+- Improve interface to compile options (formatting, etc.)
