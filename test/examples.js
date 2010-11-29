@@ -174,7 +174,7 @@ exports.dustExamples = [
                   return chunk.map(function(chunk) {
                     setTimeout(function() {
                       chunk.render(bodies.block, context).end();
-                    }, Math.random()*11);
+                    }, Math.ceil(Math.random()*10));
                   });
                 }
               },
