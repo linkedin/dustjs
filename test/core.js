@@ -17,6 +17,23 @@ exports.coreSetup = function(suite, auto) {
   suite.test("valid keys", function() {
     testRender(this, "{_foo}{$bar}{baz1}", {_foo: 1, $bar: 2, baz1: 3}, "123");
   });
+
+  suite.test("onLoad callback", function() {
+    var unit = this;
+    dust.onLoad = function(name, cb) {
+      cb(null, "Loaded: " + name);
+    };
+    dust.render("onLoad", {}, function(err, out) {
+      try {
+        unit.ifError(err);
+        unit.equals(out, "Loaded: onLoad");
+      } catch(err) {
+        unit.fail(err);
+        return;
+      }
+      unit.pass();
+    });
+  });
 }
 
 function testRender(unit, source, context, expected) {
