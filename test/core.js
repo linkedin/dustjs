@@ -34,6 +34,35 @@ exports.coreSetup = function(suite, auto) {
       unit.pass();
     });
   });
+
+  suite.test("renderSource (callback)", function() {
+    var unit = this;
+    dust.renderSource('Hello World', {}, function(err, out) {
+      try {
+        unit.ifError(err);
+        unit.equals(out, "Hello World");
+      } catch(err) {
+        unit.fail(err);
+        return;
+      }
+      unit.pass();
+    });
+  });
+
+  suite.test("renderSource (stream)", function() {
+    var unit = this;
+    dust.renderSource('Hello World', {}).on('data', function(data) {
+      try {
+        unit.equals('Hello World', data);
+      } catch(err) {
+        unit.fail(err);
+        return;
+      }
+      unit.pass();
+    }).on('error', function(err) {
+      unit.fail(err);
+    });
+  });
 }
 
 function testRender(unit, source, context, expected) {
