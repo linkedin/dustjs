@@ -12,12 +12,12 @@ Then, within your Node script or the REPL:
 
 This will import everything needed to parse, compile and render templates. To render Dust templates in the browser, grab the runtime distribution and include it in your script tags along with your compiled templates:
 
-    <script src="dust-core-0.2.0.min.js"></script>
+    <script src="dust-core-0.2.5.min.js"></script>
     <script src="compiled_templates.js"></script>
 
 Include the full distribution if you want to compile templates within the browser (as in the online demo):
 
-    <script src="dust-full-0.2.0.min.js"></script>
+    <script src="dust-full-0.2.5.min.js"></script>
 
 Precompilation is the recommended approach for general use.
 
@@ -186,6 +186,10 @@ You may define handlers that execute asynchronously and in parallel:
 
 Compiles `source` into a JavaScript template string. Registers itself under `name` when evaluated.
 
+    dust.compileFn(source, [name])
+
+Compiles `source` directly into a JavaScript function that takes a context and an optional callback (see `dust.renderSource`). Registers the template under `name` if this argument is supplied.
+
     dust.optimizers
 
 Object containing functions that transform the parse-tree before the template is compiled. To disable whitespace compression:
@@ -221,6 +225,10 @@ Streams the named template. `context` may be a plain object or an instance of `d
     stream.on("error", listener(error))
 
 Registers an event listener. Streams accept a single listener for a given event.
+
+    dust.renderSource(source, context, [callback(error, output)])
+
+Compiles and renders `source`, invoking `callback` on completion. If no callback is supplied this function returns a Stream object. Use this function when precompilation is not required.
 
 #### Contexts
 
@@ -260,7 +268,7 @@ Creates a new chunk and passes it to `callback`. Use `map` to wrap asynchronous 
 
 Writes `data` to this chunk's buffer and marks it as flushable. This method _must_ be called on any chunks created via `chunk.map`. Do _not_ call this method on a handler's main chunk -- `dust.render` and `dust.stream` take care of this for you.
 
-    chunk.tap(function)
+    chunk.tap(callback)
     chunk.untap()
 
 Convenience methods for applying filters to a stream. See the _filter_ demo for an example.
