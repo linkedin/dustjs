@@ -1,5 +1,5 @@
 //
-// Dust - Asynchronous Templating v0.2.0
+// Dust - Asynchronous Templating v0.2.5
 // http://akdubya.github.com/dustjs
 //
 // Copyright (c) 2010, Aleksander Williams
@@ -13,6 +13,7 @@ var dust = {};
 dust.cache = {};
 
 dust.register = function(name, tmpl) {
+  if (!name) return;
   dust.cache[name] = tmpl;
 };
 
@@ -29,17 +30,41 @@ dust.stream = function(name, context) {
   return stream;
 };
 
+dust.renderSource = function(source, context, callback) {
+  return dust.compileFn(source)(context, callback);
+};
+
+dust.compileFn = function(source, name) {
+  var tmpl = dust.loadSource(dust.compile(source, name));
+  return function(context, callback) {
+    var master = callback ? new Stub(callback) : new Stream();
+    dust.nextTick(function() {
+      tmpl(master.head, Context.wrap(context)).end();
+    });
+    return master;
+  }
+};
+
 dust.load = function(name, chunk, context) {
-  tmpl = dust.cache[name];
+  var tmpl = dust.cache[name];
   if (tmpl) {
     return tmpl(chunk, context);
   } else {
+    if (dust.onLoad) {
+      return chunk.map(function(chunk) {
+        dust.onLoad(name, function(err, src) {
+          if (err) return chunk.setError(err);
+          if (!dust.cache[name]) dust.loadSource(dust.compile(src, name));
+          dust.cache[name](chunk, context).end();
+        });
+      });
+    }
     return chunk.setError(new Error("Template Not Found: " + name));
   }
 };
 
 dust.loadSource = function(source, path) {
-  eval(source);
+  return eval(source);
 };
 
 if (Array.isArray) {
