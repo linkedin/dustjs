@@ -198,13 +198,13 @@ Object containing functions that transform the parse-tree before the template is
 
 #### Loading
 
-    dust.register(name, function)
+    dust.register(name, fn)
 
-Used internally to register templates with the runtime environment. Override to customize the way Dust caches templates.
+Used internally to register template function `fn` with the runtime environment. Override to customize the way Dust caches templates.
 
-    dust.load(name, chunk, context)
+    dust.onLoad(name, callback(err, out))
 
-Used internally to loads and render the named template. Override to change the way templates are loaded (e.g., to load templates from the filesystem or a database).
+By default Dust returns a "template not found" error when a named template cannot be located in the cache. Override `onLoad` to specify a fallback loading mechanism (e.g., to load templates from the filesystem or a database).
 
     dust.loadSource(source, [filename])
 
