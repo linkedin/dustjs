@@ -87,6 +87,12 @@ exports.dustExamples = [
     expected: "<script>alert('Hello!')</script>\n&lt;script&gt;alert('Goodbye!')&lt;/script&gt;"
   },
   {
+    name:     "escape_pragma",
+    source:   "{%esc:s}\n  {unsafe}{~n}\n  {%esc:h}\n    {unsafe}\n  {/esc}\n{/esc}",
+    context:  { unsafe: "<script>alert('Goodbye!')</script>" },
+    expected: "<script>alert('Goodbye!')</script>\n&lt;script&gt;alert('Goodbye!')&lt;/script&gt;"
+  },
+  {
     name:     "else_block",
     source:   "{#foo}\n"         +
               "  foo,{~s}\n"     +
