@@ -200,7 +200,7 @@ code .keyword              { font-weight: bold; color: #dd7522 }
 code .string, code .regexp { color: #669933 }
 code .class, code .special {  }
 code .number               { color: #eddd3d }
-code .comment              { color: grey }</style><script src="vendor/ecma.js"></script><script src="vendor/jquery.min.js"></script><script src="vendor/jsdump.js"></script><script src="vendor/beautify.js"></script><script src="lib/dust.js"></script><script src="lib/parser.js"></script><script src="lib/compiler.js"></script><script src="test/examples.js"></script><script src="test/uutest.js"></script><script src="test/core.js"></script><script type="text/javascript">(function(){dust.register("select",body_0);function body_0(chk,ctx){return chk.write("<select style=\"clear: both;\">").section(ctx.get("examples"),ctx,{"block":body_1},null).write("</select>");}function body_1(chk,ctx){return chk.write("<option ").reference(ctx.get("selected"),ctx,"h",[]).write(" value=\"").helper("idx",ctx,{"block":body_2},null).write("\">").reference(ctx.get("name"),ctx,"h",[]).write("</option>");}function body_2(chk,ctx){return chk.reference(ctx.getPath(true,[]),ctx,"h",[]);}return body_0;})();</script><script type="text/javascript">jsDump.parsers['function'] = function(fn) {
+code .comment              { color: grey }</style><script src="vendor/ecma.js"></script><script src="vendor/jquery.min.js"></script><script src="vendor/jsdump.js"></script><script src="vendor/beautify.js"></script><script src="lib/dust.js"></script><script src="lib/parser.js"></script><script src="lib/compiler.js"></script><script src="test/examples.js"></script><script src="test/uutest.js"></script><script src="test/core.js"></script><script type="text/javascript">(function(){dust.register("select",body_0);function body_0(chk,ctx){return chk.write("<select style=\"clear: both;\">").section(ctx.get("examples"),ctx,{"block":body_1},null).write("</select>");}function body_1(chk,ctx){return chk.write("<option ").reference(ctx.get("selected"),ctx,"h").write(" value=\"").helper("idx",ctx,{"block":body_2},null).write("\">").reference(ctx.get("name"),ctx,"h").write("</option>");}function body_2(chk,ctx){return chk.reference(ctx.getPath(true,[]),ctx,"h");}return body_0;})();</script><script type="text/javascript">jsDump.parsers['function'] = function(fn) {
   return fn.toString();
 }
 
@@ -721,13 +721,13 @@ End
 
 <p>This will import everything needed to parse, compile and render templates. To render Dust templates in the browser, grab the runtime distribution and include it in your script tags along with your compiled templates:</p>
 
-<pre><code>&lt;script src="dust-core-0.2.5.min.js"&gt;&lt;/script&gt;
+<pre><code>&lt;script src="dust-core-0.3.0.min.js"&gt;&lt;/script&gt;
 &lt;script src="compiled_templates.js"&gt;&lt;/script&gt;
 </code></pre>
 
 <p>Include the full distribution if you want to compile templates within the browser (as in the online demo):</p>
 
-<pre><code>&lt;script src="dust-full-0.2.5.min.js"&gt;&lt;/script&gt;
+<pre><code>&lt;script src="dust-full-0.3.0.min.js"&gt;&lt;/script&gt;
 </code></pre>
 
 <p>Precompilation is the recommended approach for general use.</p>
@@ -928,15 +928,15 @@ dust.render("index", base.push({foo: "bar"}), function(err, out) {
 
 <h4>Loading</h4>
 
-<pre><code>dust.register(name, function)
+<pre><code>dust.register(name, fn)
 </code></pre>
 
-<p>Used internally to register templates with the runtime environment. Override to customize the way Dust caches templates.</p>
+<p>Used internally to register template function <code>fn</code> with the runtime environment. Override to customize the way Dust caches templates.</p>
 
-<pre><code>dust.load(name, chunk, context)
+<pre><code>dust.onLoad(name, callback(err, out))
 </code></pre>
 
-<p>Used internally to loads and render the named template. Override to change the way templates are loaded (e.g., to load templates from the filesystem or a database).</p>
+<p>By default Dust returns a "template not found" error when a named template cannot be located in the cache. Override <code>onLoad</code> to specify a fallback loading mechanism (e.g., to load templates from the filesystem or a database).</p>
 
 <pre><code>dust.loadSource(source, [filename])
 </code></pre>

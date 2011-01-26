@@ -1,5 +1,5 @@
 //
-// Dust - Asynchronous Templating v0.2.5
+// Dust - Asynchronous Templating v0.3.0
 // http://akdubya.github.com/dustjs
 //
 // Copyright (c) 2010, Aleksander Williams
@@ -86,14 +86,14 @@ dust.isEmpty = function(value) {
 };
 
 dust.filter = function(string, auto, filters) {
-  var len = filters.length;
-
-  for (var i=0; i<len; i++) {
-    var name = filters[i];
-    if (name === "s") {
-      auto = null;
-    } else {
-      string = dust.filters[name](string);
+  if (filters) {
+    for (var i=0, len=filters.length; i<len; i++) {
+      var name = filters[i];
+      if (name === "s") {
+        auto = null;
+      } else {
+        string = dust.filters[name](string);
+      }
     }
   }
   if (auto) {
@@ -103,16 +103,9 @@ dust.filter = function(string, auto, filters) {
 };
 
 dust.filters = {
-  h: function(value) {
-    return dust.escapeHtml(value);
-  },
-
-  j: function(value) {
-    return dust.escapeJs(value);
-  },
-
+  h: function(value) { return dust.escapeHtml(value); },
+  j: function(value) { return dust.escapeJs(value); },
   u: encodeURI,
-
   uc: encodeURIComponent
 }
 
@@ -477,7 +470,7 @@ Tap.prototype.go = function(value) {
   return value;
 };
 
-var HCHARS = /[&<>\"]/,
+var HCHARS = new RegExp(/[&<>\"]/),
     AMP    = /&/g,
     LT     = /</g,
     GT     = />/g,
@@ -522,6 +515,8 @@ dust.escapeJs = function(s) {
 })(dust);
 
 if (typeof exports !== "undefined") {
-  require('./server')(dust);
+  if (typeof process !== "undefined") {
+      require('./server')(dust);
+  }
   module.exports = dust;
 }
