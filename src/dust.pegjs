@@ -22,7 +22,7 @@ section "section"
   { t.push(["bodies"]); return t }
 
 sec_tag_start
-  = ld t:[#?^<+@] n:identifier c:context p:params
+  = ld t:[#?^<+@%] n:identifier c:context p:params
   { return [t, n, c, p] }
 
 end_tag "end tag"
@@ -98,7 +98,7 @@ comment "comment"
   { return ["comment", c.join('')] }
 
 tag
-  = ld [#?^><+%:@/~] (!rd !eol .)+ rd
+  = ld [#?^><+%:@/~%] (!rd !eol .)+ rd
   / reference
 
 ld
