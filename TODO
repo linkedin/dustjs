@@ -1,4 +1,3 @@
-- Implement pragmas
 - Optimize static strings
 - Improve interface to compile options (formatting, etc.)
-- Document dust.renderSource & dust.compileFn
+- Refactor compiler
