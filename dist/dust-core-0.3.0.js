@@ -462,7 +462,6 @@ dust.helpers = {
   if: function(chunk, context, bodies, params) {
     var cond = (params.cond );
     if(params.cond) {
-      // TODO: regex to validate {{ }}
       if( typeof cond === "function") {
         cond = '';
         boundary = '';
@@ -496,59 +495,6 @@ dust.helpers = {
         return chunk;
     }
   },
- 
-  
-    // pre tag markers for server-side tags
-    // currently supported list of pre tags
-    // link, ajax, css, js, fmt, img, media
-   "pre.link":  function(chunk, context, bodies, params) {
-       chunk.write( " Rendering the link ! ");
-      return chunk;
-   },
-   
-   "pre.ajax":  function(chunk, context, bodies, params) {
-       chunk.write( " Rendering the ajax link ! ");
-      return chunk;
-   },
-   
-    "pre.css":  function(chunk, context, bodies, params) {
-       chunk.write( " Rendering the link href  for css and scss ! ");
-      return chunk;
-   },
-   
-    "pre.js":  function(chunk, context, bodies, params) {
-       chunk.write( " Rendering the script src for js and templates! ");
-      return chunk;
-   },
-   
-    "pre.fmt":  function(chunk, context, bodies, params) {
-       chunk.write( " Rendering the formatted data! ");
-      return chunk;
-   },
-   
-   
-    "pre.mpr":  function(chunk, context, bodies, params) {
-       chunk.write( " Rendering the media link url  ! ");
-      return chunk;
-   },
-   
-   
-   "pre.img":  function(chunk, context, bodies, params) {
-    if(params && params.url) {
-      chunk.write(" Rendering the img link ! ");
-    } else {
-      chunk.write("  Bad syntax, expecting a url param for the img tag");
-    }
-    return chunk;
-  },
-  
-   "pre.i18n": function(chunk, context, bodies, params){
-      if(params && params.text) {
-       chunk.write(" Rendering the i18n text ! ");
-      } else {
-       chunk.write("  Bad syntax, expecting text value for the i18n key");
-    }
-   }
  }
  
 
