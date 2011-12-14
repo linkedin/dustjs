@@ -11,6 +11,8 @@ var dust = {};
 (function(dust) {
 
 dust.cache = {};
+dust.pre ={};
+
 
 dust.register = function(name, tmpl) {
   if (!name) return;
@@ -18,6 +20,7 @@ dust.register = function(name, tmpl) {
 };
 
 dust.render = function(name, context, callback) {
+  
   var chunk = new Stub(callback).head;
   dust.load(name, chunk, Context.wrap(context)).end();
 };
@@ -128,7 +131,6 @@ Context.wrap = function(context) {
 
 Context.prototype.get = function(key) {
   var ctx = this.stack, value;
-
   while(ctx) {
     if (ctx.isObject) {
       value = ctx.head[key];
@@ -140,6 +142,7 @@ Context.prototype.get = function(key) {
   }
   return this.global ? this.global[key] : undefined;
 };
+
 
 Context.prototype.getPath = function(cur, down) {
   var ctx = this.stack,
@@ -157,6 +160,9 @@ Context.prototype.getPath = function(cur, down) {
 };
 
 Context.prototype.push = function(head, idx, len) {
+  // LI contribution to dust
+  head['$_idx'] = idx;
+  head['$_size'] = len;
   return new Context(new Stack(head, this.stack, idx, len), this.global, this.blocks);
 };
 
@@ -167,6 +173,7 @@ Context.prototype.rebase = function(head) {
 Context.prototype.current = function() {
   return this.stack.head;
 };
+
 
 Context.prototype.getBlock = function(key) {
   var blocks = this.blocks;
@@ -325,9 +332,11 @@ Chunk.prototype.render = function(body, context) {
 Chunk.prototype.reference = function(elem, context, auto, filters) {
   if (typeof elem === "function") {
     elem = elem(this, context, null, {auto: auto, filters: filters});
+  
     if (elem instanceof Chunk) {
       return elem;
     }
+ 
   }
   if (!dust.isEmpty(elem)) {
     return this.write(dust.filter(elem, auto, filters));
@@ -416,6 +425,9 @@ Chunk.prototype.partial = function(elem, context) {
 };
 
 Chunk.prototype.helper = function(name, context, bodies, params) {
+  console.log("name " + name);
+  for( i in params)
+  console.log("params" + i);
   return dust.helpers[name](this, context, bodies, params);
 };
 
@@ -448,8 +460,104 @@ dust.helpers = {
 
   idx: function(chunk, context, bodies) {
     return bodies.block(chunk, context.push(context.stack.index));
-  }
-}
+  },
+  
+  //@if helper for   condal logic
+  // support   {{ }} syntax for exists check
+  if: function(chunk, context, bodies, params) {
+    var cond = (params.cond );
+    if(params.cond) {
+      // TODO: regex to validate {{ }}
+      if( typeof cond === "function") {
+        cond = '';
+        boundary = '';
+        chunk.tap(function(data) {
+          if(boundary != '' && boundary[boundary.length - 1] === "{") {
+            data = (data == '' || data == '}' ) ? false : true;
+            boundary = '';
+          } else {
+            boundary = data;
+          }
+          cond += data;
+          // replace the { } tokens from the  cond value
+          cond = cond.replace("{", "");
+          cond = cond.replace("}", "");
+          return '';
+        }).render(params.cond, context).untap();
+        if(cond === '') {
+          cond = false;
+        }
+      }
+
+      if(eval(cond)) {
+        return chunk.render(bodies.block, context);
+      } else if(bodies['else']) {
+        return chunk.render(bodies['else'], context);
+      }
+    } else {
+      if(window.console) {
+        window.console.log("No expression given");
+      }
+        return chunk;
+    }
+  },
+ 
+  
+    // pre tag markers for server-side tags
+    // currently supported list of pre tags
+    // link, ajax, css, js, fmt, img, media
+   "pre.link":  function(chunk, context, bodies, params) {
+      chunk.write( " Rendering the link ! ");
+      return chunk;
+   },
+   
+   "pre.ajax":  function(chunk, context, bodies, params) {
+       chunk.write( " Rendering the ajax link ! ");
+      return chunk;
+   },
+   
+    "pre.css":  function(chunk, context, bodies, params) {
+       chunk.write( " Rendering the link href  for css and scss ! ");
+      return chunk;
+   },
+   
+    "pre.js":  function(chunk, context, bodies, params) {
+       chunk.write( " Rendering the script src for js and templates! ");
+      return chunk;
+   },
+   
+    "pre.fmt":  function(chunk, context, bodies, params) {
+       chunk.write( " Rendering the formatted data! ");
+      return chunk;
+   },
+   
+   
+    "pre.mpr":  function(chunk, context, bodies, params) {
+       chunk.write( " Rendering the media link url  ! ");
+      return chunk;
+   },
+   
+   
+   "pre.img":  function(chunk, context, bodies, params) {
+    if(params && params.src) {
+      chunk.write(" Rendering the img link ! ");
+    } else {
+      chunk.write("  Bad syntax, expecting a src param for the img tag");
+    }
+    return chunk;
+  },
+  
+   "pre.i18n": function(chunk, context, bodies, params){
+      if(params && params.text) {
+       chunk.write(" Rendering the i18n text ! ");
+      } else {
+       chunk.write("  Bad syntax, expecting text value for the i18n key");
+    }
+   }
+ }
+ 
+
+
 
 function Tap(head, tail) {
   this.head = head;
