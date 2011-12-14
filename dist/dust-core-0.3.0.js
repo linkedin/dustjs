@@ -11,8 +11,6 @@ var dust = {};
 (function(dust) {
 
 dust.cache = {};
-dust.pre ={};
-
 
 dust.register = function(name, tmpl) {
   if (!name) return;
@@ -160,7 +158,7 @@ Context.prototype.getPath = function(cur, down) {
 };
 
 Context.prototype.push = function(head, idx, len) {
-  // LI contribution to dust
+  // LI additions to dust
   head['$_idx'] = idx;
   head['$_size'] = len;
   return new Context(new Stack(head, this.stack, idx, len), this.global, this.blocks);
@@ -425,9 +423,6 @@ Chunk.prototype.partial = function(elem, context) {
 };
 
 Chunk.prototype.helper = function(name, context, bodies, params) {
-  console.log("name " + name);
-  for( i in params)
-  console.log("params" + i);
   return dust.helpers[name](this, context, bodies, params);
 };
 
@@ -507,7 +502,7 @@ dust.helpers = {
     // currently supported list of pre tags
     // link, ajax, css, js, fmt, img, media
    "pre.link":  function(chunk, context, bodies, params) {
-      chunk.write( " Rendering the link ! ");
+       chunk.write( " Rendering the link ! ");
       return chunk;
    },
    
@@ -539,10 +534,10 @@ dust.helpers = {
    
    
    "pre.img":  function(chunk, context, bodies, params) {
-    if(params && params.src) {
+    if(params && params.url) {
       chunk.write(" Rendering the img link ! ");
     } else {
-      chunk.write("  Bad syntax, expecting a src param for the img tag");
+      chunk.write("  Bad syntax, expecting a url param for the img tag");
     }
     return chunk;
   },
