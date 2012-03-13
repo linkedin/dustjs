@@ -16,14 +16,15 @@ var dustExamples = [
                     });
                   }
                 }
-              })
+              }),
+    message: "should test the stream tag"
   },
   {
     name:     "plain",
     source:   "Hello World!",
     context:  {},
     expected: "Hello World!",
-    message: "should test basic "
+    message: "should test basic"
   },
   {
     name:     "replace",
@@ -86,19 +87,21 @@ var dustExamples = [
     source:   "{foo.bar}",
     context:  { foo: {bar: "Hello!"} },
     expected: "Hello!",
-    message: "should test an obeject path"
+    message: "should test an object path"
   },
   {
     name:     "escaped",
     source:   "{safe|s}{~n}{unsafe}",
     context:  { safe: "<script>alert('Hello!')</script>", unsafe: "<script>alert('Goodbye!')</script>" },
-    expected: "<script>alert('Hello!')</script>\n&lt;script&gt;alert('Goodbye!')&lt;/script&gt;"
+    expected: "<script>alert('Hello!')</script>\n&lt;script&gt;alert('Goodbye!')&lt;/script&gt;",
+    message: "should test escaped characters"
   },
   {
     name:     "escape_pragma",
     source:   "{%esc:s}\n  {unsafe}{~n}\n  {%esc:h}\n    {unsafe}\n  {/esc}\n{/esc}",
     context:  { unsafe: "<script>alert('Goodbye!')</script>" },
-    expected: "<script>alert('Goodbye!')</script>\n&lt;script&gt;alert('Goodbye!')&lt;/script&gt;"
+    expected: "<script>alert('Goodbye!')</script>\n&lt;script&gt;alert('Goodbye!')&lt;/script&gt;",
+    message: "should test escape_pragma"
   },
   {
     name:     "else_block",
@@ -113,7 +116,8 @@ var dustExamples = [
               "  not bar!\n"     +
               "{/bar}",
     context:  { foo: true, bar: false },
-    expected: "foo, not bar!"
+    expected: "foo, not bar!",
+    message:"should test the else block"
   },
   {
     name:     "conditional",
@@ -143,7 +147,8 @@ var dustExamples = [
               "  <li>larry</li>\n"            +
               "  <li>curly</li>\n"            +
               "  <li>shemp</li>\n"            +
-              "</ul>"
+              "</ul>",
+    message: "should test conditional tags"
   },
   {
     name:     "sync_key",
@@ -153,7 +158,8 @@ var dustExamples = [
                   return "Sync";
                 }
               },
-    expected: "Hello Sync World!"
+    expected: "Hello Sync World!",
+    message: "should test sync key"
   },
   {
     name:     "async_key",
@@ -167,7 +173,8 @@ var dustExamples = [
                   });
                 }
               },
-    expected: "Hello Async World!"
+    expected: "Hello Async World!",
+    message: "should test async key"
   },
   {
     name:     "sync_chunk",
@@ -177,7 +184,8 @@ var dustExamples = [
                   return chunk.write("Chunky");
                 }
               },
-    expected: "Hello Chunky World!"
+    expected: "Hello Chunky World!",
+    message: "should test sync chunk"
   },
   {
     name:     "async_iterator",
@@ -192,7 +200,8 @@ var dustExamples = [
                   });
                 }
               },
-    expected: "3, 2, 1"
+    expected: "3, 2, 1",
+    message: "should test async iterator"
   },
   {
     name:     "filter",
@@ -206,7 +215,8 @@ var dustExamples = [
 
                 bar: "bar"
               },
-    expected: "FOO BAR"
+    expected: "FOO BAR",
+    message: "should test the filter tag"
   },
   {
     name:     "context",
@@ -240,7 +250,8 @@ var dustExamples = [
               "<li>Mayhem</li>\n"  +
               "<li>Flash</li>\n"   +
               "<li>Thunder</li>\n" +
-              "</ul>"
+              "</ul>",
+    message: "should test the context"
   },
   {
     name:     "params",
@@ -250,19 +261,22 @@ var dustExamples = [
                   return chunk.write(params.foo);
                 }
               },
-    expected: "bar"
+    expected: "bar",
+    message: "should test inner params"
   },
   {
     name:     "partials",
     source:   '{>replace/} {>"plain"/} {>"{ref}"/}',
     context:  { name: "Jim", count: 42, ref: "plain" },
-    expected: "Hello Jim! You have 42 new messages. Hello World! Hello World!"
+    expected: "Hello Jim! You have 42 new messages. Hello World! Hello World!",
+    message: "should test partials"
   },
   {
     name:     "partial_context",
     source:   "{>replace:.profile/}",
     context:  { profile: { name: "Mick", count: 30 } },
-    expected: "Hello Mick! You have 30 new messages."
+    expected: "Hello Mick! You have 30 new messages.",
+    message: "should test partial context"
   },
   {
     name:     "base_template",
@@ -277,7 +291,8 @@ var dustExamples = [
               "{~n}\n"            +
               "End",
     context:  {},
-    expected: "Start\nBase Title\nBase Content\nEnd"
+    expected: "Start\nBase Title\nBase Content\nEnd",
+    message: "should test base template"
   },
   {
     name:     "child_template",
@@ -293,7 +308,8 @@ var dustExamples = [
               "  Child Content\n"     +
               "{/main}\n",
     context:  {xhr: false},
-    expected: "Start\nChild Title\nChild Content\nEnd"
+    expected: "Start\nChild Title\nChild Content\nEnd",
+    message: "should test child template"
   },
   {
     name:     "recursion",
@@ -309,7 +325,8 @@ var dustExamples = [
                   }
                 ]
               },
-    expected: "1\n1.1\n1.1.1\n"
+    expected: "1\n1.1\n1.1.1\n",
+    message: "should test recursion"
   },
   {
     name:     "comments",
@@ -319,7 +336,8 @@ var dustExamples = [
               "!}\n"                      +
               "{!before!}Hello{!after!}",
     context:  {},
-    expected: "Hello"
+    expected: "Hello",
+    message: "should test comments"
   }
 ];
 
