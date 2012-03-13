@@ -49,3 +49,27 @@ Demo & Guide
 ------------
 
 Extensive docs and a full demo are available at <http://akdubya.github.com/dustjs>
+
+------------
+
+How to run the unit-tests?
+
+I this project we have the distributions of dust, the client and the nodejs version.
+If you want to run the client version just open the html page called specRunner.html located on "test/client/specRunner.html".
+
+In order to run the server distribution of dust, run this command in the terminal: "node test/server/specRunner.js" 
+
+pre-requisites for server version: 
+----------------------------------
+* install nodejs 0.6 or greater 
+* install npm
+* install jasmin test framework (npm install -g jasmine-node)
+
+
+
+
+
+
+
+
+
