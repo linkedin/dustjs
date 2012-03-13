@@ -1,5 +1,12 @@
 var dustExamples = [
   {
+    name: "error",
+    source: "RRR {##}",
+    context: { name: "Mick", count: 30 },
+    error: { name : 'SyntaxError', message : 'Expected buffer, comment, partial, reference, section or special but "{" found.', line: 1, column: 5 },
+    message: "should test that the error message shows line and column."
+  },
+  {
     name:     "intro",
     source:   "{#stream}{#delay}{.}{/delay}{/stream}",
     context:  (function(){
@@ -17,6 +24,7 @@ var dustExamples = [
                   }
                 }
               }),
+    expected: '',
     message: "should test the stream tag"
   },
   {
