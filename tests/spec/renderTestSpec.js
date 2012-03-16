@@ -11,11 +11,11 @@ function render(test) {
       dust.loadSource(dust.compile(test.source, test.name));
       dust.render(test.name, test.context, function(err, output) {
         expect(err).toBeNull();
-        expect(output).toEqual(test.expected);
+        expect(test.expected).toEqual(output);
       });
     }
     catch (error) {
-      expect(error).toEqual(test.error || {} );
+      expect(test.error || {} ).toEqual(error.message);
     }
   };
 }

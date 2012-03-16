@@ -3,7 +3,7 @@ var dustExamples = [
     name: "error",
     source: "RRR {##}",
     context: { name: "Mick", count: 30 },
-    error: { name : 'SyntaxError', message : 'Expected buffer, comment, partial, reference, section or special but "{" found.', line: 1, column: 5 },
+    error: 'Expected buffer, comment, partial, reference, section or special but "{" found. At line : 1, column : 5',
     message: "should test that the error message shows line and column."
   },
   {
@@ -346,6 +346,13 @@ var dustExamples = [
     context:  {},
     expected: "Hello",
     message: "should test comments"
+  },
+  {
+    name:     "@if helper",
+    source:   '{@if cond="{x}<{y}"}<div> X < Y </div>{/if}',  
+    context:  { x: 2, y: 3 },
+    expected: "<div> X < Y </div>",
+    message: "should test the simplest case of @if helper (if without else)"
   }
 ];
 

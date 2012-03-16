@@ -2,7 +2,7 @@
 # Run all tests
 #
 test:
-	node test/server.js
+	node tests/server/specRunner.js
 
 #
 # Run the benchmarks
@@ -50,11 +50,13 @@ dust:
 	@@mkdir -p dist
 	@@touch ${CORE}
 	@@echo "$$HEADER" > ${CORE}
-	@@cat ${SRC}/dust.js >> ${CORE}
+	@@cat ${SRC}/dust.js\
+	      ${SRC}/dust-helpers.js >> ${CORE}
 	@@echo ${CORE} built
 	@@touch ${FULL}
 	@@echo "$$HEADER" > ${FULL}
 	@@cat ${SRC}/dust.js\
+	      ${SRC}/dust-helpers.js\
 	      ${SRC}/compiler.js\
 	      ${SRC}/parser.js >> ${FULL}
 	@@echo ${FULL} built

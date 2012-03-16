@@ -16,7 +16,7 @@ part
 
 section "section"
   = t:sec_tag_start rd b:body e:bodies n:end_tag
-    &{return result8[1].text === result12.text}
+    &{if (!result8) return true; return result8[1].text === result12.text}
   { e.push(["param", ["literal", "block"], b]); t.push(e); return t }
   / t:sec_tag_start "/" rd
   { t.push(["bodies"]); return t }
