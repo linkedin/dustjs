@@ -52,23 +52,160 @@ Extensive docs and a full demo are available at <http://akdubya.github.com/dustj
 
 ------------
 
+Unit tests using Jasmine
+------------------------
+
 How to run the unit-tests?
 
-I this project we have the distributions of dust, the client and the nodejs version.
+In this distributions of dust, we have unit tests in Jasmine for both the client and the nodejs version.
 If you want to run the client version just open the html page called specRunner.html located on "test/client/specRunner.html".
 
 In order to run the server distribution of dust, run this command in the terminal: "node test/server/specRunner.js" 
 
-pre-requisites for server version: 
+pre-requisites for tests on node server version: 
 ----------------------------------
 * install nodejs 0.6 or greater 
 * install npm
-* install jasmin test framework (npm install -g jasmine-node)
+* install Jasmine test framework (npm install -g jasmine-node)
 
 
 
+Dust Helpers
+------------
+
+Support logic helper @if
+-------------------------
+
+Example 1: 
+
+{@if cond="('{x}'.length || '{y}'.length ) || (2 > 3) && {a}-{b} == 9"}
+      render if
+  {:else}
+      render else
+{/if}
+
+Example 2: @if inside the loop# section
+
+With {@if} helper and  {@idx} helper
+
+{#people}
+<li class="card {@idx} {@if cond="({.} + 1) % 2 == 0"} last {:else} first {/if} {/idx}" data-member-id="{id}"  id="card-{id}"></li>
+{/people
+
+With {@if} helper and the {$idx}
+
+{#people}
+ <li class="card  {@if cond="({$idx} == {$len}-1)"} last {/if} " data-member-id="{id}"  id="card-{id}"> </li>
+{/people}
 
 
+Example 3: Support exists check in the @if helper 
+
+{@if cond="({{x}} || {{y}}) || (2 > 3) && {a}-{b} == 9"}
+  You
+{:else}
+  Me
+{/if}
+
+
+{#people}
+
+<li class="card  {@if cond="({$len} + 1) % 2 == 0"} odd {:else} even {/if} " data-member-id="{memberID}"  id="card\-{memberID}">
+
+</li>
+
+{/people}
+
+{code}
+
+{info} The $idx and $len will only work with *maps* and does not  work within arrays , please use the @idx helper in that case, we think such cases will be rare{info}
+
+h3. here is a example it works
+
+sample JSON
+
+{code}
+{
+    "fronttest_mapper_two": {
+        "items": [{
+            "item": "pen"
+        }, {
+            "item": "pencil"
+        }, {
+            "item": "flower"
+        }],
+        "test": "TEST"
+    },
+}
+{code}
+
+{code}
+Rendering items in a map
+-------------------------------------------------------
+
+{! items is a map !}
+{?items}
+  <div>
+    <ol class="items" id="items-list">  
+    {#items}
+      <li>
+       {$idx}
+       {$len}
+            <span class='{@if cond="{$idx} == {$len}-1"}last{/if}'>{.item}</span>     
+                  {@if cond="{$idx} == {$len}-1"}last{/if}
+                  {@if cond="{$idx} == {$len}-1"}last{:else} not last{/if}
+      </li>
+    {/items}                    
+    </ol>
+  </div>
+{/items}
+
+
+OUTPUT
+
+Rendering items in a map
+
+---------------------------
+
+    0 3 pen
+    1 3 pencil
+    2 3 last flowe
+{code}
+
+h3. here is example $idx and $len will *not work*
+
+{code}
+
+    "fronttest_mapper_two": {
+        "brands": ["b1", "b2", "b3"],
+      
+    }
+{code}
+
+How to make it work? Use the @idx helper
+{code}
+{! brand is a list !}
+{?brands}
+  <div>
+    <ol>  
+    {#brands size="3"}
+      <li>
+      <span class='{@idx} {.}{@if cond="{.} == {size} -1"} last {/if}{/idx}'>{.}</span> 
+      {@idx} {.}{@if cond="{.} == {size} - 1"} last {/if}{/idx}
+      </li>
+    {/brands}                    
+    </ol>
+  </div>
+{/brands}
+
+OUTPUT
+
+Rendering brands in a list-------------------------------------------------------
+
+    b1 0
+    b2 1
+    b3 2 last
+{code}
 
 
 
