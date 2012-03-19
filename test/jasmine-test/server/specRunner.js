@@ -3,7 +3,7 @@ var jasmine = require('jasmine-node'),
     path = require('path');
 
 /* this should be declared global in order to access them in the spec*/
-dust = require('../../lib/dust'),
+dust = require('../../../lib/dust'),
 dustExamples = require('../spec/examples');
 
 for(key in jasmine) 

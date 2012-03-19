@@ -2,7 +2,13 @@
 # Run all tests
 #
 test:
-	node tests/server/specRunner.js
+	node test/server.js
+
+#
+# Run jasmine-test
+#
+jasmine:
+	node test/jasmine-test/server/specRunner.js
 
 #
 # Run the benchmarks
