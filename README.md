@@ -2,16 +2,18 @@ Dust
 ====
 
 This is the LinkedIn fork of dust.js
--------------------------------------
+====================================
 
 Details in the blog post : http://engineering.linkedin.com/frontend/leaving-jsps-dust-moving-linkedin-dustjs-client-side-templates
 
 We will gradually be extending this library with helper functions and bug fixes. 
 
 Current additions include:
+--------------------------
+
 * Fix to peg.js to print the line and column number for syntax errors in dust templates
-* Addition of jasmine test suite, BDD with dust.js
-* @if helper that relies entirely on the js eval for expression evaluation
+* Addition of jasmine test suite, BDD with dust.js 
+* @if helper that relies entirely on the js eval for expression evaluation   
 * Section index for lists of maps stored in the dust context for ease of writing simple logic in templates
 * Section size for lists of maps stored in the dust context for ease of  writing simple logic in templates
 
