@@ -64,3 +64,55 @@ Demo & Guide
 ß
 Extensive docs and a full demo are available at <http://akdubya.github.com/dustjs>
 
+
+**Support logic helper @if**
+----------------------------
+*Example 1:*
+
+     {@if cond="('{x}'.length || '{y}'.length ) || (2 > 3) && {a}-{b} == 9"}
+      render if
+     {:else}
+      render else
+     {/if}
+
+**Section index for lists of maps stored in the dust context**
+---------------------------------------------------
+
+*Example 2: $idx is the Loop index in dust #loop*
+
+    {#people}
+    <li class="card  
+     {@if cond="({$idx} == {$len})"}last{/if}" data-member-id="{id}"  id="card-{id}">
+     </li>
+    {/people}
+
+**Section size for lists of maps stored in the dust context**
+----------------------------------------
+
+*Example 3: $len, Loop size in dust #loop*
+
+    {#people} 
+    <li class="card  {@if cond="({$len} + 1) % 2 == 0"} odd {:else} even {/if} " data-member-id="{id}"  id="card\-{id}"> </li> 
+    {/people}
+
+*Example 4: Inside lists of primitives,$idx and $len cannot be used, and {@idx} can be used instead*
+
+    JSON : {"skills": ["jasmine", "qunit", "javascript"]}
+    {#skills}
+     <li>
+     <span class='{@idx}
+      {@if cond="{.} == '{skills}'.split(',').length -1"}
+        last
+      {/if}
+     {/idx}'>
+     {.}</span> 
+     </li>
+    {/skills}
+
+*Example 5: @if with else*   
+
+    {@if cond="'{names}'.split(',').length == 3 "}
+     {@pre.i18n key="yes" text="Yes, there are 3 names"/} 
+    {:else}
+     {@pre.i18n key="no" text="No, there are less than 3 names"/}
+    {/if}
