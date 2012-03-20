@@ -1,6 +1,20 @@
 Dust
 ====
 
+This is the LinkedIn fork of dust.js
+-------------------------------------
+Details in the blog post : http://engineering.linkedin.com/frontend/leaving-jsps-dust-moving-linkedin-dustjs-client-side-templates
+
+We will gradually be extending this library with helper functions and bug fixes. 
+
+Current additions include:
+* Fix to peg.js to print the line and column number for syntax errors in dust templates
+* Addition of jasmine test suite, BDD with dust.js
+* @if helper that relies entirely on the js eval for expression evaluation
+* Section index for lists of maps stored in the dust context for ease of writing simple logic in templates
+* Section size for lists of maps stored in the dust context for ease of  writing simple logic in templates
+
+
 > Asynchronous templates for the browser and node.js
 
 #### <http://akdubya.github.com/dustjs> #
@@ -47,13 +61,10 @@ To render compiled templates in the browser:
 
 Demo & Guide
 ------------
-
+ß
 Extensive docs and a full demo are available at <http://akdubya.github.com/dustjs>
 
-------------
 
-Dust Helpers
-------------
 
 Support logic helper @if
 -------------------------
@@ -66,129 +77,39 @@ Example 1:
       render else
 {/if}
 
-Example 2: @if inside the loop# section
+Section index for lists of maps stored in the dust context
+---------------------------------------------------
 
-With {@if} helper and  {@idx} helper
-
-{#people}
-<li class="card {@idx} {@if cond="({.} + 1) % 2 == 0"} last {:else} first {/if} {/idx}" data-member-id="{id}"  id="card-{id}"></li>
-{/people
-
-With {@if} helper and the {$idx}
+Example 2:  $idx is the Loop index in dust #loop
+------------------------------------------------
 
 {#people}
- <li class="card  {@if cond="({$idx} == {$len}-1)"} last {/if} " data-member-id="{id}"  id="card-{id}"> </li>
+ <li class="card  {@if cond="({$idx} == {$len})"}last{/if}" data-member-id="{id}"  id="card-{id}"> </li>
 {/people}
 
 
-Example 3: Support exists check in the @if helper 
-
-{@if cond="({{x}} || {{y}}) || (2 > 3) && {a}-{b} == 9"}
-  You
-{:else}
-  Me
-{/if}
-
-
-{#people}
-
-<li class="card  {@if cond="({$len} + 1) % 2 == 0"} odd {:else} even {/if} " data-member-id="{memberID}"  id="card\-{memberID}">
-
-</li>
-
+Example 3: $len, Loop size in dust #loop
+----------------------------------------
+{#people} 
+<li class="card  {@if cond="({$len} + 1) % 2 == 0"} odd {:else} even {/if} " data-member-id="{id}"  id="card\-{id}"> </li> 
 {/people}
 
-{code}
 
-{info} The $idx and $len will only work with *maps* and does not  work within arrays , please use the @idx helper in that case, we think such cases will be rare{info}
+Example 4: Inside lists of primitives,$idx and $len cannot be used, and {@idx} can be used instead
+--------------------------------------------------------------------------------------------------
+{"skills": ["jasmine", "qunit", "javascript"]}
 
-h3. here is a example it works
+{#skills}
+ <li>
+  <span class='{@idx}{.}{@if cond="{.} == '{skills}'.split(',').length -1"}last{/if}{/idx}'>{.}</span> 
+ </li>
+{/skills}
 
-sample JSON
-
-{code}
-{
-    "fronttest_mapper_two": {
-        "items": [{
-            "item": "pen"
-        }, {
-            "item": "pencil"
-        }, {
-            "item": "flower"
-        }],
-        "test": "TEST"
-    },
-}
-{code}
-
-{code}
-Rendering items in a map
--------------------------------------------------------
-
-{! items is a map !}
-{?items}
-  <div>
-    <ol class="items" id="items-list">  
-    {#items}
-      <li>
-       {$idx}
-       {$len}
-            <span class='{@if cond="{$idx} == {$len}-1"}last{/if}'>{.item}</span>     
-                  {@if cond="{$idx} == {$len}-1"}last{/if}
-                  {@if cond="{$idx} == {$len}-1"}last{:else} not last{/if}
-      </li>
-    {/items}                    
-    </ol>
-  </div>
-{/items}
-
-
-OUTPUT
-
-Rendering items in a map
-
----------------------------
-
-    0 3 pen
-    1 3 pencil
-    2 3 last flowe
-{code}
-
-h3. here is example $idx and $len will *not work*
-
-{code}
-
-    "fronttest_mapper_two": {
-        "brands": ["b1", "b2", "b3"],
-      
-    }
-{code}
-
-How to make it work? Use the @idx helper
-{code}
-{! brand is a list !}
-{?brands}
-  <div>
-    <ol>  
-    {#brands size="3"}
-      <li>
-      <span class='{@idx} {.}{@if cond="{.} == {size} -1"} last {/if}{/idx}'>{.}</span> 
-      {@idx} {.}{@if cond="{.} == {size} - 1"} last {/if}{/idx}
-      </li>
-    {/brands}                    
-    </ol>
-  </div>
-{/brands}
-
-OUTPUT
-
-Rendering brands in a list-------------------------------------------------------
-
-    b1 0
-    b2 1
-    b3 2 last
-{code}
-
-
-
+Example 5: @if with else   
+--------------------------
+{@if cond="'{names}'.split(',').length == 3 "}
+ {@pre.i18n key="yes" text="Yes, there are 3 names"/} 
+  {:else}
+ {@pre.i18n key="no" text="No, there are less than 3 names"/}
+{/if} 
 
