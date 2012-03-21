@@ -118,3 +118,56 @@ Extensive docs and a full demo are available at <http://akdubya.github.com/dustj
     {:else}
      {@pre.i18n key="no" text="No, there are less than 3 names"/}
     {/if}
+
+Global Aliases in dust
+----------------------
+
+Most often we tend to reuse the same data in the template again and again ... One way to avoid been repetitive is use aliases. So a common question was, how does dust support this ?
+
+Well, in dust there is more than one way neat way to do this.
+
+*Use Inline Partials*
+
+	Inline partials never output content themselves, and are always global to the template in which they are defined, so the order of their definition has no significance.
+
+	Key points to note : They are global to the template., there is no ordering and can be defined anywhere
+
+	*Step 1* create global alias
+
+	     {<greeting}Hello, Hola{/greeting}   
+
+	*Step 2*
+
+	     {#names}
+	       {.} {+greeting/} 
+	     {/names}
+
+	     {#projects}
+	       {.} {+greeting/}
+	     {/projects}
+
+
+
+Block Aliases in dust
+----------------------
+Inline parameters appear within the section's opening tag. Parameters are separated by a single space.
+
+	     {#profile bar="baz" bing="bong"}
+	      {name}, {bar}, {bing}
+	     {/profile}
+
+	*There are 3 flavors*
+
+	    {#test greeting="hello"} // constant b
+	     {greeting}
+	    {/test}
+
+	    {#test greeting=hello} // looks for a json context hello in the JSON hierarchy
+	     {greeting}
+	    {/test}
+
+
+	    {#test greeting="{hello}"} // resolves hello when greeting is referenced in the block and it    resolves to the first one in the hierarchy
+	     {greeting}
+	    {/test}
+
