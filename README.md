@@ -8,7 +8,7 @@ Details in the blog post : http://engineering.linkedin.com/frontend/leaving-jsps
 
 We will gradually be extending this library with helper functions and bug fixes. 
 
-Current additions include:
+Current LinkedIn additions include:
 --------------------------
 
 * Fix to peg.js to print the line and column number for syntax errors in dust templates
