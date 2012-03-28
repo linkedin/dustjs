@@ -12,8 +12,9 @@ Current LinkedIn additions include:
 --------------------------
 
 * Fix to peg.js to print the line and column number for syntax errors in dust templates
+* Fix to support > node0.4 
 * Addition of jasmine test suite, BDD with dust.js 
-* @if helper that relies entirely on the js eval for expression evaluation   
+* There are cases of rendering logic that are best done in templates. @if helper that relies entirely on the js eval for expression evaluation, The perf results are here: <http://jsperf.com/dust-if>. We intend to replace the slow js eval with a expression parser soon 
 * Section index for lists of maps stored in the dust context for ease of writing simple logic in templates
 * Section size for lists of maps stored in the dust context for ease of  writing simple logic in templates
 
