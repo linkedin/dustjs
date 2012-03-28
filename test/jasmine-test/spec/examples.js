@@ -353,7 +353,30 @@ var dustExamples = [
     context:  { x: 2, y: 3 },
     expected: "<div> X < Y </div>",
     message: "should test the simplest case of @if helper (if without else)"
-  }
+  },
+  {
+    name:     "@if helper",
+    source:   '{@if cond=" \'{x}\'.length && \'{y}\'.length "}<div> X and Y exists </div>{:else}<div> X and Y does not exists </div>{/if}',  
+    context:  {},
+    expected: "<div> X and Y does not exists </div>",
+    message: "should test the simplest case of @if helper with else using and"
+  },
+  {
+    name:     "@if helper",
+    source:   '{@if cond=" \'{x}\'.length || \'{y}\'.length "}<div> X or Y exists </div>{:else}<div> X or Y does not exists </div>{/if}',  
+    context:  { x: 1},
+    expected: "<div> X or Y exists </div>",
+    message: "should test the simplest case of @if helper with else using or"
+  },
+  {
+    name:     "@if helper",
+    source:   '{@if cond="( \'{x}\'.length ) && ({x}<3)"}<div> X exists and is 1 </div>{:else}<div> x is not there </div>{/if}',  
+    context:  { x : 1},
+    expected: "<div> X exists and is 1 </div>",
+    message: "should test the simplest case of @if helper with else using exists /and"
+  },
+  
+  
 ];
 
 if (typeof module !== "undefined" && typeof require !== "undefined") {
