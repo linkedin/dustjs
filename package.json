@@ -6,6 +6,7 @@
   "contributors"  : [],
   "url"           : "http://akdubya.github.com/dustjs/",
   "keywords"      : ["templates", "views"],
+  "bin"           : { "dustc": "./bin/dustc" },
   "main"          : "./lib/dust",
   "scripts"       : { "test": "make test" }
 }

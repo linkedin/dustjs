@@ -62,6 +62,15 @@ To render compiled templates in the browser:
 
     <script src="dust-core-0.3.0.min.js"></script>
 
+To compile templates on the command line and register them under the
+same name:
+
+    $ dustc {inputfilename|-} [<outputfilename>]
+
+For example:
+
+    $ dustc template.html
+    
 Demo & Guide
 ------------
 ß
