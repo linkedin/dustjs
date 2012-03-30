@@ -2,10 +2,10 @@
 
 var path = require('path'),
     fs = require('fs'),
-    sys = require('util');
-
-var dust = require('../lib/dust');
-var args = process.argv.slice(1);
+    sys = require('util'),
+    dust = require('../lib/dust'),
+    args = process.argv.slice(1),
+    name = null;
 
 args = args.filter(function (arg) {
     var match;
@@ -16,8 +16,12 @@ args = args.filter(function (arg) {
     switch (arg) {
         case 'h':
         case 'help':
-            sys.puts("usage: dustc source [destination]");
+            sys.puts("usage: dustc [{-n|--name}=<template_name> {sourcefilename|-} [destination]");
             process.exit(0);
+        case 'n':
+        case 'name':
+            name = match[2];
+            break;
     }
 });
 
@@ -40,7 +44,7 @@ var parseDustFile = function (e, data) {
         process.exit(1);
     }
 
-    template = dust.compile(data, input);
+    template = dust.compile(data, name || input);
     if (output) {
         fd = fs.openSync(output, "w");
         fs.writeSync(fd, template, 0, "utf8");
