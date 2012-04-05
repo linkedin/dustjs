@@ -56,7 +56,7 @@ Installation
 
 In Node:
 
-    $ npm install dust
+    $ npm install dustjs-linkedin
 
 To render compiled templates in the browser:
 

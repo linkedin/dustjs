@@ -1,11 +1,33 @@
 {
-  "name"          : "dust",
-  "version"       : "0.3.0",
-  "description"   : "Asynchronous templates for the browser and node.js",
-  "author"        : "Aleksander Williams",
-  "contributors"  : [],
-  "url"           : "http://akdubya.github.com/dustjs/",
-  "keywords"      : ["templates", "views"],
-  "main"          : "./lib/dust",
-  "scripts"       : { "test": "make test" }
+  "name": "dustjs-linkedin",
+  "version": "0.4.0",
+  "author": "Aleksander Williams",
+  "description": "Asynchronous templates for the browser and node.js",
+  "contributors": [
+    {
+      "name": "Jairo de Morais",
+      "email": "jdemorais@linkedin.com"
+    },
+    {
+      "name": "Veena Basavaraj",
+      "email":"vbasavaraj@linkedin.com"
+    }
+  ],
+  "scripts": {
+    "test" : "node test/jasmine-test/server/specRunner.js", 
+    "start": "node src/build.js"
+  },
+  "main": "./lib/dust",
+  "repository": {
+    "type": "git",
+    "url": "https://jairodemorais@github.com/linkedin/dustjs.git"
+  },
+  "keywords": ["templates", "views"],
+  "devDependencies": {
+    "jasmine-node"   :  "1.0.x"
+  },
+  "license": "MIT",
+  "engine": {
+    "node": ">=0.5"
+  }
 }
