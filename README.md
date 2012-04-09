@@ -54,7 +54,7 @@ Composable templates?
 Installation
 ------------
 
-In Node:
+For Linkedin Dustjs
 
     $ npm install dustjs-linkedin
 
@@ -70,6 +70,9 @@ Extensive docs and a full demo are available at <http://akdubya.github.com/dustj
 
 **Support logic helper @if**
 ----------------------------
+
+Dust supports the exists (?) and not exists (^?). Nested exists block easily allow for (exp1 AND exp2 AND exp3), but  (exp1 OR exp2 ) is not possible.@if helper comes handy in cases where an OR operation is required.
+
 *Example 1:*
 
      {@if cond="('{x}'.length || '{y}'.length ) || (2 > 3) && {a}-{b} == 9"}
@@ -167,8 +170,20 @@ Inline parameters appear within the section's opening tag. Parameters are separa
      {greeting}
     {/test}
 
-
-    {#test greeting="{hello}"} // resolves hello when greeting is referenced in the block and it    resolves to the first one in the hierarchy
+    {#test greeting="{hello}"} // resolves hello when greeting is referenced in the block and it resolves to the first one in the hierarchy
      {greeting}
     {/test}
 
+
+Template Inheritance in dust
+----------------------------
+
+Dust by default allows template inheritance with the concept of partials and inline partials
+
+
+TODO
+
+Dynamic Partials
+----------------
+
+TODO
