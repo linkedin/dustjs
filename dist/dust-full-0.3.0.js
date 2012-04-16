@@ -575,7 +575,7 @@ var helpers = {
     return chunk;
 
   },
-  if: function( chunk, context, bodies, params ){
+  "if": function( chunk, context, bodies, params ){
     var cond = ( params.cond );
     
     if( params && params.cond ){
