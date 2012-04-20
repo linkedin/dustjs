@@ -389,7 +389,13 @@ var dustExamples = [
     expected: "<div> X exists and is 1 </div>",
     message: "should test the simplest case of @if helper with else using exists /and"
   },
-  
+  {
+    name:     "@if helper",
+    source:   '{#list}{@if cond="( {$idx} == 1 )"}<div>{y}</div>{/if}{/list}',  
+    context:  { x : 1, list: [ { y: 'foo' }, { y: 'bar'} ]},
+    expected: "<div>bar</div>",
+    message: "should test the use of $idx in @if helper condition"
+  },
   
 ];
 
