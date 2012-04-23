@@ -240,6 +240,67 @@ When the main_with_loops.tl  is rendered ... ( says projects has three entries w
    Hello project 2
    Hello project 3
   
+Example 2
+---------------
+
+base.tl
+------------
+
+	    {+greeting}hello{/greeting}
+	    {+world/}
+
+footer.tl
+---------------
+
+      Common footer
+
+base_end.tl
+-----------------
+
+	    {>"footer"/}
+	    {+bye} bye {/bye}
+
+
+main.tl
+-----------
+	      {>"head"/}
+	        BODY
+	      {>"foot"/}
+
+head.tl
+-------------
+
+	     {>"base"/}
+	     {<world} World {/world}
+	        START
+
+foot.tl
+-------------
+
+	      END
+	      {>"base"/}
+	      {<greeting}bye{/greeting}
+
+foot_with_no_end.tl
+-------------
+
+	      END
+	      {>"base_end"/}
+	      {<bye} {! Do not print bye | }{/bye}
+
+
+
+
+output ( when I render main.tl with foot.tl )
+----------------
+hello World START  BODY  END bye
+
+
+output ( when I render main.tl with foot_with_no_end.tl )
+----------------
+hello World START  BODY  END common footer
+
+
 
 
 
