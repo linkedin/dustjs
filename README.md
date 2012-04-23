@@ -180,7 +180,8 @@ Template Inheritance in dust
 
 Dust by default allows template inheritance with the concept of partials and inline partials
 
-
+Example 1:
+--------------------
 
 partial.tl  ( this serves as the base template )
 ---------------
