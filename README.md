@@ -1,4 +1,4 @@
-Dust
+Dust  [![Build Status](https://secure.travis-ci.org/linkedin/dustjs.png)](http://travis-ci.org/linkedin/dustjs)
 ====
 
 This is the LinkedIn fork of dust.js
