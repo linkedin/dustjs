@@ -181,9 +181,71 @@ Template Inheritance in dust
 Dust by default allows template inheritance with the concept of partials and inline partials
 
 
-TODO
+
+partial.tl  ( this serves as the base template )
+---------------
+     
+       {+greeting} Hola {/greeting}
+       {+world} World {/world}
+
+
+main_without_override.tl  ( this serves as the child template )
+-----------------
+
+      {>partial/}
+
+output
+---------
+
+When the main_without_override.tl is rendered ...
+
+  Hola
+  World
+
+main_with_override.tl  ( this serves as the child template )
+-----------------
+
+      {>partial/}
+       {<greeting}
+         Hello
+       {/greeting}
+
+output
+---------
+
+When the main_with_override.tl  is rendered ...
+
+  Hello
+  World
+
+
+main_with_loops.tl
+-----------------
+
+      {>partial/}
+       {#projects
+         {<greeting}
+           Hello {.name}
+        {/greeting}
+        {/projects}
+        {<world}{/world} {! override to print nothing !}
+
+
+output
+---------
+
+When the main_with_loops.tl  is rendered ... ( says projects has three entries with the name field )
+
+   Hello project 1
+   Hello project 2
+   Hello project 3
+  
+
+
 
 Dynamic Partials
 ----------------
 
-TODO
+The name of the partial can be determined at render time. Primarily useful when a partial is loaded based on the ab-test key.
+
+{>"/path/{abkey}.tl"/}
