@@ -1,6 +1,31 @@
 Dust  [![Build Status](https://secure.travis-ci.org/linkedin/dustjs.png)](http://travis-ci.org/linkedin/dustjs)
 ====
 
+Demo & Guide
+------------
+ß
+Extensive docs and a full demo are available at <http://akdubya.github.com/dustjs>
+
+
+> Asynchronous templates for the browser and node.js
+
+#### <http://akdubya.github.com/dustjs> #
+
+Highlights!
+----
+
+I like [Mustache](http://mustache.github.com) and variants but none of them offers quite what I need.
+
+Use Dust if you want these things:
+
+* async/streaming operation
+* browser/node compatibility
+* extended Mustache/ctemplate syntax
+* clean, low-level API
+* [high performance](http://akdubya.github.com/dustjs/benchmark/index.html)
+* composable templates
+
+
 This is the LinkedIn fork of dust.js
 ====================================
 
@@ -18,39 +43,6 @@ Current LinkedIn additions include:
 * Section index for lists of maps stored in the dust context for ease of writing simple logic in templates
 * Section size for lists of maps stored in the dust context for ease of  writing simple logic in templates
 
-> Asynchronous templates for the browser and node.js
-
-#### <http://akdubya.github.com/dustjs> #
-
-Why?
-----
-
-I like [Mustache](http://mustache.github.com) and variants but none of them offers quite what I need.
-
-Use Dust if you want these things:
-
-* async/streaming operation
-* browser/node compatibility
-* extended Mustache/ctemplate syntax
-* clean, low-level API
-* [high performance](http://akdubya.github.com/dustjs/benchmark/index.html)
-* composable templates
-
-Composable templates?
----------------------
-
-    {^xhr}
-      {>base_template/}
-    {:else}
-      {+main/}
-    {/xhr}
-    {<title}
-      Child Title
-    {/title}
-    {<main}
-      Child Content
-    {/main}
-
 Installation
 ------------
 
@@ -61,11 +53,6 @@ For Linkedin Dustjs
 To render compiled templates in the browser:
 
     <script src="dust-core-0.3.0.min.js"></script>
-
-Demo & Guide
-------------
-ß
-Extensive docs and a full demo are available at <http://akdubya.github.com/dustjs>
 
 
 **Support logic helper @if**
@@ -123,7 +110,7 @@ Dust supports the exists (?) and not exists (^?). Nested exists block easily all
      {@pre.i18n key="no" text="No, there are less than 3 names"/}
     {/if}
 
-Global Aliases in dust
+Global Aliases
 ----------------------
 
 Most often we tend to reuse the same data in the template again and again ... One way to avoid been repetitive is use aliases. So a common question was, how does dust support this ?
@@ -152,7 +139,7 @@ Key points to note : They are global to the template., there is no ordering and 
 
 
 
-Block Aliases in dust
+Block Aliases
 ----------------------
 Inline parameters appear within the section's opening tag. Parameters are separated by a single space.
 
@@ -175,7 +162,7 @@ Inline parameters appear within the section's opening tag. Parameters are separa
     {/test}
 
 
-Template Inheritance in dust
+Template Inheritance
 ----------------------------
 
 Dust by default allows template inheritance with the concept of partials and inline partials
@@ -183,20 +170,19 @@ Dust by default allows template inheritance with the concept of partials and inl
 Example 1:
 --------------------
 
-partial.tl  ( this serves as the base template )
----------------
+*partial.tl  ( this serves as the base template )*
+
      
        {+greeting} Hola {/greeting}
        {+world} World {/world}
 
 
-main_without_override.tl  ( this serves as the child template )
------------------
+*main_without_override.tl  ( this serves as the child template )*
+
 
       {>partial/}
 
-output
----------
+*output*
 
 When the main_without_override.tl is rendered ...
 
@@ -211,8 +197,8 @@ main_with_override.tl  ( this serves as the child template )
          Hello
        {/greeting}
 
-output
----------
+*output*
+
 
 When the main_with_override.tl  is rendered ...
 
@@ -220,8 +206,8 @@ When the main_with_override.tl  is rendered ...
   World
 
 
-main_with_loops.tl
------------------
+*main_with_loops.tl*
+
 
       {>partial/}
        {#projects
@@ -232,8 +218,8 @@ main_with_loops.tl
         {<world}{/world} {! override to print nothing !}
 
 
-output
----------
+*output*
+
 
 When the main_with_loops.tl  is rendered ... ( says projects has three entries with the name field )
 
@@ -244,46 +230,41 @@ When the main_with_loops.tl  is rendered ... ( says projects has three entries w
 Example 2
 ---------------
 
-base.tl
-------------
+*base.tl*
 
 	    {+greeting}hello{/greeting}
 	    {+world/}
 
-footer.tl
----------------
+*footer.tl*
 
       Common footer
 
-base_end.tl
------------------
+*base_end.tl*
+
 
 	    {>"footer"/}
 	    {+bye} bye {/bye}
 
 
-main.tl
------------
+*main.tl*
+
 	      {>"head"/}
 	        BODY
 	      {>"foot"/}
 
-head.tl
--------------
+*head.tl*
 
 	     {>"base"/}
 	     {<world} World {/world}
 	        START
 
-foot.tl
--------------
+*foot.tl*
 
 	      END
 	      {>"base"/}
 	      {<greeting}bye{/greeting}
 
-foot_with_no_end.tl
--------------
+*foot_with_no_end.tl*
 
 	      END
 	      {>"base_end"/}
@@ -292,16 +273,30 @@ foot_with_no_end.tl
 
 
 
-output ( when I render main.tl with foot.tl )
-----------------
+*output ( when I render main.tl with foot.tl )*
+
 hello World START  BODY  END bye
 
 
-output ( when I render main.tl with foot_with_no_end.tl )
-----------------
+*output ( when I render main.tl with foot_with_no_end.tl )*
+
 hello World START  BODY  END common footer
 
 
+Composable templates?
+---------------------
+
+    {^xhr}
+      {>base_template/}
+    {:else}
+      {+main/}
+    {/xhr}
+    {<title}
+      Child Title
+    {/title}
+    {<main}
+      Child Content
+    {/main}
 
 
 
