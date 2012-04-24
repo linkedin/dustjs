@@ -16,7 +16,7 @@ args = args.filter(function (arg) {
     switch (arg) {
         case 'h':
         case 'help':
-            sys.puts("usage: dustc [{-n|--name}=<template_name> {sourcefilename|-} [destination]");
+            sys.puts("usage: dustc [{-n|--name}=<template_name>] {sourcefilename|-} [destination]");
             process.exit(0);
         case 'n':
         case 'name':
