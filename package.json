@@ -17,6 +17,7 @@
     "test" : "node test/jasmine-test/server/specRunner.js", 
     "start": "node src/build.js"
   },
+  "bin": { "dustc": "./bin/dustc" },
   "main": "./lib/dust",
   "repository": {
     "type": "git",
