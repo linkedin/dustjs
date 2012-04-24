@@ -56,6 +56,20 @@ var dustExamples = [
     message: "should test an array"
   },
   {
+     name:     "array",
+     source:   "{#names}({$idx}).{title} {name}{~n}{/names}",
+     context:  { title: "Sir", names: [ { name: "Moe" }, { name: "Larry" }, { name: "Curly" } ] },
+     expected: "(0).Sir Moe\n(1).Sir Larry\n(2).Sir Curly\n",
+     message: "should test an array"
+   },
+  {
+      name:     "array",
+      source:   "{#names}Size=({$len}).{title} {name}{~n}{/names}",
+      context:  { title: "Sir", names: [ { name: "Moe" }, { name: "Larry" }, { name: "Curly" } ] },
+      expected: "Size=(3).Sir Moe\nSize=(3).Sir Larry\nSize=(3).Sir Curly\n",
+      message: "should test an array"
+  },
+  {
     name:     "empty_array",
     source:   "{#names}{title} {name}{~n}{/names}",
     context:  { title: "Sir", names: [] },
@@ -375,7 +389,13 @@ var dustExamples = [
     expected: "<div> X exists and is 1 </div>",
     message: "should test the simplest case of @if helper with else using exists /and"
   },
-  
+  {
+    name:     "@if helper",
+    source:   '{#list}{@if cond="( {$idx} == 1 )"}<div>{y}</div>{/if}{/list}',  
+    context:  { x : 1, list: [ { y: 'foo' }, { y: 'bar'} ]},
+    expected: "<div>bar</div>",
+    message: "should test the use of $idx in @if helper condition"
+  },
   
 ];
 

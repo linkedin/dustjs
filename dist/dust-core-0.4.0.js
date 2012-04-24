@@ -1,5 +1,5 @@
 //
-// Dust - Asynchronous Templating v0.3.0
+// Dust - Asynchronous Templating v0.4.0
 // http://akdubya.github.com/dustjs
 //
 // Copyright (c) 2010, Aleksander Williams
@@ -157,6 +157,12 @@ Context.prototype.getPath = function(cur, down) {
 };
 
 Context.prototype.push = function(head, idx, len) {
+  if( head ){
+   // loop index for a block section
+   head['$idx'] = idx;
+   // loop size for a block section
+   head['$len'] = len;
+  }
   return new Context(new Stack(head, this.stack, idx, len), this.global, this.blocks);
 };
 
@@ -503,7 +509,7 @@ dust.escapeJs = function(s) {
 
 if (typeof exports !== "undefined") {
   dust.helpers = require("./dust-helpers").helpers;
-  if (typeof process !== "undefined") {
+  if (typeof process !== "undefined" && typeof window === "undefined") {
       require('./server')(dust);
   }
   module.exports = dust;
@@ -522,78 +528,16 @@ var helpers = {
   idx: function(chunk, context, bodies) {
     return bodies.block(chunk, context.push(context.stack.index));
   },
-  /*
-   * Dust can only do simple string interpolation ex: 
-   * {#context foo="{bar}"} and not {#context foo="{bar.baz}"}. Boo!
-   * This prevents us from passing {bar.baz} into a context as a param.
-   * So, when we need lookup baz by crawling out from the curent context...
-   * usage: {@lookup key="bar.baz"/}
-   *
-   * Note: This should be corrected in dust.
-   */
   
-  lookup: function( chunk, context, bodies, params ){
-    var path = params.path.split( '.' ),
-      value,
-      index = 0,
-      depth = path.length - 1;
-
-    //Crawl up the stack and Test to see if the path exists
-    ( function test( subject ){
- 
-      //Restart the test with the next branch
-      function next() {
-        subject = context.stack.tail.head;
-        index = 0;
-        test( subject );
-      }
-
-      if( subject[path[index]] ){
-        subject = subject[path[index]];
-        if( index < depth ) {
-          if( typeof subject === "object" && subject.hasOwnProperty ) {
-            //Its an object, so continue
-            index += 1;
-            test( subject );
-          } else {
-            //It's not an object, 
-            //and we have not reached the end of our path.
-            //Test the next branch
-            next();
-          }
-        } else {
-          //we have exhausted our path and have a subject
-          value = subject;
-        }
-      } else {
-        //It dose not exist on this branch.
-        next();
-      }
-    }( context.stack.tail.head ) );
-
-    chunk.write( value );
-    return chunk;
-
-  },
-  if: function( chunk, context, bodies, params ){
+  "if": function( chunk, context, bodies, params ){
     var cond = ( params.cond );
     
     if( params && params.cond ){
       // resolve dust references in the expression
       if( typeof cond === "function" ){
         cond = '';
-        boundary = '';
         chunk.tap( function( data ){
-          if( boundary !== '' && boundary[boundary.length - 1] === "{" ) {
-            data = ( data === '' || data === '}' ) ? false : true;
-            boundary = '';
-          } else {
-            boundary = data;
-          }
           cond += data;
-          // replace the { } tokens from the  cond value
-          cond = cond.replace( "{", "" );
-          cond = cond.replace( "}", "" );
           return '';
         } ).render( params.cond, context ).untap();
         if( cond === '' ){
