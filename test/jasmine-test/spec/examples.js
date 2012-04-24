@@ -301,6 +301,13 @@ var dustExamples = [
     message: "should test partial context"
   },
   {
+    name:     "partial_param",
+    source:   '{>replace name=n, count="{c}"/}',
+    context:  { n: "Mick", c: 30 },
+    expected: "Hello Mick! You have 30 new messages.",
+    message: "should test partial params"
+  },
+  {
     name:     "base_template",
     source:   "Start{~n}\n"       +
               "{+title}\n"        +

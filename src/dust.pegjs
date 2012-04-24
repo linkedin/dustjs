@@ -46,8 +46,8 @@ reference "reference"
   { return ["reference", n, f] }
 
 partial "partial"
-  = ld ">" n:(k:key {return ["literal", k]} / inline) c:context "/" rd
-  { return ["partial", n, c] }
+  = ld ">" n:(k:key {return ["literal", k]} / inline) c:context p:params "/" rd
+  { return ["partial", n, c, p] }
 
 filters "filters"
   = f:("|" n:key {return n})*

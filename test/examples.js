@@ -257,6 +257,12 @@ exports.dustExamples = [
     expected: "Hello Mick! You have 30 new messages."
   },
   {
+    name:     "partial_param",
+    source:   '{>replace name=n count="{c}"/}',
+    context:  { n: "Mick", c: 30 },
+    expected: "Hello Mick! You have 30 new messages."
+  },
+  {
     name:     "base_template",
     source:   "Start{~n}\n"       +
               "{+title}\n"        +
