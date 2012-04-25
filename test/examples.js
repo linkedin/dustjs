@@ -263,6 +263,12 @@ exports.dustExamples = [
     expected: "Hello Mick! You have 30 new messages."
   },
   {
+    name:     "partial_array_param",
+    source:   '{#n}{>replace name=. count="30"/}{@sep} {/sep}{/n}',
+    context:  { n: ["Mick", "Tom", "Bob"] },
+    expected: "Hello Mick! You have 30 new messages. Hello Tom! You have 30 new messages. Hello Bob! You have 30 new messages."
+  },
+  {
     name:     "base_template",
     source:   "Start{~n}\n"       +
               "{+title}\n"        +
