@@ -28,4 +28,30 @@ pre-requisites for tests on node server version:
 * install npm
 * install Jasmine test framework (npm install -g jasmine-node)
 
+To get the coverage report
+--------------------------
+
+We are using a tool called node-cover, it can be installed by npm executing "npm install cover -g".
+
+Once you have installed cover, you should use it in this way:
+
+Execute Cover.
+--------------
+
+"cover run test/jasmine-test/server/specRunner.js" // it will execute all the test and create a folder with results.
+
+Watch standard results
+----------------------
+
+"cover report" //it will show you a table con % code covered, missed lines, #lines, %blocks, Missed blocked and # blocks.
+
+Watch html results
+------------------
+
+"cover report html" //it will create a folder in the location where you executed the command with html files showing the coverage.
+
+The results are very complete, it creates one html file per js file used by the test. 
+
+The lines that are not covered are painted on red.
+
 
