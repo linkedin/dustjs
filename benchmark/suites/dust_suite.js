@@ -90,6 +90,20 @@ var benches = {
                  {name: "blue", current: false, url: "#Blue"}
                ]
              }
+  },
+
+  "if": {
+    source:  "{@if cond=\"{a} + {b} == 3 && 'U{{{a} * {b}}}' == 'U2'\"}\n" +
+             "  Condition is true\n"                                     +
+             "{:else}\n"                                                 +
+             "  Condition is false\n"                                    +
+             "{/if}",
+    context: {
+               a: 1,
+               b: function () {
+                  return 2;
+               }
+             }
   }
 
 }
