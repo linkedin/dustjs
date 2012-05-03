@@ -15,18 +15,17 @@ part
   = comment / section / partial / special / reference / buffer
 
 section "section"
-  = t:sec_tag_start rd b:body e:bodies n:end_tag
-    &{if (!result8) return true; return result8[1].text === result12.text}
+  = t:sec_tag_start ws* rd b:body e:bodies n:end_tag &{ return t[1].text === n.text;}
   { e.push(["param", ["literal", "block"], b]); t.push(e); return t }
   / t:sec_tag_start "/" rd
   { t.push(["bodies"]); return t }
 
 sec_tag_start
-  = ld t:[#?^<+@%] n:identifier c:context p:params
+  = ld t:[#?^<+@%] n:identifier c:context p:params ws*
   { return [t, n, c, p] }
 
 end_tag "end tag"
-  = ld "/" n:identifier rd
+  = ld "/" ws* n:identifier ws* rd
   { return n }
 
 context
@@ -34,7 +33,7 @@ context
   { return n ? ["context", n] : ["context"] }
 
 params "params"
-  = p:(ws k:key "=" v:(identifier / inline) {return ["param", ["literal", k], v]})*
+  = p:(ws+ k:key "=" v:(identifier / inline) {return ["param", ["literal", k], v]})*
   { return ["params"].concat(p) }
 
 bodies "bodies"
@@ -105,7 +104,7 @@ ld
   = "{"
 
 rd
-  = "}"
+  = ws* "}"
 
 eol
   = "\n"

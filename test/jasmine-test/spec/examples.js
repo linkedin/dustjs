@@ -396,7 +396,27 @@ var dustExamples = [
     expected: "<div>bar</div>",
     message: "should test the use of $idx in @if helper condition"
   },
-  
+  {
+    name:     "whitespaces in opening and closing tags",
+    source:   '{#helper foo="bar" boo="boo" } {/ helper }',  
+    context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
+    expected: "boo bar",
+    message: "should ignore extra whitespaces in opening and closing tags"
+  },
+  {
+    name:     "whitespaces in self closing tags",
+    source:   '{#helper foo="bar" boo="boo" /}',  
+    context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
+    expected: "boo bar",
+    message: "should ignore extra whitespaces in self closing tags"
+  },
+  {
+    name:     "whitespaces between params",
+    source:   '{#helper foo="bar"   boo="boo"/}',  
+    context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
+    expected: "boo bar",
+    message: "should ignore extra whitespaces between params"
+  }
 ];
 
 if (typeof module !== "undefined" && typeof require !== "undefined") {
