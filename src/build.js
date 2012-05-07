@@ -3,7 +3,7 @@ var peg  = require('pegjs'),
     path = require('path'),
     root = path.join(path.dirname(__filename), "..");
 
-var parser = peg.buildParser(fs.readFileSync(path.join(root, 'src', 'dust.pegjs'), 'utf8'));
+var parser = peg.buildParser(fs.readFileSync(path.join(root, 'src', 'dust.pegjs'), 'utf8'), {cache : true});
 
 var namespace = 'parser';
 
