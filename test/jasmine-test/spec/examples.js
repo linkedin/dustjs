@@ -446,11 +446,11 @@ var dustExamples = [
     message: "should ignore extra whitespaces between params"
   },
   {
-    name: "whitespaces after the '{' followed by '>' symbol in open tags for partials",
+    name: "whitespaces after the '{' followed by '>' symbol in open tags for partials are not allowed",
     source: '{> replace/} {> "plain"/} {> "{ref}"/}',
     context: { "name": "Jim", "count": 42, "ref": "plain" },
-    expected: "Hello Jim! You have 42 new messages. Hello World! Hello World!",
-    message: "should ignore extra whitespaces  after the '{' followed by '>'' symbol in open tags for partials"
+    error: 'Expected buffer, comment, partial, reference, section or special but "{" found. At line : 1, column : 1',
+    message: "should show an error because extra whitespaces after the '{' followed by '>'' symbol are not allowed in open tags for partials"
   },
   {
     name: "whitespaces in close tags for partials",

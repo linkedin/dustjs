@@ -85,7 +85,7 @@ reference "reference"
    with context followed by ane slash and a close curly bracket
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 partial "partial"
-  = ld ">" ws* n:(k:key {return ["literal", k]} / inline) c:context  ws* "/" rd
+  = ld ">" n:(k:key {return ["literal", k]} / inline) c:context  ws* "/" rd
   { return ["partial", n, c] }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
