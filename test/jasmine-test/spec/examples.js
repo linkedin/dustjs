@@ -396,7 +396,69 @@ var dustExamples = [
     expected: "<div>bar</div>",
     message: "should test the use of $idx in @if helper condition"
   },
-  
+  {
+    name:     "whitespaces in open tags for sections, it works equal for all these cases '{#', '{?', '{^', '{<', '{+', '{@', '{%'",
+    source:   '{# helper foo="bar" boo="boo" } {/helper}',  
+    context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
+    expected: "boo bar",
+    message: "should ignore extra whitespaces after the open curly bracket followed by any of this characters #,?,^,+,@,%"
+  },
+  {
+    name:     "whitespaces between the '{' and the symbol in open tags for sections, it works equal for all these cases '{#', '{?', '{^', '{<', '{+', '{@', '{%'",
+    source:   '{ # helper foo="bar" boo="boo" } {/helper}',  
+    context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
+    error: 'Expected buffer, comment, partial, reference, section or special but "{" found. At line : 1, column : 34',
+    message: "should show an error because whitespaces between the '{' and the symbol are not allowed in open tags"
+  },
+  {
+    name:     "whitespaces in close tags for sections, it works equal for all these cases '{#', '{?', '{^', '{<', '{+', '{@', '{%'",
+    source:   '{# helper foo="bar" boo="boo"} {/ helper }',
+    context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
+    expected: "boo bar",
+    message: "should ignore extra whitespaces after the open curly bracket followed by the slash and ignore ws before the close curly bracket"
+  },
+  {
+    name:     "whitespaces between the open curly bracket and the slash in close tags for sections",
+    source:   '{# helper foo="bar" boo="boo"} { / helper }',
+    context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
+    error: 'Expected buffer, comment, partial, reference, section or special but "{" found. At line : 1, column : 1',
+    message: "should show an error because whitespaces between the '{' and the slash are not allowed in close tags"
+  },
+  {
+    name:     "whitespaces in self closing tags",
+    source:   '{#helper foo="bar" boo="boo" /}',
+    context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
+    expected: "boo bar",
+    message: "should ignore extra whitespaces in self closing tags"
+  },
+  {
+    name:     "whitespaces between the slash and the close curly bracket in self closed tags",
+    source:   '{#helper foo="bar" boo="boo" / }',
+    context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
+    error: 'Expected buffer, comment, partial, reference, section or special but "{" found. At line : 1, column : 1',
+    message: "should show an error because whitespaces between the slash and the '}' are not allowed in self closed tags"
+  },
+  {
+    name: "whitespaces between params",
+    source: '{#helper foo="bar"   boo="boo"/}',
+    context: { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
+    expected: "boo bar",
+    message: "should ignore extra whitespaces between params"
+  },
+  {
+    name: "whitespaces after the '{' followed by '>' symbol in open tags for partials are not allowed",
+    source: '{> replace/} {> "plain"/} {> "{ref}"/}',
+    context: { "name": "Jim", "count": 42, "ref": "plain" },
+    error: 'Expected buffer, comment, partial, reference, section or special but "{" found. At line : 1, column : 1',
+    message: "should show an error because extra whitespaces after the '{' followed by '>'' symbol are not allowed in open tags for partials"
+  },
+  {
+    name: "whitespaces in close tags for partials",
+    source: '{>replace /} {>"plain" /} {>"{ref}" /}',  
+    context: { "name": "Jim", "count": 42, "ref": "plain" },
+    expected: "Hello Jim! You have 42 new messages. Hello World! Hello World!",
+    message: "should ignore extra whitespaces before the slash followed by the close curly bracket"
+  }
 ];
 
 if (typeof module !== "undefined" && typeof require !== "undefined") {
