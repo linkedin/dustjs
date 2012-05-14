@@ -1,10 +1,3 @@
-{
-  function wrap(node, ck) {
-    node['text'] = input.substring(ck.split('@')[1], pos);
-    return node;
-  }
-}
-
 start
   = body
 
@@ -57,8 +50,8 @@ special "special"
   { return ["special", k] }
 
 identifier "identifier"
-  = p:path     { return wrap(["path"].concat(p), cacheKey) }
-  / k:key      { return wrap(["key", k], cacheKey) }
+  = p:path     { var arr = ["path"].concat(p); arr.text = p[1].join('.'); return arr; }
+  / k:key      { var arr = ["key", k]; arr.text = k; return arr; }
 
 path "path"
   = k:key? d:("." k:key {return k})+ {
