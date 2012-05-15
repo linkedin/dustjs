@@ -268,6 +268,18 @@ exports.dustExamples = [
     context:  { n: ["Mick", "Tom", "Bob"] },
     expected: "Hello Mick! You have 30 new messages. Hello Tom! You have 30 new messages. Hello Bob! You have 30 new messages."
   },
+  { name:     "partial_context_param",
+    source:   '{>replace:profile name="{n}" count="{c}"/}',
+    context:  { profile:  { n: "Mick", c: 30 } },
+    expected: "Hello Mick! You have 30 new messages.",
+    message: "should test partial params with context"
+  },
+  { name:     "partial_context_param_literal",
+    source:   '{>replace:profile name="Joe" count="99"/}',
+    context:  { profile:  { n: "Mick", count: 30 } },
+    expected: "Hello Joe! You have 30 new messages.",
+    message: "should test partial params with context. Fallback values of name or count is undefined"
+  },
   {
     name:     "base_template",
     source:   "Start{~n}\n"       +
