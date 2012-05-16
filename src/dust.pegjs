@@ -54,8 +54,14 @@ identifier "identifier"
   / k:key      { var arr = ["key", k]; arr.text = k; return arr; }
 
 path "path"
-  = k:key? d:("." k:key {return k})+ {
-    if (k) { d.unshift(k); return [false, d]; }
+  = k:key? d:("." k:key {return k})+ a:("[" a:([0-9]+) "]" {return a.join('')})? {
+    if (k) {
+      d.unshift(k);
+      if (a) {
+        d.push(a);
+      } 
+      return [false, d];
+    }
     return [true, d];
   }
   / "." { return [true, []] }
