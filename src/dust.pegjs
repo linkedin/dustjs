@@ -171,21 +171,21 @@ comment "comment"
   { return ["comment", c.join('')] }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
-   Match an open curly bracket plus any of this characters #?^><+%:@/~% plus any character or characters that doesn't match rd or eol  
-   plus a close curly bracket
+   Match an open curly bracket plus any of this characters #?^><+%:@/~% plus 0 or more whitespaces plus any character or characters that 
+   doesn't match rd or eol plus 0 or more whitespaces plus a close curly bracket
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 tag
   = ld [#?^><+%:@/~%] ws* (!rd !eol .)+  ws* rd
   / reference
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
-   Match an open curly bracket plus 0 or more white spaces 
+   Match an open curly bracket
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 ld
   = "{"
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
-   Match 0 or more white spaces plus a close curly bracket
+   Match a close curly bracket
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 rd
   = "}"
