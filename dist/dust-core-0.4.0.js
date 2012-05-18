@@ -8,6 +8,12 @@
 
 var dust = {};
 
+function getGlobal(){	
+  return (function(){	
+    return this.dust;	
+      }).call(null);
+}
+
 (function(dust) {
 
 dust.cache = {};
@@ -509,7 +515,7 @@ dust.escapeJs = function(s) {
 
 if (typeof exports !== "undefined") {
   dust.helpers = require("./dust-helpers").helpers;
-  if (typeof process !== "undefined" && typeof window === "undefined") {
+  if (typeof process !== "undefined") {
       require('./server')(dust);
   }
   module.exports = dust;
@@ -564,4 +570,4 @@ var helpers = {
 
 dust.helpers = helpers;
 
-})(typeof exports !== 'undefined' ? exports : window.dust);
+})(typeof exports !== 'undefined' ? exports : getGlobal());
