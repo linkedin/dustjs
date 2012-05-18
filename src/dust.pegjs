@@ -54,13 +54,11 @@ identifier "identifier"
   / k:key      { var arr = ["key", k]; arr.text = k; return arr; }
 
 path "path"
-  = k:key? d:("." k:key {return k})+ a:("[" a:([0-9]+) "]" {return a.join('')})? {
-    if (k) {
+  = k:key? d:(nestedKey)+ {
+    d = d[0]; 
+    if (k && d) {
       d.unshift(k);
-      if (a) {
-        d.push(a);
-      } 
-      return [false, d];
+      return [false, d];;
     }
     return [true, d];
   }
@@ -69,6 +67,12 @@ path "path"
 key "key"
   = h:[a-zA-Z_$] t:[0-9a-zA-Z_$]*
   { return h + t.join('') }
+  
+nestedKey "nestedKey"
+  = d:("." k:key {return k})+ a:(array)? { if (a) { return d.concat(a); } else { return d; } }
+
+array "array"
+  = i:("[" a:([0-9]+) "]" {return a.join('')}) nk: nestedKey? { if(nk) { nk.unshift(i); } else {nk = [i] } return nk; }
 
 inline "inline"
   = '"' '"'                 { return ["literal", ""] }
