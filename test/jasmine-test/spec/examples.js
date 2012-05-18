@@ -396,6 +396,27 @@ var dustExamples = [
     expected: "<div>bar</div>",
     message: "should test the use of $idx in @if helper condition"
   },
+  {
+    name:     "Accessing array by index",
+    source:   '{do.re[0]}',  
+    context:  { "do": { "re" : ["hello!","bye!"] } },
+    expected: "hello!",
+    message: "should return a specific array element by index. Simplest case, the array only contains primitive values."
+  },
+  {
+    name:     "Accessing array by index",
+    source:   '{do.re[0].mi}',  
+    context:  { "do": { "re" : [{"mi" : "hello!"},"bye!"] } },
+    expected: "hello!",
+    message: "should return a specific array element by index. Complex case, the array contains objects."
+  },
+  {
+    name:     "Accessing array by index",
+    source:   '{do.re[0].mi[1].fa}',  
+    context:  { "do": { "re" : [{"mi" : ["one", {"fa" : "hello!"}]},"bye!"] } },
+    expected: "hello!",
+    message: "should return a specific array element by index. Most Complex case, the array contains nested objects."
+  }
   
 ];
 
