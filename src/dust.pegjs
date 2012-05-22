@@ -1,12 +1,7 @@
-{
-  function wrap(node, ck) {
-    node['text'] = input.substring(ck.split('@')[1], pos);
-    return node;
-  }
-}
 /*-------------------------------------------------------------------------------------------------------------------------------------
    Start tag this is the first function to be executed.
 ---------------------------------------------------------------------------------------------------------------------------------------*/
+
 start
   = body
 
@@ -106,15 +101,19 @@ special "special"
    Match anything that match with path or key
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 identifier "identifier"
-  = p:path     { return wrap(["path"].concat(p), cacheKey) }
-  / k:key      { return wrap(["key", k], cacheKey) }
+  = p:path     { var arr = ["path"].concat(p); arr.text = p[1].join('.'); return arr; }
+  / k:key      { var arr = ["key", k]; arr.text = k; return arr; }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
    Match anything that match with key plus one or more characters that match with key again but preceded by a dot "." 
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 path "path"
-  = k:key? d:("." k:key {return k})+ {
-    if (k) { d.unshift(k); return [false, d]; }
+  = k:key? d:(nestedKey)+ {
+    d = d[0]; 
+    if (k && d) {
+      d.unshift(k);
+      return [false, d];;
+    }
     return [true, d];
   }
   / "." { return [true, []] }
@@ -125,6 +124,12 @@ path "path"
 key "key"
   = h:[a-zA-Z_$] t:[0-9a-zA-Z_$]*
   { return h + t.join('') }
+  
+nestedKey "nestedKey"
+  = d:("." k:key {return k})+ a:(array)? { if (a) { return d.concat(a); } else { return d; } }
+
+array "array"
+  = i:("[" a:([0-9]+) "]" {return a.join('')}) nk: nestedKey? { if(nk) { nk.unshift(i); } else {nk = [i] } return nk; }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
    Match two double quotes or double quotes plus something that matches with literal plus other double quotes or  

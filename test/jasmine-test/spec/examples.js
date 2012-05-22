@@ -471,6 +471,27 @@ var dustExamples = [
     context: { "name": "Jim", "count": 42, "ref": "plain" },
     expected: "Hello Jim! You have 42 new messages. Hello World! Hello World!",
     message: "should ignore extra whitespaces before the slash followed by the close curly bracket"
+  },
+  {
+    name:     "Accessing array by index",
+    source:   '{do.re[0]}',  
+    context:  { "do": { "re" : ["hello!","bye!"] } },
+    expected: "hello!",
+    message: "should return a specific array element by index. Simplest case, the array only contains primitive values."
+  },
+  {
+    name:     "Accessing array by index",
+    source:   '{do.re[0].mi}',  
+    context:  { "do": { "re" : [{"mi" : "hello!"},"bye!"] } },
+    expected: "hello!",
+    message: "should return a specific array element by index. Complex case, the array contains objects."
+  },
+  {
+    name:     "Accessing array by index",
+    source:   '{do.re[0].mi[1].fa}',  
+    context:  { "do": { "re" : [{"mi" : ["one", {"fa" : "hello!"}]},"bye!"] } },
+    expected: "hello!",
+    message: "should return a specific array element by index. Most Complex case, the array contains nested objects."
   }
 ];
 
