@@ -492,6 +492,20 @@ var dustExamples = [
     context:  { "do": { "re" : [{"mi" : ["one", {"fa" : "hello!"}]},"bye!"] } },
     expected: "hello!",
     message: "should return a specific array element by index. Most Complex case, the array contains nested objects."
+  },
+  {
+    name:     "params: integer",
+    source:   "{#helper foo=10 /}",
+    context:  { helper: function(chunk, context, bodies, params) { return chunk.write(params.foo); } },
+    expected: "10",
+    message: "Block handlers syntax should support integer number parameters"
+  },
+  {
+    name:     "params: decimal",
+    source:   "{#helper foo=3.14159 /}",
+    context:  { helper: function(chunk, context, bodies, params) { return chunk.write(params.foo); } },
+    expected: "3.14159",
+    message: "Block handlers syntax should support decimal number parameters"
   }
 ];
 
