@@ -324,6 +324,26 @@ exports.dustExamples = [
               "{!before!}Hello{!after!}",
     context:  {},
     expected: "Hello"
+  },
+  {
+    name:     "params: integer",
+    source:   "{#helper foo=10 /}",
+    context:  {
+                helper: function(chunk, context, bodies, params) {
+                    return chunk.write(params.foo);
+                }
+              },
+    expected: "10"
+  },
+  {
+    name:     "params: decimal",
+    source:   "{#helper foo=3.14159 /}",
+    context:  {
+                helper: function(chunk, context, bodies, params) {
+                    return chunk.write(params.foo);
+                }
+              },
+    expected: "3.14159"
   }
 ];
 

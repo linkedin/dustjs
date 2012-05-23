@@ -56,7 +56,7 @@ context
    inline
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 params "params"
-  = p:(ws+ k:key "=" v:(identifier / inline) {return ["param", ["literal", k], v]})*
+  = p:(ws+ k:key "=" v:(number / identifier / inline) {return ["param", ["literal", k], v]})*
   { return ["params"].concat(p) }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
@@ -103,6 +103,19 @@ special "special"
 identifier "identifier"
   = p:path     { var arr = ["path"].concat(p); arr.text = p[1].join('.'); return arr; }
   / k:key      { var arr = ["key", k]; arr.text = k; return arr; }
+
+/*-------------------------------------------------------------------------------------------------------------------------------------
+   Match an integer or float (1 or 1.00)
+---------------------------------------------------------------------------------------------------------------------------------------*/
+
+number "number"
+  = n:(frac / integer) { return ['literal', n]; }
+
+frac "frac"
+  = l:integer "." r:integer+ { return parseFloat(l + "." + r.join('')); }
+
+integer "integer"
+  = digits:[0-9]+ { return parseInt(digits.join(""), 10); }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
    Match anything that match with key plus one or more characters that match with key again but preceded by a dot "." 
