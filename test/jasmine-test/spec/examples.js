@@ -506,6 +506,20 @@ var dustExamples = [
     context:  { helper: function(chunk, context, bodies, params) { return chunk.write(params.foo); } },
     expected: "3.14159",
     message: "Block handlers syntax should support decimal number parameters"
+  },
+  {
+    name:     "JSON.stringify filter",
+    source:   "{obj|js|s}",
+    context:  { obj: { id: 1, name: "bob", occupation: "construction" } },
+    expected: JSON.stringify({ id: 1, name: "bob", occupation: "construction" }),
+    message: "should stringify a JSON literal when using the js filter"
+  },
+  {
+    name:     "JSON.parse filter",
+    source:   "{obj|jp}",
+    context:  { obj: JSON.stringify({ id: 1, name: "bob", occupation: "construction" }) },
+    expected: JSON.parse(JSON.stringify({ id: 1, name: "bob", occupation: "construction" })).toString(),
+    message: "should objectify a JSON string when using the jp filter"
   }
 ];
 
