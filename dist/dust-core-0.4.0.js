@@ -8,6 +8,12 @@
 
 var dust = {};
 
+function getGlobal(){	
+  return (function(){	
+    return this.dust;	
+      }).call(null);
+}
+
 (function(dust) {
 
 dust.cache = {};
@@ -75,9 +81,15 @@ if (Array.isArray) {
   };
 }
 
-dust.nextTick = function(callback) {
-  setTimeout(callback, 0);
-}
+dust.nextTick = (function() {
+  if (typeof process !== "undefined") {
+    return process.nextTick;
+  } else {
+    return function(callback) {
+      setTimeout(callback,0);
+    }
+  }
+} )();
 
 dust.isEmpty = function(value) {
   if (dust.isArray(value) && !value.length) return true;
@@ -107,7 +119,7 @@ dust.filters = {
   j: function(value) { return dust.escapeJs(value); },
   u: encodeURI,
   uc: encodeURIComponent
-}
+};
 
 function Context(stack, global, blocks) {
   this.stack  = stack;
@@ -117,14 +129,14 @@ function Context(stack, global, blocks) {
 
 dust.makeBase = function(global) {
   return new Context(new Stack(), global);
-}
+};
 
 Context.wrap = function(context) {
   if (context instanceof Context) {
     return context;
   }
   return new Context(new Stack(context));
-}
+};
 
 Context.prototype.get = function(key) {
   var ctx = this.stack, value;
@@ -183,7 +195,7 @@ Context.prototype.getBlock = function(key) {
     fn = blocks[len][key];
     if (fn) return fn;
   }
-}
+};
 
 Context.prototype.shiftBlocks = function(locals) {
   var blocks = this.blocks;
@@ -197,7 +209,7 @@ Context.prototype.shiftBlocks = function(locals) {
     return new Context(this.stack, this.global, newBlocks);
   }
   return this;
-}
+};
 
 function Stack(head, tail, idx, len) {
   this.tail = tail;
@@ -230,7 +242,7 @@ Stub.prototype.flush = function() {
     this.head = chunk;
   }
   this.callback(null, this.out);
-}
+};
 
 function Stream() {
   this.head = new Chunk(this);
@@ -253,7 +265,7 @@ Stream.prototype.flush = function() {
     this.head = chunk;
   }
   this.emit('end');
-}
+};
 
 Stream.prototype.emit = function(type, data) {
   var events = this.events;
@@ -261,7 +273,7 @@ Stream.prototype.emit = function(type, data) {
   if (events && events[type]) {
     events[type](data);
   }
-}
+};
 
 Stream.prototype.on = function(type, callback) {
   if (!this.events) {
@@ -269,7 +281,7 @@ Stream.prototype.on = function(type, callback) {
   }
   this.events[type] = callback;
   return this;
-}
+};
 
 function Chunk(root, next, taps) {
   this.root = root;
@@ -287,7 +299,7 @@ Chunk.prototype.write = function(data) {
   }
   this.data += data;
   return this;
-}
+};
 
 Chunk.prototype.end = function(data) {
   if (data) {
@@ -296,7 +308,7 @@ Chunk.prototype.end = function(data) {
   this.flushable = true;
   this.root.flush();
   return this;
-}
+};
 
 Chunk.prototype.map = function(callback) {
   var cursor = new Chunk(this.root, this.next, this.taps),
@@ -306,7 +318,7 @@ Chunk.prototype.map = function(callback) {
   this.flushable = true;
   callback(branch);
   return cursor;
-}
+};
 
 Chunk.prototype.tap = function(tap) {
   var taps = this.taps;
@@ -317,16 +329,16 @@ Chunk.prototype.tap = function(tap) {
     this.taps = new Tap(tap);
   }
   return this;
-}
+};
 
 Chunk.prototype.untap = function() {
   this.taps = this.taps.tail;
   return this;
-}
+};
 
 Chunk.prototype.render = function(body, context) {
   return body(this, context);
-}
+};
 
 Chunk.prototype.reference = function(elem, context, auto, filters) {
   if (typeof elem === "function") {
@@ -385,7 +397,7 @@ Chunk.prototype.exists = function(elem, context, bodies) {
     return skip(this, context);
   }
   return this;
-}
+};
 
 Chunk.prototype.notexists = function(elem, context, bodies) {
   var body = bodies.block,
@@ -397,7 +409,7 @@ Chunk.prototype.notexists = function(elem, context, bodies) {
     return skip(this, context);
   }
   return this;
-}
+};
 
 Chunk.prototype.block = function(elem, context, bodies) {
   var body = bodies.block;
@@ -412,7 +424,17 @@ Chunk.prototype.block = function(elem, context, bodies) {
   return this;
 };
 
-Chunk.prototype.partial = function(elem, context) {
+Chunk.prototype.partial = function(elem, context, params) {
+  var ctx = context.stack, tempHead = ctx.head;
+  if (params){
+    //put the params context second to match what section does. {.} matches the current context without parameters
+    //remove head
+    context = context.rebase(ctx.tail);
+    //put params on
+    context = context.push(params);
+    //reattach the head
+    context = context.push(tempHead);
+  }
   if (typeof elem === "function") {
     return this.capture(elem, context, function(name, chunk) {
       dust.load(name, chunk, context).end();
@@ -463,18 +485,19 @@ Tap.prototype.go = function(value) {
   return value;
 };
 
-var HCHARS = new RegExp(/[&<>\"]/),
+var HCHARS = new RegExp(/[&<>\"\']/),
     AMP    = /&/g,
     LT     = /</g,
     GT     = />/g,
-    QUOT   = /\"/g;
+    QUOT   = /\"/g,
+    SQUOT  = /\'/g;
 
 dust.escapeHtml = function(s) {
   if (typeof s === "string") {
     if (!HCHARS.test(s)) {
       return s;
     }
-    return s.replace(AMP,'&amp;').replace(LT,'&lt;').replace(GT,'&gt;').replace(QUOT,'&quot;');
+    return s.replace(AMP,'&amp;').replace(LT,'&lt;').replace(GT,'&gt;').replace(QUOT,'&quot;').replace(SQUOT, '&#39;');
   }
   return s;
 };
@@ -509,7 +532,7 @@ dust.escapeJs = function(s) {
 
 if (typeof exports !== "undefined") {
   dust.helpers = require("./dust-helpers").helpers;
-  if (typeof process !== "undefined" && typeof window === "undefined") {
+  if (typeof process !== "undefined") {
       require('./server')(dust);
   }
   module.exports = dust;
@@ -564,4 +587,4 @@ var helpers = {
 
 dust.helpers = helpers;
 
-})(typeof exports !== 'undefined' ? exports : window.dust);
+})(typeof exports !== 'undefined' ? exports : getGlobal());

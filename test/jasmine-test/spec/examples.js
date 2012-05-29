@@ -115,14 +115,14 @@ var dustExamples = [
     name:     "escaped",
     source:   "{safe|s}{~n}{unsafe}",
     context:  { safe: "<script>alert('Hello!')</script>", unsafe: "<script>alert('Goodbye!')</script>" },
-    expected: "<script>alert('Hello!')</script>\n&lt;script&gt;alert('Goodbye!')&lt;/script&gt;",
+    expected: "<script>alert('Hello!')</script>\n&lt;script&gt;alert(&#39;Goodbye!&#39;)&lt;/script&gt;",
     message: "should test escaped characters"
   },
   {
     name:     "escape_pragma",
     source:   "{%esc:s}\n  {unsafe}{~n}\n  {%esc:h}\n    {unsafe}\n  {/esc}\n{/esc}",
     context:  { unsafe: "<script>alert('Goodbye!')</script>" },
-    expected: "<script>alert('Goodbye!')</script>\n&lt;script&gt;alert('Goodbye!')&lt;/script&gt;",
+    expected: "<script>alert('Goodbye!')</script>\n&lt;script&gt;alert(&#39;Goodbye!&#39;)&lt;/script&gt;",
     message: "should test escape_pragma"
   },
   {
@@ -421,7 +421,118 @@ var dustExamples = [
     expected: "<div>bar</div>",
     message: "should test the use of $idx in @if helper condition"
   },
-  
+  {
+    name:     "whitespaces in open tags for sections, it works equal for all these cases '{#', '{?', '{^', '{<', '{+', '{@', '{%'",
+    source:   '{# helper foo="bar" boo="boo" } {/helper}',  
+    context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
+    expected: "boo bar",
+    message: "should ignore extra whitespaces after the open curly bracket followed by any of this characters #,?,^,+,@,%"
+  },
+  {
+    name:     "whitespaces between the '{' and the symbol in open tags for sections, it works equal for all these cases '{#', '{?', '{^', '{<', '{+', '{@', '{%'",
+    source:   '{ # helper foo="bar" boo="boo" } {/helper}',  
+    context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
+    error: 'Expected buffer, comment, partial, reference, section or special but "{" found. At line : 1, column : 34',
+    message: "should show an error because whitespaces between the '{' and the symbol are not allowed in open tags"
+  },
+  {
+    name:     "whitespaces in close tags for sections, it works equal for all these cases '{#', '{?', '{^', '{<', '{+', '{@', '{%'",
+    source:   '{# helper foo="bar" boo="boo"} {/ helper }',
+    context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
+    expected: "boo bar",
+    message: "should ignore extra whitespaces after the open curly bracket followed by the slash and ignore ws before the close curly bracket"
+  },
+  {
+    name:     "whitespaces between the open curly bracket and the slash in close tags for sections",
+    source:   '{# helper foo="bar" boo="boo"} { / helper }',
+    context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
+    error: 'Expected buffer, comment, partial, reference, section or special but "{" found. At line : 1, column : 1',
+    message: "should show an error because whitespaces between the '{' and the slash are not allowed in close tags"
+  },
+  {
+    name:     "whitespaces in self closing tags",
+    source:   '{#helper foo="bar" boo="boo" /}',
+    context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
+    expected: "boo bar",
+    message: "should ignore extra whitespaces in self closing tags"
+  },
+  {
+    name:     "whitespaces between the slash and the close curly bracket in self closed tags",
+    source:   '{#helper foo="bar" boo="boo" / }',
+    context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
+    error: 'Expected buffer, comment, partial, reference, section or special but "{" found. At line : 1, column : 1',
+    message: "should show an error because whitespaces between the slash and the '}' are not allowed in self closed tags"
+  },
+  {
+    name: "whitespaces between params",
+    source: '{#helper foo="bar"   boo="boo"/}',
+    context: { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
+    expected: "boo bar",
+    message: "should ignore extra whitespaces between params"
+  },
+  {
+    name: "whitespaces after the '{' followed by '>' symbol in open tags for partials are not allowed",
+    source: '{> replace/} {> "plain"/} {> "{ref}"/}',
+    context: { "name": "Jim", "count": 42, "ref": "plain" },
+    error: 'Expected buffer, comment, partial, reference, section or special but "{" found. At line : 1, column : 1',
+    message: "should show an error because extra whitespaces after the '{' followed by '>'' symbol are not allowed in open tags for partials"
+  },
+  {
+    name: "whitespaces in close tags for partials",
+    source: '{>replace /} {>"plain" /} {>"{ref}" /}',  
+    context: { "name": "Jim", "count": 42, "ref": "plain" },
+    expected: "Hello Jim! You have 42 new messages. Hello World! Hello World!",
+    message: "should ignore extra whitespaces before the slash followed by the close curly bracket"
+  },
+  {
+    name:     "Accessing array by index",
+    source:   '{do.re[0]}',  
+    context:  { "do": { "re" : ["hello!","bye!"] } },
+    expected: "hello!",
+    message: "should return a specific array element by index. Simplest case, the array only contains primitive values."
+  },
+  {
+    name:     "Accessing array by index",
+    source:   '{do.re[0].mi}',  
+    context:  { "do": { "re" : [{"mi" : "hello!"},"bye!"] } },
+    expected: "hello!",
+    message: "should return a specific array element by index. Complex case, the array contains objects."
+  },
+  {
+    name:     "Accessing array by index",
+    source:   '{do.re[0].mi[1].fa}',  
+    context:  { "do": { "re" : [{"mi" : ["one", {"fa" : "hello!"}]},"bye!"] } },
+    expected: "hello!",
+    message: "should return a specific array element by index. Most Complex case, the array contains nested objects."
+  },
+  {
+    name:     "params: integer",
+    source:   "{#helper foo=10 /}",
+    context:  { helper: function(chunk, context, bodies, params) { return chunk.write(params.foo); } },
+    expected: "10",
+    message: "Block handlers syntax should support integer number parameters"
+  },
+  {
+    name:     "params: decimal",
+    source:   "{#helper foo=3.14159 /}",
+    context:  { helper: function(chunk, context, bodies, params) { return chunk.write(params.foo); } },
+    expected: "3.14159",
+    message: "Block handlers syntax should support decimal number parameters"
+  },
+  {
+    name:     "JSON.stringify filter",
+    source:   "{obj|js|s}",
+    context:  { obj: { id: 1, name: "bob", occupation: "construction" } },
+    expected: JSON.stringify({ id: 1, name: "bob", occupation: "construction" }),
+    message: "should stringify a JSON literal when using the js filter"
+  },
+  {
+    name:     "JSON.parse filter",
+    source:   "{obj|jp}",
+    context:  { obj: JSON.stringify({ id: 1, name: "bob", occupation: "construction" }) },
+    expected: JSON.parse(JSON.stringify({ id: 1, name: "bob", occupation: "construction" })).toString(),
+    message: "should objectify a JSON string when using the jp filter"
+  }
 ];
 
 if (typeof module !== "undefined" && typeof require !== "undefined") {

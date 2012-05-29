@@ -84,13 +84,13 @@ exports.dustExamples = [
     name:     "escaped",
     source:   "{safe|s}{~n}{unsafe}",
     context:  { safe: "<script>alert('Hello!')</script>", unsafe: "<script>alert('Goodbye!')</script>" },
-    expected: "<script>alert('Hello!')</script>\n&lt;script&gt;alert('Goodbye!')&lt;/script&gt;"
+    expected: "<script>alert('Hello!')</script>\n&lt;script&gt;alert(&#39;Goodbye!&#39;)&lt;/script&gt;"
   },
   {
     name:     "escape_pragma",
     source:   "{%esc:s}\n  {unsafe}{~n}\n  {%esc:h}\n    {unsafe}\n  {/esc}\n{/esc}",
     context:  { unsafe: "<script>alert('Goodbye!')</script>" },
-    expected: "<script>alert('Goodbye!')</script>\n&lt;script&gt;alert('Goodbye!')&lt;/script&gt;"
+    expected: "<script>alert('Goodbye!')</script>\n&lt;script&gt;alert(&#39;Goodbye!&#39;)&lt;/script&gt;"
   },
   {
     name:     "else_block",
@@ -336,6 +336,26 @@ exports.dustExamples = [
               "{!before!}Hello{!after!}",
     context:  {},
     expected: "Hello"
+  },
+  {
+    name:     "params: integer",
+    source:   "{#helper foo=10 /}",
+    context:  {
+                helper: function(chunk, context, bodies, params) {
+                    return chunk.write(params.foo);
+                }
+              },
+    expected: "10"
+  },
+  {
+    name:     "params: decimal",
+    source:   "{#helper foo=3.14159 /}",
+    context:  {
+                helper: function(chunk, context, bodies, params) {
+                    return chunk.write(params.foo);
+                }
+              },
+    expected: "3.14159"
   }
 ];
 
