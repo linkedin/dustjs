@@ -532,6 +532,131 @@ var dustExamples = [
     context:  { obj: JSON.stringify({ id: 1, name: "bob", occupation: "construction" }) },
     expected: JSON.parse(JSON.stringify({ id: 1, name: "bob", occupation: "construction" })).toString(),
     message: "should objectify a JSON string when using the jp filter"
+  },
+  {
+    name:     "select helper: one condition - eq",
+    source:   ["{@select key=\"foo\"}",
+                 "{@eq value=10}foobar{/eq}",
+               "{/select}"
+              ].join("\n"),
+    context:  { foo: 10 },
+    expected: "foobar",
+    message: "Select helper works with one condition (eq)"
+  },
+  {
+    name:     "select helper: one condition - lt",
+    source:   ["{@select key=\"foo\"}",
+                 "{@lt value=20}foobar{/lt}",
+               "{/select}"
+              ].join("\n"),
+    context:  { foo: 10 },
+    expected: "foobar",
+    message: "Select helper works with one condition (lt)"
+  },
+  {
+    name:     "select helper: one condition - lte",
+    source:   ["{@select key=\"foo\"}",
+                 "{@lte value=10}foobar{/lte}",
+               "{/select}"
+              ].join("\n"),
+    context:  { foo: 10 },
+    expected: "foobar",
+    message: "Select helper works with one condition (lte)"
+  },
+  {
+    name:     "select helper: one condition - lte",
+    source:   ["{@select key=\"foo\"}",
+                 "{@lte value=11}foobar{/lte}",
+               "{/select}"
+              ].join("\n"),
+    context:  { foo: 10 },
+    expected: "foobar",
+    message: "Select helper works with one condition (lte)"
+  },
+  {
+    name:     "select helper: one condition - gt",
+    source:   ["{@select key=\"foo\"}",
+                 "{@gt value=5}foobar{/gt}",
+               "{/select}"
+              ].join("\n"),
+    context:  { foo: 10 },
+    expected: "foobar",
+    message: "Select helper works with one condition (gt)"
+  },
+  {
+    name:     "select helper: one condition - gte",
+    source:   ["{@select key=\"foo\"}",
+                 "{@gte value=10}foobar{/gte}",
+               "{/select}"
+              ].join("\n"),
+    context:  { foo: 10 },
+    expected: "foobar",
+    message: "Select helper works with one condition (gte)"
+  },
+  {
+    name:     "select helper: one condition - gte",
+    source:   ["{@select key=\"foo\"}",
+                 "{@gte value=5}foobar{/gte}",
+               "{/select}"
+              ].join("\n"),
+    context:  { foo: 10 },
+    expected: "foobar",
+    message: "Select helper works with one condition (gte)"
+  },
+  {
+    name:     "select helper: one condition - number",
+    source:   ["{@select key=\"foo\"}",
+                 "{@eq value=10}foobar{/eq}",
+               "{/select}"
+              ].join("\n"),
+    context:  { foo: 10 },
+    expected: "foobar",
+    message: "Select helper works with one condition of type number (eq)"
+  },
+  {
+    name:     "select helper: one condition - string",
+    source:   ["{@select key=\"foo\"}",
+                 "{@eq value=\"bar\"}foobar{/eq}",
+               "{/select}"
+              ].join("\n"),
+    context:  { foo: "bar" },
+    expected: "foobar",
+    message: "Select helper works with one condition of type string (eq)"
+  },
+  {
+    name:     "select helper: two conditions",
+    source:   ["{@select key=\"foo\"}",
+                 "{@eq value=\"bar\"}foobar{/eq}",
+                 "{@eq value=\"baz\"}foobaz{/eq}",
+               "{/select}"
+              ].join("\n"),
+    context:  { foo: "baz" },
+    expected: "foobaz",
+    message: "Select helper works with two conditions"
+  },
+  {
+    name:     "select helper: three conditions with else",
+    source:   ["{@select key=\"foo\"}",
+                 "{@eq value=\"bar\"}foobar{/eq}",
+                 "{@eq value=\"baz\"}foobaz{/eq}",
+                 "{@eq value=\"foobar\"}foofoobar{/eq}",
+                 "{@else value=\"foo\"}foofoo{/else}",
+               "{/select}"
+              ].join("\n"),
+    context:  { foo: "foo" },
+    expected: "foofoo",
+    message: "Select helper works with three conditions with else"
+  },
+  {
+    name:     "select helper: no matching conditions",
+    source:   ["{@select key=\"foo\"}",
+                 "{@eq value=\"bar\"}foobar{/eq}",
+                 "{@eq value=\"baz\"}foobaz{/eq}",
+               "{/select}"
+              ].join("\n"),
+    context:  { foo: "foo" },
+    expected: "",
+    message: "Select helper works correctly with no matching conditions"
   }
 ];
 
