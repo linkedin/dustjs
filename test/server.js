@@ -1,6 +1,6 @@
 var uutest    = require('./uutest'),
     dust      = require('../lib/dust'),
-    tests     = require('./examples').dustExamples,
+    tests     = require('./jasmine-test/spec/examples'),
     coreSetup = require('./core').coreSetup;
 
 function dumpError(err) {
