@@ -25,7 +25,8 @@
   },
   "keywords": ["templates", "views"],
   "devDependencies": {
-    "jasmine-node"   :  "1.0.x"
+    "jasmine-node"   :  "1.0.x",
+    "cover"          :  "0.2.x"
   },
   "license": "MIT",
   "engine": {
