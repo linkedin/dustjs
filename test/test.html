@@ -13,14 +13,14 @@
 <script src="../lib/dust-helpers.js"></script>
 <script src="../lib/parser.js"></script>
 <script src="../lib/compiler.js"></script>
-<script src="./examples.js"></script>
+<script src="./jasmine-test/spec/examples.js"></script>
 <script src="./uutest.js"></script>
 <script src="./core.js"></script>
 <script type="text/javascript">
   (function(){
     dust.register("select",body_0);
     function body_0(chk,ctx){
-      return chk.write("<select style=\"clear: both;\">").section(ctx.get("examples"),ctx,{"block":body_1},null).write("</select>");
+      return chk.write("<select style=\"clear: both;width: 496px;\">").section(ctx.get("examples"),ctx,{"block":body_1},null).write("</select>");
     }
 	  function body_1(chk,ctx){
 	    return chk.write("<option ").reference(ctx.get("selected"),ctx,"h").write("value=\"").helper("idx",ctx,{"block":body_2},null).write("\">").reference(ctx.get("name"),ctx,"h").write("</option>");
@@ -129,7 +129,11 @@
 
 	$(document).ready(function() {
     dustExamples.forEach(function(ex) {
-	    dust.loadSource(dust.compile(ex.source, ex.name));
+      if (ex.error){
+        dustExamples.splice(dustExamples.indexOf(ex), 1);  
+      } else {
+	      dust.loadSource(dust.compile(ex.source, ex.name));
+      }
 	  });
     
     runSuite();
@@ -226,7 +230,7 @@
 		<div class="col1">
 			<p>1. Select a template 
 			<span id="select">
-			<select style="clear: both;">
+			<select style="clear: both; width:496px">
 				<option value="0">intro</option>
 				<option value="1">plain</option>
 				<option selected="" value="2">replace</option>
