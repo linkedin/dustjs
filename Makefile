@@ -11,6 +11,12 @@ jasmine:
 	node test/jasmine-test/server/specRunner.js
 
 #
+# Run code coverage and generate report
+#
+coverage:
+	cover run test/server.js && cover report && cover report html
+
+#
 # Run the benchmarks
 #
 bench:

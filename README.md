@@ -67,3 +67,19 @@ registered under the same name as the source file:
 You can customize the name under which the template is registered:
 
     $ dustc --name=mytemplate template.html
+
+Running Tests
+------------
+
+To run tests:
+
+    $ make test
+
+To generate code coverage report:
+
+    $ npm install cover -g
+    $ make coverage
+    
+To view HTML test coverage report:
+
+    $ open cover_html/index.html
