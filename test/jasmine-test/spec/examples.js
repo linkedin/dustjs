@@ -645,6 +645,26 @@ var dustExamples = [
     context:  { foo: "foo" },
     expected: "",
     message: "Select helper works correctly with no matching conditions"
+  },
+  {
+    name: "ws updated to allow eol",
+    source: ['{#pubAuthors ',
+              'paramName="pubAuthors"',
+              'formName=name ',
+              'defaultContributorFirstName=defaultContributorFirstName ',
+              'defaultContributorLastName=defaultContributorLastName',
+              'coContributors=coContributors', 
+              'isRequestSecure=isRequestSecure', 
+              'memberId=defaultAuthorId ',
+              'maxNumberOfAuthors=maxNumberOfAuthors ',
+              'addText=i18n_publication_author_add',
+              'removeText=i18n_publication_author_remove ',
+              'maxReachedText=i18n_publication_author_max_reached}',
+              '{>"tl/apps/profile/v2/partial/contributors_input"/}',
+              '{/pubAuthors}',].join("\n"),
+    context: {},
+    expected: "",
+    message: "Should ignore carriage return or tab"
   }
 ];
 
