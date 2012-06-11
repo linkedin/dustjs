@@ -645,6 +645,18 @@ var dustExamples = [
     context:  { foo: "foo" },
     expected: "",
     message: "Select helper works correctly with no matching conditions"
+  },
+  {
+    name: "ws updated to allow eol",
+    source: ['{#authors ',
+              'name="theAuthors"',
+              'lastname="authorlastname" ',
+              'maxtext=300}',
+              '{>"otherTemplate"/}',
+              '{/authors}',].join("\n"),
+    context: {},
+    expected: "",
+    message: "Should ignore carriage return or tab"
   }
 ];
 
