@@ -1,5 +1,5 @@
 //
-// Dust - Asynchronous Templating v0.4.0
+// Dust - Asynchronous Templating v0.6.0
 // http://akdubya.github.com/dustjs
 //
 // Copyright (c) 2010, Aleksander Williams
