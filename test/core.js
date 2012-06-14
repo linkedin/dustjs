@@ -35,6 +35,23 @@ exports.coreSetup = function(suite, auto) {
     });
   });
 
+  suite.test("onLoad callback is passed context", function() {
+    var unit = this;
+    dust.onLoad = function(name, cb, extras) {
+      cb(null, "Loaded: " + name + " with context.foo: " + extras.context.get("foo") + ".");
+    };
+    dust.render("onLoadWithContext", {foo:"bar"}, function(err, out) {
+      try {
+        unit.ifError(err);
+        unit.equals(out, "Loaded: onLoadWithContext with context.foo: bar.");
+      } catch(err) {
+        unit.fail(err);
+        return;
+      }
+      unit.pass();
+    });
+  });
+
   suite.test("renderSource (callback)", function() {
     var unit = this;
     dust.renderSource('Hello World', {}, function(err, out) {
