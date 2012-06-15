@@ -409,7 +409,55 @@ var dustExamples = [
     expected: "<div>bar</div>",
     message: "should test the use of $idx in @if helper condition"
   },
-  
+  {
+    name:     "sizeFilter 3 items",
+    source:   'you have {list|size} new messages',
+    context:  { list: [ 'msg1', 'msg2', 'msg3' ] },
+    expected: "you have 3 new messages",
+    message: "should test if size filter is working properly with array"
+  },
+  {
+    name:     "sizeFilter string",
+    source:   "'{mystring}' has {mystring|size} letters",
+    context:  { mystring: 'hello' },
+    expected: "'hello' has 5 letters",
+    message: "should test if size filter is working properly with strings"
+  },
+  {
+    name:     "sizeFilter string (empty)",
+    source:   "'{mystring}' has {mystring|size} letters",
+    context:  { mystring: '' },
+    expected: "'' has 0 letters",
+    message: "should test if size filter is working properly with strings"
+  },
+  {
+    name:     "sizeFilter number",
+    source:   'you have {mynumber|size} new messages',
+    context:  { mynumber: 10 },
+    expected: "you have 10 new messages",
+    message: "should test if size filter is working properly with numbers"
+  },
+  {
+    name:     "sizeFilter number",
+    source:   'you have {mynumber|size} new messages',
+    context:  { mynumber: 0 },
+    expected: "you have 0 new messages",
+    message: "should test if size filter is working properly with numbers"
+  },
+  {
+    name:     "sizeFilter 0 items",
+    source:   'you have {list|size} new messages',
+    context:  { list: [] },
+    expected: "you have 0 new messages",
+    message: "should test if the filter is invoked *before* empty messages are returned"
+  },
+  {
+    name:     "sizeFilter value not set",
+    source:   'you have {mynumber|size} new messages',
+    context:  {},
+    expected: "you have 0 new messages",
+    message: "should test if size filter is working properly when the value is not submitted at all"
+  }
 ];
 
 if (typeof module !== "undefined" && typeof require !== "undefined") {
