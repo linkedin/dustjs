@@ -669,6 +669,19 @@ var dustExamples = [
     context: {},
     expected: "",
     message: "Should ignore carriage return or tab"
+  },
+  {
+    name: "dust grammar for dynamic inline partials",
+    source: ['{<title_A}',
+                'AAA',
+              '{/title_A}',
+              '{<title_B}',
+                'BBB',
+              '{/title_B}',
+              '{+"title_{val}"/}'].join("\n"),
+    context: { "val" : "A" },
+    expected: "AAA",
+    message: "inline partial should accept dynamic key"
   }
 ];
 
