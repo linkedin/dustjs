@@ -452,6 +452,13 @@ var dustExamples = [
     message: "should test if the filter is invoked *before* empty messages are returned"
   },
   {
+    name:     "sizeFilter with object",
+    source:   'you have {mynumber|size} new messages',
+    context:  { foo:'bar', baz:'bax' },
+    expected: "you have 2 new messages",
+    message: "should test if size filter is working properly when the value is an object"
+  },
+  {
     name:     "sizeFilter value not set",
     source:   'you have {mynumber|size} new messages',
     context:  {},
