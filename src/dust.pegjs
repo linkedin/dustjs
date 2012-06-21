@@ -169,7 +169,7 @@ buffer "buffer"
   { return ["buffer", b.join('')] }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
-   Match anything that match with esc or any of this characters ^" and doesn't match with tag or eol 
+   Match anything that match with esc or any character but double quotes or tag.
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 literal "literal"
   = b:(!tag c:(esc / [^"]) {return c})+
