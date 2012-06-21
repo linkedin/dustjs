@@ -453,10 +453,17 @@ var dustExamples = [
   },
   {
     name:     "sizeFilter with object",
-    source:   'you have {mynumber|size} new messages',
-    context:  { foo:'bar', baz:'bax' },
+    source:   'you have {myValue|size} new messages',
+    context:  { myValue: { foo:'bar', baz:'bax' } },
     expected: "you have 2 new messages",
-    message: "should test if size filter is working properly when the value is an object"
+    message: "should test if size filter is working properly when the value is an object "
+  },
+  {
+    name:     "sizeFilter with object",
+    source:   'you have {myValue|size} new messages',
+    context:  { myValue: {} },
+    expected: "you have 0 new messages",
+    message: "should test if size filter is working properly when the value is an object that is zero"
   },
   {
     name:     "sizeFilter value not set",
