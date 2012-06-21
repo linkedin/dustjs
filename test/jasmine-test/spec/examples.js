@@ -669,6 +669,15 @@ var dustExamples = [
     context: {},
     expected: "",
     message: "Should ignore carriage return or tab"
+  },
+  {
+    name: "literal params relaxed to allow eol",
+    source: ['{#helper name="Dialog" config="{',
+            '\'name\' : \'index\' }',
+            ' "} {/helper}'].join("\n"),
+    context: {},
+    expected: "",
+    message: "Should ignore carriage return or tab inside literal params"
   }
 ];
 

@@ -172,7 +172,7 @@ buffer "buffer"
    Match anything that match with esc or any of this characters ^" and doesn't match with tag or eol 
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 literal "literal"
-  = b:(!tag !eol c:(esc / [^"]) {return c})+
+  = b:(!tag c:(esc / [^"]) {return c})+
   { return b.join('') }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
