@@ -669,6 +669,58 @@ var dustExamples = [
     context: {},
     expected: "",
     message: "Should ignore carriage return or tab"
+  },
+  {
+    name: "dust grammar for dynamic inline partials",
+    source: ['{<title_A}',
+                'AAA',
+              '{/title_A}',
+              '{<title_B}',
+                'BBB',
+              '{/title_B}',
+              '{+"title_{val}"/}'].join("\n"),
+    context: { "val" : "A" },
+    expected: "AAA",
+    message: "inline partial should accept dynamic key"
+  },
+  {
+    name: "dust grammar for dynamic inline partials with two keys",
+    source: ['{<title_A}',
+                'AAA',
+              '{/title_A}',
+              '{<title_B}',
+                'BBB',
+              '{/title_B}',
+              '{+"{val1}_{val2}"/}'].join("\n"),
+    context: { "val1" : "title", "val2" : "A" },
+    expected: "AAA",
+    message: "inline partial should accept more than one dynamic key"
+  },
+  {
+    name: "dust grammar for dynamic inline partials with objects",
+    source: ['{<title_A}',
+                'AAA',
+              '{/title_A}',
+              '{<title_B}',
+                'BBB',
+              '{/title_B}',
+              '{+"{val1}_{obj.name}"/}'].join("\n"),
+    context: { "val1" : "title", "val2" : "A", "obj" : { "name" : "B" } },
+    expected: "BBB",
+    message: "inline partial should accept objects as dynamic keys"
+  },
+  {
+    name: "dust grammar for dynamic inline partials with array",
+    source: ['{<title_A}',
+                'AAA',
+              '{/title_A}',
+              '{<title_B}',
+                'BBB',
+              '{/title_B}',
+              '{+"{val1}_{obj.name[0]}"/}'].join("\n"),
+    context: { "val1" : "title", "val2" : "A", "obj" : { "name" : ["A", "B"] } },
+    expected: "AAA",
+    message: "inline partial should accept array reference as dynamic keys"
   }
 ];
 

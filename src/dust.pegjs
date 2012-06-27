@@ -80,8 +80,8 @@ reference "reference"
    with context followed by ane slash and a close curly bracket
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 partial "partial"
-  = ld ">" n:(k:key {return ["literal", k]} / inline) c:context p:params ws* "/" rd
-  { return ["partial", n, c, p] }
+  = ld s:(">"/"+") n:(k:key {return ["literal", k]} / inline) c:context p:params ws* "/" rd
+  { var key = (s ===">")? "partial" : s; return [key, n, c, p] }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
    Match a pipe character followed by anything that matches with key

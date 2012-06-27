@@ -188,7 +188,12 @@ Context.prototype.current = function() {
   return this.stack.head;
 };
 
-Context.prototype.getBlock = function(key) {
+Context.prototype.getBlock = function(key, chk, ctx) {
+  if (typeof key === "function") {
+    key = key(chk, ctx).data;
+    chk.data = "";
+  }
+
   var blocks = this.blocks;
 
   if (!blocks) return;
@@ -541,6 +546,16 @@ if (typeof exports !== "undefined") {
 }
 (function(dust){
 
+/* make a safe version of console if it is not available
+ * currently supporting:
+ *   _console.log 
+ * */
+var _console = (typeof console !== 'undefined')? console: {
+  log: function(){
+     /* a noop*/
+   }
+};
+
 function isSelect(context) {
   var value = context.current();
   return typeof value === "object" && value.isSelect === true;    
@@ -600,7 +615,10 @@ var helpers = {
   idx: function(chunk, context, bodies) {
     return bodies.block(chunk, context.push(context.stack.index));
   },
-
+  contextDump: function(chunk, context, bodies) {
+    _console.log(JSON.stringify(context.stack));
+    return chunk;
+  },
   "if": function( chunk, context, bodies, params ){
     if( params && params.cond ){
       var cond = params.cond;
@@ -626,9 +644,7 @@ var helpers = {
     }
     // no condition
     else {
-      if( typeof window !== 'undefined' && window.console ){
-        window.console.log( "No expression given!" );
-      }
+      _console.log( "No expression given!" );
     }
     return chunk;
   },
