@@ -189,7 +189,6 @@ Context.prototype.current = function() {
 };
 
 Context.prototype.getBlock = function(key, chk, ctx) {
-  debugger;
   if (typeof key === "function") {
     key = key(chk, ctx).data;
     chk.data = "";
