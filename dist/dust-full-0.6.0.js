@@ -541,6 +541,16 @@ if (typeof exports !== "undefined") {
 }
 (function(dust){
 
+/* make a safe version of console if it is not available
+ * currently supporting:
+ *   _console.log 
+ * */
+var _console = (typeof console !== 'undefined')? console: {
+  log: function(){
+     /* a noop*/
+   }
+};
+
 function isSelect(context) {
   var value = context.current();
   return typeof value === "object" && value.isSelect === true;    
@@ -600,7 +610,10 @@ var helpers = {
   idx: function(chunk, context, bodies) {
     return bodies.block(chunk, context.push(context.stack.index));
   },
-
+  contextDump: function(chunk, context, bodies) {
+    _console.log(JSON.stringify(context.stack));
+    return chunk;
+  },
   "if": function( chunk, context, bodies, params ){
     if( params && params.cond ){
       var cond = params.cond;
@@ -626,9 +639,7 @@ var helpers = {
     }
     // no condition
     else {
-      if( typeof window !== 'undefined' && window.console ){
-        window.console.log( "No expression given!" );
-      }
+      _console.log( "No expression given!" );
     }
     return chunk;
   },
@@ -2187,11 +2198,17 @@ var parser = (function(){
         result0 = result0 !== null ? result0 : "";
         if (result0 !== null) {
           result2 = parse_nestedKey();
+          if (result2 === null) {
+            result2 = parse_array();
+          }
           if (result2 !== null) {
             result1 = [];
             while (result2 !== null) {
               result1.push(result2);
               result2 = parse_nestedKey();
+              if (result2 === null) {
+                result2 = parse_array();
+              }
             }
           } else {
             result1 = null;
