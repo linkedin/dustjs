@@ -506,6 +506,13 @@ var dustExamples = [
     message: "should return a specific array element by index. Most Complex case, the array contains nested objects."
   },
   {
+    name:     "Accessing array by index",
+    source:   '{do[0]}',  
+    context:  { "do": ["lala", "lele"] },
+    expected: "lala",
+    message: "should return a specific array element by index. Root context object as array."
+  },
+  {
     name:     "params: integer",
     source:   "{#helper foo=10 /}",
     context:  { helper: function(chunk, context, bodies, params) { return chunk.write(params.foo); } },

@@ -121,7 +121,7 @@ integer "integer"
    Match anything that match with key plus one or more characters that match with key again but preceded by a dot "." 
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 path "path"
-  = k:key? d:(nestedKey)+ {
+  = k:key? d:(nestedKey / array)+ {
     d = d[0]; 
     if (k && d) {
       d.unshift(k);
