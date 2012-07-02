@@ -2209,11 +2209,17 @@ var parser = (function(){
         result0 = result0 !== null ? result0 : "";
         if (result0 !== null) {
           result2 = parse_nestedKey();
+          if (result2 === null) {
+            result2 = parse_array();
+          }
           if (result2 !== null) {
             result1 = [];
             while (result2 !== null) {
               result1.push(result2);
               result2 = parse_nestedKey();
+              if (result2 === null) {
+                result2 = parse_array();
+              }
             }
           } else {
             result1 = null;
