@@ -666,6 +666,44 @@ var dustExamples = [
     message: "Select helper works correctly with no matching conditions"
   },
   {
+    name:     "select helper: using tap - eq",
+    source:   ['{@select key="y"}',
+                '{@eq value="{y}"}<div>FOO</div>{/eq}',
+                '{@eq value="{x}"}<div>BAR</div>{/eq}',
+              '{/select}'].join("\n"),  
+    context:  { y: 'foo', x: 'bar' },
+    expected: "<div>FOO</div>",
+    message: "Select helper works correctly using tap for eq"
+  },
+  {
+    name:     "select helper: using tap - gte",
+    source:   "{@select key=\"foo\"}{@gte value=\"{x}\"}foobar{/gte}{/select}",
+    context:  {foo : 10 , x : 10},
+    expected: "foobar",
+    message: "Select helper works correctly using tap for gte"
+  },
+  {
+    name:     "select helper: using tap - lte",
+    source:   "{@select key=\"foo\"}{@lte value=\"{x}\"}foobar{/lte}{/select}",
+    context:  {foo : 10 , x : 10},
+    expected: "foobar",
+    message: "Select helper works correctly using tap for lte"
+  },
+  {
+    name:     "select helper: using tap - gt",
+    source:   "{@select key=\"foo\"}{@gt value=\"{x}\"}foobar{/gt}{/select}",
+    context:  {foo : 10 , x : 5},
+    expected: "foobar",
+    message: "Select helper works correctly using tap for gt"
+  },
+  {
+    name:     "select helper: using tap - lt",
+    source:   "{@select key=\"foo\"}{@lt value=\"{x}\"}foobar{/lt}{/select}",
+    context:  {foo : 10 , x : 15},
+    expected: "foobar",
+    message: "Select helper works correctly using tap for lt"
+  },
+  {
     name: "ws updated to allow eol",
     source: ['{#authors ',
               'name="theAuthors"',
