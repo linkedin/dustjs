@@ -188,7 +188,12 @@ Context.prototype.current = function() {
   return this.stack.head;
 };
 
-Context.prototype.getBlock = function(key) {
+Context.prototype.getBlock = function(key, chk, ctx) {
+  if (typeof key === "function") {
+    key = key(chk, ctx).data;
+    chk.data = "";
+  }
+
   var blocks = this.blocks;
 
   if (!blocks) return;

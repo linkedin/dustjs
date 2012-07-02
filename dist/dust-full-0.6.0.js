@@ -188,7 +188,12 @@ Context.prototype.current = function() {
   return this.stack.head;
 };
 
-Context.prototype.getBlock = function(key) {
+Context.prototype.getBlock = function(key, chk, ctx) {
+  if (typeof key === "function") {
+    key = key(chk, ctx).data;
+    chk.data = "";
+  }
+
   var blocks = this.blocks;
 
   if (!blocks) return;
@@ -892,12 +897,20 @@ dust.nodes = {
   },
 
   "+": function(context, node) {
-    return ".block(ctx.getBlock("
+    if(typeof(node[1].text) === "undefined"  && typeof(node[4]) === "undefined"){
+      return ".block(ctx.getBlock("
+      + dust.compileNode(context, node[1])
+      + ",chk, ctx)," + dust.compileNode(context, node[2]) + ", {},"
+      + dust.compileNode(context, node[3])
+      + ")";
+    }else {
+      return ".block(ctx.getBlock("
       + escape(node[1].text)
       + ")," + dust.compileNode(context, node[2]) + ","
       + dust.compileNode(context, node[4]) + ","
       + dust.compileNode(context, node[3])
       + ")";
+    }
   },
 
   "@": function(context, node) {
@@ -1828,6 +1841,17 @@ var parser = (function(){
               matchFailed("\">\"");
             }
           }
+          if (result1 === null) {
+            if (input.charCodeAt(pos.offset) === 43) {
+              result1 = "+";
+              advance(pos, 1);
+            } else {
+              result1 = null;
+              if (reportFailures === 0) {
+                matchFailed("\"+\"");
+              }
+            }
+          }
           if (result1 !== null) {
             pos2 = clone(pos);
             result2 = parse_key();
@@ -1898,7 +1922,7 @@ var parser = (function(){
           pos = clone(pos1);
         }
         if (result0 !== null) {
-          result0 = (function(offset, line, column, n, c, p) { return ["partial", n, c, p] })(pos0.offset, pos0.line, pos0.column, result0[2], result0[3], result0[4]);
+          result0 = (function(offset, line, column, s, n, c, p) { var key = (s ===">")? "partial" : s; return [key, n, c, p] })(pos0.offset, pos0.line, pos0.column, result0[1], result0[2], result0[3], result0[4]);
         }
         if (result0 === null) {
           pos = clone(pos0);
