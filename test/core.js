@@ -63,6 +63,23 @@ exports.coreSetup = function(suite, auto) {
       unit.fail(err);
     });
   });
+
+  suite.test("renderSource (pipe)", function() {
+    var unit = this;
+    dust.renderSource('Hello World', {}).pipe({
+      write: function (data) {
+        try {
+          unit.equals('Hello World', data);
+        } catch(err) {
+          unit.fail(err);
+          return;
+        }
+      },
+      end: function () {
+        unit.pass();
+      }
+    })
+  });
 }
 
 function testRender(unit, source, context, expected, error) {
