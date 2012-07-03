@@ -704,6 +704,27 @@ var dustExamples = [
     message: "Select helper works correctly using tap for lt"
   },
   {
+    name:     "select helper: using tap in the key",
+    source:   "{@select key=\"{x}\"}{@eq value=10}foobar{/eq}{/select}",
+    context:  {foo : 10 , x : "foo"},
+    expected: "foobar",
+    message: "Select helper works correctly using tap in the key"
+  },
+  {
+    name:     "select helper: using tap in the key with nested objects",
+    source:   "{@select key=\"{x.key}\"}{@eq value=10}foobar{/eq}{/select}",
+    context:  {foo : 10 , x : {key : "foo"}},
+    expected: "foobar",
+    message: "Select helper works correctly using tap in the key with nested objects"
+  },
+  {
+    name:     "select helper: using tap in the key with nested objects",
+    source:   "{@select key=\"{x.b.foo}\"}{@eq value=10}foobar{/eq}{/select}",
+    context:  { a : 10 , x : {b : { "foo" : "a"}}},
+    expected: "foobar",
+    message: "Select helper works correctly using tap in the key with nested objects"
+  },
+  {
     name: "ws updated to allow eol",
     source: ['{#authors ',
               'name="theAuthors"',
