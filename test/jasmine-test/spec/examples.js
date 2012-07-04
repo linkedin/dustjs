@@ -666,6 +666,94 @@ var dustExamples = [
     message: "Select helper works correctly with no matching conditions"
   },
   {
+    name:     "select helper: using tap - eq",
+    source:   ['{@select key="y"}',
+                '{@eq value="{y}"}<div>FOO</div>{/eq}',
+                '{@eq value="{x}"}<div>BAR</div>{/eq}',
+              '{/select}'].join("\n"),  
+    context:  { y: 'foo', x: 'bar' },
+    expected: "<div>FOO</div>",
+    message: "Select helper works correctly using tap for eq"
+  },
+  {
+    name:     "select helper: using tap - gte",
+    source:   "{@select key=\"foo\"}{@gte value=\"{x}\"}foobar{/gte}{/select}",
+    context:  {foo : 10 , x : 10},
+    expected: "foobar",
+    message: "Select helper works correctly using tap for gte"
+  },
+  {
+    name:     "select helper: using tap - lte",
+    source:   "{@select key=\"foo\"}{@lte value=\"{x}\"}foobar{/lte}{/select}",
+    context:  {foo : 10 , x : 10},
+    expected: "foobar",
+    message: "Select helper works correctly using tap for lte"
+  },
+  {
+    name:     "select helper: using tap - gt",
+    source:   "{@select key=\"foo\"}{@gt value=\"{x}\"}foobar{/gt}{/select}",
+    context:  {foo : 10 , x : 5},
+    expected: "foobar",
+    message: "Select helper works correctly using tap for gt"
+  },
+  {
+    name:     "select helper: using tap - lt",
+    source:   "{@select key=\"foo\"}{@lt value=\"{x}\"}foobar{/lt}{/select}",
+    context:  {foo : 10 , x : 15},
+    expected: "foobar",
+    message: "Select helper works correctly using tap for lt"
+  },
+  {
+    name:     "select helper: using tap in the key",
+    source:   "{@select key=\"{x}\"}{@eq value=10}foobar{/eq}{/select}",
+    context:  {foo : 10 , x : "foo"},
+    expected: "foobar",
+    message: "Select helper works correctly using tap in the key"
+  },
+  {
+    name:     "select helper: using tap in the key with nested objects",
+    source:   "{@select key=\"{x.key}\"}{@eq value=10}foobar{/eq}{/select}",
+    context:  {foo : 10 , x : {key : "foo"}},
+    expected: "foobar",
+    message: "Select helper works correctly using tap in the key with nested objects"
+  },
+  {
+    name:     "select helper: using tap in the key with nested objects",
+    source:   "{@select key=\"{x.b.foo}\"}{@eq value=10}foobar{/eq}{/select}",
+    context:  { a : 10 , x : {b : { "foo" : "a"}}},
+    expected: "foobar",
+    message: "Select helper works correctly using tap in the key with nested objects"
+  },
+  {
+    name:     "select helper inside an object: usign tap in the key",
+    source:   ["{#b}{@select key=\"y\"}{@eq value=\"{y}\"}<div>FOO</div>{/eq}",
+               "{@eq value=\"{x}\"}<div>BAR</div>{/eq}",
+               "{/select}{/b}"].join("\n"),
+    context:  { b : { y: "foo", x: "bar" } },
+    expected: "<div>FOO</div>",
+    message: "Select helper works correctly inside an object using tap in the key"
+  },
+  {
+    name:     "select helper inside an object: usign else tag",
+    source:   ["{#b}{@select key=\"y\"}{@eq value=\"{y}\"}<div>FOO</div>{/eq}",
+               "{@eq value=\"{x}\"}<div>BAR</div>{/eq}",
+               "{@else value=\"foo\"}foofoo{/else}",
+               "{/select}{/b}"].join("\n"),
+    context:  { b : { z: "foo", x: "bar" } },
+    expected: "foofoo",
+    message: "Select helper works correctly inside an object using else tag"
+  },
+  {
+    name:     "select helper inside an object: usign else tag without value",
+    source:   ["{#b}{@select key=\"y\"}{@eq value=\"{y}\"}<div>FOO</div>{/eq}",
+               "{@eq value=\"{x}\"}<div>BAR</div>{/eq}",
+               "{@else value=\"foo\"}foofoo{/else}",
+               "{/select}{/b}"].join("\n"),
+    context:  { b : { z: "foo", x: "bar" } },
+    expected: "foofoo",
+    message: "Select helper works correctly inside an object using else tag without value"
+  },
+  {
     name: "ws updated to allow eol",
     source: ['{#authors ',
               'name="theAuthors"',
