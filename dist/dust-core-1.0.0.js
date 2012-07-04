@@ -1,5 +1,5 @@
 //
-// Dust - Asynchronous Templating v0.6.0
+// Dust - Asynchronous Templating v1.0.0
 // http://akdubya.github.com/dustjs
 //
 // Copyright (c) 2010, Aleksander Williams
@@ -575,7 +575,6 @@ function isSelect(context) {
 function filter(chunk, context, bodies, params, filter) {
   var params = params || {},
       actual, expected;
-  
   if (params.key) {
     actual = context.get(params.key);
   } else if (isSelect(context)) {
@@ -586,8 +585,7 @@ function filter(chunk, context, bodies, params, filter) {
   } else {
     throw "No key specified for filter and no key found in context from select statement";
   }
-
-  expected = params.value;
+  expected = helpers.tap(params.value, chunk, context);
   if (filter(expected, coerce(actual, params.type, context))) {
     if (isSelect(context)) {
       context.current().isResolved = true;
@@ -630,22 +628,30 @@ var helpers = {
     _console.log(JSON.stringify(context.stack));
     return chunk;
   },
+  
+  // Utility helping to resolve dust references in the given chunk
+  tap: function( input, chunk, context ){
+    // return given input if there is no dust reference to resolve
+    var output = input;
+    // dust compiles a string to function, if there are references
+    if( typeof input === "function"){
+      output = '';
+      chunk.tap(function(data){
+        output += data;
+        return '';
+      }).render(input, context).untap();
+      if( output === '' ){
+        output = false;
+      }
+    } 
+    return output;
+  },
+
   "if": function( chunk, context, bodies, params ){
     if( params && params.cond ){
       var cond = params.cond;
-
-      // resolve dust references in the expression
-      if( typeof cond === "function" ){
-        cond = '';
-        chunk.tap( function( data ){
-          cond += data;
-          return '';
-        } ).render( params.cond, context ).untap();
-        if( cond === '' ){
-          cond = false;
-        }
-      }
-      // eval expressions with no dust references
+      cond = this.tap(cond, chunk, context);
+      // eval expressions with given dust references
       if( eval( cond ) ){
        return chunk.render( bodies.block, context );
       }
@@ -655,13 +661,21 @@ var helpers = {
     }
     // no condition
     else {
-      _console.log( "No expression given!" );
+      _console.log( "NO condition given in the if helper!" );
     }
     return chunk;
   },
-
   select: function(chunk, context, bodies, params) {
-    return chunk.render(bodies.block, context.push({ isSelect: true, isResolved: false, value: context.get(params.key) }));
+    if( params && params.key){
+      var key = params.key;
+      key = this.tap(key, chunk, context);
+      return chunk.render(bodies.block, context.push({ isSelect: true, isResolved: false, value: context.get(key) }));
+    }
+    // no key
+    else {
+      _console.log( "No key given for the select tag!" );
+    }
+    return chunk;
   },
 
   eq: function(chunk, context, bodies, params) {

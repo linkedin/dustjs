@@ -52,7 +52,7 @@ For Linkedin Dustjs
 
 To render compiled templates in the browser:
 
-    <script src="dust-core-0.6.0.min.js"></script>
+    <script src="dust-core-1.0.0.min.js"></script>
 
 To compile a template on the command line, use the dustc command.
 Its syntax is:
