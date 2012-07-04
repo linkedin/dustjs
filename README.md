@@ -3,7 +3,6 @@ Dust  [![Build Status](https://secure.travis-ci.org/linkedin/dustjs.png)](http:/
 
 Demo & Guide
 ------------
-ß
 Extensive docs and a full demo are available at <http://akdubya.github.com/dustjs>
 
 
@@ -42,6 +41,19 @@ Current LinkedIn additions include:
 * There are cases of rendering logic that are best done in templates. @if helper that relies entirely on the js eval for expression evaluation, The perf results are here: <http://jsperf.com/dust-if>. We intend to replace the slow js eval with a expression parser soon 
 * Section index for lists of maps stored in the dust context for ease of writing simple logic in templates
 * Section size for lists of maps stored in the dust context for ease of  writing simple logic in templates
+* Automated Travis CI integration, jasmine for BDD, code coverage report
+* Extend grammar to relax whitespace/eol 
+* Add support for rhino in the dust core
+* improve compile times by 10X with changes to how we use peg parser
+* Extend filters for JSON.stringify and JSON.parse
+* logic helpers for select/ switch
+* Support numbers in dust inline params
+* Extend partials to support inline params
+* Support for array references, hence list elements can be accessed via the [] notation
+* Support dynamic blocks, similar to dynamic partials
+* Add pipe support for node
+* Documentation/wiki on the best practices for using dustjs
+
 
 Installation
 ------------
