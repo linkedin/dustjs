@@ -13,13 +13,13 @@
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
-    <title>Dustjs by linkedin</title>
+    <title>Dust by linkedin</title>
   </head>
 
   <body>
     <header>
       <div class="inner">
-        <h1>Dustjs</h1>
+        <h1>Dust</h1>
         <h2>Asynchronous templates for the browser and node.js</h2>
         <a href="https://github.com/linkedin/dustjs" class="button"><small>View project on</small>GitHub</a>
       </div>
@@ -28,12 +28,12 @@
     <div id="content-wrapper">
       <div class="inner clearfix">
         <section id="main-content">
-          <h1>Dust  <a href="http://travis-ci.org/linkedin/dustjs"><img src="https://secure.travis-ci.org/linkedin/dustjs.png" alt="Build Status"></a>
+          <h1>Dust<a href="http://travis-ci.org/linkedin/dustjs"><img src="https://secure.travis-ci.org/linkedin/dustjs.png" alt="Build Status"></a>
 </h1>
 
 <h2>Highlights!</h2>
 
-<p>Use Dust if you want these things:</p>
+<p>Use {dust} if you want these things:</p>
 
 <ul>
 <li>async/streaming operation</li>
@@ -42,7 +42,7 @@
 <li>clean, low-level API</li>
 <li><a href="http://akdubya.github.com/dustjs/benchmark/index.html">high performance</a></li>
 <li>composable templates</li>
-</ul><h1>This is the LinkedIn fork of dust.js</h1>
+</ul><h1>This is the LinkedIn fork of Dust</h1>
 
 <p>Details in the blog post : <a href="http://engineering.linkedin.com/frontend/leaving-jsps-dust-moving-linkedin-dustjs-client-side-templates">http://engineering.linkedin.com/frontend/leaving-jsps-dust-moving-linkedin-dustjs-client-side-templates</a></p>
 
@@ -53,7 +53,7 @@
 <ul>
 <li>Fix to peg.js to print the line and column number for syntax errors in dust templates</li>
 <li>Fix to support &gt; node0.4 </li>
-<li>Addition of jasmine test suite, BDD with dust.js </li>
+<li>Addition of jasmine test suite, BDD with Dust </li>
 <li>There are cases of rendering logic that are best done in templates. The if helper that relies entirely on the js eval for expression evaluation, The perf results are here: <a href="http://jsperf.com/dust-if">http://jsperf.com/dust-if</a>. 
 We intend to replace the slow js eval with a expression parser soon </li>
 <li>Section index for lists of maps stored in the dust context for ease of writing simple logic in templates</li>
@@ -64,15 +64,15 @@ We intend to replace the slow js eval with a expression parser soon </li>
 <li>improve compile times by 10X with changes to how we use peg parser</li>
 <li>Extend filters for JSON.stringify and JSON.parse</li>
 <li>logic helpers for select/ switch</li>
-<li>Support numbers in dust inline params</li>
+<li>Support numbers in the inline params</li>
 <li>Extend partials to support inline params</li>
 <li>Support for array references, hence list elements can be accessed via the [] notation</li>
 <li>Support dynamic blocks, similar to dynamic partials</li>
 <li>Add pipe support for node</li>
-<li>Documentation/wiki on the best practices for using dustjs</li>
+<li>Documentation/wiki on the best practices for using Dust</li>
 </ul><h2>Installation</h2>
 
-<p>For Linkedin Dustjs</p>
+<p>For Linkedin {dust}</p>
 
 <pre><code>$ npm install dustjs-linkedin
 </code></pre>
@@ -105,6 +105,13 @@ registered under the same name as the source file:</p>
 
 <pre><code>$ make test
 </code></pre>
+
+<p>To run jasmine tests:</p>
+
+<pre><code>$ make jasmine
+</code></pre>
+
+
 
 <p>To generate code coverage report:</p>
 
