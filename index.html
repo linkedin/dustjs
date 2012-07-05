@@ -54,7 +54,8 @@
 <li>Fix to peg.js to print the line and column number for syntax errors in dust templates</li>
 <li>Fix to support &gt; node0.4 </li>
 <li>Addition of jasmine test suite, BDD with dust.js </li>
-<li>There are cases of rendering logic that are best done in templates. <a href="https://github.com/if" class="user-mention">@if</a> helper that relies entirely on the js eval for expression evaluation, The perf results are here: <a href="http://jsperf.com/dust-if">http://jsperf.com/dust-if</a>. We intend to replace the slow js eval with a expression parser soon </li>
+<li>There are cases of rendering logic that are best done in templates. The if helper that relies entirely on the js eval for expression evaluation, The perf results are here: <a href="http://jsperf.com/dust-if">http://jsperf.com/dust-if</a>. 
+We intend to replace the slow js eval with a expression parser soon </li>
 <li>Section index for lists of maps stored in the dust context for ease of writing simple logic in templates</li>
 <li>Section size for lists of maps stored in the dust context for ease of  writing simple logic in templates</li>
 <li>Automated Travis CI integration, jasmine for BDD, code coverage report</li>
