@@ -98,7 +98,7 @@ var dustExamples = [
     message: "should test renaming a key"
   },
   {
-    name:     "force_current",
+    name:     "force_local",
     source:   "{#person}{.root}: {name}, {age}{/person}",
     context:  { root: "Subject", person: { name: "Larry", age: 45 } },
     expected: ": Larry, 45",
@@ -294,32 +294,32 @@ var dustExamples = [
     message: "should test partials"
   },
   {
-    name:     "partial_context",
+    name:     "partial_with_context",
     source:   "{>replace:.profile/}",
     context:  { profile: { name: "Mick", count: 30 } },
     expected: "Hello Mick! You have 30 new messages.",
     message: "should test partial context"
   },
   {
-    name:     "partial_param",
+    name:     "partial_inline_param",
     source:   '{>replace name=n count="{c}"/}',
     context:  { n: "Mick", c: 30 },
     expected: "Hello Mick! You have 30 new messages.",
     message: "should test partial params"
   },
-  {name:     "partial_array_param",
+  {name:     "partial_inline_array_param",
     source:   '{#n}{>replace name=. count="30"/}{@sep} {/sep}{/n}',
     context:  { n: ["Mick", "Tom", "Bob"] },
     expected: "Hello Mick! You have 30 new messages. Hello Tom! You have 30 new messages. Hello Bob! You have 30 new messages.",
     message: "should test partial params using an array"
   },
-  {name:     "partial_context_param",
+  {name:     "partial_inline_param_with_context",
     source:   '{>replace:profile name="{n}" count="{c}"/}',
     context:  { profile:  { n: "Mick", c: 30 } },
     expected: "Hello Mick! You have 30 new messages.",
     message: "should test partial params with context"
   },
-  {name:     "partial_context_param_literal",
+  {name:     "partial_inline_param_literal_with_context",
     source:   '{>replace:profile name="Joe" count="99"/}',
     context:  { profile:  { n: "Mick", count: 30 } },
     expected: "Hello Joe! You have 30 new messages.",
@@ -387,49 +387,49 @@ var dustExamples = [
     message: "should test comments"
   },
   {
-    name:     "@if helper",
+    name:     "if helper without else",
     source:   '{@if cond="{x}<{y}"}<div> X < Y </div>{/if}',  
     context:  { x: 2, y: 3 },
     expected: "<div> X < Y </div>",
     message: "should test the simplest case of @if helper (if without else)"
   },
   {
-    name:     "@if helper",
+    name:     "if helper with else block",
     source:   '{@if cond=" \'{x}\'.length && \'{y}\'.length "}<div> X and Y exists </div>{:else}<div> X and Y does not exists </div>{/if}',  
     context:  {},
     expected: "<div> X and Y does not exists </div>",
     message: "should test the simplest case of @if helper with else using and"
   },
   {
-    name:     "@if helper",
+    name:     "if helper with else using or condition",
     source:   '{@if cond=" \'{x}\'.length || \'{y}\'.length "}<div> X or Y exists </div>{:else}<div> X or Y does not exists </div>{/if}',  
     context:  { x: 1},
     expected: "<div> X or Y exists </div>",
     message: "should test the simplest case of @if helper with else using or"
   },
   {
-    name:     "@if helper",
+    name:     "if helper with else using and condiiton",
     source:   '{@if cond="( \'{x}\'.length ) && ({x}<3)"}<div> X exists and is 1 </div>{:else}<div> x is not there </div>{/if}',  
     context:  { x : 1},
     expected: "<div> X exists and is 1 </div>",
     message: "should test the simplest case of @if helper with else using exists /and"
   },
   {
-    name:     "@if helper",
+    name:     "if helper using $idx",
     source:   '{#list}{@if cond="( {$idx} == 1 )"}<div>{y}</div>{/if}{/list}',  
     context:  { x : 1, list: [ { y: 'foo' }, { y: 'bar'} ]},
     expected: "<div>bar</div>",
     message: "should test the use of $idx in @if helper condition"
   },
   {
-    name:     "whitespaces in open tags for sections, it works equal for all these cases '{#', '{?', '{^', '{<', '{+', '{@', '{%'",
+    name:     "whitespaces between openning brace and identifier for '{#', '{?', '{^', '{<', '{+', '{@', '{%'",
     source:   '{# helper foo="bar" boo="boo" } {/helper}',  
     context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
     expected: "boo bar",
     message: "should ignore extra whitespaces after the open curly bracket followed by any of this characters #,?,^,+,@,%"
   },
   {
-    name:     "whitespaces between the '{' and the symbol in open tags for sections, it works equal for all these cases '{#', '{?', '{^', '{<', '{+', '{@', '{%'",
+    name:     "error: whitespaces between the opening brace and the symbol for '{#', '{?', '{^', '{<', '{+', '{@', '{%'",
     source:   '{ # helper foo="bar" boo="boo" } {/helper}',  
     context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
     error: 'Expected buffer, comment, partial, reference, section or special but "{" found. At line : 1, column : 34',
@@ -813,7 +813,7 @@ var dustExamples = [
     message: "inline partial should accept objects as dynamic keys"
   },
   {
-    name: "dust grammar for dynamic inline partials with array",
+    name: "dynamic blocks using array notation",
     source: ['{<title_A}',
                 'AAA',
               '{/title_A}',
