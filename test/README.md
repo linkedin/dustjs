@@ -1,10 +1,9 @@
-
 Dust original Unit tests
 ------------------------
 This test are developed to be run with nodejs,
 so if you want to run them you should execute this command in the terminal: "node test/server.js"
 
-Dust Unit tests using Jasmine
+Dust Unit tests using jasmine
 -----------------------------
 
 How to run the unit-tests with jasmine?
@@ -39,6 +38,7 @@ Code coverage report
 -----------------------------
 
 We are using a tool called node-cover, it can be installed by npm with the following command:
+
      npm install cover -g
 
 Once you have installed cover, you can use it to generate the code coverage results
@@ -46,12 +46,13 @@ Once you have installed cover, you can use it to generate the code coverage resu
 Execute Cover
 -------------- 
 
-      cover run test/jasmine-test/server/specRunner.js // execute all the test and create a folder with results.
+      cover run test/jasmine-test/server/specRunner.js // executes all the test and creates a folder with results.
    
-      cover report // show you a table with % code covered, missed lines, #lines, %blocks, Missed blocked and # blocks.
+      cover report // shows you a table with % code covered, missed lines, #lines, %blocks, missed blocks and # blocks.
 
-      cover report html //create a folder in the location where you executed the command and the coverage report is in html.
+      cover report html //creates a folder the location where you executed the command and the report is in html.
 
-The results are very complete, it creates one html file per js file used by the test. The lines that are not covered are shown on red.
+The results are very complete, it creates one html file per js file used by the test. 
+The lines that are not covered are shown on red.
 
 
