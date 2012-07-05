@@ -624,6 +624,7 @@ var helpers = {
   idx: function(chunk, context, bodies) {
     return bodies.block(chunk, context.push(context.stack.index));
   },
+  
   contextDump: function(chunk, context, bodies) {
     _console.log(JSON.stringify(context.stack));
     return chunk;
@@ -661,10 +662,11 @@ var helpers = {
     }
     // no condition
     else {
-      _console.log( "NO condition given in the if helper!" );
+      _console.log( "No condition given in the if helper!" );
     }
     return chunk;
   },
+  
   select: function(chunk, context, bodies, params) {
     if( params && params.key){
       var key = params.key;
@@ -673,7 +675,7 @@ var helpers = {
     }
     // no key
     else {
-      _console.log( "No key given for the select tag!" );
+      _console.log( "No key given in the select helper!" );
     }
     return chunk;
   },
@@ -2328,24 +2330,24 @@ var parser = (function(){
         }
         if (result0 !== null) {
           result1 = [];
-          if (/^[0-9a-zA-Z_$]/.test(input.charAt(pos.offset))) {
+          if (/^[0-9a-zA-Z_$\-]/.test(input.charAt(pos.offset))) {
             result2 = input.charAt(pos.offset);
             advance(pos, 1);
           } else {
             result2 = null;
             if (reportFailures === 0) {
-              matchFailed("[0-9a-zA-Z_$]");
+              matchFailed("[0-9a-zA-Z_$\\-]");
             }
           }
           while (result2 !== null) {
             result1.push(result2);
-            if (/^[0-9a-zA-Z_$]/.test(input.charAt(pos.offset))) {
+            if (/^[0-9a-zA-Z_$\-]/.test(input.charAt(pos.offset))) {
               result2 = input.charAt(pos.offset);
               advance(pos, 1);
             } else {
               result2 = null;
               if (reportFailures === 0) {
-                matchFailed("[0-9a-zA-Z_$]");
+                matchFailed("[0-9a-zA-Z_$\\-]");
               }
             }
           }

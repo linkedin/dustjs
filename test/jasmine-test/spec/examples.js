@@ -824,6 +824,27 @@ var dustExamples = [
     context: { "val1" : "title", "val2" : "A", "obj" : { "name" : ["A", "B"] } },
     expected: "AAA",
     message: "inline partial should accept array reference as dynamic keys"
+  },
+  {
+    name: "Use dash in key",
+    source: 'Hello {first-name}, {last-name}! You have {count} new messages.',
+    context: { "first-name": "Mick", "last-name" : "Jagger", "count": 30 },
+    expected: "Hello Mick, Jagger! You have 30 new messages.",
+    message: "using dash should be allowed in keys"
+  },
+  {
+    name: "Use dash in partial's key",
+    source: '{<title-a}foo-bar{/title-a}{+"{foo-title}-{bar-letter}"/}',
+    context: { "foo-title" : "title", "bar-letter": "a" },
+    expected: "foo-bar",
+    message: "using dash should be allowed in partial's keys"
+  },
+  {
+    name: "Use dash in partial's params",
+    source: '{>replace name=first-name count="{c}"/}',
+    context: { "first-name": "Mick", "c": 30 },
+    expected: "Hello Mick! You have 30 new messages.",
+    message: "using dash should be allowed in partial's params"
   }
 ];
 
