@@ -1,14 +1,13 @@
-Dust original Unit tests
+Dust core unit-tests
 ------------------------
-This test are developed to be run with nodejs,
-so if you want to run them you should execute this command in the terminal: "node test/server.js"
+core tests run on node, use the following command
 
-Dust Unit tests using jasmine
+     node test/server.js
+
+Dust unit-tests using jasmine
 -----------------------------
 
-How to run the unit-tests with jasmine?
-
-In the current distribution of dust, we have unit tests in Jasmine for both the client and the nodejs version.
+In the current distribution of dust, we have unit tests in jasmine for both the client and the nodejs version.
 If you want to run the client version just open the html page called specRunner.html located in
  
      test/jasmine-test/client/specRunner.html
@@ -17,16 +16,16 @@ Pre-requisites for tests on node server version:
 ----------------------------------
 * install nodejs 0.6 or greater 
 * install npm
-* install Jasmine test framework : npm install -g jasmine-node
+* install jasmine test framework : npm install -g jasmine-node
 
 In order to run the node.js version of dust, run this command in the terminal
 
      node test/jasmine-test/server/specRunner.js
 
 
-With make
+Run tests with make
 -------------------
-  * original unit tests: 
+  * core unit tests: 
        make test
 
   * jasmine unit test
@@ -52,7 +51,6 @@ Execute Cover
 
       cover report html //creates a folder the location where you executed the command and the report is in html.
 
-The results are very complete, it creates one html file per js file used by the test. 
-The lines that are not covered are shown on red.
+Cover creates one html file per js file used by the test. The lines that are not covered are shown on red.
 
 
