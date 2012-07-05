@@ -54,8 +54,7 @@ params "params"
   { return ["params"].concat(p) }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
-   bodies is defined as matching a opening brace followed by key and closing brace, plus something that
-   matches with body 0 or more times.
+   bodies is defined as matching a opening brace followed by key and closing brace, plus body 0 or more times.
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 bodies "bodies"
   = p:(ld ":" k:key rd v:body {return ["param", ["literal", k], v]})*
@@ -155,7 +154,7 @@ buffer "buffer"
   { return ["buffer", b.join('')] }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
-   literal is defined as matching esc or any character except the double quotes and it cannot be a  tag
+   literal is defined as matching esc or any character except the double quotes and it cannot be a tag
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 literal "literal"
   = b:(!tag c:(esc / [^"]) {return c})+
