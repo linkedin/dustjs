@@ -31,7 +31,7 @@ Run tests with make
   * jasmine unit test
        make jasmine
 
-Note: the above commands has to be executed in the project root folder.
+Note: the above commands has to be run in the project root folder.
 
 Code coverage report
 -----------------------------
@@ -42,14 +42,14 @@ We are using a tool called node-cover, it can be installed by npm with the follo
 
 Once you have installed cover, you can use it to generate the code coverage results
 
-Execute Cover
+Run Cover
 -------------- 
 
-      cover run test/jasmine-test/server/specRunner.js // executes all the test and creates a folder with results.
+      cover run test/jasmine-test/server/specRunner.js // runs all the test and creates a folder with results.
    
       cover report // shows you a table with % code covered, missed lines, #lines, %blocks, missed blocks and # blocks.
 
-      cover report html //creates a folder the location where you executed the command and the report is in html.
+      cover report html //creates a folder the location where you run the command and the report is in html.
 
 Cover creates one html file per js file used by the test. The lines that are not covered are shown on red.
 
