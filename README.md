@@ -3,17 +3,11 @@ Dust  [![Build Status](https://secure.travis-ci.org/linkedin/dustjs.png)](http:/
 
 Demo & Guide
 ------------
-Extensive docs and a full demo are available at <http://akdubya.github.com/dustjs>
+Extensive docs and a full demo are available at <http://linkedin.github.com/dustjs/>
 
-
-> Asynchronous templates for the browser and node.js
-
-#### <http://akdubya.github.com/dustjs> #
 
 Highlights!
 ----
-
-I like [Mustache](http://mustache.github.com) and variants but none of them offers quite what I need.
 
 Use Dust if you want these things:
 
