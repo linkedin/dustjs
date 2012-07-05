@@ -128,7 +128,7 @@ path "path"
    key is defined as a character matching a to z, upper or lower case, followed by 0 or more alphanumeric characters  
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 key "key"
-  = h:[a-zA-Z_$] t:[0-9a-zA-Z_$]*
+  = h:[a-zA-Z_$] t:[0-9a-zA-Z_$-]*
   { return h + t.join('') }
 
 array "array"
