@@ -824,6 +824,24 @@ var dustExamples = [
     context: { "val1" : "title", "val2" : "A", "obj" : { "name" : ["A", "B"] } },
     expected: "AAA",
     message: "inline partial should accept array reference as dynamic keys"
+  },
+  {
+    name: "select helper use inside a loop using primitives types",
+    source: ['{#order}',
+             '{@select key="{.}"}',
+               '{@eq value="SUM"}',
+                 '<script fs-alias=\'profile_v2_summary\' type="fs/embed" fs-uri=\'{backgroundAliases|s}\'>',
+                 '</script>',
+               '{/eq}',
+               '{@eq value="EXP"}',
+                 '<script fs-alias=\'profile_v2_positions\' type="fs/embed" fs-uri=\'{backgroundAliases|s}\'>',
+                 '</script>',
+               '{/eq}',
+             '{/select}',
+             '{/order}',].join("\n"),
+    context: {order : ["SUM", "APP", "EXP", "SKIL", "LANG", "CERT", "PUBL", "EDU", "REC", "ADD", "PER", "CON", "PTNT"]},
+    expected: "<script fs-alias='profile_v2_summary' type=\"fs/embed\" fs-uri=''></script><script fs-alias='profile_v2_positions' type=\"fs/embed\" fs-uri=''></script>",
+    message: "select helper should work fine using it inside a loop with primitives types"
   }
 ];
 
