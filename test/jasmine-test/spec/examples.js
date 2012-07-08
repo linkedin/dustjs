@@ -294,36 +294,36 @@ var dustExamples = [
     message: "should test partials"
   },
   {
-    name:     "partial_with_context",
+    name:     "partial with context",
     source:   "{>replace:.profile/}",
     context:  { profile: { name: "Mick", count: 30 } },
     expected: "Hello Mick! You have 30 new messages.",
-    message: "should test partial context"
+    message: "should test partial with context"
   },
   {
-    name:     "partial_inline_param",
+    name:     "partial with inline params",
     source:   '{>replace name=n count="{c}"/}',
     context:  { n: "Mick", c: 30 },
     expected: "Hello Mick! You have 30 new messages.",
-    message: "should test partial params"
+    message: "should test partial with inline params"
   },
-  {name:     "partial_inline_array_param",
+  {name:     "partial within a array",
     source:   '{#n}{>replace name=. count="30"/}{@sep} {/sep}{/n}',
     context:  { n: ["Mick", "Tom", "Bob"] },
     expected: "Hello Mick! You have 30 new messages. Hello Tom! You have 30 new messages. Hello Bob! You have 30 new messages.",
-    message: "should test partial params using an array"
+    message: "should test partial within an array"
   },
-  {name:     "partial_inline_param_with_context",
+  {name:     "partial with inline params and context",
     source:   '{>replace:profile name="{n}" count="{c}"/}',
     context:  { profile:  { n: "Mick", c: 30 } },
     expected: "Hello Mick! You have 30 new messages.",
-    message: "should test partial params with context"
+    message: "should test partial with inline params and context"
   },
-  {name:     "partial_inline_param_literal_with_context",
+  {name:     "partial with literal inline param and context",
     source:   '{>replace:profile name="Joe" count="99"/}',
     context:  { profile:  { n: "Mick", count: 30 } },
     expected: "Hello Joe! You have 30 new messages.",
-    message: "should test partial params with context. Fallback values of name or count is undefined"
+    message: "should test partial with literal inline param and context. Fallback values for name or count are undefined"
   },
   {
     name:     "base_template",
@@ -391,126 +391,126 @@ var dustExamples = [
     source:   '{@if cond="{x}<{y}"}<div> X < Y </div>{/if}',  
     context:  { x: 2, y: 3 },
     expected: "<div> X < Y </div>",
-    message: "should test the simplest case of @if helper (if without else)"
+    message: "should test if helper without else"
   },
   {
     name:     "if helper with else block",
     source:   '{@if cond=" \'{x}\'.length && \'{y}\'.length "}<div> X and Y exists </div>{:else}<div> X and Y does not exists </div>{/if}',  
     context:  {},
     expected: "<div> X and Y does not exists </div>",
-    message: "should test the simplest case of @if helper with else using and"
+    message: "should test if helper with else block"
   },
   {
-    name:     "if helper with else using or condition",
+    name:     "if helper with else using the or condition",
     source:   '{@if cond=" \'{x}\'.length || \'{y}\'.length "}<div> X or Y exists </div>{:else}<div> X or Y does not exists </div>{/if}',  
     context:  { x: 1},
     expected: "<div> X or Y exists </div>",
-    message: "should test the simplest case of @if helper with else using or"
+    message: "should test if helper with else using the or condition"
   },
   {
-    name:     "if helper with else using and condiiton",
+    name:     "if helper with else using the and conditon",
     source:   '{@if cond="( \'{x}\'.length ) && ({x}<3)"}<div> X exists and is 1 </div>{:else}<div> x is not there </div>{/if}',  
     context:  { x : 1},
     expected: "<div> X exists and is 1 </div>",
-    message: "should test the simplest case of @if helper with else using exists /and"
+    message: "should test if helper with else usingt he and conditon"
   },
   {
     name:     "if helper using $idx",
     source:   '{#list}{@if cond="( {$idx} == 1 )"}<div>{y}</div>{/if}{/list}',  
     context:  { x : 1, list: [ { y: 'foo' }, { y: 'bar'} ]},
     expected: "<div>bar</div>",
-    message: "should test the use of $idx in @if helper condition"
+    message: "should test the if helper using $idx"
   },
   {
-    name:     "whitespaces between openning brace and identifier for '{#', '{?', '{^', '{<', '{+', '{@', '{%'",
+    name:     "ignore extra whitespaces between opening brace plus any of (#,?,@,^,+,%) and the tag identifier",
     source:   '{# helper foo="bar" boo="boo" } {/helper}',  
     context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
     expected: "boo bar",
-    message: "should ignore extra whitespaces after the open curly bracket followed by any of the characters #,?,^,+,@,%"
+    message: "should ignore extra whitespaces between opening brace plus any of (#,?,@,^,+,%) and the tag identifier"
   },
   {
-    name:     "error: whitespaces between the opening brace and the symbol for '{#', '{?', '{^', '{<', '{+', '{@', '{%'",
+    name:     "error: whitespaces between the opening brace and any of (#,?,@,^,+,%) is not allowed",
     source:   '{ # helper foo="bar" boo="boo" } {/helper}',  
     context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
     error: 'Expected buffer, comment, partial, reference, section or special but "{" found. At line : 1, column : 34',
-    message: "should show an error because whitespaces between the '{' and the symbol are not allowed in open tags"
+    message: "should show an error for whitespces between the opening brace and any of (#,?,@,^,+,%)"
   },
   {
-    name:     "whitespaces after closing brace, slash and before identifier supported",
+    name:     "whitespaces between the closing brace plus slash and the tag identifier is supported",
     source:   '{# helper foo="bar" boo="boo"} {/ helper }',
     context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
     expected: "boo bar",
-    message: "should ignore extra whitespaces after the open curly bracket followed by the slash and ignore ws before the close curly bracket"
+    message: "should ignore extra whitespaces between the closing brace plus slash and the tag identifier"
   },
   {
-    name:     "error: whitespaces between the openning curly brace and slash not supported",
+    name:     "error: whitespaces between the openning curly brace and forward slash in the closing tags not supported",
     source:   '{# helper foo="bar" boo="boo"} { / helper }',
     context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
     error: 'Expected buffer, comment, partial, reference, section or special but "{" found. At line : 1, column : 1',
-    message: "should show an error because whitespaces between the '{' and the slash are not allowed in close tags"
+    message: "should show an error because whitespaces between the '{' and the forward slash are not allowed in the closing tags"
   },
   {
-    name:     "whitespaces in self closing tags",
+    name:     "whitespaces before the self closing tags is allowed",
     source:   '{#helper foo="bar" boo="boo" /}',
     context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
     expected: "boo bar",
-    message: "should ignore extra whitespaces in self closing tags"
+    message: "should ignore extra whitespaces before the self closing tags"
   },
   {
-    name:     "error: whitespaces between the slash and the closing brace in self closed tags",
+    name:     "error: whitespaces between the forward slash and the closing brace in self closing tags",
     source:   '{#helper foo="bar" boo="boo" / }',
     context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
     error: 'Expected buffer, comment, partial, reference, section or special but "{" found. At line : 1, column : 1',
-    message: "should show an error because whitespaces between the slash and the '}' are not allowed in self closed tags"
+    message: "should show an error for whitespaces  etween the forward slash and the closing brace in self closing tags"
   },
   {
-    name: "whitespaces between inline params supported",
+    name: "extra whitespaces between inline params supported",
     source: '{#helper foo="bar"   boo="boo"/}',
     context: { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
     expected: "boo bar",
-    message: "should ignore extra whitespaces between params"
+    message: "should ignore extra whitespaces between inline params"
   },
   {
-    name: "error : whitespaces after the '{' followed by '>' symbol in open tags for partials are not allowed",
+    name: "error : whitespaces between the '{' plus '>' and partial identifier is not supported",
     source: '{> replace/} {> "plain"/} {> "{ref}"/}',
     context: { "name": "Jim", "count": 42, "ref": "plain" },
     error: 'Expected buffer, comment, partial, reference, section or special but "{" found. At line : 1, column : 1',
-    message: "should show an error because extra whitespaces after the '{' followed by '>'' symbol are not allowed in opening tags for partials"
+    message: "should show an error for whitespaces between the '{' plus '>' and partial identifier"
   },
   {
-    name: "whitespaces before the closing tags in partials supported",
+    name: "whitespaces before the forward slash and the closing brace in partials supported",
     source: '{>replace /} {>"plain" /} {>"{ref}" /}',  
     context: { "name": "Jim", "count": 42, "ref": "plain" },
     expected: "Hello Jim! You have 42 new messages. Hello World! Hello World!",
-    message: "should ignore extra whitespaces before the slash followed by the closing curly brace"
+    message: "should ignore extra whitespacesbefore the forward slash and the closing brace in partials"
   },
   {
     name:     "Accessing array element by index when element value is a primitive",
     source:   '{do.re[0]}',  
     context:  { "do": { "re" : ["hello!","bye!"] } },
     expected: "hello!",
-    message: "should return a specific array element by index "
+    message: "should return a specific array element by index when element value is a primitive"
   },
   {
     name:     "Accessing array by index when element value is a object",
     source:   '{do.re[0].mi}',  
     context:  { "do": { "re" : [{"mi" : "hello!"},"bye!"] } },
     expected: "hello!",
-    message: "should return a specific array element by index."
+    message: "should return a specific array element by index when element value is a object"
   },
   {
     name:     "Accessing array by index when element is a nested object",
     source:   '{do.re[0].mi[1].fa}',  
     context:  { "do": { "re" : [{"mi" : ["one", {"fa" : "hello!"}]},"bye!"] } },
     expected: "hello!",
-    message: "should return a specific array element by index."
+    message: "should return a specific array element by index when element is a nested object"
   },
   {
-    name:     "Accessing array by index when element is list of primitieves",
+    name:     "Accessing array by index when element is list of primitives",
     source:   '{do[0]}',  
     context:  { "do": ["lala", "lele"] },
     expected: "lala",
-    message: "should return a specific array element by index."
+    message: "should return a specific array element by index when element is list of primitives"
   },
   {
     name:     "inline params as integer",
@@ -541,220 +541,225 @@ var dustExamples = [
     message: "should objectify a JSON string when using the jp filter"
   },
   {
-    name:     "select helper with one condition eq",
+    name:     "select helper with a constant string and condition eq",
     source:   ["{@select key=\"foo\"}",
+                 "{@eq value=\"foo\"}foo{/eq}",
+               "{/select}"
+              ].join("\n"),
+    context:  {},
+    expected: "foo",
+    message: "should test select helper with a constant string and condition eq"
+  },
+  {
+    name:     "select helper with a variable string and condition eq",
+    source:   ["{@select key=\"{foo}\"}",
+                 "{@eq value=\"foo\"}foo{/eq}",
+               "{/select}"
+              ].join("\n"),
+    context:  { "foo": "foo" },
+    expected: "foo",
+    message: "should test select helper with a variable string and condition eq"
+  },
+  {
+    name:     "select helper with variable and one condition eq",
+    source:   ["{@select key=foo}",
                  "{@eq value=10}foobar{/eq}",
                "{/select}"
               ].join("\n"),
     context:  { foo: 10 },
     expected: "foobar",
-    message: "Select helper works with one condition (eq)"
+    message: "should test select helper with variable and one condition eq"
   },
   {
-    name:     "select helper with one condition lt",
-    source:   ["{@select key=\"foo\"}",
+    name:     "select helper with string variable compared to a number and one condition eq",
+    source:   ["{@select key=foo}",
+                 "{@eq value=10}foobar{/eq}",
+               "{/select}"
+              ].join("\n"),
+    context:  { foo: 10 },
+    expected: "foobar",
+    message: "should test select helper with string variable compared to a number and one condition eq"
+  },
+  
+  {
+    name:     "select helper with variable and one condition lt",
+    source:   ["{@select key=foo}",
                  "{@lt value=20}foobar{/lt}",
                "{/select}"
               ].join("\n"),
     context:  { foo: 10 },
     expected: "foobar",
-    message: "Select helper works with one condition (lt)"
+    message: "should test select helper with variable and one condition lt"
   },
   {
     name:     "select helper with one condition lte",
-    source:   ["{@select key=\"foo\"}",
+    source:   ["{@select key=foo}",
                  "{@lte value=10}foobar{/lte}",
                "{/select}"
               ].join("\n"),
     context:  { foo: 10 },
     expected: "foobar",
-    message: "Select helper works with one condition (lte)"
+    message: "should test select helper with one condition lte"
   },
   {
-    name:     "select helper with one condition lte",
-    source:   ["{@select key=\"foo\"}",
+    name:     "select helper with with variable and one condition lte",
+    source:   ["{@select key=foo}",
                  "{@lte value=11}foobar{/lte}",
                "{/select}"
               ].join("\n"),
     context:  { foo: 10 },
     expected: "foobar",
-    message: "Select helper works with one condition (lte)"
+    message: "should test select helper with variable and one condition lte"
   },
   {
-    name:     "select helper with one condition gt",
-    source:   ["{@select key=\"foo\"}",
+    name:     "select helper with variable and one condition gt",
+    source:   ["{@select key=foo}",
                  "{@gt value=5}foobar{/gt}",
                "{/select}"
               ].join("\n"),
     context:  { foo: 10 },
     expected: "foobar",
-    message: "Select helper works with one condition (gt)"
+    message: "should test select helper with variable and one condition gt"
   },
   {
-    name:     "select helper with one condition gte",
-    source:   ["{@select key=\"foo\"}",
+    name:     "select helper with variable and one condition gte",
+    source:   ["{@select key=foo}",
                  "{@gte value=10}foobar{/gte}",
                "{/select}"
               ].join("\n"),
     context:  { foo: 10 },
     expected: "foobar",
-    message: "Select helper works with one condition (gte)"
+    message: "should test select helper with variable and one condition gte"
   },
   {
-    name:     "select helper with one condition gte",
-    source:   ["{@select key=\"foo\"}",
+    name:     "select helper with variable and one condition gte",
+    source:   ["{@select key=foo}",
                  "{@gte value=5}foobar{/gte}",
                "{/select}"
               ].join("\n"),
     context:  { foo: 10 },
     expected: "foobar",
-    message: "Select helper works with one condition (gte)"
+    message: "should test select helper with variable and one condition gte"
   },
+  
   {
-    name:     "select helper with one condition and the key is of type number",
-    source:   ["{@select key=\"foo\"}",
-                 "{@eq value=10}foobar{/eq}",
-               "{/select}"
-              ].join("\n"),
-    context:  { foo: 10 },
-    expected: "foobar",
-    message: "Select helper works with one condition of type number (eq)"
-  },
-  {
-    name:     "select helper with one condition and key is of type string",
-    source:   ["{@select key=\"foo\"}",
+    name:     "select helper with variable of type string and eq condition",
+    source:   ["{@select key=\"{foo}\"}",
                  "{@eq value=\"bar\"}foobar{/eq}",
                "{/select}"
               ].join("\n"),
-    context:  { foo: "bar" },
+    context:  { "foo": "bar" },
     expected: "foobar",
-    message: "Select helper works with one condition of type string (eq)"
+    message: "should test select helper with variable of type string and eq condition"
   },
   {
     name:     "select helper with two conditions",
-    source:   ["{@select key=\"foo\"}",
+    source:   ["{@select key=\"{foo}\"}",
                  "{@eq value=\"bar\"}foobar{/eq}",
                  "{@eq value=\"baz\"}foobaz{/eq}",
                "{/select}"
               ].join("\n"),
-    context:  { foo: "baz" },
+    context:  { "foo": "baz" },
     expected: "foobaz",
-    message: "Select helper works with two conditions"
+    message: "should test select helper works with two conditions"
   },
   {
     name:     "select helper with three conditions and default case called else",
-    source:   ["{@select key=\"foo\"}",
+    source:   ["{@select key=\"{foo}\"}",
                  "{@eq value=\"bar\"}foobar{/eq}",
                  "{@eq value=\"baz\"}foobaz{/eq}",
                  "{@eq value=\"foobar\"}foofoobar{/eq}",
                  "{@else value=\"foo\"}foofoo{/else}",
                "{/select}"
               ].join("\n"),
-    context:  { foo: "foo" },
+    context:  { "foo": "foo" },
     expected: "foofoo",
-    message: "Select helper works with three conditions with else"
+    message: "Select helper works with three conditions and fallback as else"
+  },
+  {
+    name:     "select helper with three conditions and default case called default",
+    source:   ["{@select key=\"{foo}\"}",
+                 "{@eq value=\"bar\"}foobar{/eq}",
+                 "{@eq value=\"baz\"}foobaz{/eq}",
+                 "{@eq value=\"foobar\"}foofoobar{/eq}",
+                 "{@default value=\"foo\"}foofoo{/default}",
+               "{/select}"
+              ].join("\n"),
+    context:  { "foo": "foo" },
+    expected: "foofoo",
+    message: "Select helper works with three conditions and fallback as default"
   },
   {
     name:     "select helper with no matching conditions",
-    source:   ["{@select key=\"foo\"}",
+    source:   ["{@select key=\"{foo}\"}",
                  "{@eq value=\"bar\"}foobar{/eq}",
                  "{@eq value=\"baz\"}foobaz{/eq}",
                "{/select}"
               ].join("\n"),
-    context:  { foo: "foo" },
+    context:  { "foo": "foo" },
     expected: "",
-    message: "Select helper works correctly with no matching conditions"
+    message: "should test select helper with no matching conditions"
   },
   {
-    name:     "select helper with using tap for resolving keys as dust references and check for eq",
-    source:   ['{@select key="y"}',
+    name:     "select helper with variable and type string with 2 conditions",
+    source:   ['{@select key=test}',
                 '{@eq value="{y}"}<div>FOO</div>{/eq}',
                 '{@eq value="{x}"}<div>BAR</div>{/eq}',
               '{/select}'].join("\n"),  
-    context:  { y: 'foo', x: 'bar' },
+    context:  { "test":"foo", "y": "foo", "x": "bar" },
     expected: "<div>FOO</div>",
-    message: "Select helper works correctly using tap for eq"
+    message: "should test select helper with variable and type string with 2 conditions"
   },
   {
-    name:     "select helper with using tap for resolving keys as dust references and check for gte",
-    source:   "{@select key=\"foo\"}{@gte value=\"{x}\"}foobar{/gte}{/select}",
-    context:  {foo : 10 , x : 10},
+    name:     "select helper with variable and type string in a nested object",
+    source:   "{@select key=x.key}{@eq value=10}foobar{/eq}{/select}",
+    context:  {"x": {"key" : 10}},
     expected: "foobar",
-    message: "Select helper works correctly using tap for gte"
+    message: "should test select helper with variable and type string in a nested object"
   },
   {
-    name:     "select helper with using tap for resolving keys as dust references and check for lte",
-    source:   "{@select key=\"foo\"}{@lte value=\"{x}\"}foobar{/lte}{/select}",
-    context:  {foo : 10 , x : 10},
+    name:     "select helper with variable and type string in a nested objects",
+    source:   "{@select key=\"{x.b.foo}\"}{@eq value=\"a\"}foobar{/eq}{/select}",
+    context:  { x : {b : { "foo" : "a"}}},
     expected: "foobar",
-    message: "Select helper works correctly using tap for lte"
+    message: "should test select helper with variable and type string in a nested objects"
   },
+  
   {
-    name:     "select helper with using tap for resolving keys as dust references and check for gt",
-    source:   "{@select key=\"foo\"}{@gt value=\"{x}\"}foobar{/gt}{/select}",
-    context:  {foo : 10 , x : 5},
-    expected: "foobar",
-    message: "Select helper works correctly using tap for gt"
-  },
-  {
-    name:     "select helper with using tap for resolving keys as dust references and check for lt",
-    source:   "{@select key=\"foo\"}{@lt value=\"{x}\"}foobar{/lt}{/select}",
-    context:  {foo : 10 , x : 15},
-    expected: "foobar",
-    message: "Select helper works correctly using tap for lt"
-  },
-  {
-    name:     "select helper with using tap for resolving keys as dust references",
-    source:   "{@select key=\"{x}\"}{@eq value=10}foobar{/eq}{/select}",
-    context:  {foo : 10 , x : "foo"},
-    expected: "foobar",
-    message: "Select helper works correctly using tap in the key"
-  },
-  {
-    name:     "select helper with using tap for resolving keys as dust references when key is a nested object",
-    source:   "{@select key=\"{x.key}\"}{@eq value=10}foobar{/eq}{/select}",
-    context:  {foo : 10 , x : {key : "foo"}},
-    expected: "foobar",
-    message: "Select helper works correctly using tap in the key with nested objects"
-  },
-  {
-    name:     "select helper with key in a nested object",
-    source:   "{@select key=\"{x.b.foo}\"}{@eq value=10}foobar{/eq}{/select}",
-    context:  { a : 10 , x : {b : { "foo" : "a"}}},
-    expected: "foobar",
-    message: "Select helper works correctly using tap in the key with nested objects"
-  },
-  {
-    name:     "select helper inside an object with missing key in the context",
-    source:   ["{#b}{@select key=\"y\"}{@eq value=\"{y}\"}<div>FOO</div>{/eq}",
-               "{@eq value=\"{x}\"}<div>BAR</div>{/eq}",
-               "{/select}{/b}"].join("\n"),
-    context:  { b : { y: "foo", x: "bar" } },
-    expected: "<div>FOO</div>",
-    message: "Select helper works correctly inside an object using tap in the key"
-  },
-  {
-    name:     "select helper inside an object with the default else block",
-    source:   ["{#b}{@select key=\"y\"}{@eq value=\"{y}\"}<div>FOO</div>{/eq}",
-               "{@eq value=\"{x}\"}<div>BAR</div>{/eq}",
-               "{@else value=\"foo\"}foofoo{/else}",
+    name:     "select helper with missing key in the context and hence no output",
+    source:   ["{#b}{@select key=y}",
+               " {@eq value=\"{z}\"}<div>FOO</div>{/eq}",
+               " {@eq value=\"{x}\"}<div>BAR</div>{/eq}",
+               " {@else}foofoo{/else}",
                "{/select}{/b}"].join("\n"),
     context:  { b : { z: "foo", x: "bar" } },
-    expected: "foofoo",
-    message: "Select helper works correctly inside an object using else tag"
+    expected: "",
+    message: "should test select helper with missing key in the context and hence no output"
   },
   {
-    name:     "select helper inside an object using the else block without value",
-    source:   ["{#b}{@select key=\"y\"}{@eq value=\"{y}\"}<div>FOO</div>{/eq}",
-               "{@eq value=\"{x}\"}<div>BAR</div>{/eq}",
-               "{@else value=\"foo\"}foofoo{/else}",
+    name:     "select helper wih key matching the else condition",
+    source:   ["{#b}{@select key=\"{x}\"}",
+               " {@eq value=\"{y}\"}<div>BAR</div>{/eq}",
+               " {@eq value=\"{z}\"}<div>BAZ</div>{/eq}",
+               " {@else value=\"foo\"}foofoo{/else}",
                "{/select}{/b}"].join("\n"),
-    context:  { b : { z: "foo", x: "bar" } },
+    context:  { b : { "x": "foo", "y": "bar", "z": "baz" } },
     expected: "foofoo",
+    message: "should test select helper with key matching the else condition"
+  },
+  {
+    name:     "select helper inside a array",
+    source:   ["{#skills}{@select key=.}",
+               "{@eq value=\"java\"}JAVA,{/eq}",
+               "{@eq value=\"js\"}JS,{/eq}",
+               "{@else value=\"foo\"}UNKNOWN{/else}",
+               "{/select}{/skills}"].join("\n"),
+    context:  { "skills" : [ "java", "js" , "unknown"] },
+    expected: "JAVA,JS,UNKNOWN",
     message: "Select helper works correctly inside an object using else tag without value"
   },
   {
-    name: "whitespaces relaxation also includes eol",
+    name: "ignore whitespaces also means ignoring eol",
     source: ['{#authors ',
               'name="theAuthors"',
               'lastname="authorlastname" ',
@@ -763,18 +768,19 @@ var dustExamples = [
               '{/authors}',].join("\n"),
     context: {},
     expected: "",
-    message: "Should ignore carriage return or tab"
+    message: "should ignore eol"
   },
   {
-    name: "inline params relaxed to allow eol",
+    name: "ignore carriage return or tab in inline param values",
     source: ['{#helper name="Dialog" config="{',
             '\'name\' : \'index\' }',
             ' "} {/helper}'].join("\n"),
     context: {},
     expected: "",
+    message: "should ignore carriage return or tab in inline param values"   
   },
   {
-    name: "dynamic blocks support",
+    name: "blocks with dynamic keys",
     source: ['{<title_A}',
                 'AAA',
               '{/title_A}',
@@ -784,10 +790,10 @@ var dustExamples = [
               '{+"title_{val}"/}'].join("\n"),
     context: { "val" : "A" },
     expected: "AAA",
-    message: "inline partial should accept dynamic key"
+    message: "should test blocks with dynamic keys"
   },
   {
-    name: "dynamic blocks with 2 references to resolve",
+    name: "blocks with more than one dynamic keys",
     source: ['{<title_A}',
                 'AAA',
               '{/title_A}',
@@ -797,10 +803,10 @@ var dustExamples = [
               '{+"{val1}_{val2}"/}'].join("\n"),
     context: { "val1" : "title", "val2" : "A" },
     expected: "AAA",
-    message: "inline partial should accept more than one dynamic key"
+    message: "should test blocks with more than one dynamic keys"
   },
   {
-    name: "dynamic blocks with objects as references ",
+    name: "blocks with dynamic key values as objects",
     source: ['{<title_A}',
                 'AAA',
               '{/title_A}',
@@ -810,10 +816,10 @@ var dustExamples = [
               '{+"{val1}_{obj.name}"/}'].join("\n"),
     context: { "val1" : "title", "val2" : "A", "obj" : { "name" : "B" } },
     expected: "BBB",
-    message: "inline partial should accept objects as dynamic keys"
+    message: "should test blocks with dynamic key values as objects"
   },
   {
-    name: "dynamic blocks using array notation",
+    name: "blocks with dynamic key values as arrays",
     source: ['{<title_A}',
                 'AAA',
               '{/title_A}',
@@ -823,25 +829,7 @@ var dustExamples = [
               '{+"{val1}_{obj.name[0]}"/}'].join("\n"),
     context: { "val1" : "title", "val2" : "A", "obj" : { "name" : ["A", "B"] } },
     expected: "AAA",
-    message: "inline partial should accept array reference as dynamic keys"
-  },
-  {
-    name: "select helper use inside a loop using primitives types",
-    source: ['{#order}',
-             '{@select key="{.}"}',
-               '{@eq value="SUM"}',
-                 '<script fs-alias=\'profile_v2_summary\' type="fs/embed" fs-uri=\'{backgroundAliases|s}\'>',
-                 '</script>',
-               '{/eq}',
-               '{@eq value="EXP"}',
-                 '<script fs-alias=\'profile_v2_positions\' type="fs/embed" fs-uri=\'{backgroundAliases|s}\'>',
-                 '</script>',
-               '{/eq}',
-             '{/select}',
-             '{/order}',].join("\n"),
-    context: {order : ["SUM", "APP", "EXP", "SKIL", "LANG", "CERT", "PUBL", "EDU", "REC", "ADD", "PER", "CON", "PTNT"]},
-    expected: "<script fs-alias='profile_v2_summary' type=\"fs/embed\" fs-uri=''></script><script fs-alias='profile_v2_positions' type=\"fs/embed\" fs-uri=''></script>",
-    message: "select helper should work fine using it inside a loop with primitives types"
+    message: "should test blocks with dynamic key values as arrays"
   }
 ];
 
