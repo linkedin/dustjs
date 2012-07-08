@@ -664,20 +664,7 @@ var dustExamples = [
     message: "should test select helper works with two conditions"
   },
   {
-    name:     "select helper with three conditions and default case called else",
-    source:   ["{@select key=\"{foo}\"}",
-                 "{@eq value=\"bar\"}foobar{/eq}",
-                 "{@eq value=\"baz\"}foobaz{/eq}",
-                 "{@eq value=\"foobar\"}foofoobar{/eq}",
-                 "{@else value=\"foo\"}foofoo{/else}",
-               "{/select}"
-              ].join("\n"),
-    context:  { "foo": "foo" },
-    expected: "foofoo",
-    message: "Select helper works with three conditions and fallback as else"
-  },
-  {
-    name:     "select helper with three conditions and default case called default",
+    name:     "select helper with three conditions and default case",
     source:   ["{@select key=\"{foo}\"}",
                  "{@eq value=\"bar\"}foobar{/eq}",
                  "{@eq value=\"baz\"}foobaz{/eq}",
@@ -687,7 +674,7 @@ var dustExamples = [
               ].join("\n"),
     context:  { "foo": "foo" },
     expected: "foofoo",
-    message: "Select helper works with three conditions and fallback as default"
+    message: "should test select helper with three conditions and default case"
   },
   {
     name:     "select helper with no matching conditions",
@@ -730,7 +717,7 @@ var dustExamples = [
     source:   ["{#b}{@select key=y}",
                " {@eq value=\"{z}\"}<div>FOO</div>{/eq}",
                " {@eq value=\"{x}\"}<div>BAR</div>{/eq}",
-               " {@else}foofoo{/else}",
+               " {@default}foofoo{/default}",
                "{/select}{/b}"].join("\n"),
     context:  { b : { z: "foo", x: "bar" } },
     expected: "",
@@ -741,22 +728,33 @@ var dustExamples = [
     source:   ["{#b}{@select key=\"{x}\"}",
                " {@eq value=\"{y}\"}<div>BAR</div>{/eq}",
                " {@eq value=\"{z}\"}<div>BAZ</div>{/eq}",
-               " {@else value=\"foo\"}foofoo{/else}",
+               " {@default value=\"foo\"}foofoo{/default}",
                "{/select}{/b}"].join("\n"),
     context:  { b : { "x": "foo", "y": "bar", "z": "baz" } },
     expected: "foofoo",
     message: "should test select helper with key matching the else condition"
   },
   {
-    name:     "select helper inside a array",
+    name:     "select helper inside a array with .",
     source:   ["{#skills}{@select key=.}",
                "{@eq value=\"java\"}JAVA,{/eq}",
                "{@eq value=\"js\"}JS,{/eq}",
-               "{@else value=\"foo\"}UNKNOWN{/else}",
+               "{@default value=\"foo\"}UNKNOWN{/default}",
                "{/select}{/skills}"].join("\n"),
     context:  { "skills" : [ "java", "js" , "unknown"] },
     expected: "JAVA,JS,UNKNOWN",
-    message: "Select helper works correctly inside an object using else tag without value"
+    message: "should test a select helper inside a array with ."
+  },
+  {
+    name:     "select helper inside a array with {.}",
+    source:   ["{#skills}{@select key=\"{.}\"}",
+               "{@eq value=\"java\"}JAVA,{/eq}",
+               "{@eq value=\"js\"}JS,{/eq}",
+               "{@default value=\"foo\"}UNKNOWN{/default}",
+               "{/select}{/skills}"].join("\n"),
+    context:  { "skills" : [ "java", "js" , "unknown"] },
+    expected: "JAVA,JS,UNKNOWN",
+    message: "should test select helper inside a array with {.}"
   },
   {
     name: "ignore whitespaces also means ignoring eol",
