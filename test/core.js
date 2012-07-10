@@ -80,6 +80,29 @@ exports.coreSetup = function(suite, auto) {
       }
     })
   });
+
+  suite.test("renderSource (multipe listeners)", function() {
+    var unit = this;
+    dust.renderSource('Hello World', {}).on('data', function(data) {
+      try {
+        unit.equals('Hello World', data);
+      } catch(err) {
+        unit.fail(err);
+        return;
+      }
+    }).on('data', function(data) {
+      try {
+        unit.equals('Hello World', data);
+      } catch(err) {
+        unit.fail(err);
+        return;
+      }
+    }).on('end', function() {
+      unit.pass();
+    }).on('error', function(err) {
+      unit.fail(err);
+    });
+  });
 }
 
 function testRender(unit, source, context, expected, error) {
