@@ -828,6 +828,62 @@ var dustExamples = [
     context: { "val1" : "title", "val2" : "A", "obj" : { "name" : ["A", "B"] } },
     expected: "AAA",
     message: "should test blocks with dynamic key values as arrays"
+  },
+  {
+    name:     "sizeHelper 3 items",
+    source:   'you have {@size subject=list/} new messages',
+    context:  { list: [ 'msg1', 'msg2', 'msg3' ] },
+    expected: "you have 3 new messages",
+    message: "should test if size Helper is working properly with array"
+  },
+  {
+    name:     "sizeHelper string",
+    source:   "'{mystring}' has {@size subject=mystring/} letters",
+    context:  { mystring: 'hello' },
+    expected: "'hello' has 5 letters",
+    message: "should test if size Helper is working properly with strings"
+  },
+  {
+    name:     "sizeHelper string (empty)",
+    source:   "'{mystring}' has {@size subject=mystring/} letters",
+    context:  { mystring: '' },
+    expected: "'' has 0 letters",
+    message: "should test if size Helper is working properly with strings"
+  },
+  {
+    name:     "sizeHelper number",
+    source:   'you have {@size subject=mynumber/} new messages',
+    context:  { mynumber: 10 },
+    expected: "you have 10 new messages",
+    message: "should test if size Helper is working properly with numbers"
+  },
+  {
+    name:     "sizeHelper number",
+    source:   'you have {@size subject=mynumber/} new messages',
+    context:  { mynumber: 0 },
+    expected: "you have 0 new messages",
+    message: "should test if size Helper is working properly with numbers"
+  },
+  {
+    name:     "sizeHelper with object",
+    source:   'you have {@size subject=myValue/} new messages',
+    context:  { myValue: { foo:'bar', baz:'bax' } },
+    expected: "you have 2 new messages",
+    message: "should test if size Helper is working properly when the value is an object "
+  },
+  {
+    name:     "sizeHelper with object",
+    source:   'you have {@size subject=myValue/} new messages',
+    context:  { myValue: {} },
+    expected: "you have 0 new messages",
+    message: "should test if size Helper is working properly when the value is an object that is zero"
+  },
+  {
+    name:     "sizeHelper value not set",
+    source:   'you have {@size subject=myNumber/} new messages',
+    context:  {},
+    expected: "you have 0 new messages",
+    message: "should test if size Helper is working properly when the value is not submitted at all"
   }
 ];
 
