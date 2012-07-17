@@ -1,0 +1,2744 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>/Users/jdemorai/projects/dust-Linkedin/dustjs/lib/parser.js -- cover.io</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="bootstrap.css" rel="stylesheet">
+    <link href="prettify.css" type="text/css" rel="stylesheet" />
+    <style type="text/css">
+      html, body {
+        font-family: georgia, serif;
+      }
+      
+      .content {
+      }
+      table#files-table {
+        table-layout: fixed;
+        width: 94%;
+      }
+
+      table#files-table td, table#files-table th {
+        width: 11%;
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+      
+      table#files-table td:first-child, table#files-table th:first-child {
+        width: 33%;
+      }
+      
+      .partialuncovered { 
+        background: #EE9; 
+      }
+      
+      pre.prettyprint {
+        padding-top: 0em;
+        border: 5px;
+        padding-left: 0em;
+        padding-bottom: 0em;
+        font-family: Consolas, Menlo, Monaco, 'Lucida Console', 'Liberation Mono', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Courier New', monospace, serif;
+
+      }
+       
+      span.covered {
+        border-left: 2px solid lime; 
+      }
+      
+      span.uncovered {
+        background: #FDD;
+        border-left: 2px solid red; 
+      }
+      
+      span.partial {
+        border-left: 2px solid #EE9; 
+        background: #FFA;
+      }
+      
+      div.header {
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        border-bottom: 1px solid #EEE;
+        height: 90px;
+        background: #F8F8F8;
+      }
+      
+      div.header-content {
+        padding: 1em 3em;
+      }
+      
+      a.index {
+        text-decoration: none;
+        color: inherit;
+        font-size: 11px;
+      }
+      
+      a.coverio {
+        text-decoration: none;
+        color: inherit;
+        font-size: 11px;
+      }
+      
+      div.content > a.index {
+        padding-left: 1.5em;
+        padding-bottom: 2em;
+      }
+      
+      div.header-content h3 {
+        font-weight: normal;
+      }
+      
+      span.filename {
+        font-weight: bold;
+      }
+      
+      span.percentage {
+        font-weight: bold;
+      }
+      
+      div.stats {
+        font-size: 13px;
+      }
+      
+      div.stats span.separator {
+        margin-left: 10px;
+        margin-right: 10px;
+      }
+      
+      div.stats span.stat-descriptor {
+        color: gray;
+      }
+      
+      table.code td.text {
+        padding-left: 0px;
+        padding-right: 0px;
+      }
+
+      .linenos p {
+        text-align: left;
+        margin: 0;
+        padding-right: 0.5em;
+        color: #999999;
+        font-family: verdana, sans-serif;
+        font-size: 0.8em;   /* 12/16 */
+        line-height: 16px;  /* 16/12 */
+      }
+
+      td.text {
+        width: 100%;
+        height: 16px;
+      }
+      
+      td.text pre > span {
+        padding-top: 3px;
+        line-height: 16px;
+      }
+    
+    </style>
+    <script src="jquery.min.js"></script>
+    <script type="text/javascript" src="prettify.js"></script>
+    <script >
+    
+      $(function() {
+        $(".linenos p").css("text-align", "right");
+        setTimeout(function() {
+          prettyPrint();
+        });
+      });
+    </script>
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  </head>
+
+  <body>
+
+      <div class="content">
+        <div class="header">
+          <div class="header-content">
+            <a class="index" href="index.html">« index</a>
+            <h3>Coverage for <span class="filename">/Users/jdemorai/projects/dust-Linkedin/dustjs/lib/parser.js</span> : <span class="percentage">87%</span></h3>
+            <div class="stats">
+              2550  <span class="stat-descriptor">lines</span>     <span class="separator">| </span> 
+              2236  <span class="stat-descriptor">run</span>        <span class="separator">| </span> 
+              314  <span class="stat-descriptor">missing</span>    <span class="separator">| </span> 
+              19  <span class="stat-descriptor">partial</span>      <span class="separator">| </span> 
+              749  <span class="stat-descriptor">blocks</span>     <span class="separator">| </span> 
+              556  <span class="stat-descriptor">blocks run</span>  <span class="separator">| </span> 
+              193  <span class="stat-descriptor">blocks missing</span>
+            </div>
+          </div>
+        </div>
+        <table class="code" cellspacing="0" cellpadding="0">
+          <tbody>
+            <tr>
+              <td class='linenos' valign='top'><p>1</p><p>2</p><p>3</p><p>4</p><p>5</p><p>6</p><p>7</p><p>8</p><p>9</p><p>10</p><p>11</p><p>12</p><p>13</p><p>14</p><p>15</p><p>16</p><p>17</p><p>18</p><p>19</p><p>20</p><p>21</p><p>22</p><p>23</p><p>24</p><p>25</p><p>26</p><p>27</p><p>28</p><p>29</p><p>30</p><p>31</p><p>32</p><p>33</p><p>34</p><p>35</p><p>36</p><p>37</p><p>38</p><p>39</p><p>40</p><p>41</p><p>42</p><p>43</p><p>44</p><p>45</p><p>46</p><p>47</p><p>48</p><p>49</p><p>50</p><p>51</p><p>52</p><p>53</p><p>54</p><p>55</p><p>56</p><p>57</p><p>58</p><p>59</p><p>60</p><p>61</p><p>62</p><p>63</p><p>64</p><p>65</p><p>66</p><p>67</p><p>68</p><p>69</p><p>70</p><p>71</p><p>72</p><p>73</p><p>74</p><p>75</p><p>76</p><p>77</p><p>78</p><p>79</p><p>80</p><p>81</p><p>82</p><p>83</p><p>84</p><p>85</p><p>86</p><p>87</p><p>88</p><p>89</p><p>90</p><p>91</p><p>92</p><p>93</p><p>94</p><p>95</p><p>96</p><p>97</p><p>98</p><p>99</p><p>100</p><p>101</p><p>102</p><p>103</p><p>104</p><p>105</p><p>106</p><p>107</p><p>108</p><p>109</p><p>110</p><p>111</p><p>112</p><p>113</p><p>114</p><p>115</p><p>116</p><p>117</p><p>118</p><p>119</p><p>120</p><p>121</p><p>122</p><p>123</p><p>124</p><p>125</p><p>126</p><p>127</p><p>128</p><p>129</p><p>130</p><p>131</p><p>132</p><p>133</p><p>134</p><p>135</p><p>136</p><p>137</p><p>138</p><p>139</p><p>140</p><p>141</p><p>142</p><p>143</p><p>144</p><p>145</p><p>146</p><p>147</p><p>148</p><p>149</p><p>150</p><p>151</p><p>152</p><p>153</p><p>154</p><p>155</p><p>156</p><p>157</p><p>158</p><p>159</p><p>160</p><p>161</p><p>162</p><p>163</p><p>164</p><p>165</p><p>166</p><p>167</p><p>168</p><p>169</p><p>170</p><p>171</p><p>172</p><p>173</p><p>174</p><p>175</p><p>176</p><p>177</p><p>178</p><p>179</p><p>180</p><p>181</p><p>182</p><p>183</p><p>184</p><p>185</p><p>186</p><p>187</p><p>188</p><p>189</p><p>190</p><p>191</p><p>192</p><p>193</p><p>194</p><p>195</p><p>196</p><p>197</p><p>198</p><p>199</p><p>200</p><p>201</p><p>202</p><p>203</p><p>204</p><p>205</p><p>206</p><p>207</p><p>208</p><p>209</p><p>210</p><p>211</p><p>212</p><p>213</p><p>214</p><p>215</p><p>216</p><p>217</p><p>218</p><p>219</p><p>220</p><p>221</p><p>222</p><p>223</p><p>224</p><p>225</p><p>226</p><p>227</p><p>228</p><p>229</p><p>230</p><p>231</p><p>232</p><p>233</p><p>234</p><p>235</p><p>236</p><p>237</p><p>238</p><p>239</p><p>240</p><p>241</p><p>242</p><p>243</p><p>244</p><p>245</p><p>246</p><p>247</p><p>248</p><p>249</p><p>250</p><p>251</p><p>252</p><p>253</p><p>254</p><p>255</p><p>256</p><p>257</p><p>258</p><p>259</p><p>260</p><p>261</p><p>262</p><p>263</p><p>264</p><p>265</p><p>266</p><p>267</p><p>268</p><p>269</p><p>270</p><p>271</p><p>272</p><p>273</p><p>274</p><p>275</p><p>276</p><p>277</p><p>278</p><p>279</p><p>280</p><p>281</p><p>282</p><p>283</p><p>284</p><p>285</p><p>286</p><p>287</p><p>288</p><p>289</p><p>290</p><p>291</p><p>292</p><p>293</p><p>294</p><p>295</p><p>296</p><p>297</p><p>298</p><p>299</p><p>300</p><p>301</p><p>302</p><p>303</p><p>304</p><p>305</p><p>306</p><p>307</p><p>308</p><p>309</p><p>310</p><p>311</p><p>312</p><p>313</p><p>314</p><p>315</p><p>316</p><p>317</p><p>318</p><p>319</p><p>320</p><p>321</p><p>322</p><p>323</p><p>324</p><p>325</p><p>326</p><p>327</p><p>328</p><p>329</p><p>330</p><p>331</p><p>332</p><p>333</p><p>334</p><p>335</p><p>336</p><p>337</p><p>338</p><p>339</p><p>340</p><p>341</p><p>342</p><p>343</p><p>344</p><p>345</p><p>346</p><p>347</p><p>348</p><p>349</p><p>350</p><p>351</p><p>352</p><p>353</p><p>354</p><p>355</p><p>356</p><p>357</p><p>358</p><p>359</p><p>360</p><p>361</p><p>362</p><p>363</p><p>364</p><p>365</p><p>366</p><p>367</p><p>368</p><p>369</p><p>370</p><p>371</p><p>372</p><p>373</p><p>374</p><p>375</p><p>376</p><p>377</p><p>378</p><p>379</p><p>380</p><p>381</p><p>382</p><p>383</p><p>384</p><p>385</p><p>386</p><p>387</p><p>388</p><p>389</p><p>390</p><p>391</p><p>392</p><p>393</p><p>394</p><p>395</p><p>396</p><p>397</p><p>398</p><p>399</p><p>400</p><p>401</p><p>402</p><p>403</p><p>404</p><p>405</p><p>406</p><p>407</p><p>408</p><p>409</p><p>410</p><p>411</p><p>412</p><p>413</p><p>414</p><p>415</p><p>416</p><p>417</p><p>418</p><p>419</p><p>420</p><p>421</p><p>422</p><p>423</p><p>424</p><p>425</p><p>426</p><p>427</p><p>428</p><p>429</p><p>430</p><p>431</p><p>432</p><p>433</p><p>434</p><p>435</p><p>436</p><p>437</p><p>438</p><p>439</p><p>440</p><p>441</p><p>442</p><p>443</p><p>444</p><p>445</p><p>446</p><p>447</p><p>448</p><p>449</p><p>450</p><p>451</p><p>452</p><p>453</p><p>454</p><p>455</p><p>456</p><p>457</p><p>458</p><p>459</p><p>460</p><p>461</p><p>462</p><p>463</p><p>464</p><p>465</p><p>466</p><p>467</p><p>468</p><p>469</p><p>470</p><p>471</p><p>472</p><p>473</p><p>474</p><p>475</p><p>476</p><p>477</p><p>478</p><p>479</p><p>480</p><p>481</p><p>482</p><p>483</p><p>484</p><p>485</p><p>486</p><p>487</p><p>488</p><p>489</p><p>490</p><p>491</p><p>492</p><p>493</p><p>494</p><p>495</p><p>496</p><p>497</p><p>498</p><p>499</p><p>500</p><p>501</p><p>502</p><p>503</p><p>504</p><p>505</p><p>506</p><p>507</p><p>508</p><p>509</p><p>510</p><p>511</p><p>512</p><p>513</p><p>514</p><p>515</p><p>516</p><p>517</p><p>518</p><p>519</p><p>520</p><p>521</p><p>522</p><p>523</p><p>524</p><p>525</p><p>526</p><p>527</p><p>528</p><p>529</p><p>530</p><p>531</p><p>532</p><p>533</p><p>534</p><p>535</p><p>536</p><p>537</p><p>538</p><p>539</p><p>540</p><p>541</p><p>542</p><p>543</p><p>544</p><p>545</p><p>546</p><p>547</p><p>548</p><p>549</p><p>550</p><p>551</p><p>552</p><p>553</p><p>554</p><p>555</p><p>556</p><p>557</p><p>558</p><p>559</p><p>560</p><p>561</p><p>562</p><p>563</p><p>564</p><p>565</p><p>566</p><p>567</p><p>568</p><p>569</p><p>570</p><p>571</p><p>572</p><p>573</p><p>574</p><p>575</p><p>576</p><p>577</p><p>578</p><p>579</p><p>580</p><p>581</p><p>582</p><p>583</p><p>584</p><p>585</p><p>586</p><p>587</p><p>588</p><p>589</p><p>590</p><p>591</p><p>592</p><p>593</p><p>594</p><p>595</p><p>596</p><p>597</p><p>598</p><p>599</p><p>600</p><p>601</p><p>602</p><p>603</p><p>604</p><p>605</p><p>606</p><p>607</p><p>608</p><p>609</p><p>610</p><p>611</p><p>612</p><p>613</p><p>614</p><p>615</p><p>616</p><p>617</p><p>618</p><p>619</p><p>620</p><p>621</p><p>622</p><p>623</p><p>624</p><p>625</p><p>626</p><p>627</p><p>628</p><p>629</p><p>630</p><p>631</p><p>632</p><p>633</p><p>634</p><p>635</p><p>636</p><p>637</p><p>638</p><p>639</p><p>640</p><p>641</p><p>642</p><p>643</p><p>644</p><p>645</p><p>646</p><p>647</p><p>648</p><p>649</p><p>650</p><p>651</p><p>652</p><p>653</p><p>654</p><p>655</p><p>656</p><p>657</p><p>658</p><p>659</p><p>660</p><p>661</p><p>662</p><p>663</p><p>664</p><p>665</p><p>666</p><p>667</p><p>668</p><p>669</p><p>670</p><p>671</p><p>672</p><p>673</p><p>674</p><p>675</p><p>676</p><p>677</p><p>678</p><p>679</p><p>680</p><p>681</p><p>682</p><p>683</p><p>684</p><p>685</p><p>686</p><p>687</p><p>688</p><p>689</p><p>690</p><p>691</p><p>692</p><p>693</p><p>694</p><p>695</p><p>696</p><p>697</p><p>698</p><p>699</p><p>700</p><p>701</p><p>702</p><p>703</p><p>704</p><p>705</p><p>706</p><p>707</p><p>708</p><p>709</p><p>710</p><p>711</p><p>712</p><p>713</p><p>714</p><p>715</p><p>716</p><p>717</p><p>718</p><p>719</p><p>720</p><p>721</p><p>722</p><p>723</p><p>724</p><p>725</p><p>726</p><p>727</p><p>728</p><p>729</p><p>730</p><p>731</p><p>732</p><p>733</p><p>734</p><p>735</p><p>736</p><p>737</p><p>738</p><p>739</p><p>740</p><p>741</p><p>742</p><p>743</p><p>744</p><p>745</p><p>746</p><p>747</p><p>748</p><p>749</p><p>750</p><p>751</p><p>752</p><p>753</p><p>754</p><p>755</p><p>756</p><p>757</p><p>758</p><p>759</p><p>760</p><p>761</p><p>762</p><p>763</p><p>764</p><p>765</p><p>766</p><p>767</p><p>768</p><p>769</p><p>770</p><p>771</p><p>772</p><p>773</p><p>774</p><p>775</p><p>776</p><p>777</p><p>778</p><p>779</p><p>780</p><p>781</p><p>782</p><p>783</p><p>784</p><p>785</p><p>786</p><p>787</p><p>788</p><p>789</p><p>790</p><p>791</p><p>792</p><p>793</p><p>794</p><p>795</p><p>796</p><p>797</p><p>798</p><p>799</p><p>800</p><p>801</p><p>802</p><p>803</p><p>804</p><p>805</p><p>806</p><p>807</p><p>808</p><p>809</p><p>810</p><p>811</p><p>812</p><p>813</p><p>814</p><p>815</p><p>816</p><p>817</p><p>818</p><p>819</p><p>820</p><p>821</p><p>822</p><p>823</p><p>824</p><p>825</p><p>826</p><p>827</p><p>828</p><p>829</p><p>830</p><p>831</p><p>832</p><p>833</p><p>834</p><p>835</p><p>836</p><p>837</p><p>838</p><p>839</p><p>840</p><p>841</p><p>842</p><p>843</p><p>844</p><p>845</p><p>846</p><p>847</p><p>848</p><p>849</p><p>850</p><p>851</p><p>852</p><p>853</p><p>854</p><p>855</p><p>856</p><p>857</p><p>858</p><p>859</p><p>860</p><p>861</p><p>862</p><p>863</p><p>864</p><p>865</p><p>866</p><p>867</p><p>868</p><p>869</p><p>870</p><p>871</p><p>872</p><p>873</p><p>874</p><p>875</p><p>876</p><p>877</p><p>878</p><p>879</p><p>880</p><p>881</p><p>882</p><p>883</p><p>884</p><p>885</p><p>886</p><p>887</p><p>888</p><p>889</p><p>890</p><p>891</p><p>892</p><p>893</p><p>894</p><p>895</p><p>896</p><p>897</p><p>898</p><p>899</p><p>900</p><p>901</p><p>902</p><p>903</p><p>904</p><p>905</p><p>906</p><p>907</p><p>908</p><p>909</p><p>910</p><p>911</p><p>912</p><p>913</p><p>914</p><p>915</p><p>916</p><p>917</p><p>918</p><p>919</p><p>920</p><p>921</p><p>922</p><p>923</p><p>924</p><p>925</p><p>926</p><p>927</p><p>928</p><p>929</p><p>930</p><p>931</p><p>932</p><p>933</p><p>934</p><p>935</p><p>936</p><p>937</p><p>938</p><p>939</p><p>940</p><p>941</p><p>942</p><p>943</p><p>944</p><p>945</p><p>946</p><p>947</p><p>948</p><p>949</p><p>950</p><p>951</p><p>952</p><p>953</p><p>954</p><p>955</p><p>956</p><p>957</p><p>958</p><p>959</p><p>960</p><p>961</p><p>962</p><p>963</p><p>964</p><p>965</p><p>966</p><p>967</p><p>968</p><p>969</p><p>970</p><p>971</p><p>972</p><p>973</p><p>974</p><p>975</p><p>976</p><p>977</p><p>978</p><p>979</p><p>980</p><p>981</p><p>982</p><p>983</p><p>984</p><p>985</p><p>986</p><p>987</p><p>988</p><p>989</p><p>990</p><p>991</p><p>992</p><p>993</p><p>994</p><p>995</p><p>996</p><p>997</p><p>998</p><p>999</p><p>1000</p><p>1001</p><p>1002</p><p>1003</p><p>1004</p><p>1005</p><p>1006</p><p>1007</p><p>1008</p><p>1009</p><p>1010</p><p>1011</p><p>1012</p><p>1013</p><p>1014</p><p>1015</p><p>1016</p><p>1017</p><p>1018</p><p>1019</p><p>1020</p><p>1021</p><p>1022</p><p>1023</p><p>1024</p><p>1025</p><p>1026</p><p>1027</p><p>1028</p><p>1029</p><p>1030</p><p>1031</p><p>1032</p><p>1033</p><p>1034</p><p>1035</p><p>1036</p><p>1037</p><p>1038</p><p>1039</p><p>1040</p><p>1041</p><p>1042</p><p>1043</p><p>1044</p><p>1045</p><p>1046</p><p>1047</p><p>1048</p><p>1049</p><p>1050</p><p>1051</p><p>1052</p><p>1053</p><p>1054</p><p>1055</p><p>1056</p><p>1057</p><p>1058</p><p>1059</p><p>1060</p><p>1061</p><p>1062</p><p>1063</p><p>1064</p><p>1065</p><p>1066</p><p>1067</p><p>1068</p><p>1069</p><p>1070</p><p>1071</p><p>1072</p><p>1073</p><p>1074</p><p>1075</p><p>1076</p><p>1077</p><p>1078</p><p>1079</p><p>1080</p><p>1081</p><p>1082</p><p>1083</p><p>1084</p><p>1085</p><p>1086</p><p>1087</p><p>1088</p><p>1089</p><p>1090</p><p>1091</p><p>1092</p><p>1093</p><p>1094</p><p>1095</p><p>1096</p><p>1097</p><p>1098</p><p>1099</p><p>1100</p><p>1101</p><p>1102</p><p>1103</p><p>1104</p><p>1105</p><p>1106</p><p>1107</p><p>1108</p><p>1109</p><p>1110</p><p>1111</p><p>1112</p><p>1113</p><p>1114</p><p>1115</p><p>1116</p><p>1117</p><p>1118</p><p>1119</p><p>1120</p><p>1121</p><p>1122</p><p>1123</p><p>1124</p><p>1125</p><p>1126</p><p>1127</p><p>1128</p><p>1129</p><p>1130</p><p>1131</p><p>1132</p><p>1133</p><p>1134</p><p>1135</p><p>1136</p><p>1137</p><p>1138</p><p>1139</p><p>1140</p><p>1141</p><p>1142</p><p>1143</p><p>1144</p><p>1145</p><p>1146</p><p>1147</p><p>1148</p><p>1149</p><p>1150</p><p>1151</p><p>1152</p><p>1153</p><p>1154</p><p>1155</p><p>1156</p><p>1157</p><p>1158</p><p>1159</p><p>1160</p><p>1161</p><p>1162</p><p>1163</p><p>1164</p><p>1165</p><p>1166</p><p>1167</p><p>1168</p><p>1169</p><p>1170</p><p>1171</p><p>1172</p><p>1173</p><p>1174</p><p>1175</p><p>1176</p><p>1177</p><p>1178</p><p>1179</p><p>1180</p><p>1181</p><p>1182</p><p>1183</p><p>1184</p><p>1185</p><p>1186</p><p>1187</p><p>1188</p><p>1189</p><p>1190</p><p>1191</p><p>1192</p><p>1193</p><p>1194</p><p>1195</p><p>1196</p><p>1197</p><p>1198</p><p>1199</p><p>1200</p><p>1201</p><p>1202</p><p>1203</p><p>1204</p><p>1205</p><p>1206</p><p>1207</p><p>1208</p><p>1209</p><p>1210</p><p>1211</p><p>1212</p><p>1213</p><p>1214</p><p>1215</p><p>1216</p><p>1217</p><p>1218</p><p>1219</p><p>1220</p><p>1221</p><p>1222</p><p>1223</p><p>1224</p><p>1225</p><p>1226</p><p>1227</p><p>1228</p><p>1229</p><p>1230</p><p>1231</p><p>1232</p><p>1233</p><p>1234</p><p>1235</p><p>1236</p><p>1237</p><p>1238</p><p>1239</p><p>1240</p><p>1241</p><p>1242</p><p>1243</p><p>1244</p><p>1245</p><p>1246</p><p>1247</p><p>1248</p><p>1249</p><p>1250</p><p>1251</p><p>1252</p><p>1253</p><p>1254</p><p>1255</p><p>1256</p><p>1257</p><p>1258</p><p>1259</p><p>1260</p><p>1261</p><p>1262</p><p>1263</p><p>1264</p><p>1265</p><p>1266</p><p>1267</p><p>1268</p><p>1269</p><p>1270</p><p>1271</p><p>1272</p><p>1273</p><p>1274</p><p>1275</p><p>1276</p><p>1277</p><p>1278</p><p>1279</p><p>1280</p><p>1281</p><p>1282</p><p>1283</p><p>1284</p><p>1285</p><p>1286</p><p>1287</p><p>1288</p><p>1289</p><p>1290</p><p>1291</p><p>1292</p><p>1293</p><p>1294</p><p>1295</p><p>1296</p><p>1297</p><p>1298</p><p>1299</p><p>1300</p><p>1301</p><p>1302</p><p>1303</p><p>1304</p><p>1305</p><p>1306</p><p>1307</p><p>1308</p><p>1309</p><p>1310</p><p>1311</p><p>1312</p><p>1313</p><p>1314</p><p>1315</p><p>1316</p><p>1317</p><p>1318</p><p>1319</p><p>1320</p><p>1321</p><p>1322</p><p>1323</p><p>1324</p><p>1325</p><p>1326</p><p>1327</p><p>1328</p><p>1329</p><p>1330</p><p>1331</p><p>1332</p><p>1333</p><p>1334</p><p>1335</p><p>1336</p><p>1337</p><p>1338</p><p>1339</p><p>1340</p><p>1341</p><p>1342</p><p>1343</p><p>1344</p><p>1345</p><p>1346</p><p>1347</p><p>1348</p><p>1349</p><p>1350</p><p>1351</p><p>1352</p><p>1353</p><p>1354</p><p>1355</p><p>1356</p><p>1357</p><p>1358</p><p>1359</p><p>1360</p><p>1361</p><p>1362</p><p>1363</p><p>1364</p><p>1365</p><p>1366</p><p>1367</p><p>1368</p><p>1369</p><p>1370</p><p>1371</p><p>1372</p><p>1373</p><p>1374</p><p>1375</p><p>1376</p><p>1377</p><p>1378</p><p>1379</p><p>1380</p><p>1381</p><p>1382</p><p>1383</p><p>1384</p><p>1385</p><p>1386</p><p>1387</p><p>1388</p><p>1389</p><p>1390</p><p>1391</p><p>1392</p><p>1393</p><p>1394</p><p>1395</p><p>1396</p><p>1397</p><p>1398</p><p>1399</p><p>1400</p><p>1401</p><p>1402</p><p>1403</p><p>1404</p><p>1405</p><p>1406</p><p>1407</p><p>1408</p><p>1409</p><p>1410</p><p>1411</p><p>1412</p><p>1413</p><p>1414</p><p>1415</p><p>1416</p><p>1417</p><p>1418</p><p>1419</p><p>1420</p><p>1421</p><p>1422</p><p>1423</p><p>1424</p><p>1425</p><p>1426</p><p>1427</p><p>1428</p><p>1429</p><p>1430</p><p>1431</p><p>1432</p><p>1433</p><p>1434</p><p>1435</p><p>1436</p><p>1437</p><p>1438</p><p>1439</p><p>1440</p><p>1441</p><p>1442</p><p>1443</p><p>1444</p><p>1445</p><p>1446</p><p>1447</p><p>1448</p><p>1449</p><p>1450</p><p>1451</p><p>1452</p><p>1453</p><p>1454</p><p>1455</p><p>1456</p><p>1457</p><p>1458</p><p>1459</p><p>1460</p><p>1461</p><p>1462</p><p>1463</p><p>1464</p><p>1465</p><p>1466</p><p>1467</p><p>1468</p><p>1469</p><p>1470</p><p>1471</p><p>1472</p><p>1473</p><p>1474</p><p>1475</p><p>1476</p><p>1477</p><p>1478</p><p>1479</p><p>1480</p><p>1481</p><p>1482</p><p>1483</p><p>1484</p><p>1485</p><p>1486</p><p>1487</p><p>1488</p><p>1489</p><p>1490</p><p>1491</p><p>1492</p><p>1493</p><p>1494</p><p>1495</p><p>1496</p><p>1497</p><p>1498</p><p>1499</p><p>1500</p><p>1501</p><p>1502</p><p>1503</p><p>1504</p><p>1505</p><p>1506</p><p>1507</p><p>1508</p><p>1509</p><p>1510</p><p>1511</p><p>1512</p><p>1513</p><p>1514</p><p>1515</p><p>1516</p><p>1517</p><p>1518</p><p>1519</p><p>1520</p><p>1521</p><p>1522</p><p>1523</p><p>1524</p><p>1525</p><p>1526</p><p>1527</p><p>1528</p><p>1529</p><p>1530</p><p>1531</p><p>1532</p><p>1533</p><p>1534</p><p>1535</p><p>1536</p><p>1537</p><p>1538</p><p>1539</p><p>1540</p><p>1541</p><p>1542</p><p>1543</p><p>1544</p><p>1545</p><p>1546</p><p>1547</p><p>1548</p><p>1549</p><p>1550</p><p>1551</p><p>1552</p><p>1553</p><p>1554</p><p>1555</p><p>1556</p><p>1557</p><p>1558</p><p>1559</p><p>1560</p><p>1561</p><p>1562</p><p>1563</p><p>1564</p><p>1565</p><p>1566</p><p>1567</p><p>1568</p><p>1569</p><p>1570</p><p>1571</p><p>1572</p><p>1573</p><p>1574</p><p>1575</p><p>1576</p><p>1577</p><p>1578</p><p>1579</p><p>1580</p><p>1581</p><p>1582</p><p>1583</p><p>1584</p><p>1585</p><p>1586</p><p>1587</p><p>1588</p><p>1589</p><p>1590</p><p>1591</p><p>1592</p><p>1593</p><p>1594</p><p>1595</p><p>1596</p><p>1597</p><p>1598</p><p>1599</p><p>1600</p><p>1601</p><p>1602</p><p>1603</p><p>1604</p><p>1605</p><p>1606</p><p>1607</p><p>1608</p><p>1609</p><p>1610</p><p>1611</p><p>1612</p><p>1613</p><p>1614</p><p>1615</p><p>1616</p><p>1617</p><p>1618</p><p>1619</p><p>1620</p><p>1621</p><p>1622</p><p>1623</p><p>1624</p><p>1625</p><p>1626</p><p>1627</p><p>1628</p><p>1629</p><p>1630</p><p>1631</p><p>1632</p><p>1633</p><p>1634</p><p>1635</p><p>1636</p><p>1637</p><p>1638</p><p>1639</p><p>1640</p><p>1641</p><p>1642</p><p>1643</p><p>1644</p><p>1645</p><p>1646</p><p>1647</p><p>1648</p><p>1649</p><p>1650</p><p>1651</p><p>1652</p><p>1653</p><p>1654</p><p>1655</p><p>1656</p><p>1657</p><p>1658</p><p>1659</p><p>1660</p><p>1661</p><p>1662</p><p>1663</p><p>1664</p><p>1665</p><p>1666</p><p>1667</p><p>1668</p><p>1669</p><p>1670</p><p>1671</p><p>1672</p><p>1673</p><p>1674</p><p>1675</p><p>1676</p><p>1677</p><p>1678</p><p>1679</p><p>1680</p><p>1681</p><p>1682</p><p>1683</p><p>1684</p><p>1685</p><p>1686</p><p>1687</p><p>1688</p><p>1689</p><p>1690</p><p>1691</p><p>1692</p><p>1693</p><p>1694</p><p>1695</p><p>1696</p><p>1697</p><p>1698</p><p>1699</p><p>1700</p><p>1701</p><p>1702</p><p>1703</p><p>1704</p><p>1705</p><p>1706</p><p>1707</p><p>1708</p><p>1709</p><p>1710</p><p>1711</p><p>1712</p><p>1713</p><p>1714</p><p>1715</p><p>1716</p><p>1717</p><p>1718</p><p>1719</p><p>1720</p><p>1721</p><p>1722</p><p>1723</p><p>1724</p><p>1725</p><p>1726</p><p>1727</p><p>1728</p><p>1729</p><p>1730</p><p>1731</p><p>1732</p><p>1733</p><p>1734</p><p>1735</p><p>1736</p><p>1737</p><p>1738</p><p>1739</p><p>1740</p><p>1741</p><p>1742</p><p>1743</p><p>1744</p><p>1745</p><p>1746</p><p>1747</p><p>1748</p><p>1749</p><p>1750</p><p>1751</p><p>1752</p><p>1753</p><p>1754</p><p>1755</p><p>1756</p><p>1757</p><p>1758</p><p>1759</p><p>1760</p><p>1761</p><p>1762</p><p>1763</p><p>1764</p><p>1765</p><p>1766</p><p>1767</p><p>1768</p><p>1769</p><p>1770</p><p>1771</p><p>1772</p><p>1773</p><p>1774</p><p>1775</p><p>1776</p><p>1777</p><p>1778</p><p>1779</p><p>1780</p><p>1781</p><p>1782</p><p>1783</p><p>1784</p><p>1785</p><p>1786</p><p>1787</p><p>1788</p><p>1789</p><p>1790</p><p>1791</p><p>1792</p><p>1793</p><p>1794</p><p>1795</p><p>1796</p><p>1797</p><p>1798</p><p>1799</p><p>1800</p><p>1801</p><p>1802</p><p>1803</p><p>1804</p><p>1805</p><p>1806</p><p>1807</p><p>1808</p><p>1809</p><p>1810</p><p>1811</p><p>1812</p><p>1813</p><p>1814</p><p>1815</p><p>1816</p><p>1817</p><p>1818</p><p>1819</p><p>1820</p><p>1821</p><p>1822</p><p>1823</p><p>1824</p><p>1825</p><p>1826</p><p>1827</p><p>1828</p><p>1829</p><p>1830</p><p>1831</p><p>1832</p><p>1833</p><p>1834</p><p>1835</p><p>1836</p><p>1837</p><p>1838</p><p>1839</p><p>1840</p><p>1841</p><p>1842</p><p>1843</p><p>1844</p><p>1845</p><p>1846</p><p>1847</p><p>1848</p><p>1849</p><p>1850</p><p>1851</p><p>1852</p><p>1853</p><p>1854</p><p>1855</p><p>1856</p><p>1857</p><p>1858</p><p>1859</p><p>1860</p><p>1861</p><p>1862</p><p>1863</p><p>1864</p><p>1865</p><p>1866</p><p>1867</p><p>1868</p><p>1869</p><p>1870</p><p>1871</p><p>1872</p><p>1873</p><p>1874</p><p>1875</p><p>1876</p><p>1877</p><p>1878</p><p>1879</p><p>1880</p><p>1881</p><p>1882</p><p>1883</p><p>1884</p><p>1885</p><p>1886</p><p>1887</p><p>1888</p><p>1889</p><p>1890</p><p>1891</p><p>1892</p><p>1893</p><p>1894</p><p>1895</p><p>1896</p><p>1897</p><p>1898</p><p>1899</p><p>1900</p><p>1901</p><p>1902</p><p>1903</p><p>1904</p><p>1905</p><p>1906</p><p>1907</p><p>1908</p><p>1909</p><p>1910</p><p>1911</p><p>1912</p><p>1913</p><p>1914</p><p>1915</p><p>1916</p><p>1917</p><p>1918</p><p>1919</p><p>1920</p><p>1921</p><p>1922</p><p>1923</p><p>1924</p><p>1925</p><p>1926</p><p>1927</p><p>1928</p><p>1929</p><p>1930</p><p>1931</p><p>1932</p><p>1933</p><p>1934</p><p>1935</p><p>1936</p><p>1937</p><p>1938</p><p>1939</p><p>1940</p><p>1941</p><p>1942</p><p>1943</p><p>1944</p><p>1945</p><p>1946</p><p>1947</p><p>1948</p><p>1949</p><p>1950</p><p>1951</p><p>1952</p><p>1953</p><p>1954</p><p>1955</p><p>1956</p><p>1957</p><p>1958</p><p>1959</p><p>1960</p><p>1961</p><p>1962</p><p>1963</p><p>1964</p><p>1965</p><p>1966</p><p>1967</p><p>1968</p><p>1969</p><p>1970</p><p>1971</p><p>1972</p><p>1973</p><p>1974</p><p>1975</p><p>1976</p><p>1977</p><p>1978</p><p>1979</p><p>1980</p><p>1981</p><p>1982</p><p>1983</p><p>1984</p><p>1985</p><p>1986</p><p>1987</p><p>1988</p><p>1989</p><p>1990</p><p>1991</p><p>1992</p><p>1993</p><p>1994</p><p>1995</p><p>1996</p><p>1997</p><p>1998</p><p>1999</p><p>2000</p><p>2001</p><p>2002</p><p>2003</p><p>2004</p><p>2005</p><p>2006</p><p>2007</p><p>2008</p><p>2009</p><p>2010</p><p>2011</p><p>2012</p><p>2013</p><p>2014</p><p>2015</p><p>2016</p><p>2017</p><p>2018</p><p>2019</p><p>2020</p><p>2021</p><p>2022</p><p>2023</p><p>2024</p><p>2025</p><p>2026</p><p>2027</p><p>2028</p><p>2029</p><p>2030</p><p>2031</p><p>2032</p><p>2033</p><p>2034</p><p>2035</p><p>2036</p><p>2037</p><p>2038</p><p>2039</p><p>2040</p><p>2041</p><p>2042</p><p>2043</p><p>2044</p><p>2045</p><p>2046</p><p>2047</p><p>2048</p><p>2049</p><p>2050</p><p>2051</p><p>2052</p><p>2053</p><p>2054</p><p>2055</p><p>2056</p><p>2057</p><p>2058</p><p>2059</p><p>2060</p><p>2061</p><p>2062</p><p>2063</p><p>2064</p><p>2065</p><p>2066</p><p>2067</p><p>2068</p><p>2069</p><p>2070</p><p>2071</p><p>2072</p><p>2073</p><p>2074</p><p>2075</p><p>2076</p><p>2077</p><p>2078</p><p>2079</p><p>2080</p><p>2081</p><p>2082</p><p>2083</p><p>2084</p><p>2085</p><p>2086</p><p>2087</p><p>2088</p><p>2089</p><p>2090</p><p>2091</p><p>2092</p><p>2093</p><p>2094</p><p>2095</p><p>2096</p><p>2097</p><p>2098</p><p>2099</p><p>2100</p><p>2101</p><p>2102</p><p>2103</p><p>2104</p><p>2105</p><p>2106</p><p>2107</p><p>2108</p><p>2109</p><p>2110</p><p>2111</p><p>2112</p><p>2113</p><p>2114</p><p>2115</p><p>2116</p><p>2117</p><p>2118</p><p>2119</p><p>2120</p><p>2121</p><p>2122</p><p>2123</p><p>2124</p><p>2125</p><p>2126</p><p>2127</p><p>2128</p><p>2129</p><p>2130</p><p>2131</p><p>2132</p><p>2133</p><p>2134</p><p>2135</p><p>2136</p><p>2137</p><p>2138</p><p>2139</p><p>2140</p><p>2141</p><p>2142</p><p>2143</p><p>2144</p><p>2145</p><p>2146</p><p>2147</p><p>2148</p><p>2149</p><p>2150</p><p>2151</p><p>2152</p><p>2153</p><p>2154</p><p>2155</p><p>2156</p><p>2157</p><p>2158</p><p>2159</p><p>2160</p><p>2161</p><p>2162</p><p>2163</p><p>2164</p><p>2165</p><p>2166</p><p>2167</p><p>2168</p><p>2169</p><p>2170</p><p>2171</p><p>2172</p><p>2173</p><p>2174</p><p>2175</p><p>2176</p><p>2177</p><p>2178</p><p>2179</p><p>2180</p><p>2181</p><p>2182</p><p>2183</p><p>2184</p><p>2185</p><p>2186</p><p>2187</p><p>2188</p><p>2189</p><p>2190</p><p>2191</p><p>2192</p><p>2193</p><p>2194</p><p>2195</p><p>2196</p><p>2197</p><p>2198</p><p>2199</p><p>2200</p><p>2201</p><p>2202</p><p>2203</p><p>2204</p><p>2205</p><p>2206</p><p>2207</p><p>2208</p><p>2209</p><p>2210</p><p>2211</p><p>2212</p><p>2213</p><p>2214</p><p>2215</p><p>2216</p><p>2217</p><p>2218</p><p>2219</p><p>2220</p><p>2221</p><p>2222</p><p>2223</p><p>2224</p><p>2225</p><p>2226</p><p>2227</p><p>2228</p><p>2229</p><p>2230</p><p>2231</p><p>2232</p><p>2233</p><p>2234</p><p>2235</p><p>2236</p><p>2237</p><p>2238</p><p>2239</p><p>2240</p><p>2241</p><p>2242</p><p>2243</p><p>2244</p><p>2245</p><p>2246</p><p>2247</p><p>2248</p><p>2249</p><p>2250</p><p>2251</p><p>2252</p><p>2253</p><p>2254</p><p>2255</p><p>2256</p><p>2257</p><p>2258</p><p>2259</p><p>2260</p><p>2261</p><p>2262</p><p>2263</p><p>2264</p><p>2265</p><p>2266</p><p>2267</p><p>2268</p><p>2269</p><p>2270</p><p>2271</p><p>2272</p><p>2273</p><p>2274</p><p>2275</p><p>2276</p><p>2277</p><p>2278</p><p>2279</p><p>2280</p><p>2281</p><p>2282</p><p>2283</p><p>2284</p><p>2285</p><p>2286</p><p>2287</p><p>2288</p><p>2289</p><p>2290</p><p>2291</p><p>2292</p><p>2293</p><p>2294</p><p>2295</p><p>2296</p><p>2297</p><p>2298</p><p>2299</p><p>2300</p><p>2301</p><p>2302</p><p>2303</p><p>2304</p><p>2305</p><p>2306</p><p>2307</p><p>2308</p><p>2309</p><p>2310</p><p>2311</p><p>2312</p><p>2313</p><p>2314</p><p>2315</p><p>2316</p><p>2317</p><p>2318</p><p>2319</p><p>2320</p><p>2321</p><p>2322</p><p>2323</p><p>2324</p><p>2325</p><p>2326</p><p>2327</p><p>2328</p><p>2329</p><p>2330</p><p>2331</p><p>2332</p><p>2333</p><p>2334</p><p>2335</p><p>2336</p><p>2337</p><p>2338</p><p>2339</p><p>2340</p><p>2341</p><p>2342</p><p>2343</p><p>2344</p><p>2345</p><p>2346</p><p>2347</p><p>2348</p><p>2349</p><p>2350</p><p>2351</p><p>2352</p><p>2353</p><p>2354</p><p>2355</p><p>2356</p><p>2357</p><p>2358</p><p>2359</p><p>2360</p><p>2361</p><p>2362</p><p>2363</p><p>2364</p><p>2365</p><p>2366</p><p>2367</p><p>2368</p><p>2369</p><p>2370</p><p>2371</p><p>2372</p><p>2373</p><p>2374</p><p>2375</p><p>2376</p><p>2377</p><p>2378</p><p>2379</p><p>2380</p><p>2381</p><p>2382</p><p>2383</p><p>2384</p><p>2385</p><p>2386</p><p>2387</p><p>2388</p><p>2389</p><p>2390</p><p>2391</p><p>2392</p><p>2393</p><p>2394</p><p>2395</p><p>2396</p><p>2397</p><p>2398</p><p>2399</p><p>2400</p><p>2401</p><p>2402</p><p>2403</p><p>2404</p><p>2405</p><p>2406</p><p>2407</p><p>2408</p><p>2409</p><p>2410</p><p>2411</p><p>2412</p><p>2413</p><p>2414</p><p>2415</p><p>2416</p><p>2417</p><p>2418</p><p>2419</p><p>2420</p><p>2421</p><p>2422</p><p>2423</p><p>2424</p><p>2425</p><p>2426</p><p>2427</p><p>2428</p><p>2429</p><p>2430</p><p>2431</p><p>2432</p><p>2433</p><p>2434</p><p>2435</p><p>2436</p><p>2437</p><p>2438</p><p>2439</p><p>2440</p><p>2441</p><p>2442</p><p>2443</p><p>2444</p><p>2445</p><p>2446</p><p>2447</p><p>2448</p><p>2449</p><p>2450</p><p>2451</p><p>2452</p><p>2453</p><p>2454</p><p>2455</p><p>2456</p><p>2457</p><p>2458</p><p>2459</p><p>2460</p><p>2461</p><p>2462</p><p>2463</p><p>2464</p><p>2465</p><p>2466</p><p>2467</p><p>2468</p><p>2469</p><p>2470</p><p>2471</p><p>2472</p><p>2473</p><p>2474</p><p>2475</p><p>2476</p><p>2477</p><p>2478</p><p>2479</p><p>2480</p><p>2481</p><p>2482</p><p>2483</p><p>2484</p><p>2485</p><p>2486</p><p>2487</p><p>2488</p><p>2489</p><p>2490</p><p>2491</p><p>2492</p><p>2493</p><p>2494</p><p>2495</p><p>2496</p><p>2497</p><p>2498</p><p>2499</p><p>2500</p><p>2501</p><p>2502</p><p>2503</p><p>2504</p><p>2505</p><p>2506</p><p>2507</p><p>2508</p><p>2509</p><p>2510</p><p>2511</p><p>2512</p><p>2513</p><p>2514</p><p>2515</p><p>2516</p><p>2517</p><p>2518</p><p>2519</p><p>2520</p><p>2521</p><p>2522</p><p>2523</p><p>2524</p><p>2525</p><p>2526</p><p>2527</p><p>2528</p><p>2529</p><p>2530</p><p>2531</p><p>2532</p><p>2533</p><p>2534</p><p>2535</p><p>2536</p><p>2537</p><p>2538</p><p>2539</p><p>2540</p><p>2541</p><p>2542</p><p>2543</p><p>2544</p><p>2545</p><p>2546</p><p>2547</p><p>2548</p><p>2549</p><p>2550</p></td><td class='text' valign='top'><pre class='prettyprint lang-js'><span class='covered'>  (function(dust){</span>
+<span class='covered'>  </span>
+<span class='covered'>  var parser = (function(){</span>
+<span class='covered'>    /*</span>
+<span class='covered'>     * Generated by PEG.js 0.7.0.</span>
+<span class='covered'>     *</span>
+<span class='covered'>     * http://pegjs.majda.cz/</span>
+<span class='covered'>     */</span>
+<span class='covered'>    </span>
+<span class='covered'>    function quote(s) {</span>
+<span class='covered'>      /*</span>
+<span class='covered'>       * ECMA-262, 5th ed., 7.8.4: All characters may appear literally in a</span>
+<span class='covered'>       * string literal except for the closing quote character, backslash,</span>
+<span class='covered'>       * carriage return, line separator, paragraph separator, and line feed.</span>
+<span class='covered'>       * Any character may appear in the form of an escape sequence.</span>
+<span class='covered'>       *</span>
+<span class='covered'>       * For portability, we also escape escape all control and non-ASCII</span>
+<span class='covered'>       * characters. Note that &quot;\0&quot; and &quot;\v&quot; escape sequences are not used</span>
+<span class='covered'>       * because JSHint does not like the first and IE the second.</span>
+<span class='covered'>       */</span>
+<span class='covered'>       return &#39;&quot;&#39; + s</span>
+<span class='covered'>        .replace(/\\/g, &#39;\\\\&#39;)  // backslash</span>
+<span class='covered'>        .replace(/&quot;/g, &#39;\\&quot;&#39;)    // closing quote character</span>
+<span class='covered'>        .replace(/\x08/g, &#39;\\b&#39;) // backspace</span>
+<span class='covered'>        .replace(/\t/g, &#39;\\t&#39;)   // horizontal tab</span>
+<span class='covered'>        .replace(/\n/g, &#39;\\n&#39;)   // line feed</span>
+<span class='covered'>        .replace(/\f/g, &#39;\\f&#39;)   // form feed</span>
+<span class='covered'>        .replace(/\r/g, &#39;\\r&#39;)   // carriage return</span>
+<span class='covered'>        .replace(/[\x00-\x07\x0B\x0E-\x1F\x80-\uFFFF]/g, escape)</span>
+<span class='covered'>        + &#39;&quot;&#39;;</span>
+<span class='covered'>    }</span>
+<span class='covered'>    </span>
+<span class='covered'>    var result = {</span>
+<span class='covered'>      /*</span>
+<span class='covered'>       * Parses the input with a generated parser. If the parsing is successfull,</span>
+<span class='covered'>       * returns a value explicitly or implicitly specified by the grammar from</span>
+<span class='covered'>       * which the parser was generated (see |PEG.buildParser|). If the parsing is</span>
+<span class='covered'>       * unsuccessful, throws |PEG.parser.SyntaxError| describing the error.</span>
+<span class='covered'>       */</span>
+<span class='covered'>      parse: function(input, startRule) {</span>
+<span class='covered'>        var parseFunctions = {</span>
+<span class='covered'>          &quot;body&quot;: parse_body,</span>
+<span class='covered'>          &quot;part&quot;: parse_part,</span>
+<span class='covered'>          &quot;section&quot;: parse_section,</span>
+<span class='covered'>          &quot;sec_tag_start&quot;: parse_sec_tag_start,</span>
+<span class='covered'>          &quot;end_tag&quot;: parse_end_tag,</span>
+<span class='covered'>          &quot;context&quot;: parse_context,</span>
+<span class='covered'>          &quot;params&quot;: parse_params,</span>
+<span class='covered'>          &quot;bodies&quot;: parse_bodies,</span>
+<span class='covered'>          &quot;reference&quot;: parse_reference,</span>
+<span class='covered'>          &quot;partial&quot;: parse_partial,</span>
+<span class='covered'>          &quot;filters&quot;: parse_filters,</span>
+<span class='covered'>          &quot;special&quot;: parse_special,</span>
+<span class='covered'>          &quot;identifier&quot;: parse_identifier,</span>
+<span class='covered'>          &quot;number&quot;: parse_number,</span>
+<span class='covered'>          &quot;frac&quot;: parse_frac,</span>
+<span class='covered'>          &quot;integer&quot;: parse_integer,</span>
+<span class='covered'>          &quot;path&quot;: parse_path,</span>
+<span class='covered'>          &quot;key&quot;: parse_key,</span>
+<span class='covered'>          &quot;nestedKey&quot;: parse_nestedKey,</span>
+<span class='covered'>          &quot;array&quot;: parse_array,</span>
+<span class='covered'>          &quot;inline&quot;: parse_inline,</span>
+<span class='covered'>          &quot;inline_part&quot;: parse_inline_part,</span>
+<span class='covered'>          &quot;buffer&quot;: parse_buffer,</span>
+<span class='covered'>          &quot;literal&quot;: parse_literal,</span>
+<span class='covered'>          &quot;esc&quot;: parse_esc,</span>
+<span class='covered'>          &quot;comment&quot;: parse_comment,</span>
+<span class='covered'>          &quot;tag&quot;: parse_tag,</span>
+<span class='covered'>          &quot;ld&quot;: parse_ld,</span>
+<span class='covered'>          &quot;rd&quot;: parse_rd,</span>
+<span class='covered'>          &quot;eol&quot;: parse_eol,</span>
+<span class='covered'>          &quot;ws&quot;: parse_ws</span>
+<span class='covered'>        };</span>
+<span class='covered'>        </span>
+<span class='covered'>        if (startRule !== undefined) {</span>
+<span class='uncovered'>          if (parseFunctions[startRule] === undefined) {</span>
+<span class='uncovered'>            throw new Error(&quot;Invalid rule name: &quot; + quote(startRule) + &quot;.&quot;);</span>
+<span class='covered'>          }</span>
+<span class='covered'>        } else {</span>
+<span class='covered'>          startRule = &quot;body&quot;;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        var pos = { offset: 0, line: 1, column: 1, seenCR: false };</span>
+<span class='covered'>        var reportFailures = 0;</span>
+<span class='covered'>        var rightmostFailuresPos = { offset: 0, line: 1, column: 1, seenCR: false };</span>
+<span class='covered'>        var rightmostFailuresExpected = [];</span>
+<span class='covered'>        </span>
+<span class='covered'>        function padLeft(input, padding, length) {</span>
+<span class='uncovered'>          var result = input;</span>
+<span class='covered'>          </span>
+<span class='uncovered'>          var padLength = length - input.length;</span>
+<span class='uncovered'>          for (var i = 0; i &lt; padLength; i++) {</span>
+<span class='uncovered'>            result = padding + result;</span>
+<span class='covered'>          }</span>
+<span class='covered'>          </span>
+<span class='uncovered'>          return result;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function escape(ch) {</span>
+<span class='uncovered'>          var charCode = ch.charCodeAt(0);</span>
+<span class='uncovered'>          var escapeChar;</span>
+<span class='uncovered'>          var length;</span>
+<span class='covered'>          </span>
+<span class='uncovered'>          if (charCode &lt;= 0xFF) {</span>
+<span class='uncovered'>            escapeChar = &#39;x&#39;;</span>
+<span class='uncovered'>            length = 2;</span>
+<span class='covered'>          } else {</span>
+<span class='uncovered'>            escapeChar = &#39;u&#39;;</span>
+<span class='uncovered'>            length = 4;</span>
+<span class='covered'>          }</span>
+<span class='covered'>          </span>
+<span class='uncovered'>          return &#39;\\&#39; + escapeChar + padLeft(charCode.toString(16).toUpperCase(), &#39;0&#39;, length);</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function clone(object) {</span>
+<span class='covered'>          var result = {};</span>
+<span class='covered'>          for (var key in object) {</span>
+<span class='covered'>            result[key] = object[key];</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return result;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function advance(pos, n) {</span>
+<span class='covered'>          var endOffset = pos.offset + n;</span>
+<span class='covered'>          </span>
+<span class='covered'>          for (var offset = pos.offset; offset &lt; endOffset; offset++) {</span>
+<span class='covered'>            var ch = input.charAt(offset);</span>
+<span class='covered'>            if (ch === &quot;\n&quot;) {</span>
+<span class='covered'>              if (!pos.seenCR) { pos.line++; }</span>
+<span class='covered'>              pos.column = 1;</span>
+<span class='covered'>              pos.seenCR = false;</span>
+<span class='covered'>            } else if (ch === &quot;\r&quot; || ch === &quot;\u2028&quot; || ch === &quot;\u2029&quot;) {</span>
+<span class='uncovered'>              pos.line++;</span>
+<span class='uncovered'>              pos.column = 1;</span>
+<span class='uncovered'>              pos.seenCR = true;</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              pos.column++;</span>
+<span class='covered'>              pos.seenCR = false;</span>
+<span class='covered'>            }</span>
+<span class='covered'>          }</span>
+<span class='covered'>          </span>
+<span class='covered'>          pos.offset += n;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function matchFailed(failure) {</span>
+<span class='covered'>          if (pos.offset &lt; rightmostFailuresPos.offset) {</span>
+<span class='uncovered'>            return;</span>
+<span class='covered'>          }</span>
+<span class='covered'>          </span>
+<span class='covered'>          if (pos.offset &gt; rightmostFailuresPos.offset) {</span>
+<span class='covered'>            rightmostFailuresPos = clone(pos);</span>
+<span class='covered'>            rightmostFailuresExpected = [];</span>
+<span class='covered'>          }</span>
+<span class='covered'>          </span>
+<span class='covered'>          rightmostFailuresExpected.push(failure);</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function parse_body() {</span>
+<span class='covered'>          var result0, result1;</span>
+<span class='covered'>          var pos0;</span>
+<span class='covered'>          </span>
+<span class='covered'>          pos0 = clone(pos);</span>
+<span class='covered'>          result0 = [];</span>
+<span class='covered'>          result1 = parse_part();</span>
+<span class='covered'>          while (result1 !== null) {</span>
+<span class='covered'>            result0.push(result1);</span>
+<span class='covered'>            result1 = parse_part();</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            result0 = (function(offset, line, column, p) { return [&quot;body&quot;].concat(p) })(pos0.offset, pos0.line, pos0.column, result0);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='uncovered'>            pos = clone(pos0);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return result0;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function parse_part() {</span>
+<span class='covered'>          var result0;</span>
+<span class='covered'>          </span>
+<span class='covered'>          result0 = parse_comment();</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='covered'>            result0 = parse_section();</span>
+<span class='covered'>            if (result0 === null) {</span>
+<span class='covered'>              result0 = parse_partial();</span>
+<span class='covered'>              if (result0 === null) {</span>
+<span class='covered'>                result0 = parse_special();</span>
+<span class='covered'>                if (result0 === null) {</span>
+<span class='covered'>                  result0 = parse_reference();</span>
+<span class='covered'>                  if (result0 === null) {</span>
+<span class='covered'>                    result0 = parse_buffer();</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                }</span>
+<span class='covered'>              }</span>
+<span class='covered'>            }</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return result0;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function parse_section() {</span>
+<span class='covered'>          var result0, result1, result2, result3, result4, result5, result6;</span>
+<span class='covered'>          var pos0, pos1;</span>
+<span class='covered'>          </span>
+<span class='covered'>          reportFailures++;</span>
+<span class='covered'>          pos0 = clone(pos);</span>
+<span class='covered'>          pos1 = clone(pos);</span>
+<span class='covered'>          result0 = parse_sec_tag_start();</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            result1 = [];</span>
+<span class='covered'>            result2 = parse_ws();</span>
+<span class='covered'>            while (result2 !== null) {</span>
+<span class='covered'>              result1.push(result2);</span>
+<span class='covered'>              result2 = parse_ws();</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result1 !== null) {</span>
+<span class='covered'>              result2 = parse_rd();</span>
+<span class='covered'>              if (result2 !== null) {</span>
+<span class='covered'>                result3 = parse_body();</span>
+<span class='covered'>                if (result3 !== null) {</span>
+<span class='covered'>                  result4 = parse_bodies();</span>
+<span class='covered'>                  if (result4 !== null) {</span>
+<span class='covered'>                    result5 = parse_end_tag();</span>
+<span class='covered'>                    if (result5 !== null) {</span>
+<span class='partial'>                      result6 = (function(offset, line, column, t, b, e, n) { return t[1].text === n.text;})(pos.offset, pos.line, pos.column, result0, result3, result4, result5) ? &quot;&quot; : <span class='partialuncovered'>null;</span></span>
+<span class='covered'>                      if (result6 !== null) {</span>
+<span class='covered'>                        result0 = [result0, result1, result2, result3, result4, result5, result6];</span>
+<span class='covered'>                      } else {</span>
+<span class='uncovered'>                        result0 = null;</span>
+<span class='uncovered'>                        pos = clone(pos1);</span>
+<span class='covered'>                      }</span>
+<span class='covered'>                    } else {</span>
+<span class='covered'>                      result0 = null;</span>
+<span class='covered'>                      pos = clone(pos1);</span>
+<span class='covered'>                    }</span>
+<span class='covered'>                  } else {</span>
+<span class='uncovered'>                    result0 = null;</span>
+<span class='uncovered'>                    pos = clone(pos1);</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                } else {</span>
+<span class='uncovered'>                  result0 = null;</span>
+<span class='uncovered'>                  pos = clone(pos1);</span>
+<span class='covered'>                }</span>
+<span class='covered'>              } else {</span>
+<span class='covered'>                result0 = null;</span>
+<span class='covered'>                pos = clone(pos1);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            } else {</span>
+<span class='uncovered'>              result0 = null;</span>
+<span class='uncovered'>              pos = clone(pos1);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result0 = null;</span>
+<span class='covered'>            pos = clone(pos1);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            result0 = (function(offset, line, column, t, b, e, n) { e.push([&quot;param&quot;, [&quot;literal&quot;, &quot;block&quot;], b]); t.push(e); return t })(pos0.offset, pos0.line, pos0.column, result0[0], result0[3], result0[4], result0[5]);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='covered'>            pos = clone(pos0);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='covered'>            pos0 = clone(pos);</span>
+<span class='covered'>            pos1 = clone(pos);</span>
+<span class='covered'>            result0 = parse_sec_tag_start();</span>
+<span class='covered'>            if (result0 !== null) {</span>
+<span class='covered'>              result1 = [];</span>
+<span class='covered'>              result2 = parse_ws();</span>
+<span class='covered'>              while (result2 !== null) {</span>
+<span class='covered'>                result1.push(result2);</span>
+<span class='covered'>                result2 = parse_ws();</span>
+<span class='covered'>              }</span>
+<span class='covered'>              if (result1 !== null) {</span>
+<span class='covered'>                if (input.charCodeAt(pos.offset) === 47) {</span>
+<span class='covered'>                  result2 = &quot;/&quot;;</span>
+<span class='covered'>                  advance(pos, 1);</span>
+<span class='covered'>                } else {</span>
+<span class='covered'>                  result2 = null;</span>
+<span class='covered'>                  if (reportFailures === 0) {</span>
+<span class='uncovered'>                    matchFailed(&quot;\&quot;/\&quot;&quot;);</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                }</span>
+<span class='covered'>                if (result2 !== null) {</span>
+<span class='covered'>                  result3 = parse_rd();</span>
+<span class='covered'>                  if (result3 !== null) {</span>
+<span class='covered'>                    result0 = [result0, result1, result2, result3];</span>
+<span class='covered'>                  } else {</span>
+<span class='covered'>                    result0 = null;</span>
+<span class='covered'>                    pos = clone(pos1);</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                } else {</span>
+<span class='covered'>                  result0 = null;</span>
+<span class='covered'>                  pos = clone(pos1);</span>
+<span class='covered'>                }</span>
+<span class='covered'>              } else {</span>
+<span class='uncovered'>                result0 = null;</span>
+<span class='uncovered'>                pos = clone(pos1);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              result0 = null;</span>
+<span class='covered'>              pos = clone(pos1);</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result0 !== null) {</span>
+<span class='covered'>              result0 = (function(offset, line, column, t) { t.push([&quot;bodies&quot;]); return t })(pos0.offset, pos0.line, pos0.column, result0[0]);</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result0 === null) {</span>
+<span class='covered'>              pos = clone(pos0);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          }</span>
+<span class='covered'>          reportFailures--;</span>
+<span class='covered'>          if (reportFailures === 0 &amp;&amp; result0 === null) {</span>
+<span class='covered'>            matchFailed(&quot;section&quot;);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return result0;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function parse_sec_tag_start() {</span>
+<span class='covered'>          var result0, result1, result2, result3, result4, result5;</span>
+<span class='covered'>          var pos0, pos1;</span>
+<span class='covered'>          </span>
+<span class='covered'>          pos0 = clone(pos);</span>
+<span class='covered'>          pos1 = clone(pos);</span>
+<span class='covered'>          result0 = parse_ld();</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            if (/^[#?^&lt;+@%]/.test(input.charAt(pos.offset))) {</span>
+<span class='covered'>              result1 = input.charAt(pos.offset);</span>
+<span class='covered'>              advance(pos, 1);</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              result1 = null;</span>
+<span class='covered'>              if (reportFailures === 0) {</span>
+<span class='uncovered'>                matchFailed(&quot;[#?^&lt;+@%]&quot;);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result1 !== null) {</span>
+<span class='covered'>              result2 = [];</span>
+<span class='covered'>              result3 = parse_ws();</span>
+<span class='covered'>              while (result3 !== null) {</span>
+<span class='covered'>                result2.push(result3);</span>
+<span class='covered'>                result3 = parse_ws();</span>
+<span class='covered'>              }</span>
+<span class='covered'>              if (result2 !== null) {</span>
+<span class='covered'>                result3 = parse_identifier();</span>
+<span class='covered'>                if (result3 !== null) {</span>
+<span class='covered'>                  result4 = parse_context();</span>
+<span class='covered'>                  if (result4 !== null) {</span>
+<span class='covered'>                    result5 = parse_params();</span>
+<span class='covered'>                    if (result5 !== null) {</span>
+<span class='covered'>                      result0 = [result0, result1, result2, result3, result4, result5];</span>
+<span class='covered'>                    } else {</span>
+<span class='uncovered'>                      result0 = null;</span>
+<span class='uncovered'>                      pos = clone(pos1);</span>
+<span class='covered'>                    }</span>
+<span class='covered'>                  } else {</span>
+<span class='uncovered'>                    result0 = null;</span>
+<span class='uncovered'>                    pos = clone(pos1);</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                } else {</span>
+<span class='covered'>                  result0 = null;</span>
+<span class='covered'>                  pos = clone(pos1);</span>
+<span class='covered'>                }</span>
+<span class='covered'>              } else {</span>
+<span class='uncovered'>                result0 = null;</span>
+<span class='uncovered'>                pos = clone(pos1);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              result0 = null;</span>
+<span class='covered'>              pos = clone(pos1);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result0 = null;</span>
+<span class='covered'>            pos = clone(pos1);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            result0 = (function(offset, line, column, t, n, c, p) { return [t, n, c, p] })(pos0.offset, pos0.line, pos0.column, result0[1], result0[3], result0[4], result0[5]);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='covered'>            pos = clone(pos0);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return result0;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function parse_end_tag() {</span>
+<span class='covered'>          var result0, result1, result2, result3, result4, result5;</span>
+<span class='covered'>          var pos0, pos1;</span>
+<span class='covered'>          </span>
+<span class='covered'>          reportFailures++;</span>
+<span class='covered'>          pos0 = clone(pos);</span>
+<span class='covered'>          pos1 = clone(pos);</span>
+<span class='covered'>          result0 = parse_ld();</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            if (input.charCodeAt(pos.offset) === 47) {</span>
+<span class='covered'>              result1 = &quot;/&quot;;</span>
+<span class='covered'>              advance(pos, 1);</span>
+<span class='covered'>            } else {</span>
+<span class='uncovered'>              result1 = null;</span>
+<span class='uncovered'>              if (reportFailures === 0) {</span>
+<span class='uncovered'>                matchFailed(&quot;\&quot;/\&quot;&quot;);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result1 !== null) {</span>
+<span class='covered'>              result2 = [];</span>
+<span class='covered'>              result3 = parse_ws();</span>
+<span class='covered'>              while (result3 !== null) {</span>
+<span class='covered'>                result2.push(result3);</span>
+<span class='covered'>                result3 = parse_ws();</span>
+<span class='covered'>              }</span>
+<span class='covered'>              if (result2 !== null) {</span>
+<span class='covered'>                result3 = parse_identifier();</span>
+<span class='covered'>                if (result3 !== null) {</span>
+<span class='covered'>                  result4 = [];</span>
+<span class='covered'>                  result5 = parse_ws();</span>
+<span class='covered'>                  while (result5 !== null) {</span>
+<span class='covered'>                    result4.push(result5);</span>
+<span class='covered'>                    result5 = parse_ws();</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                  if (result4 !== null) {</span>
+<span class='covered'>                    result5 = parse_rd();</span>
+<span class='covered'>                    if (result5 !== null) {</span>
+<span class='covered'>                      result0 = [result0, result1, result2, result3, result4, result5];</span>
+<span class='covered'>                    } else {</span>
+<span class='uncovered'>                      result0 = null;</span>
+<span class='uncovered'>                      pos = clone(pos1);</span>
+<span class='covered'>                    }</span>
+<span class='covered'>                  } else {</span>
+<span class='uncovered'>                    result0 = null;</span>
+<span class='uncovered'>                    pos = clone(pos1);</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                } else {</span>
+<span class='uncovered'>                  result0 = null;</span>
+<span class='uncovered'>                  pos = clone(pos1);</span>
+<span class='covered'>                }</span>
+<span class='covered'>              } else {</span>
+<span class='uncovered'>                result0 = null;</span>
+<span class='uncovered'>                pos = clone(pos1);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            } else {</span>
+<span class='uncovered'>              result0 = null;</span>
+<span class='uncovered'>              pos = clone(pos1);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result0 = null;</span>
+<span class='covered'>            pos = clone(pos1);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            result0 = (function(offset, line, column, n) { return n })(pos0.offset, pos0.line, pos0.column, result0[3]);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='covered'>            pos = clone(pos0);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          reportFailures--;</span>
+<span class='partial'>          if (reportFailures === 0 &amp;&amp; <span class='partialuncovered'>result0 === null)</span> {</span>
+<span class='uncovered'>            matchFailed(&quot;end tag&quot;);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return result0;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function parse_context() {</span>
+<span class='covered'>          var result0, result1;</span>
+<span class='covered'>          var pos0, pos1, pos2;</span>
+<span class='covered'>          </span>
+<span class='covered'>          pos0 = clone(pos);</span>
+<span class='covered'>          pos1 = clone(pos);</span>
+<span class='covered'>          pos2 = clone(pos);</span>
+<span class='covered'>          if (input.charCodeAt(pos.offset) === 58) {</span>
+<span class='covered'>            result0 = &quot;:&quot;;</span>
+<span class='covered'>            advance(pos, 1);</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result0 = null;</span>
+<span class='covered'>            if (reportFailures === 0) {</span>
+<span class='uncovered'>              matchFailed(&quot;\&quot;:\&quot;&quot;);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            result1 = parse_identifier();</span>
+<span class='covered'>            if (result1 !== null) {</span>
+<span class='covered'>              result0 = [result0, result1];</span>
+<span class='covered'>            } else {</span>
+<span class='uncovered'>              result0 = null;</span>
+<span class='uncovered'>              pos = clone(pos2);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result0 = null;</span>
+<span class='covered'>            pos = clone(pos2);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            result0 = (function(offset, line, column, n) {return n})(pos1.offset, pos1.line, pos1.column, result0[1]);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='covered'>            pos = clone(pos1);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          result0 = result0 !== null ? result0 : &quot;&quot;;</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            result0 = (function(offset, line, column, n) { return n ? [&quot;context&quot;, n] : [&quot;context&quot;] })(pos0.offset, pos0.line, pos0.column, result0);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='uncovered'>            pos = clone(pos0);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return result0;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function parse_params() {</span>
+<span class='covered'>          var result0, result1, result2, result3, result4;</span>
+<span class='covered'>          var pos0, pos1, pos2;</span>
+<span class='covered'>          </span>
+<span class='covered'>          reportFailures++;</span>
+<span class='covered'>          pos0 = clone(pos);</span>
+<span class='covered'>          result0 = [];</span>
+<span class='covered'>          pos1 = clone(pos);</span>
+<span class='covered'>          pos2 = clone(pos);</span>
+<span class='covered'>          result2 = parse_ws();</span>
+<span class='covered'>          if (result2 !== null) {</span>
+<span class='covered'>            result1 = [];</span>
+<span class='covered'>            while (result2 !== null) {</span>
+<span class='covered'>              result1.push(result2);</span>
+<span class='covered'>              result2 = parse_ws();</span>
+<span class='covered'>            }</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result1 = null;</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result1 !== null) {</span>
+<span class='covered'>            result2 = parse_key();</span>
+<span class='covered'>            if (result2 !== null) {</span>
+<span class='covered'>              if (input.charCodeAt(pos.offset) === 61) {</span>
+<span class='covered'>                result3 = &quot;=&quot;;</span>
+<span class='covered'>                advance(pos, 1);</span>
+<span class='covered'>              } else {</span>
+<span class='uncovered'>                result3 = null;</span>
+<span class='uncovered'>                if (reportFailures === 0) {</span>
+<span class='uncovered'>                  matchFailed(&quot;\&quot;=\&quot;&quot;);</span>
+<span class='covered'>                }</span>
+<span class='covered'>              }</span>
+<span class='covered'>              if (result3 !== null) {</span>
+<span class='covered'>                result4 = parse_number();</span>
+<span class='covered'>                if (result4 === null) {</span>
+<span class='covered'>                  result4 = parse_identifier();</span>
+<span class='covered'>                  if (result4 === null) {</span>
+<span class='covered'>                    result4 = parse_inline();</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                }</span>
+<span class='covered'>                if (result4 !== null) {</span>
+<span class='covered'>                  result1 = [result1, result2, result3, result4];</span>
+<span class='covered'>                } else {</span>
+<span class='uncovered'>                  result1 = null;</span>
+<span class='uncovered'>                  pos = clone(pos2);</span>
+<span class='covered'>                }</span>
+<span class='covered'>              } else {</span>
+<span class='uncovered'>                result1 = null;</span>
+<span class='uncovered'>                pos = clone(pos2);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              result1 = null;</span>
+<span class='covered'>              pos = clone(pos2);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result1 = null;</span>
+<span class='covered'>            pos = clone(pos2);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result1 !== null) {</span>
+<span class='covered'>            result1 = (function(offset, line, column, k, v) {return [&quot;param&quot;, [&quot;literal&quot;, k], v]})(pos1.offset, pos1.line, pos1.column, result1[1], result1[3]);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result1 === null) {</span>
+<span class='covered'>            pos = clone(pos1);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          while (result1 !== null) {</span>
+<span class='covered'>            result0.push(result1);</span>
+<span class='covered'>            pos1 = clone(pos);</span>
+<span class='covered'>            pos2 = clone(pos);</span>
+<span class='covered'>            result2 = parse_ws();</span>
+<span class='covered'>            if (result2 !== null) {</span>
+<span class='covered'>              result1 = [];</span>
+<span class='covered'>              while (result2 !== null) {</span>
+<span class='covered'>                result1.push(result2);</span>
+<span class='covered'>                result2 = parse_ws();</span>
+<span class='covered'>              }</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              result1 = null;</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result1 !== null) {</span>
+<span class='covered'>              result2 = parse_key();</span>
+<span class='covered'>              if (result2 !== null) {</span>
+<span class='covered'>                if (input.charCodeAt(pos.offset) === 61) {</span>
+<span class='covered'>                  result3 = &quot;=&quot;;</span>
+<span class='covered'>                  advance(pos, 1);</span>
+<span class='covered'>                } else {</span>
+<span class='uncovered'>                  result3 = null;</span>
+<span class='uncovered'>                  if (reportFailures === 0) {</span>
+<span class='uncovered'>                    matchFailed(&quot;\&quot;=\&quot;&quot;);</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                }</span>
+<span class='covered'>                if (result3 !== null) {</span>
+<span class='covered'>                  result4 = parse_number();</span>
+<span class='covered'>                  if (result4 === null) {</span>
+<span class='covered'>                    result4 = parse_identifier();</span>
+<span class='covered'>                    if (result4 === null) {</span>
+<span class='covered'>                      result4 = parse_inline();</span>
+<span class='covered'>                    }</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                  if (result4 !== null) {</span>
+<span class='covered'>                    result1 = [result1, result2, result3, result4];</span>
+<span class='covered'>                  } else {</span>
+<span class='uncovered'>                    result1 = null;</span>
+<span class='uncovered'>                    pos = clone(pos2);</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                } else {</span>
+<span class='uncovered'>                  result1 = null;</span>
+<span class='uncovered'>                  pos = clone(pos2);</span>
+<span class='covered'>                }</span>
+<span class='covered'>              } else {</span>
+<span class='covered'>                result1 = null;</span>
+<span class='covered'>                pos = clone(pos2);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              result1 = null;</span>
+<span class='covered'>              pos = clone(pos2);</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result1 !== null) {</span>
+<span class='covered'>              result1 = (function(offset, line, column, k, v) {return [&quot;param&quot;, [&quot;literal&quot;, k], v]})(pos1.offset, pos1.line, pos1.column, result1[1], result1[3]);</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result1 === null) {</span>
+<span class='covered'>              pos = clone(pos1);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            result0 = (function(offset, line, column, p) { return [&quot;params&quot;].concat(p) })(pos0.offset, pos0.line, pos0.column, result0);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='uncovered'>            pos = clone(pos0);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          reportFailures--;</span>
+<span class='partial'>          if (reportFailures === 0 &amp;&amp; <span class='partialuncovered'>result0 === null)</span> {</span>
+<span class='uncovered'>            matchFailed(&quot;params&quot;);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return result0;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function parse_bodies() {</span>
+<span class='covered'>          var result0, result1, result2, result3, result4, result5;</span>
+<span class='covered'>          var pos0, pos1, pos2;</span>
+<span class='covered'>          </span>
+<span class='covered'>          reportFailures++;</span>
+<span class='covered'>          pos0 = clone(pos);</span>
+<span class='covered'>          result0 = [];</span>
+<span class='covered'>          pos1 = clone(pos);</span>
+<span class='covered'>          pos2 = clone(pos);</span>
+<span class='covered'>          result1 = parse_ld();</span>
+<span class='covered'>          if (result1 !== null) {</span>
+<span class='covered'>            if (input.charCodeAt(pos.offset) === 58) {</span>
+<span class='covered'>              result2 = &quot;:&quot;;</span>
+<span class='covered'>              advance(pos, 1);</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              result2 = null;</span>
+<span class='covered'>              if (reportFailures === 0) {</span>
+<span class='uncovered'>                matchFailed(&quot;\&quot;:\&quot;&quot;);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result2 !== null) {</span>
+<span class='covered'>              result3 = parse_key();</span>
+<span class='covered'>              if (result3 !== null) {</span>
+<span class='covered'>                result4 = parse_rd();</span>
+<span class='covered'>                if (result4 !== null) {</span>
+<span class='covered'>                  result5 = parse_body();</span>
+<span class='covered'>                  if (result5 !== null) {</span>
+<span class='covered'>                    result1 = [result1, result2, result3, result4, result5];</span>
+<span class='covered'>                  } else {</span>
+<span class='uncovered'>                    result1 = null;</span>
+<span class='uncovered'>                    pos = clone(pos2);</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                } else {</span>
+<span class='uncovered'>                  result1 = null;</span>
+<span class='uncovered'>                  pos = clone(pos2);</span>
+<span class='covered'>                }</span>
+<span class='covered'>              } else {</span>
+<span class='uncovered'>                result1 = null;</span>
+<span class='uncovered'>                pos = clone(pos2);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              result1 = null;</span>
+<span class='covered'>              pos = clone(pos2);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result1 = null;</span>
+<span class='covered'>            pos = clone(pos2);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result1 !== null) {</span>
+<span class='covered'>            result1 = (function(offset, line, column, k, v) {return [&quot;param&quot;, [&quot;literal&quot;, k], v]})(pos1.offset, pos1.line, pos1.column, result1[2], result1[4]);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result1 === null) {</span>
+<span class='covered'>            pos = clone(pos1);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          while (result1 !== null) {</span>
+<span class='covered'>            result0.push(result1);</span>
+<span class='covered'>            pos1 = clone(pos);</span>
+<span class='covered'>            pos2 = clone(pos);</span>
+<span class='covered'>            result1 = parse_ld();</span>
+<span class='covered'>            if (result1 !== null) {</span>
+<span class='covered'>              if (input.charCodeAt(pos.offset) === 58) {</span>
+<span class='uncovered'>                result2 = &quot;:&quot;;</span>
+<span class='uncovered'>                advance(pos, 1);</span>
+<span class='covered'>              } else {</span>
+<span class='covered'>                result2 = null;</span>
+<span class='covered'>                if (reportFailures === 0) {</span>
+<span class='uncovered'>                  matchFailed(&quot;\&quot;:\&quot;&quot;);</span>
+<span class='covered'>                }</span>
+<span class='covered'>              }</span>
+<span class='covered'>              if (result2 !== null) {</span>
+<span class='uncovered'>                result3 = parse_key();</span>
+<span class='uncovered'>                if (result3 !== null) {</span>
+<span class='uncovered'>                  result4 = parse_rd();</span>
+<span class='uncovered'>                  if (result4 !== null) {</span>
+<span class='uncovered'>                    result5 = parse_body();</span>
+<span class='uncovered'>                    if (result5 !== null) {</span>
+<span class='uncovered'>                      result1 = [result1, result2, result3, result4, result5];</span>
+<span class='covered'>                    } else {</span>
+<span class='uncovered'>                      result1 = null;</span>
+<span class='uncovered'>                      pos = clone(pos2);</span>
+<span class='covered'>                    }</span>
+<span class='covered'>                  } else {</span>
+<span class='uncovered'>                    result1 = null;</span>
+<span class='uncovered'>                    pos = clone(pos2);</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                } else {</span>
+<span class='uncovered'>                  result1 = null;</span>
+<span class='uncovered'>                  pos = clone(pos2);</span>
+<span class='covered'>                }</span>
+<span class='covered'>              } else {</span>
+<span class='covered'>                result1 = null;</span>
+<span class='covered'>                pos = clone(pos2);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            } else {</span>
+<span class='uncovered'>              result1 = null;</span>
+<span class='uncovered'>              pos = clone(pos2);</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result1 !== null) {</span>
+<span class='uncovered'>              result1 = (function(offset, line, column, k, v) {return [&quot;param&quot;, [&quot;literal&quot;, k], v]})(pos1.offset, pos1.line, pos1.column, result1[2], result1[4]);</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result1 === null) {</span>
+<span class='covered'>              pos = clone(pos1);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            result0 = (function(offset, line, column, p) { return [&quot;bodies&quot;].concat(p) })(pos0.offset, pos0.line, pos0.column, result0);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='uncovered'>            pos = clone(pos0);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          reportFailures--;</span>
+<span class='partial'>          if (reportFailures === 0 &amp;&amp; <span class='partialuncovered'>result0 === null)</span> {</span>
+<span class='uncovered'>            matchFailed(&quot;bodies&quot;);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return result0;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function parse_reference() {</span>
+<span class='covered'>          var result0, result1, result2, result3;</span>
+<span class='covered'>          var pos0, pos1;</span>
+<span class='covered'>          </span>
+<span class='covered'>          reportFailures++;</span>
+<span class='covered'>          pos0 = clone(pos);</span>
+<span class='covered'>          pos1 = clone(pos);</span>
+<span class='covered'>          result0 = parse_ld();</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            result1 = parse_identifier();</span>
+<span class='covered'>            if (result1 !== null) {</span>
+<span class='covered'>              result2 = parse_filters();</span>
+<span class='covered'>              if (result2 !== null) {</span>
+<span class='covered'>                result3 = parse_rd();</span>
+<span class='covered'>                if (result3 !== null) {</span>
+<span class='covered'>                  result0 = [result0, result1, result2, result3];</span>
+<span class='covered'>                } else {</span>
+<span class='uncovered'>                  result0 = null;</span>
+<span class='uncovered'>                  pos = clone(pos1);</span>
+<span class='covered'>                }</span>
+<span class='covered'>              } else {</span>
+<span class='uncovered'>                result0 = null;</span>
+<span class='uncovered'>                pos = clone(pos1);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              result0 = null;</span>
+<span class='covered'>              pos = clone(pos1);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result0 = null;</span>
+<span class='covered'>            pos = clone(pos1);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            result0 = (function(offset, line, column, n, f) { return [&quot;reference&quot;, n, f] })(pos0.offset, pos0.line, pos0.column, result0[1], result0[2]);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='covered'>            pos = clone(pos0);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          reportFailures--;</span>
+<span class='covered'>          if (reportFailures === 0 &amp;&amp; result0 === null) {</span>
+<span class='covered'>            matchFailed(&quot;reference&quot;);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return result0;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function parse_partial() {</span>
+<span class='covered'>          var result0, result1, result2, result3, result4, result5, result6, result7;</span>
+<span class='covered'>          var pos0, pos1, pos2;</span>
+<span class='covered'>          </span>
+<span class='covered'>          reportFailures++;</span>
+<span class='covered'>          pos0 = clone(pos);</span>
+<span class='covered'>          pos1 = clone(pos);</span>
+<span class='covered'>          result0 = parse_ld();</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            if (input.charCodeAt(pos.offset) === 62) {</span>
+<span class='covered'>              result1 = &quot;&gt;&quot;;</span>
+<span class='covered'>              advance(pos, 1);</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              result1 = null;</span>
+<span class='covered'>              if (reportFailures === 0) {</span>
+<span class='uncovered'>                matchFailed(&quot;\&quot;&gt;\&quot;&quot;);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result1 === null) {</span>
+<span class='covered'>              if (input.charCodeAt(pos.offset) === 43) {</span>
+<span class='covered'>                result1 = &quot;+&quot;;</span>
+<span class='covered'>                advance(pos, 1);</span>
+<span class='covered'>              } else {</span>
+<span class='covered'>                result1 = null;</span>
+<span class='covered'>                if (reportFailures === 0) {</span>
+<span class='uncovered'>                  matchFailed(&quot;\&quot;+\&quot;&quot;);</span>
+<span class='covered'>                }</span>
+<span class='covered'>              }</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result1 !== null) {</span>
+<span class='covered'>              pos2 = clone(pos);</span>
+<span class='covered'>              result2 = parse_key();</span>
+<span class='covered'>              if (result2 !== null) {</span>
+<span class='covered'>                result2 = (function(offset, line, column, k) {return [&quot;literal&quot;, k]})(pos2.offset, pos2.line, pos2.column, result2);</span>
+<span class='covered'>              }</span>
+<span class='covered'>              if (result2 === null) {</span>
+<span class='covered'>                pos = clone(pos2);</span>
+<span class='covered'>              }</span>
+<span class='covered'>              if (result2 === null) {</span>
+<span class='covered'>                result2 = parse_inline();</span>
+<span class='covered'>              }</span>
+<span class='covered'>              if (result2 !== null) {</span>
+<span class='covered'>                result3 = parse_context();</span>
+<span class='covered'>                if (result3 !== null) {</span>
+<span class='covered'>                  result4 = parse_params();</span>
+<span class='covered'>                  if (result4 !== null) {</span>
+<span class='covered'>                    result5 = [];</span>
+<span class='covered'>                    result6 = parse_ws();</span>
+<span class='covered'>                    while (result6 !== null) {</span>
+<span class='covered'>                      result5.push(result6);</span>
+<span class='covered'>                      result6 = parse_ws();</span>
+<span class='covered'>                    }</span>
+<span class='covered'>                    if (result5 !== null) {</span>
+<span class='covered'>                      if (input.charCodeAt(pos.offset) === 47) {</span>
+<span class='covered'>                        result6 = &quot;/&quot;;</span>
+<span class='covered'>                        advance(pos, 1);</span>
+<span class='covered'>                      } else {</span>
+<span class='uncovered'>                        result6 = null;</span>
+<span class='uncovered'>                        if (reportFailures === 0) {</span>
+<span class='uncovered'>                          matchFailed(&quot;\&quot;/\&quot;&quot;);</span>
+<span class='covered'>                        }</span>
+<span class='covered'>                      }</span>
+<span class='covered'>                      if (result6 !== null) {</span>
+<span class='covered'>                        result7 = parse_rd();</span>
+<span class='covered'>                        if (result7 !== null) {</span>
+<span class='covered'>                          result0 = [result0, result1, result2, result3, result4, result5, result6, result7];</span>
+<span class='covered'>                        } else {</span>
+<span class='uncovered'>                          result0 = null;</span>
+<span class='uncovered'>                          pos = clone(pos1);</span>
+<span class='covered'>                        }</span>
+<span class='covered'>                      } else {</span>
+<span class='uncovered'>                        result0 = null;</span>
+<span class='uncovered'>                        pos = clone(pos1);</span>
+<span class='covered'>                      }</span>
+<span class='covered'>                    } else {</span>
+<span class='uncovered'>                      result0 = null;</span>
+<span class='uncovered'>                      pos = clone(pos1);</span>
+<span class='covered'>                    }</span>
+<span class='covered'>                  } else {</span>
+<span class='uncovered'>                    result0 = null;</span>
+<span class='uncovered'>                    pos = clone(pos1);</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                } else {</span>
+<span class='uncovered'>                  result0 = null;</span>
+<span class='uncovered'>                  pos = clone(pos1);</span>
+<span class='covered'>                }</span>
+<span class='covered'>              } else {</span>
+<span class='covered'>                result0 = null;</span>
+<span class='covered'>                pos = clone(pos1);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              result0 = null;</span>
+<span class='covered'>              pos = clone(pos1);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result0 = null;</span>
+<span class='covered'>            pos = clone(pos1);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            result0 = (function(offset, line, column, s, n, c, p) { var key = (s ===&quot;&gt;&quot;)? &quot;partial&quot; : s; return [key, n, c, p] })(pos0.offset, pos0.line, pos0.column, result0[1], result0[2], result0[3], result0[4]);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='covered'>            pos = clone(pos0);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          reportFailures--;</span>
+<span class='covered'>          if (reportFailures === 0 &amp;&amp; result0 === null) {</span>
+<span class='covered'>            matchFailed(&quot;partial&quot;);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return result0;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function parse_filters() {</span>
+<span class='covered'>          var result0, result1, result2;</span>
+<span class='covered'>          var pos0, pos1, pos2;</span>
+<span class='covered'>          </span>
+<span class='covered'>          reportFailures++;</span>
+<span class='covered'>          pos0 = clone(pos);</span>
+<span class='covered'>          result0 = [];</span>
+<span class='covered'>          pos1 = clone(pos);</span>
+<span class='covered'>          pos2 = clone(pos);</span>
+<span class='covered'>          if (input.charCodeAt(pos.offset) === 124) {</span>
+<span class='covered'>            result1 = &quot;|&quot;;</span>
+<span class='covered'>            advance(pos, 1);</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result1 = null;</span>
+<span class='covered'>            if (reportFailures === 0) {</span>
+<span class='uncovered'>              matchFailed(&quot;\&quot;|\&quot;&quot;);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result1 !== null) {</span>
+<span class='covered'>            result2 = parse_key();</span>
+<span class='covered'>            if (result2 !== null) {</span>
+<span class='covered'>              result1 = [result1, result2];</span>
+<span class='covered'>            } else {</span>
+<span class='uncovered'>              result1 = null;</span>
+<span class='uncovered'>              pos = clone(pos2);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result1 = null;</span>
+<span class='covered'>            pos = clone(pos2);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result1 !== null) {</span>
+<span class='covered'>            result1 = (function(offset, line, column, n) {return n})(pos1.offset, pos1.line, pos1.column, result1[1]);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result1 === null) {</span>
+<span class='covered'>            pos = clone(pos1);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          while (result1 !== null) {</span>
+<span class='covered'>            result0.push(result1);</span>
+<span class='covered'>            pos1 = clone(pos);</span>
+<span class='covered'>            pos2 = clone(pos);</span>
+<span class='covered'>            if (input.charCodeAt(pos.offset) === 124) {</span>
+<span class='covered'>              result1 = &quot;|&quot;;</span>
+<span class='covered'>              advance(pos, 1);</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              result1 = null;</span>
+<span class='covered'>              if (reportFailures === 0) {</span>
+<span class='uncovered'>                matchFailed(&quot;\&quot;|\&quot;&quot;);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result1 !== null) {</span>
+<span class='covered'>              result2 = parse_key();</span>
+<span class='covered'>              if (result2 !== null) {</span>
+<span class='covered'>                result1 = [result1, result2];</span>
+<span class='covered'>              } else {</span>
+<span class='uncovered'>                result1 = null;</span>
+<span class='uncovered'>                pos = clone(pos2);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              result1 = null;</span>
+<span class='covered'>              pos = clone(pos2);</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result1 !== null) {</span>
+<span class='covered'>              result1 = (function(offset, line, column, n) {return n})(pos1.offset, pos1.line, pos1.column, result1[1]);</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result1 === null) {</span>
+<span class='covered'>              pos = clone(pos1);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            result0 = (function(offset, line, column, f) { return [&quot;filters&quot;].concat(f) })(pos0.offset, pos0.line, pos0.column, result0);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='uncovered'>            pos = clone(pos0);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          reportFailures--;</span>
+<span class='partial'>          if (reportFailures === 0 &amp;&amp; <span class='partialuncovered'>result0 === null)</span> {</span>
+<span class='uncovered'>            matchFailed(&quot;filters&quot;);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return result0;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function parse_special() {</span>
+<span class='covered'>          var result0, result1, result2, result3;</span>
+<span class='covered'>          var pos0, pos1;</span>
+<span class='covered'>          </span>
+<span class='covered'>          reportFailures++;</span>
+<span class='covered'>          pos0 = clone(pos);</span>
+<span class='covered'>          pos1 = clone(pos);</span>
+<span class='covered'>          result0 = parse_ld();</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            if (input.charCodeAt(pos.offset) === 126) {</span>
+<span class='covered'>              result1 = &quot;~&quot;;</span>
+<span class='covered'>              advance(pos, 1);</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              result1 = null;</span>
+<span class='covered'>              if (reportFailures === 0) {</span>
+<span class='uncovered'>                matchFailed(&quot;\&quot;~\&quot;&quot;);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result1 !== null) {</span>
+<span class='covered'>              result2 = parse_key();</span>
+<span class='covered'>              if (result2 !== null) {</span>
+<span class='covered'>                result3 = parse_rd();</span>
+<span class='covered'>                if (result3 !== null) {</span>
+<span class='covered'>                  result0 = [result0, result1, result2, result3];</span>
+<span class='covered'>                } else {</span>
+<span class='uncovered'>                  result0 = null;</span>
+<span class='uncovered'>                  pos = clone(pos1);</span>
+<span class='covered'>                }</span>
+<span class='covered'>              } else {</span>
+<span class='uncovered'>                result0 = null;</span>
+<span class='uncovered'>                pos = clone(pos1);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              result0 = null;</span>
+<span class='covered'>              pos = clone(pos1);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result0 = null;</span>
+<span class='covered'>            pos = clone(pos1);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            result0 = (function(offset, line, column, k) { return [&quot;special&quot;, k] })(pos0.offset, pos0.line, pos0.column, result0[2]);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='covered'>            pos = clone(pos0);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          reportFailures--;</span>
+<span class='covered'>          if (reportFailures === 0 &amp;&amp; result0 === null) {</span>
+<span class='covered'>            matchFailed(&quot;special&quot;);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return result0;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function parse_identifier() {</span>
+<span class='covered'>          var result0;</span>
+<span class='covered'>          var pos0;</span>
+<span class='covered'>          </span>
+<span class='covered'>          reportFailures++;</span>
+<span class='covered'>          pos0 = clone(pos);</span>
+<span class='covered'>          result0 = parse_path();</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            result0 = (function(offset, line, column, p) { var arr = [&quot;path&quot;].concat(p); arr.text = p[1].join(&#39;.&#39;); return arr; })(pos0.offset, pos0.line, pos0.column, result0);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='covered'>            pos = clone(pos0);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='covered'>            pos0 = clone(pos);</span>
+<span class='covered'>            result0 = parse_key();</span>
+<span class='covered'>            if (result0 !== null) {</span>
+<span class='covered'>              result0 = (function(offset, line, column, k) { var arr = [&quot;key&quot;, k]; arr.text = k; return arr; })(pos0.offset, pos0.line, pos0.column, result0);</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result0 === null) {</span>
+<span class='covered'>              pos = clone(pos0);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          }</span>
+<span class='covered'>          reportFailures--;</span>
+<span class='partial'>          if (reportFailures === 0 &amp;&amp; <span class='partialuncovered'>result0 === null)</span> {</span>
+<span class='uncovered'>            matchFailed(&quot;identifier&quot;);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return result0;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function parse_number() {</span>
+<span class='covered'>          var result0;</span>
+<span class='covered'>          var pos0;</span>
+<span class='covered'>          </span>
+<span class='covered'>          reportFailures++;</span>
+<span class='covered'>          pos0 = clone(pos);</span>
+<span class='covered'>          result0 = parse_frac();</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='covered'>            result0 = parse_integer();</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            result0 = (function(offset, line, column, n) { return [&#39;literal&#39;, n]; })(pos0.offset, pos0.line, pos0.column, result0);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='covered'>            pos = clone(pos0);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          reportFailures--;</span>
+<span class='partial'>          if (reportFailures === 0 &amp;&amp; <span class='partialuncovered'>result0 === null)</span> {</span>
+<span class='uncovered'>            matchFailed(&quot;number&quot;);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return result0;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function parse_frac() {</span>
+<span class='covered'>          var result0, result1, result2, result3;</span>
+<span class='covered'>          var pos0, pos1;</span>
+<span class='covered'>          </span>
+<span class='covered'>          reportFailures++;</span>
+<span class='covered'>          pos0 = clone(pos);</span>
+<span class='covered'>          pos1 = clone(pos);</span>
+<span class='covered'>          result0 = parse_integer();</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            if (input.charCodeAt(pos.offset) === 46) {</span>
+<span class='covered'>              result1 = &quot;.&quot;;</span>
+<span class='covered'>              advance(pos, 1);</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              result1 = null;</span>
+<span class='covered'>              if (reportFailures === 0) {</span>
+<span class='uncovered'>                matchFailed(&quot;\&quot;.\&quot;&quot;);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result1 !== null) {</span>
+<span class='covered'>              result3 = parse_integer();</span>
+<span class='covered'>              if (result3 !== null) {</span>
+<span class='covered'>                result2 = [];</span>
+<span class='covered'>                while (result3 !== null) {</span>
+<span class='covered'>                  result2.push(result3);</span>
+<span class='covered'>                  result3 = parse_integer();</span>
+<span class='covered'>                }</span>
+<span class='covered'>              } else {</span>
+<span class='uncovered'>                result2 = null;</span>
+<span class='covered'>              }</span>
+<span class='covered'>              if (result2 !== null) {</span>
+<span class='covered'>                result0 = [result0, result1, result2];</span>
+<span class='covered'>              } else {</span>
+<span class='uncovered'>                result0 = null;</span>
+<span class='uncovered'>                pos = clone(pos1);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              result0 = null;</span>
+<span class='covered'>              pos = clone(pos1);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result0 = null;</span>
+<span class='covered'>            pos = clone(pos1);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            result0 = (function(offset, line, column, l, r) { return parseFloat(l + &quot;.&quot; + r.join(&#39;&#39;)); })(pos0.offset, pos0.line, pos0.column, result0[0], result0[2]);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='covered'>            pos = clone(pos0);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          reportFailures--;</span>
+<span class='partial'>          if (reportFailures === 0 &amp;&amp; <span class='partialuncovered'>result0 === null)</span> {</span>
+<span class='uncovered'>            matchFailed(&quot;frac&quot;);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return result0;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function parse_integer() {</span>
+<span class='covered'>          var result0, result1;</span>
+<span class='covered'>          var pos0;</span>
+<span class='covered'>          </span>
+<span class='covered'>          reportFailures++;</span>
+<span class='covered'>          pos0 = clone(pos);</span>
+<span class='covered'>          if (/^[0-9]/.test(input.charAt(pos.offset))) {</span>
+<span class='covered'>            result1 = input.charAt(pos.offset);</span>
+<span class='covered'>            advance(pos, 1);</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result1 = null;</span>
+<span class='covered'>            if (reportFailures === 0) {</span>
+<span class='uncovered'>              matchFailed(&quot;[0-9]&quot;);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result1 !== null) {</span>
+<span class='covered'>            result0 = [];</span>
+<span class='covered'>            while (result1 !== null) {</span>
+<span class='covered'>              result0.push(result1);</span>
+<span class='covered'>              if (/^[0-9]/.test(input.charAt(pos.offset))) {</span>
+<span class='covered'>                result1 = input.charAt(pos.offset);</span>
+<span class='covered'>                advance(pos, 1);</span>
+<span class='covered'>              } else {</span>
+<span class='covered'>                result1 = null;</span>
+<span class='covered'>                if (reportFailures === 0) {</span>
+<span class='uncovered'>                  matchFailed(&quot;[0-9]&quot;);</span>
+<span class='covered'>                }</span>
+<span class='covered'>              }</span>
+<span class='covered'>            }</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result0 = null;</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            result0 = (function(offset, line, column, digits) { return parseInt(digits.join(&quot;&quot;), 10); })(pos0.offset, pos0.line, pos0.column, result0);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='covered'>            pos = clone(pos0);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          reportFailures--;</span>
+<span class='partial'>          if (reportFailures === 0 &amp;&amp; <span class='partialuncovered'>result0 === null)</span> {</span>
+<span class='uncovered'>            matchFailed(&quot;integer&quot;);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return result0;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function parse_path() {</span>
+<span class='covered'>          var result0, result1, result2;</span>
+<span class='covered'>          var pos0, pos1;</span>
+<span class='covered'>          </span>
+<span class='covered'>          reportFailures++;</span>
+<span class='covered'>          pos0 = clone(pos);</span>
+<span class='covered'>          pos1 = clone(pos);</span>
+<span class='covered'>          result0 = parse_key();</span>
+<span class='covered'>          result0 = result0 !== null ? result0 : &quot;&quot;;</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            result2 = parse_nestedKey();</span>
+<span class='covered'>            if (result2 === null) {</span>
+<span class='covered'>              result2 = parse_array();</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result2 !== null) {</span>
+<span class='covered'>              result1 = [];</span>
+<span class='covered'>              while (result2 !== null) {</span>
+<span class='covered'>                result1.push(result2);</span>
+<span class='covered'>                result2 = parse_nestedKey();</span>
+<span class='covered'>                if (result2 === null) {</span>
+<span class='covered'>                  result2 = parse_array();</span>
+<span class='covered'>                }</span>
+<span class='covered'>              }</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              result1 = null;</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result1 !== null) {</span>
+<span class='covered'>              result0 = [result0, result1];</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              result0 = null;</span>
+<span class='covered'>              pos = clone(pos1);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          } else {</span>
+<span class='uncovered'>            result0 = null;</span>
+<span class='uncovered'>            pos = clone(pos1);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            result0 = (function(offset, line, column, k, d) {</span>
+<span class='covered'>              d = d[0]; </span>
+<span class='covered'>              if (k &amp;&amp; d) {</span>
+<span class='covered'>                d.unshift(k);</span>
+<span class='covered'>                return [false, d];;</span>
+<span class='covered'>              }</span>
+<span class='covered'>              return [true, d];</span>
+<span class='covered'>            })(pos0.offset, pos0.line, pos0.column, result0[0], result0[1]);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='covered'>            pos = clone(pos0);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='covered'>            pos0 = clone(pos);</span>
+<span class='covered'>            if (input.charCodeAt(pos.offset) === 46) {</span>
+<span class='covered'>              result0 = &quot;.&quot;;</span>
+<span class='covered'>              advance(pos, 1);</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              result0 = null;</span>
+<span class='covered'>              if (reportFailures === 0) {</span>
+<span class='uncovered'>                matchFailed(&quot;\&quot;.\&quot;&quot;);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result0 !== null) {</span>
+<span class='covered'>              result0 = (function(offset, line, column) { return [true, []] })(pos0.offset, pos0.line, pos0.column);</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result0 === null) {</span>
+<span class='covered'>              pos = clone(pos0);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          }</span>
+<span class='covered'>          reportFailures--;</span>
+<span class='partial'>          if (reportFailures === 0 &amp;&amp; <span class='partialuncovered'>result0 === null)</span> {</span>
+<span class='uncovered'>            matchFailed(&quot;path&quot;);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return result0;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function parse_key() {</span>
+<span class='covered'>          var result0, result1, result2;</span>
+<span class='covered'>          var pos0, pos1;</span>
+<span class='covered'>          </span>
+<span class='covered'>          reportFailures++;</span>
+<span class='covered'>          pos0 = clone(pos);</span>
+<span class='covered'>          pos1 = clone(pos);</span>
+<span class='covered'>          if (/^[a-zA-Z_$]/.test(input.charAt(pos.offset))) {</span>
+<span class='covered'>            result0 = input.charAt(pos.offset);</span>
+<span class='covered'>            advance(pos, 1);</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result0 = null;</span>
+<span class='covered'>            if (reportFailures === 0) {</span>
+<span class='uncovered'>              matchFailed(&quot;[a-zA-Z_$]&quot;);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            result1 = [];</span>
+<span class='covered'>            if (/^[0-9a-zA-Z_$]/.test(input.charAt(pos.offset))) {</span>
+<span class='covered'>              result2 = input.charAt(pos.offset);</span>
+<span class='covered'>              advance(pos, 1);</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              result2 = null;</span>
+<span class='covered'>              if (reportFailures === 0) {</span>
+<span class='uncovered'>                matchFailed(&quot;[0-9a-zA-Z_$]&quot;);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            }</span>
+<span class='covered'>            while (result2 !== null) {</span>
+<span class='covered'>              result1.push(result2);</span>
+<span class='covered'>              if (/^[0-9a-zA-Z_$]/.test(input.charAt(pos.offset))) {</span>
+<span class='covered'>                result2 = input.charAt(pos.offset);</span>
+<span class='covered'>                advance(pos, 1);</span>
+<span class='covered'>              } else {</span>
+<span class='covered'>                result2 = null;</span>
+<span class='covered'>                if (reportFailures === 0) {</span>
+<span class='uncovered'>                  matchFailed(&quot;[0-9a-zA-Z_$]&quot;);</span>
+<span class='covered'>                }</span>
+<span class='covered'>              }</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result1 !== null) {</span>
+<span class='covered'>              result0 = [result0, result1];</span>
+<span class='covered'>            } else {</span>
+<span class='uncovered'>              result0 = null;</span>
+<span class='uncovered'>              pos = clone(pos1);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result0 = null;</span>
+<span class='covered'>            pos = clone(pos1);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            result0 = (function(offset, line, column, h, t) { return h + t.join(&#39;&#39;) })(pos0.offset, pos0.line, pos0.column, result0[0], result0[1]);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='covered'>            pos = clone(pos0);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          reportFailures--;</span>
+<span class='partial'>          if (reportFailures === 0 &amp;&amp; <span class='partialuncovered'>result0 === null)</span> {</span>
+<span class='uncovered'>            matchFailed(&quot;key&quot;);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return result0;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function parse_nestedKey() {</span>
+<span class='covered'>          var result0, result1, result2;</span>
+<span class='covered'>          var pos0, pos1, pos2, pos3;</span>
+<span class='covered'>          </span>
+<span class='covered'>          reportFailures++;</span>
+<span class='covered'>          pos0 = clone(pos);</span>
+<span class='covered'>          pos1 = clone(pos);</span>
+<span class='covered'>          pos2 = clone(pos);</span>
+<span class='covered'>          pos3 = clone(pos);</span>
+<span class='covered'>          if (input.charCodeAt(pos.offset) === 46) {</span>
+<span class='covered'>            result1 = &quot;.&quot;;</span>
+<span class='covered'>            advance(pos, 1);</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result1 = null;</span>
+<span class='covered'>            if (reportFailures === 0) {</span>
+<span class='uncovered'>              matchFailed(&quot;\&quot;.\&quot;&quot;);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result1 !== null) {</span>
+<span class='covered'>            result2 = parse_key();</span>
+<span class='covered'>            if (result2 !== null) {</span>
+<span class='covered'>              result1 = [result1, result2];</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              result1 = null;</span>
+<span class='covered'>              pos = clone(pos3);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result1 = null;</span>
+<span class='covered'>            pos = clone(pos3);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result1 !== null) {</span>
+<span class='covered'>            result1 = (function(offset, line, column, k) {return k})(pos2.offset, pos2.line, pos2.column, result1[1]);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result1 === null) {</span>
+<span class='covered'>            pos = clone(pos2);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result1 !== null) {</span>
+<span class='covered'>            result0 = [];</span>
+<span class='covered'>            while (result1 !== null) {</span>
+<span class='covered'>              result0.push(result1);</span>
+<span class='covered'>              pos2 = clone(pos);</span>
+<span class='covered'>              pos3 = clone(pos);</span>
+<span class='covered'>              if (input.charCodeAt(pos.offset) === 46) {</span>
+<span class='covered'>                result1 = &quot;.&quot;;</span>
+<span class='covered'>                advance(pos, 1);</span>
+<span class='covered'>              } else {</span>
+<span class='covered'>                result1 = null;</span>
+<span class='covered'>                if (reportFailures === 0) {</span>
+<span class='uncovered'>                  matchFailed(&quot;\&quot;.\&quot;&quot;);</span>
+<span class='covered'>                }</span>
+<span class='covered'>              }</span>
+<span class='covered'>              if (result1 !== null) {</span>
+<span class='covered'>                result2 = parse_key();</span>
+<span class='covered'>                if (result2 !== null) {</span>
+<span class='covered'>                  result1 = [result1, result2];</span>
+<span class='covered'>                } else {</span>
+<span class='uncovered'>                  result1 = null;</span>
+<span class='uncovered'>                  pos = clone(pos3);</span>
+<span class='covered'>                }</span>
+<span class='covered'>              } else {</span>
+<span class='covered'>                result1 = null;</span>
+<span class='covered'>                pos = clone(pos3);</span>
+<span class='covered'>              }</span>
+<span class='covered'>              if (result1 !== null) {</span>
+<span class='covered'>                result1 = (function(offset, line, column, k) {return k})(pos2.offset, pos2.line, pos2.column, result1[1]);</span>
+<span class='covered'>              }</span>
+<span class='covered'>              if (result1 === null) {</span>
+<span class='covered'>                pos = clone(pos2);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            }</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result0 = null;</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            result1 = parse_array();</span>
+<span class='covered'>            result1 = result1 !== null ? result1 : &quot;&quot;;</span>
+<span class='covered'>            if (result1 !== null) {</span>
+<span class='covered'>              result0 = [result0, result1];</span>
+<span class='covered'>            } else {</span>
+<span class='uncovered'>              result0 = null;</span>
+<span class='uncovered'>              pos = clone(pos1);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result0 = null;</span>
+<span class='covered'>            pos = clone(pos1);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            result0 = (function(offset, line, column, d, a) { if (a) { return d.concat(a); } else { return d; } })(pos0.offset, pos0.line, pos0.column, result0[0], result0[1]);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='covered'>            pos = clone(pos0);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          reportFailures--;</span>
+<span class='partial'>          if (reportFailures === 0 &amp;&amp; <span class='partialuncovered'>result0 === null)</span> {</span>
+<span class='uncovered'>            matchFailed(&quot;nestedKey&quot;);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return result0;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function parse_array() {</span>
+<span class='covered'>          var result0, result1, result2;</span>
+<span class='covered'>          var pos0, pos1, pos2, pos3;</span>
+<span class='covered'>          </span>
+<span class='covered'>          reportFailures++;</span>
+<span class='covered'>          pos0 = clone(pos);</span>
+<span class='covered'>          pos1 = clone(pos);</span>
+<span class='covered'>          pos2 = clone(pos);</span>
+<span class='covered'>          pos3 = clone(pos);</span>
+<span class='covered'>          if (input.charCodeAt(pos.offset) === 91) {</span>
+<span class='covered'>            result0 = &quot;[&quot;;</span>
+<span class='covered'>            advance(pos, 1);</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result0 = null;</span>
+<span class='covered'>            if (reportFailures === 0) {</span>
+<span class='uncovered'>              matchFailed(&quot;\&quot;[\&quot;&quot;);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            if (/^[0-9]/.test(input.charAt(pos.offset))) {</span>
+<span class='covered'>              result2 = input.charAt(pos.offset);</span>
+<span class='covered'>              advance(pos, 1);</span>
+<span class='covered'>            } else {</span>
+<span class='uncovered'>              result2 = null;</span>
+<span class='uncovered'>              if (reportFailures === 0) {</span>
+<span class='uncovered'>                matchFailed(&quot;[0-9]&quot;);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result2 !== null) {</span>
+<span class='covered'>              result1 = [];</span>
+<span class='covered'>              while (result2 !== null) {</span>
+<span class='covered'>                result1.push(result2);</span>
+<span class='covered'>                if (/^[0-9]/.test(input.charAt(pos.offset))) {</span>
+<span class='uncovered'>                  result2 = input.charAt(pos.offset);</span>
+<span class='uncovered'>                  advance(pos, 1);</span>
+<span class='covered'>                } else {</span>
+<span class='covered'>                  result2 = null;</span>
+<span class='covered'>                  if (reportFailures === 0) {</span>
+<span class='uncovered'>                    matchFailed(&quot;[0-9]&quot;);</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                }</span>
+<span class='covered'>              }</span>
+<span class='covered'>            } else {</span>
+<span class='uncovered'>              result1 = null;</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result1 !== null) {</span>
+<span class='covered'>              if (input.charCodeAt(pos.offset) === 93) {</span>
+<span class='covered'>                result2 = &quot;]&quot;;</span>
+<span class='covered'>                advance(pos, 1);</span>
+<span class='covered'>              } else {</span>
+<span class='uncovered'>                result2 = null;</span>
+<span class='uncovered'>                if (reportFailures === 0) {</span>
+<span class='uncovered'>                  matchFailed(&quot;\&quot;]\&quot;&quot;);</span>
+<span class='covered'>                }</span>
+<span class='covered'>              }</span>
+<span class='covered'>              if (result2 !== null) {</span>
+<span class='covered'>                result0 = [result0, result1, result2];</span>
+<span class='covered'>              } else {</span>
+<span class='uncovered'>                result0 = null;</span>
+<span class='uncovered'>                pos = clone(pos3);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            } else {</span>
+<span class='uncovered'>              result0 = null;</span>
+<span class='uncovered'>              pos = clone(pos3);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result0 = null;</span>
+<span class='covered'>            pos = clone(pos3);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            result0 = (function(offset, line, column, a) {return a.join(&#39;&#39;)})(pos2.offset, pos2.line, pos2.column, result0[1]);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='covered'>            pos = clone(pos2);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            result1 = parse_nestedKey();</span>
+<span class='covered'>            result1 = result1 !== null ? result1 : &quot;&quot;;</span>
+<span class='covered'>            if (result1 !== null) {</span>
+<span class='covered'>              result0 = [result0, result1];</span>
+<span class='covered'>            } else {</span>
+<span class='uncovered'>              result0 = null;</span>
+<span class='uncovered'>              pos = clone(pos1);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result0 = null;</span>
+<span class='covered'>            pos = clone(pos1);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            result0 = (function(offset, line, column, i, nk) { if(nk) { nk.unshift(i); } else {nk = [i] } return nk; })(pos0.offset, pos0.line, pos0.column, result0[0], result0[1]);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='covered'>            pos = clone(pos0);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          reportFailures--;</span>
+<span class='partial'>          if (reportFailures === 0 &amp;&amp; <span class='partialuncovered'>result0 === null)</span> {</span>
+<span class='uncovered'>            matchFailed(&quot;array&quot;);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return result0;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function parse_inline() {</span>
+<span class='covered'>          var result0, result1, result2;</span>
+<span class='covered'>          var pos0, pos1;</span>
+<span class='covered'>          </span>
+<span class='covered'>          reportFailures++;</span>
+<span class='covered'>          pos0 = clone(pos);</span>
+<span class='covered'>          pos1 = clone(pos);</span>
+<span class='covered'>          if (input.charCodeAt(pos.offset) === 34) {</span>
+<span class='covered'>            result0 = &quot;\&quot;&quot;;</span>
+<span class='covered'>            advance(pos, 1);</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result0 = null;</span>
+<span class='covered'>            if (reportFailures === 0) {</span>
+<span class='uncovered'>              matchFailed(&quot;\&quot;\\\&quot;\&quot;&quot;);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            if (input.charCodeAt(pos.offset) === 34) {</span>
+<span class='uncovered'>              result1 = &quot;\&quot;&quot;;</span>
+<span class='uncovered'>              advance(pos, 1);</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              result1 = null;</span>
+<span class='covered'>              if (reportFailures === 0) {</span>
+<span class='uncovered'>                matchFailed(&quot;\&quot;\\\&quot;\&quot;&quot;);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result1 !== null) {</span>
+<span class='uncovered'>              result0 = [result0, result1];</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              result0 = null;</span>
+<span class='covered'>              pos = clone(pos1);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result0 = null;</span>
+<span class='covered'>            pos = clone(pos1);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='uncovered'>            result0 = (function(offset, line, column) { return [&quot;literal&quot;, &quot;&quot;] })(pos0.offset, pos0.line, pos0.column);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='covered'>            pos = clone(pos0);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='covered'>            pos0 = clone(pos);</span>
+<span class='covered'>            pos1 = clone(pos);</span>
+<span class='covered'>            if (input.charCodeAt(pos.offset) === 34) {</span>
+<span class='covered'>              result0 = &quot;\&quot;&quot;;</span>
+<span class='covered'>              advance(pos, 1);</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              result0 = null;</span>
+<span class='covered'>              if (reportFailures === 0) {</span>
+<span class='uncovered'>                matchFailed(&quot;\&quot;\\\&quot;\&quot;&quot;);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result0 !== null) {</span>
+<span class='covered'>              result1 = parse_literal();</span>
+<span class='covered'>              if (result1 !== null) {</span>
+<span class='covered'>                if (input.charCodeAt(pos.offset) === 34) {</span>
+<span class='covered'>                  result2 = &quot;\&quot;&quot;;</span>
+<span class='covered'>                  advance(pos, 1);</span>
+<span class='covered'>                } else {</span>
+<span class='covered'>                  result2 = null;</span>
+<span class='covered'>                  if (reportFailures === 0) {</span>
+<span class='uncovered'>                    matchFailed(&quot;\&quot;\\\&quot;\&quot;&quot;);</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                }</span>
+<span class='covered'>                if (result2 !== null) {</span>
+<span class='covered'>                  result0 = [result0, result1, result2];</span>
+<span class='covered'>                } else {</span>
+<span class='covered'>                  result0 = null;</span>
+<span class='covered'>                  pos = clone(pos1);</span>
+<span class='covered'>                }</span>
+<span class='covered'>              } else {</span>
+<span class='covered'>                result0 = null;</span>
+<span class='covered'>                pos = clone(pos1);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              result0 = null;</span>
+<span class='covered'>              pos = clone(pos1);</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result0 !== null) {</span>
+<span class='covered'>              result0 = (function(offset, line, column, l) { return [&quot;literal&quot;, l] })(pos0.offset, pos0.line, pos0.column, result0[1]);</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result0 === null) {</span>
+<span class='covered'>              pos = clone(pos0);</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result0 === null) {</span>
+<span class='covered'>              pos0 = clone(pos);</span>
+<span class='covered'>              pos1 = clone(pos);</span>
+<span class='covered'>              if (input.charCodeAt(pos.offset) === 34) {</span>
+<span class='covered'>                result0 = &quot;\&quot;&quot;;</span>
+<span class='covered'>                advance(pos, 1);</span>
+<span class='covered'>              } else {</span>
+<span class='covered'>                result0 = null;</span>
+<span class='covered'>                if (reportFailures === 0) {</span>
+<span class='uncovered'>                  matchFailed(&quot;\&quot;\\\&quot;\&quot;&quot;);</span>
+<span class='covered'>                }</span>
+<span class='covered'>              }</span>
+<span class='covered'>              if (result0 !== null) {</span>
+<span class='covered'>                result2 = parse_inline_part();</span>
+<span class='covered'>                if (result2 !== null) {</span>
+<span class='covered'>                  result1 = [];</span>
+<span class='covered'>                  while (result2 !== null) {</span>
+<span class='covered'>                    result1.push(result2);</span>
+<span class='covered'>                    result2 = parse_inline_part();</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                } else {</span>
+<span class='uncovered'>                  result1 = null;</span>
+<span class='covered'>                }</span>
+<span class='covered'>                if (result1 !== null) {</span>
+<span class='covered'>                  if (input.charCodeAt(pos.offset) === 34) {</span>
+<span class='covered'>                    result2 = &quot;\&quot;&quot;;</span>
+<span class='covered'>                    advance(pos, 1);</span>
+<span class='covered'>                  } else {</span>
+<span class='uncovered'>                    result2 = null;</span>
+<span class='uncovered'>                    if (reportFailures === 0) {</span>
+<span class='uncovered'>                      matchFailed(&quot;\&quot;\\\&quot;\&quot;&quot;);</span>
+<span class='covered'>                    }</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                  if (result2 !== null) {</span>
+<span class='covered'>                    result0 = [result0, result1, result2];</span>
+<span class='covered'>                  } else {</span>
+<span class='uncovered'>                    result0 = null;</span>
+<span class='uncovered'>                    pos = clone(pos1);</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                } else {</span>
+<span class='uncovered'>                  result0 = null;</span>
+<span class='uncovered'>                  pos = clone(pos1);</span>
+<span class='covered'>                }</span>
+<span class='covered'>              } else {</span>
+<span class='covered'>                result0 = null;</span>
+<span class='covered'>                pos = clone(pos1);</span>
+<span class='covered'>              }</span>
+<span class='covered'>              if (result0 !== null) {</span>
+<span class='covered'>                result0 = (function(offset, line, column, p) { return [&quot;body&quot;].concat(p) })(pos0.offset, pos0.line, pos0.column, result0[1]);</span>
+<span class='covered'>              }</span>
+<span class='covered'>              if (result0 === null) {</span>
+<span class='covered'>                pos = clone(pos0);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            }</span>
+<span class='covered'>          }</span>
+<span class='covered'>          reportFailures--;</span>
+<span class='partial'>          if (reportFailures === 0 &amp;&amp; <span class='partialuncovered'>result0 === null)</span> {</span>
+<span class='uncovered'>            matchFailed(&quot;inline&quot;);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return result0;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function parse_inline_part() {</span>
+<span class='covered'>          var result0;</span>
+<span class='covered'>          var pos0;</span>
+<span class='covered'>          </span>
+<span class='covered'>          result0 = parse_special();</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='covered'>            result0 = parse_reference();</span>
+<span class='covered'>            if (result0 === null) {</span>
+<span class='covered'>              pos0 = clone(pos);</span>
+<span class='covered'>              result0 = parse_literal();</span>
+<span class='covered'>              if (result0 !== null) {</span>
+<span class='covered'>                result0 = (function(offset, line, column, l) { return [&quot;buffer&quot;, l] })(pos0.offset, pos0.line, pos0.column, result0);</span>
+<span class='covered'>              }</span>
+<span class='covered'>              if (result0 === null) {</span>
+<span class='covered'>                pos = clone(pos0);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            }</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return result0;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function parse_buffer() {</span>
+<span class='covered'>          var result0, result1, result2, result3, result4;</span>
+<span class='covered'>          var pos0, pos1, pos2, pos3;</span>
+<span class='covered'>          </span>
+<span class='covered'>          reportFailures++;</span>
+<span class='covered'>          pos0 = clone(pos);</span>
+<span class='covered'>          pos1 = clone(pos);</span>
+<span class='covered'>          result0 = parse_eol();</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            result1 = [];</span>
+<span class='covered'>            result2 = parse_ws();</span>
+<span class='covered'>            while (result2 !== null) {</span>
+<span class='covered'>              result1.push(result2);</span>
+<span class='covered'>              result2 = parse_ws();</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result1 !== null) {</span>
+<span class='covered'>              result0 = [result0, result1];</span>
+<span class='covered'>            } else {</span>
+<span class='uncovered'>              result0 = null;</span>
+<span class='uncovered'>              pos = clone(pos1);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result0 = null;</span>
+<span class='covered'>            pos = clone(pos1);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            result0 = (function(offset, line, column, e, w) { return [&quot;format&quot;, e, w.join(&#39;&#39;)] })(pos0.offset, pos0.line, pos0.column, result0[0], result0[1]);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='covered'>            pos = clone(pos0);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='covered'>            pos0 = clone(pos);</span>
+<span class='covered'>            pos1 = clone(pos);</span>
+<span class='covered'>            pos2 = clone(pos);</span>
+<span class='covered'>            pos3 = clone(pos);</span>
+<span class='covered'>            reportFailures++;</span>
+<span class='covered'>            result1 = parse_tag();</span>
+<span class='covered'>            reportFailures--;</span>
+<span class='covered'>            if (result1 === null) {</span>
+<span class='covered'>              result1 = &quot;&quot;;</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              result1 = null;</span>
+<span class='covered'>              pos = clone(pos3);</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result1 !== null) {</span>
+<span class='covered'>              pos3 = clone(pos);</span>
+<span class='covered'>              reportFailures++;</span>
+<span class='covered'>              result2 = parse_eol();</span>
+<span class='covered'>              reportFailures--;</span>
+<span class='covered'>              if (result2 === null) {</span>
+<span class='covered'>                result2 = &quot;&quot;;</span>
+<span class='covered'>              } else {</span>
+<span class='uncovered'>                result2 = null;</span>
+<span class='uncovered'>                pos = clone(pos3);</span>
+<span class='covered'>              }</span>
+<span class='covered'>              if (result2 !== null) {</span>
+<span class='covered'>                pos3 = clone(pos);</span>
+<span class='covered'>                reportFailures++;</span>
+<span class='covered'>                result3 = parse_comment();</span>
+<span class='covered'>                reportFailures--;</span>
+<span class='covered'>                if (result3 === null) {</span>
+<span class='covered'>                  result3 = &quot;&quot;;</span>
+<span class='covered'>                } else {</span>
+<span class='uncovered'>                  result3 = null;</span>
+<span class='uncovered'>                  pos = clone(pos3);</span>
+<span class='covered'>                }</span>
+<span class='covered'>                if (result3 !== null) {</span>
+<span class='covered'>                  if (input.length &gt; pos.offset) {</span>
+<span class='covered'>                    result4 = input.charAt(pos.offset);</span>
+<span class='covered'>                    advance(pos, 1);</span>
+<span class='covered'>                  } else {</span>
+<span class='covered'>                    result4 = null;</span>
+<span class='covered'>                    if (reportFailures === 0) {</span>
+<span class='uncovered'>                      matchFailed(&quot;any character&quot;);</span>
+<span class='covered'>                    }</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                  if (result4 !== null) {</span>
+<span class='covered'>                    result1 = [result1, result2, result3, result4];</span>
+<span class='covered'>                  } else {</span>
+<span class='covered'>                    result1 = null;</span>
+<span class='covered'>                    pos = clone(pos2);</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                } else {</span>
+<span class='uncovered'>                  result1 = null;</span>
+<span class='uncovered'>                  pos = clone(pos2);</span>
+<span class='covered'>                }</span>
+<span class='covered'>              } else {</span>
+<span class='uncovered'>                result1 = null;</span>
+<span class='uncovered'>                pos = clone(pos2);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              result1 = null;</span>
+<span class='covered'>              pos = clone(pos2);</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result1 !== null) {</span>
+<span class='covered'>              result1 = (function(offset, line, column, c) {return c})(pos1.offset, pos1.line, pos1.column, result1[3]);</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result1 === null) {</span>
+<span class='covered'>              pos = clone(pos1);</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result1 !== null) {</span>
+<span class='covered'>              result0 = [];</span>
+<span class='covered'>              while (result1 !== null) {</span>
+<span class='covered'>                result0.push(result1);</span>
+<span class='covered'>                pos1 = clone(pos);</span>
+<span class='covered'>                pos2 = clone(pos);</span>
+<span class='covered'>                pos3 = clone(pos);</span>
+<span class='covered'>                reportFailures++;</span>
+<span class='covered'>                result1 = parse_tag();</span>
+<span class='covered'>                reportFailures--;</span>
+<span class='covered'>                if (result1 === null) {</span>
+<span class='covered'>                  result1 = &quot;&quot;;</span>
+<span class='covered'>                } else {</span>
+<span class='covered'>                  result1 = null;</span>
+<span class='covered'>                  pos = clone(pos3);</span>
+<span class='covered'>                }</span>
+<span class='covered'>                if (result1 !== null) {</span>
+<span class='covered'>                  pos3 = clone(pos);</span>
+<span class='covered'>                  reportFailures++;</span>
+<span class='covered'>                  result2 = parse_eol();</span>
+<span class='covered'>                  reportFailures--;</span>
+<span class='covered'>                  if (result2 === null) {</span>
+<span class='covered'>                    result2 = &quot;&quot;;</span>
+<span class='covered'>                  } else {</span>
+<span class='covered'>                    result2 = null;</span>
+<span class='covered'>                    pos = clone(pos3);</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                  if (result2 !== null) {</span>
+<span class='covered'>                    pos3 = clone(pos);</span>
+<span class='covered'>                    reportFailures++;</span>
+<span class='covered'>                    result3 = parse_comment();</span>
+<span class='covered'>                    reportFailures--;</span>
+<span class='covered'>                    if (result3 === null) {</span>
+<span class='covered'>                      result3 = &quot;&quot;;</span>
+<span class='covered'>                    } else {</span>
+<span class='covered'>                      result3 = null;</span>
+<span class='covered'>                      pos = clone(pos3);</span>
+<span class='covered'>                    }</span>
+<span class='covered'>                    if (result3 !== null) {</span>
+<span class='covered'>                      if (input.length &gt; pos.offset) {</span>
+<span class='covered'>                        result4 = input.charAt(pos.offset);</span>
+<span class='covered'>                        advance(pos, 1);</span>
+<span class='covered'>                      } else {</span>
+<span class='covered'>                        result4 = null;</span>
+<span class='covered'>                        if (reportFailures === 0) {</span>
+<span class='uncovered'>                          matchFailed(&quot;any character&quot;);</span>
+<span class='covered'>                        }</span>
+<span class='covered'>                      }</span>
+<span class='covered'>                      if (result4 !== null) {</span>
+<span class='covered'>                        result1 = [result1, result2, result3, result4];</span>
+<span class='covered'>                      } else {</span>
+<span class='covered'>                        result1 = null;</span>
+<span class='covered'>                        pos = clone(pos2);</span>
+<span class='covered'>                      }</span>
+<span class='covered'>                    } else {</span>
+<span class='covered'>                      result1 = null;</span>
+<span class='covered'>                      pos = clone(pos2);</span>
+<span class='covered'>                    }</span>
+<span class='covered'>                  } else {</span>
+<span class='covered'>                    result1 = null;</span>
+<span class='covered'>                    pos = clone(pos2);</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                } else {</span>
+<span class='covered'>                  result1 = null;</span>
+<span class='covered'>                  pos = clone(pos2);</span>
+<span class='covered'>                }</span>
+<span class='covered'>                if (result1 !== null) {</span>
+<span class='covered'>                  result1 = (function(offset, line, column, c) {return c})(pos1.offset, pos1.line, pos1.column, result1[3]);</span>
+<span class='covered'>                }</span>
+<span class='covered'>                if (result1 === null) {</span>
+<span class='covered'>                  pos = clone(pos1);</span>
+<span class='covered'>                }</span>
+<span class='covered'>              }</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              result0 = null;</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result0 !== null) {</span>
+<span class='covered'>              result0 = (function(offset, line, column, b) { return [&quot;buffer&quot;, b.join(&#39;&#39;)] })(pos0.offset, pos0.line, pos0.column, result0);</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result0 === null) {</span>
+<span class='covered'>              pos = clone(pos0);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          }</span>
+<span class='covered'>          reportFailures--;</span>
+<span class='covered'>          if (reportFailures === 0 &amp;&amp; result0 === null) {</span>
+<span class='covered'>            matchFailed(&quot;buffer&quot;);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return result0;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function parse_literal() {</span>
+<span class='covered'>          var result0, result1, result2;</span>
+<span class='covered'>          var pos0, pos1, pos2, pos3;</span>
+<span class='covered'>          </span>
+<span class='covered'>          reportFailures++;</span>
+<span class='covered'>          pos0 = clone(pos);</span>
+<span class='covered'>          pos1 = clone(pos);</span>
+<span class='covered'>          pos2 = clone(pos);</span>
+<span class='covered'>          pos3 = clone(pos);</span>
+<span class='covered'>          reportFailures++;</span>
+<span class='covered'>          result1 = parse_tag();</span>
+<span class='covered'>          reportFailures--;</span>
+<span class='covered'>          if (result1 === null) {</span>
+<span class='covered'>            result1 = &quot;&quot;;</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result1 = null;</span>
+<span class='covered'>            pos = clone(pos3);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result1 !== null) {</span>
+<span class='covered'>            result2 = parse_esc();</span>
+<span class='covered'>            if (result2 === null) {</span>
+<span class='covered'>              if (/^[^&quot;]/.test(input.charAt(pos.offset))) {</span>
+<span class='covered'>                result2 = input.charAt(pos.offset);</span>
+<span class='covered'>                advance(pos, 1);</span>
+<span class='covered'>              } else {</span>
+<span class='covered'>                result2 = null;</span>
+<span class='covered'>                if (reportFailures === 0) {</span>
+<span class='uncovered'>                  matchFailed(&quot;[^\&quot;]&quot;);</span>
+<span class='covered'>                }</span>
+<span class='covered'>              }</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result2 !== null) {</span>
+<span class='covered'>              result1 = [result1, result2];</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              result1 = null;</span>
+<span class='covered'>              pos = clone(pos2);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result1 = null;</span>
+<span class='covered'>            pos = clone(pos2);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result1 !== null) {</span>
+<span class='covered'>            result1 = (function(offset, line, column, c) {return c})(pos1.offset, pos1.line, pos1.column, result1[1]);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result1 === null) {</span>
+<span class='covered'>            pos = clone(pos1);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result1 !== null) {</span>
+<span class='covered'>            result0 = [];</span>
+<span class='covered'>            while (result1 !== null) {</span>
+<span class='covered'>              result0.push(result1);</span>
+<span class='covered'>              pos1 = clone(pos);</span>
+<span class='covered'>              pos2 = clone(pos);</span>
+<span class='covered'>              pos3 = clone(pos);</span>
+<span class='covered'>              reportFailures++;</span>
+<span class='covered'>              result1 = parse_tag();</span>
+<span class='covered'>              reportFailures--;</span>
+<span class='covered'>              if (result1 === null) {</span>
+<span class='covered'>                result1 = &quot;&quot;;</span>
+<span class='covered'>              } else {</span>
+<span class='covered'>                result1 = null;</span>
+<span class='covered'>                pos = clone(pos3);</span>
+<span class='covered'>              }</span>
+<span class='covered'>              if (result1 !== null) {</span>
+<span class='covered'>                result2 = parse_esc();</span>
+<span class='covered'>                if (result2 === null) {</span>
+<span class='covered'>                  if (/^[^&quot;]/.test(input.charAt(pos.offset))) {</span>
+<span class='covered'>                    result2 = input.charAt(pos.offset);</span>
+<span class='covered'>                    advance(pos, 1);</span>
+<span class='covered'>                  } else {</span>
+<span class='covered'>                    result2 = null;</span>
+<span class='covered'>                    if (reportFailures === 0) {</span>
+<span class='uncovered'>                      matchFailed(&quot;[^\&quot;]&quot;);</span>
+<span class='covered'>                    }</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                }</span>
+<span class='covered'>                if (result2 !== null) {</span>
+<span class='covered'>                  result1 = [result1, result2];</span>
+<span class='covered'>                } else {</span>
+<span class='covered'>                  result1 = null;</span>
+<span class='covered'>                  pos = clone(pos2);</span>
+<span class='covered'>                }</span>
+<span class='covered'>              } else {</span>
+<span class='covered'>                result1 = null;</span>
+<span class='covered'>                pos = clone(pos2);</span>
+<span class='covered'>              }</span>
+<span class='covered'>              if (result1 !== null) {</span>
+<span class='covered'>                result1 = (function(offset, line, column, c) {return c})(pos1.offset, pos1.line, pos1.column, result1[1]);</span>
+<span class='covered'>              }</span>
+<span class='covered'>              if (result1 === null) {</span>
+<span class='covered'>                pos = clone(pos1);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            }</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result0 = null;</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            result0 = (function(offset, line, column, b) { return b.join(&#39;&#39;) })(pos0.offset, pos0.line, pos0.column, result0);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='covered'>            pos = clone(pos0);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          reportFailures--;</span>
+<span class='partial'>          if (reportFailures === 0 &amp;&amp; <span class='partialuncovered'>result0 === null)</span> {</span>
+<span class='uncovered'>            matchFailed(&quot;literal&quot;);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return result0;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function parse_esc() {</span>
+<span class='covered'>          var result0;</span>
+<span class='covered'>          var pos0;</span>
+<span class='covered'>          </span>
+<span class='covered'>          pos0 = clone(pos);</span>
+<span class='covered'>          if (input.substr(pos.offset, 2) === &quot;\\\&quot;&quot;) {</span>
+<span class='uncovered'>            result0 = &quot;\\\&quot;&quot;;</span>
+<span class='uncovered'>            advance(pos, 2);</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result0 = null;</span>
+<span class='covered'>            if (reportFailures === 0) {</span>
+<span class='uncovered'>              matchFailed(&quot;\&quot;\\\\\\\&quot;\&quot;&quot;);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='uncovered'>            result0 = (function(offset, line, column) { return &#39;&quot;&#39; })(pos0.offset, pos0.line, pos0.column);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='covered'>            pos = clone(pos0);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return result0;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function parse_comment() {</span>
+<span class='covered'>          var result0, result1, result2, result3;</span>
+<span class='covered'>          var pos0, pos1, pos2, pos3, pos4;</span>
+<span class='covered'>          </span>
+<span class='covered'>          reportFailures++;</span>
+<span class='covered'>          pos0 = clone(pos);</span>
+<span class='covered'>          pos1 = clone(pos);</span>
+<span class='covered'>          if (input.substr(pos.offset, 2) === &quot;{!&quot;) {</span>
+<span class='covered'>            result0 = &quot;{!&quot;;</span>
+<span class='covered'>            advance(pos, 2);</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result0 = null;</span>
+<span class='covered'>            if (reportFailures === 0) {</span>
+<span class='uncovered'>              matchFailed(&quot;\&quot;{!\&quot;&quot;);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            result1 = [];</span>
+<span class='covered'>            pos2 = clone(pos);</span>
+<span class='covered'>            pos3 = clone(pos);</span>
+<span class='covered'>            pos4 = clone(pos);</span>
+<span class='covered'>            reportFailures++;</span>
+<span class='covered'>            if (input.substr(pos.offset, 2) === &quot;!}&quot;) {</span>
+<span class='uncovered'>              result2 = &quot;!}&quot;;</span>
+<span class='uncovered'>              advance(pos, 2);</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              result2 = null;</span>
+<span class='covered'>              if (reportFailures === 0) {</span>
+<span class='uncovered'>                matchFailed(&quot;\&quot;!}\&quot;&quot;);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            }</span>
+<span class='covered'>            reportFailures--;</span>
+<span class='covered'>            if (result2 === null) {</span>
+<span class='covered'>              result2 = &quot;&quot;;</span>
+<span class='covered'>            } else {</span>
+<span class='uncovered'>              result2 = null;</span>
+<span class='uncovered'>              pos = clone(pos4);</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result2 !== null) {</span>
+<span class='covered'>              if (input.length &gt; pos.offset) {</span>
+<span class='covered'>                result3 = input.charAt(pos.offset);</span>
+<span class='covered'>                advance(pos, 1);</span>
+<span class='covered'>              } else {</span>
+<span class='uncovered'>                result3 = null;</span>
+<span class='uncovered'>                if (reportFailures === 0) {</span>
+<span class='uncovered'>                  matchFailed(&quot;any character&quot;);</span>
+<span class='covered'>                }</span>
+<span class='covered'>              }</span>
+<span class='covered'>              if (result3 !== null) {</span>
+<span class='covered'>                result2 = [result2, result3];</span>
+<span class='covered'>              } else {</span>
+<span class='uncovered'>                result2 = null;</span>
+<span class='uncovered'>                pos = clone(pos3);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            } else {</span>
+<span class='uncovered'>              result2 = null;</span>
+<span class='uncovered'>              pos = clone(pos3);</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result2 !== null) {</span>
+<span class='covered'>              result2 = (function(offset, line, column, c) {return c})(pos2.offset, pos2.line, pos2.column, result2[1]);</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result2 === null) {</span>
+<span class='uncovered'>              pos = clone(pos2);</span>
+<span class='covered'>            }</span>
+<span class='covered'>            while (result2 !== null) {</span>
+<span class='covered'>              result1.push(result2);</span>
+<span class='covered'>              pos2 = clone(pos);</span>
+<span class='covered'>              pos3 = clone(pos);</span>
+<span class='covered'>              pos4 = clone(pos);</span>
+<span class='covered'>              reportFailures++;</span>
+<span class='covered'>              if (input.substr(pos.offset, 2) === &quot;!}&quot;) {</span>
+<span class='covered'>                result2 = &quot;!}&quot;;</span>
+<span class='covered'>                advance(pos, 2);</span>
+<span class='covered'>              } else {</span>
+<span class='covered'>                result2 = null;</span>
+<span class='covered'>                if (reportFailures === 0) {</span>
+<span class='uncovered'>                  matchFailed(&quot;\&quot;!}\&quot;&quot;);</span>
+<span class='covered'>                }</span>
+<span class='covered'>              }</span>
+<span class='covered'>              reportFailures--;</span>
+<span class='covered'>              if (result2 === null) {</span>
+<span class='covered'>                result2 = &quot;&quot;;</span>
+<span class='covered'>              } else {</span>
+<span class='covered'>                result2 = null;</span>
+<span class='covered'>                pos = clone(pos4);</span>
+<span class='covered'>              }</span>
+<span class='covered'>              if (result2 !== null) {</span>
+<span class='covered'>                if (input.length &gt; pos.offset) {</span>
+<span class='covered'>                  result3 = input.charAt(pos.offset);</span>
+<span class='covered'>                  advance(pos, 1);</span>
+<span class='covered'>                } else {</span>
+<span class='uncovered'>                  result3 = null;</span>
+<span class='uncovered'>                  if (reportFailures === 0) {</span>
+<span class='uncovered'>                    matchFailed(&quot;any character&quot;);</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                }</span>
+<span class='covered'>                if (result3 !== null) {</span>
+<span class='covered'>                  result2 = [result2, result3];</span>
+<span class='covered'>                } else {</span>
+<span class='uncovered'>                  result2 = null;</span>
+<span class='uncovered'>                  pos = clone(pos3);</span>
+<span class='covered'>                }</span>
+<span class='covered'>              } else {</span>
+<span class='covered'>                result2 = null;</span>
+<span class='covered'>                pos = clone(pos3);</span>
+<span class='covered'>              }</span>
+<span class='covered'>              if (result2 !== null) {</span>
+<span class='covered'>                result2 = (function(offset, line, column, c) {return c})(pos2.offset, pos2.line, pos2.column, result2[1]);</span>
+<span class='covered'>              }</span>
+<span class='covered'>              if (result2 === null) {</span>
+<span class='covered'>                pos = clone(pos2);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result1 !== null) {</span>
+<span class='covered'>              if (input.substr(pos.offset, 2) === &quot;!}&quot;) {</span>
+<span class='covered'>                result2 = &quot;!}&quot;;</span>
+<span class='covered'>                advance(pos, 2);</span>
+<span class='covered'>              } else {</span>
+<span class='uncovered'>                result2 = null;</span>
+<span class='uncovered'>                if (reportFailures === 0) {</span>
+<span class='uncovered'>                  matchFailed(&quot;\&quot;!}\&quot;&quot;);</span>
+<span class='covered'>                }</span>
+<span class='covered'>              }</span>
+<span class='covered'>              if (result2 !== null) {</span>
+<span class='covered'>                result0 = [result0, result1, result2];</span>
+<span class='covered'>              } else {</span>
+<span class='uncovered'>                result0 = null;</span>
+<span class='uncovered'>                pos = clone(pos1);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            } else {</span>
+<span class='uncovered'>              result0 = null;</span>
+<span class='uncovered'>              pos = clone(pos1);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result0 = null;</span>
+<span class='covered'>            pos = clone(pos1);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            result0 = (function(offset, line, column, c) { return [&quot;comment&quot;, c.join(&#39;&#39;)] })(pos0.offset, pos0.line, pos0.column, result0[1]);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='covered'>            pos = clone(pos0);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          reportFailures--;</span>
+<span class='covered'>          if (reportFailures === 0 &amp;&amp; result0 === null) {</span>
+<span class='covered'>            matchFailed(&quot;comment&quot;);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return result0;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function parse_tag() {</span>
+<span class='covered'>          var result0, result1, result2, result3, result4, result5, result6;</span>
+<span class='covered'>          var pos0, pos1, pos2;</span>
+<span class='covered'>          </span>
+<span class='covered'>          pos0 = clone(pos);</span>
+<span class='covered'>          result0 = parse_ld();</span>
+<span class='covered'>          if (result0 !== null) {</span>
+<span class='covered'>            if (/^[#?^&gt;&lt;+%:@\/~%]/.test(input.charAt(pos.offset))) {</span>
+<span class='covered'>              result1 = input.charAt(pos.offset);</span>
+<span class='covered'>              advance(pos, 1);</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              result1 = null;</span>
+<span class='covered'>              if (reportFailures === 0) {</span>
+<span class='uncovered'>                matchFailed(&quot;[#?^&gt;&lt;+%:@\\/~%]&quot;);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result1 !== null) {</span>
+<span class='covered'>              result2 = [];</span>
+<span class='covered'>              result3 = parse_ws();</span>
+<span class='covered'>              while (result3 !== null) {</span>
+<span class='covered'>                result2.push(result3);</span>
+<span class='covered'>                result3 = parse_ws();</span>
+<span class='covered'>              }</span>
+<span class='covered'>              if (result2 !== null) {</span>
+<span class='covered'>                pos1 = clone(pos);</span>
+<span class='covered'>                pos2 = clone(pos);</span>
+<span class='covered'>                reportFailures++;</span>
+<span class='covered'>                result4 = parse_rd();</span>
+<span class='covered'>                reportFailures--;</span>
+<span class='covered'>                if (result4 === null) {</span>
+<span class='covered'>                  result4 = &quot;&quot;;</span>
+<span class='covered'>                } else {</span>
+<span class='uncovered'>                  result4 = null;</span>
+<span class='uncovered'>                  pos = clone(pos2);</span>
+<span class='covered'>                }</span>
+<span class='covered'>                if (result4 !== null) {</span>
+<span class='covered'>                  pos2 = clone(pos);</span>
+<span class='covered'>                  reportFailures++;</span>
+<span class='covered'>                  result5 = parse_eol();</span>
+<span class='covered'>                  reportFailures--;</span>
+<span class='covered'>                  if (result5 === null) {</span>
+<span class='covered'>                    result5 = &quot;&quot;;</span>
+<span class='covered'>                  } else {</span>
+<span class='uncovered'>                    result5 = null;</span>
+<span class='uncovered'>                    pos = clone(pos2);</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                  if (result5 !== null) {</span>
+<span class='covered'>                    if (input.length &gt; pos.offset) {</span>
+<span class='covered'>                      result6 = input.charAt(pos.offset);</span>
+<span class='covered'>                      advance(pos, 1);</span>
+<span class='covered'>                    } else {</span>
+<span class='uncovered'>                      result6 = null;</span>
+<span class='uncovered'>                      if (reportFailures === 0) {</span>
+<span class='uncovered'>                        matchFailed(&quot;any character&quot;);</span>
+<span class='covered'>                      }</span>
+<span class='covered'>                    }</span>
+<span class='covered'>                    if (result6 !== null) {</span>
+<span class='covered'>                      result4 = [result4, result5, result6];</span>
+<span class='covered'>                    } else {</span>
+<span class='uncovered'>                      result4 = null;</span>
+<span class='uncovered'>                      pos = clone(pos1);</span>
+<span class='covered'>                    }</span>
+<span class='covered'>                  } else {</span>
+<span class='uncovered'>                    result4 = null;</span>
+<span class='uncovered'>                    pos = clone(pos1);</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                } else {</span>
+<span class='uncovered'>                  result4 = null;</span>
+<span class='uncovered'>                  pos = clone(pos1);</span>
+<span class='covered'>                }</span>
+<span class='covered'>                if (result4 !== null) {</span>
+<span class='covered'>                  result3 = [];</span>
+<span class='covered'>                  while (result4 !== null) {</span>
+<span class='covered'>                    result3.push(result4);</span>
+<span class='covered'>                    pos1 = clone(pos);</span>
+<span class='covered'>                    pos2 = clone(pos);</span>
+<span class='covered'>                    reportFailures++;</span>
+<span class='covered'>                    result4 = parse_rd();</span>
+<span class='covered'>                    reportFailures--;</span>
+<span class='covered'>                    if (result4 === null) {</span>
+<span class='covered'>                      result4 = &quot;&quot;;</span>
+<span class='covered'>                    } else {</span>
+<span class='covered'>                      result4 = null;</span>
+<span class='covered'>                      pos = clone(pos2);</span>
+<span class='covered'>                    }</span>
+<span class='covered'>                    if (result4 !== null) {</span>
+<span class='covered'>                      pos2 = clone(pos);</span>
+<span class='covered'>                      reportFailures++;</span>
+<span class='covered'>                      result5 = parse_eol();</span>
+<span class='covered'>                      reportFailures--;</span>
+<span class='covered'>                      if (result5 === null) {</span>
+<span class='covered'>                        result5 = &quot;&quot;;</span>
+<span class='covered'>                      } else {</span>
+<span class='uncovered'>                        result5 = null;</span>
+<span class='uncovered'>                        pos = clone(pos2);</span>
+<span class='covered'>                      }</span>
+<span class='covered'>                      if (result5 !== null) {</span>
+<span class='covered'>                        if (input.length &gt; pos.offset) {</span>
+<span class='covered'>                          result6 = input.charAt(pos.offset);</span>
+<span class='covered'>                          advance(pos, 1);</span>
+<span class='covered'>                        } else {</span>
+<span class='uncovered'>                          result6 = null;</span>
+<span class='uncovered'>                          if (reportFailures === 0) {</span>
+<span class='uncovered'>                            matchFailed(&quot;any character&quot;);</span>
+<span class='covered'>                          }</span>
+<span class='covered'>                        }</span>
+<span class='covered'>                        if (result6 !== null) {</span>
+<span class='covered'>                          result4 = [result4, result5, result6];</span>
+<span class='covered'>                        } else {</span>
+<span class='uncovered'>                          result4 = null;</span>
+<span class='uncovered'>                          pos = clone(pos1);</span>
+<span class='covered'>                        }</span>
+<span class='covered'>                      } else {</span>
+<span class='uncovered'>                        result4 = null;</span>
+<span class='uncovered'>                        pos = clone(pos1);</span>
+<span class='covered'>                      }</span>
+<span class='covered'>                    } else {</span>
+<span class='covered'>                      result4 = null;</span>
+<span class='covered'>                      pos = clone(pos1);</span>
+<span class='covered'>                    }</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                } else {</span>
+<span class='uncovered'>                  result3 = null;</span>
+<span class='covered'>                }</span>
+<span class='covered'>                if (result3 !== null) {</span>
+<span class='covered'>                  result4 = [];</span>
+<span class='covered'>                  result5 = parse_ws();</span>
+<span class='covered'>                  while (result5 !== null) {</span>
+<span class='uncovered'>                    result4.push(result5);</span>
+<span class='uncovered'>                    result5 = parse_ws();</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                  if (result4 !== null) {</span>
+<span class='covered'>                    result5 = parse_rd();</span>
+<span class='covered'>                    if (result5 !== null) {</span>
+<span class='covered'>                      result0 = [result0, result1, result2, result3, result4, result5];</span>
+<span class='covered'>                    } else {</span>
+<span class='uncovered'>                      result0 = null;</span>
+<span class='uncovered'>                      pos = clone(pos0);</span>
+<span class='covered'>                    }</span>
+<span class='covered'>                  } else {</span>
+<span class='uncovered'>                    result0 = null;</span>
+<span class='uncovered'>                    pos = clone(pos0);</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                } else {</span>
+<span class='uncovered'>                  result0 = null;</span>
+<span class='uncovered'>                  pos = clone(pos0);</span>
+<span class='covered'>                }</span>
+<span class='covered'>              } else {</span>
+<span class='uncovered'>                result0 = null;</span>
+<span class='uncovered'>                pos = clone(pos0);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              result0 = null;</span>
+<span class='covered'>              pos = clone(pos0);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result0 = null;</span>
+<span class='covered'>            pos = clone(pos0);</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='covered'>            result0 = parse_reference();</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return result0;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function parse_ld() {</span>
+<span class='covered'>          var result0;</span>
+<span class='covered'>          </span>
+<span class='covered'>          if (input.charCodeAt(pos.offset) === 123) {</span>
+<span class='covered'>            result0 = &quot;{&quot;;</span>
+<span class='covered'>            advance(pos, 1);</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result0 = null;</span>
+<span class='covered'>            if (reportFailures === 0) {</span>
+<span class='uncovered'>              matchFailed(&quot;\&quot;{\&quot;&quot;);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return result0;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function parse_rd() {</span>
+<span class='covered'>          var result0;</span>
+<span class='covered'>          </span>
+<span class='covered'>          if (input.charCodeAt(pos.offset) === 125) {</span>
+<span class='covered'>            result0 = &quot;}&quot;;</span>
+<span class='covered'>            advance(pos, 1);</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result0 = null;</span>
+<span class='covered'>            if (reportFailures === 0) {</span>
+<span class='uncovered'>              matchFailed(&quot;\&quot;}\&quot;&quot;);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return result0;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function parse_eol() {</span>
+<span class='covered'>          var result0;</span>
+<span class='covered'>          </span>
+<span class='covered'>          if (input.charCodeAt(pos.offset) === 10) {</span>
+<span class='covered'>            result0 = &quot;\n&quot;;</span>
+<span class='covered'>            advance(pos, 1);</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result0 = null;</span>
+<span class='covered'>            if (reportFailures === 0) {</span>
+<span class='uncovered'>              matchFailed(&quot;\&quot;\\n\&quot;&quot;);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='covered'>            if (input.substr(pos.offset, 2) === &quot;\r\n&quot;) {</span>
+<span class='uncovered'>              result0 = &quot;\r\n&quot;;</span>
+<span class='uncovered'>              advance(pos, 2);</span>
+<span class='covered'>            } else {</span>
+<span class='covered'>              result0 = null;</span>
+<span class='covered'>              if (reportFailures === 0) {</span>
+<span class='uncovered'>                matchFailed(&quot;\&quot;\\r\\n\&quot;&quot;);</span>
+<span class='covered'>              }</span>
+<span class='covered'>            }</span>
+<span class='covered'>            if (result0 === null) {</span>
+<span class='covered'>              if (input.charCodeAt(pos.offset) === 13) {</span>
+<span class='uncovered'>                result0 = &quot;\r&quot;;</span>
+<span class='uncovered'>                advance(pos, 1);</span>
+<span class='covered'>              } else {</span>
+<span class='covered'>                result0 = null;</span>
+<span class='covered'>                if (reportFailures === 0) {</span>
+<span class='uncovered'>                  matchFailed(&quot;\&quot;\\r\&quot;&quot;);</span>
+<span class='covered'>                }</span>
+<span class='covered'>              }</span>
+<span class='covered'>              if (result0 === null) {</span>
+<span class='covered'>                if (input.charCodeAt(pos.offset) === 8232) {</span>
+<span class='uncovered'>                  result0 = &quot;\u2028&quot;;</span>
+<span class='uncovered'>                  advance(pos, 1);</span>
+<span class='covered'>                } else {</span>
+<span class='covered'>                  result0 = null;</span>
+<span class='covered'>                  if (reportFailures === 0) {</span>
+<span class='uncovered'>                    matchFailed(&quot;\&quot;\\u2028\&quot;&quot;);</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                }</span>
+<span class='covered'>                if (result0 === null) {</span>
+<span class='covered'>                  if (input.charCodeAt(pos.offset) === 8233) {</span>
+<span class='uncovered'>                    result0 = &quot;\u2029&quot;;</span>
+<span class='uncovered'>                    advance(pos, 1);</span>
+<span class='covered'>                  } else {</span>
+<span class='covered'>                    result0 = null;</span>
+<span class='covered'>                    if (reportFailures === 0) {</span>
+<span class='uncovered'>                      matchFailed(&quot;\&quot;\\u2029\&quot;&quot;);</span>
+<span class='covered'>                    }</span>
+<span class='covered'>                  }</span>
+<span class='covered'>                }</span>
+<span class='covered'>              }</span>
+<span class='covered'>            }</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return result0;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        function parse_ws() {</span>
+<span class='covered'>          var result0;</span>
+<span class='covered'>          </span>
+<span class='covered'>          if (/^[\t\x0B\f \xA0\uFEFF]/.test(input.charAt(pos.offset))) {</span>
+<span class='covered'>            result0 = input.charAt(pos.offset);</span>
+<span class='covered'>            advance(pos, 1);</span>
+<span class='covered'>          } else {</span>
+<span class='covered'>            result0 = null;</span>
+<span class='covered'>            if (reportFailures === 0) {</span>
+<span class='uncovered'>              matchFailed(&quot;[\\t\\x0B\\f \\xA0\\uFEFF]&quot;);</span>
+<span class='covered'>            }</span>
+<span class='covered'>          }</span>
+<span class='covered'>          if (result0 === null) {</span>
+<span class='covered'>            result0 = parse_eol();</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return result0;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        </span>
+<span class='covered'>        function cleanupExpected(expected) {</span>
+<span class='covered'>          expected.sort();</span>
+<span class='covered'>          </span>
+<span class='covered'>          var lastExpected = null;</span>
+<span class='covered'>          var cleanExpected = [];</span>
+<span class='covered'>          for (var i = 0; i &lt; expected.length; i++) {</span>
+<span class='covered'>            if (expected[i] !== lastExpected) {</span>
+<span class='covered'>              cleanExpected.push(expected[i]);</span>
+<span class='covered'>              lastExpected = expected[i];</span>
+<span class='covered'>            }</span>
+<span class='covered'>          }</span>
+<span class='covered'>          return cleanExpected;</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        </span>
+<span class='covered'>        </span>
+<span class='covered'>        var result = parseFunctions[startRule]();</span>
+<span class='covered'>        </span>
+<span class='covered'>        /*</span>
+<span class='covered'>         * The parser is now in one of the following three states:</span>
+<span class='covered'>         *</span>
+<span class='covered'>         * 1. The parser successfully parsed the whole input.</span>
+<span class='covered'>         *</span>
+<span class='covered'>         *    - |result !== null|</span>
+<span class='covered'>         *    - |pos.offset === input.length|</span>
+<span class='covered'>         *    - |rightmostFailuresExpected| may or may not contain something</span>
+<span class='covered'>         *</span>
+<span class='covered'>         * 2. The parser successfully parsed only a part of the input.</span>
+<span class='covered'>         *</span>
+<span class='covered'>         *    - |result !== null|</span>
+<span class='covered'>         *    - |pos.offset &lt; input.length|</span>
+<span class='covered'>         *    - |rightmostFailuresExpected| may or may not contain something</span>
+<span class='covered'>         *</span>
+<span class='covered'>         * 3. The parser did not successfully parse any part of the input.</span>
+<span class='covered'>         *</span>
+<span class='covered'>         *   - |result === null|</span>
+<span class='covered'>         *   - |pos.offset === 0|</span>
+<span class='covered'>         *   - |rightmostFailuresExpected| contains at least one failure</span>
+<span class='covered'>         *</span>
+<span class='covered'>         * All code following this comment (including called functions) must</span>
+<span class='covered'>         * handle these states.</span>
+<span class='covered'>         */</span>
+<span class='covered'>        if (result === null || pos.offset !== input.length) {</span>
+<span class='covered'>          var offset = Math.max(pos.offset, rightmostFailuresPos.offset);</span>
+<span class='partial'>          var found = offset &lt; input.length ? input.charAt(offset) : <span class='partialuncovered'>null;</span></span>
+<span class='partial'>          var errorPosition = pos.offset &gt; rightmostFailuresPos.offset ? <span class='partialuncovered'>pos </span>: rightmostFailuresPos;</span>
+<span class='covered'>          </span>
+<span class='covered'>          throw new parser.SyntaxError(</span>
+<span class='covered'>            cleanupExpected(rightmostFailuresExpected),</span>
+<span class='covered'>            found,</span>
+<span class='covered'>            offset,</span>
+<span class='covered'>            errorPosition.line,</span>
+<span class='covered'>            errorPosition.column</span>
+<span class='covered'>          );</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='covered'>        return result;</span>
+<span class='covered'>      },</span>
+<span class='covered'>      </span>
+<span class='covered'>      /* Returns the parser source code. */</span>
+<span class='uncovered'>      toSource: function() { return this._source; }</span>
+<span class='covered'>    };</span>
+<span class='covered'>    </span>
+<span class='covered'>    /* Thrown when a parser encounters a syntax error. */</span>
+<span class='covered'>    </span>
+<span class='covered'>    result.SyntaxError = function(expected, found, offset, line, column) {</span>
+<span class='covered'>      function buildMessage(expected, found) {</span>
+<span class='covered'>        var expectedHumanized, foundHumanized;</span>
+<span class='covered'>        </span>
+<span class='covered'>        switch (expected.length) {</span>
+<span class='covered'>          case 0:</span>
+<span class='uncovered'>            expectedHumanized = &quot;end of input&quot;;</span>
+<span class='covered'>            break;</span>
+<span class='covered'>          case 1:</span>
+<span class='uncovered'>            expectedHumanized = expected[0];</span>
+<span class='covered'>            break;</span>
+<span class='covered'>          default:</span>
+<span class='covered'>            expectedHumanized = expected.slice(0, expected.length - 1).join(&quot;, &quot;)</span>
+<span class='covered'>              + &quot; or &quot;</span>
+<span class='covered'>              + expected[expected.length - 1];</span>
+<span class='covered'>        }</span>
+<span class='covered'>        </span>
+<span class='partial'>        foundHumanized = found ? quote(found) : <span class='partialuncovered'>&quot;end of input&quot;;</span></span>
+<span class='covered'>        </span>
+<span class='covered'>        return &quot;Expected &quot; + expectedHumanized + &quot; but &quot; + foundHumanized + &quot; found.&quot;;</span>
+<span class='covered'>      }</span>
+<span class='covered'>      </span>
+<span class='covered'>      this.name = &quot;SyntaxError&quot;;</span>
+<span class='covered'>      this.expected = expected;</span>
+<span class='covered'>      this.found = found;</span>
+<span class='covered'>      this.message = buildMessage(expected, found);</span>
+<span class='covered'>      this.offset = offset;</span>
+<span class='covered'>      this.line = line;</span>
+<span class='covered'>      this.column = column;</span>
+<span class='covered'>    };</span>
+<span class='covered'>    </span>
+<span class='covered'>    result.SyntaxError.prototype = Error.prototype;</span>
+<span class='covered'>    </span>
+<span class='covered'>    return result;</span>
+<span class='covered'>  })();</span>
+<span class='covered'>  </span>
+<span class='covered'>  dust.parse = parser.parse;</span>
+<span class='covered'>  </span>
+<span class='partial'>  })(typeof exports !== &#39;undefined&#39; ? exports : <span class='partialuncovered'>getGlobal())</span>;</span></pre></td>          
+            </tr>
+          </tbody>
+        </table>
+        <a class="index" href="index.html">« index</a> | <a class="coverio" href="http://cover.io">cover.io</a>
+      </div>
+  </body>
+</html>
