@@ -128,15 +128,15 @@
 	}
 
 	$(document).ready(function() {
-    dustExamples.forEach(function(ex) {
-      if (ex.error){
-        dustExamples.splice(dustExamples.indexOf(ex), 1);  
-      } else {
+          dustExamples.forEach(function(ex) {
+          if (ex.error) {
+              dustExamples.splice(dustExamples.indexOf(ex), 1);  
+            } else {
 	      dust.loadSource(dust.compile(ex.source, ex.name));
-      }
-	  });
+           }
+        });
     
-    runSuite();
+     runSuite();
     
     $('#tagline').empty().show().css({left: ($(window).width() * .02) + 165});
 	  dust.loadSource(dust.compile(dustExamples[0].source, "intro"));
