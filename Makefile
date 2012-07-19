@@ -8,8 +8,7 @@ test:
 # Run jasmine-test
 #
 jasmine:
-	node test/jasmine-test/server/specRunner.js
-
+	node test/jasmine-test/server/specRunner.js grammarTests
 #
 # Run code coverage and generate report
 #
@@ -62,13 +61,12 @@ dust:
 	@@mkdir -p dist
 	@@touch ${CORE}
 	@@echo "$$HEADER" > ${CORE}
-	@@cat ${SRC}/dust.js\
-	      ${SRC}/dust-helpers.js >> ${CORE}
+	@@cat ${SRC}/dust.js >> ${CORE}
 	@@echo ${CORE} built
+
 	@@touch ${FULL}
 	@@echo "$$HEADER" > ${FULL}
 	@@cat ${SRC}/dust.js\
-	      ${SRC}/dust-helpers.js\
 	      ${SRC}/compiler.js\
 	      ${SRC}/parser.js >> ${FULL}
 	@@echo ${FULL} built
