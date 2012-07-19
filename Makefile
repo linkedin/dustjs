@@ -8,7 +8,7 @@ test:
 # Run jasmine-test
 #
 jasmine:
-	node test/jasmine-test/server/specRunner.js grammarTests
+	node test/jasmine-test/server/specRunner.js
 #
 # Run code coverage and generate report
 #
