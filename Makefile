@@ -9,7 +9,6 @@ test:
 #
 jasmine:
 	node test/jasmine-test/server/specRunner.js
-
 #
 # Run code coverage and generate report
 #
@@ -44,6 +43,7 @@ CORE = dist/dust-core-${VERSION}.js
 CORE_MIN = dist/dust-core-${VERSION}.min.js
 FULL = dist/dust-full-${VERSION}.js
 FULL_MIN = dist/dust-full-${VERSION}.min.js
+HELPERS = dustjs-helpers/lib
 
 define HEADER
 //
@@ -58,17 +58,19 @@ endef
 
 export HEADER
 
+#TODO: REMOVE THE HELPERS IN THE NEXT RELEASE
 dust:
 	@@mkdir -p dist
 	@@touch ${CORE}
 	@@echo "$$HEADER" > ${CORE}
 	@@cat ${SRC}/dust.js\
-	      ${SRC}/dust-helpers.js >> ${CORE}
+	      ${HELPERS}/dust-helpers.js >> ${CORE}
 	@@echo ${CORE} built
+
 	@@touch ${FULL}
 	@@echo "$$HEADER" > ${FULL}
 	@@cat ${SRC}/dust.js\
-	      ${SRC}/dust-helpers.js\
+	      ${HELPERS}/dust-helpers.js\
 	      ${SRC}/compiler.js\
 	      ${SRC}/parser.js >> ${FULL}
 	@@echo ${FULL} built

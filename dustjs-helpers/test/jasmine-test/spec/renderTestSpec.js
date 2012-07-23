@@ -1,6 +1,6 @@
 describe ("Test the basic functionality of dust", function() {
-  for (var index = 0; index < grammarTests.length; index++) {
-    var test = grammarTests[index];
+  for (var index = 0; index < helpersTests.length; index++) {
+    var test = helpersTests[index];
     it ("RENDER: " + test.message, render(test));
     it ("STREAM: " + test.message, stream(test));
     it ("PIPE: " + test.message, pipe(test));

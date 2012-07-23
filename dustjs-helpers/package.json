@@ -1,0 +1,39 @@
+{
+  "name": "dustjs-helpers",
+  "version": "1.0.0",
+  "author": "Jairo de Morais",
+  "description": "Helpers for dustjs-LinkedIn package",
+  "contributors": [
+    {
+      "name": "Jairo de Morais",
+      "email": "jdemorais@linkedin.com"
+    },
+    {
+      "name": "Veena Basavaraj",
+      "email":"vbasavaraj@linkedin.com"
+    },
+    {
+      "name": "Johnathan Leppert",
+      "email":"jleppert@linkedin.com"
+    }
+  ],
+  "scripts": {
+    "test" : "node test/jasmine-test/server/specRunner.js", 
+    "start": "node src/build.js"
+  },
+  "main": "./lib/dust-helpers",
+  "repository": {
+    "type": "git",
+    "url": "https://jairodemorais@github.com/linkedin/dustjs.git"
+  },
+  "keywords": ["templates", "views", "helpers"],
+  "devDependencies": {
+    "jasmine-node"   :  "1.0.x",
+    "cover"          :  "0.2.x",
+    "dustjs-linkedin":  "1.0.0"
+  },
+  "license": "MIT",
+  "engine": {
+    "node": ">=0.5"
+  }
+}
