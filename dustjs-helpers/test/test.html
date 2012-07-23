@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>dust</title>
+<link href="./dust_files/css" rel="stylesheet" type="text/css">
+<script src="./dust_files/ecma.js"></script>
+<style type="text/css"></style>
+<script src="./dust_files/jquery.min.js"></script>
+<script src="./dust_files/jsdump.js"></script>
+<script src="./dust_files/beautify.js"></script>
+<script src="../lib/dust.js"></script>
+<script src="../lib/dust-helpers.js"></script>
+<script src="../lib/parser.js"></script>
+<script src="../lib/compiler.js"></script>
+<script src="./jasmine-test/spec/helpersTests.js"></script>
+<script src="./uutest.js"></script>
+<script src="./core.js"></script>
+<script type="text/javascript">
+  (function(){
+    dust.register("select",body_0);
+    function body_0(chk,ctx){
+      return chk.write("<select style=\"clear: both;width: 496px;\">").section(ctx.get("examples"),ctx,{"block":body_1},null).write("</select>");
+    }
+	  function body_1(chk,ctx){
+	    return chk.write("<option ").reference(ctx.get("selected"),ctx,"h").write("value=\"").helper("idx",ctx,{"block":body_2},null).write("\">").reference(ctx.get("name"),ctx,"h").write("</option>");
+	  }
+	  function body_2(chk,ctx){
+	    return chk.reference(ctx.getPath(true,[]),ctx,"h");
+	  }
+	  return body_0;})();
+</script>
+<script type="text/javascript">
+  jsDump.parsers['function'] = function(fn) {
+	  return fn.toString();
+	}
+
+	function renderDemo() {
+	var tmpl = dust.cache["demo"],
+	source = $('#input-context').val();
+
+	$('#output-text').empty();
+
+	if (tmpl && source) {
+	setPending('#input-context');
+	setPending('#output-text');
+	try {
+	eval("var context = " + source + ";");
+	if (typeof context === 'function') {
+	context = context();
+	}
+	dust.stream("demo", context)
+	.on('data', function(data) {
+	$('#output-text').append(dust.escapeHtml(data));
+	})
+	.on('end', function() {
+	setOkay('#input-context');
+	setOkay('#output-text');
+	})
+	.on('error', function(err) {
+	setError('#input-context', err);
+	});
+	} catch(err) {
+	setError('#input-context', err);
+	}
+	}
+	}
+
+	function setOkay(sel) {
+	$(sel).next()
+	.removeClass('pending')
+	.addClass('ok')
+	.html('<i class="icon iconOk"></i> <span>Ready </span>');
+	}
+
+	function setPending(sel) {
+	$(sel).next()
+	.removeClass('ok')
+	.removeClass('error')
+	.addClass('pending')
+	.html('<i class="icon"></i> <span>Pending </span>');
+	}
+
+	function setError(sel, err) {
+	$(sel).next()
+	.removeClass('pending')
+	.addClass('error')
+	.html('<i class="icon iconFail"></i> <span>' + err.toString() + '</span>');
+	}
+
+	function dump(obj) {
+	return js_beautify(jsDump.parse(obj), {
+	indent_size: 2
+	});
+	}
+
+	function runSuite() {
+	var suite = new uutest.Suite({
+	start: function() {
+	$('#test-console').empty();
+	},
+	pass: function() {
+	$('#test-console').append(".");
+	},
+	fail: function() {
+	$('#test-console').append("F");
+	},
+	done: function(passed, failed, elapsed) {
+	$('#test-console').append("\n");
+	$('#test-console').append(passed + " passed " + failed + " failed " + "(" + elapsed + "ms)");
+	this.errors.forEach(function(err) {
+	$('#test-console').append("\n");
+	$('#test-console').append(dust.escapeHtml(dumpError(err)));
+	});
+	}
+	});
+	coreSetup(suite, dustExamples.slice(1), dust);
+	suite.run();
+	}
+
+	function dumpError(err) {
+	var out = err.testName + " -> ";
+	if (!err.message) {
+	err.message = jsDump.parse(err.expected)
+	+ " " + err.operator + " " + jsDump.parse(err.actual);
+	}
+	return out + err.stack;
+	}
+
+	$(document).ready(function() {
+          dustExamples.forEach(function(ex) {
+          if (ex.error) {
+              dustExamples.splice(dustExamples.indexOf(ex), 1);  
+            } else {
+	      dust.loadSource(dust.compile(ex.source, ex.name));
+           }
+        });
+    
+     runSuite();
+    
+    $('#tagline').empty().show().css({left: ($(window).width() * .02) + 165});
+	  dust.loadSource(dust.compile(dustExamples[0].source, "intro"));
+	  dust.stream("intro", dustExamples[0].context())
+	    .on('data', function(data) {
+	      $('#tagline').append(data);
+	    })
+	    .on('end', function() {
+	      $('#tagline').delay(500).fadeOut('slow');
+	    });
+
+	  dust.render("select", 
+	    {
+	      examples: dustExamples,
+	      selected: function(chk, ctx) {
+	        if (ctx.current().name === "replace") return "selected";
+	      }
+	    }, function(err, output) {
+	      $('#select').html(output);
+	  });
+
+	$('#select > select').change(function() {
+	var idx = $(this).val();
+	$('#input-source').val(dustExamples[idx].source);
+	$('#input-context').val(dump(dustExamples[idx].context));
+	$('#input-source').change();
+	});
+
+	$('#input-source').change(function() {
+	setPending('#input-source');
+	try {
+	var compiled = dust.compile($(this).val(), "demo");
+	dust.loadSource(compiled);
+	$('#output-js').text(js_beautify(compiled, {
+	indent_size: 2
+	}));
+	setOkay('#input-source');
+	} catch(err) {
+	setError('#input-source', err);
+	return;
+	}
+	renderDemo();
+	});
+
+	$('#input-context').change(renderDemo);
+
+	var sections = $("body > div");
+	var cur_id;
+
+	$(window).scroll(function() {
+	var scrollTop = $(window).scrollTop();
+
+	if (scrollTop === 0) {
+	cur_id = undefined;
+	$('.docked').remove();
+	return;
+	}
+
+	sections.each(function(idx, section) {
+	var sectionTop = section.offsetTop,
+	sectionBottom = sectionTop + section.offsetHeight;
+
+	if (scrollTop >= sectionTop && scrollTop < sectionBottom) {
+	var $hdr = $(section).find('.header').clone();
+	if (section.id !== cur_id) {
+	cur_id = section.id;
+	$('.docked').remove();
+	$hdr.appendTo('body');
+	$hdr.addClass('docked');
+	}
+	return false;
+	}
+	});
+	});
+
+	$('#select > select').change();
+	$(window).scroll();
+
+	});
+</script>
+</head>
+<body>
+<div id="dust" class="content">
+	<div class="left">
+		<div class="header">
+		  <h1>{dust}</h1>
+		  <img src="./dust_files/images/logo-linkedin.png" height="55" width="55" alt="LinkedIn" class="logo">
+		  <span id="tagline" style="left: 230px; display: none; ">asynchronous templates for the browser and node.js</span>
+		  
+		</div>
+		<div class="col1">
+			<p>1. Select a template 
+			<span id="select">
+			<select style="clear: both; width:496px">
+				<option value="0">intro</option>
+				<option value="1">plain</option>
+				<option selected="" value="2">replace</option>
+				<option value="3">zero</option>
+				<option value="4">array</option>
+				<option value="5">empty_array</option>
+				<option value="6">implicit</option>
+				<option value="7">object</option>
+				<option value="8">rename_key</option>
+				<option value="9">force_current</option>
+				<option value="10">path</option>
+				<option value="11">escaped</option>
+				<option value="12">escape_pragma</option>
+				<option value="13">else_block</option>
+				<option value="14">conditional</option>
+				<option value="15">sync_key</option>
+				<option value="16">async_key</option>
+				<option value="17">sync_chunk</option>
+				<option value="18">async_iterator</option>
+				<option value="19">filter</option>
+				<option value="20">context</option>
+				<option value="21">params</option>
+				<option value="22">partials</option>
+				<option value="23">partial_context</option>
+				<option value="24">base_template</option>
+				<option value="25">child_template</option>
+				<option value="26">recursion</option>
+				<option value="27">comments</option>
+			</select></span> or write your own:
+			</p>
+			<textarea id="input-source" class="console"></textarea>
+
+			<div class="status ok"><i class="icon davinci-selectable"></i> Ready</div>
+			<p>2. The compiled template registers itself by name:</p><pre class="console"><code id="output-js">(function() {
+			dust.register("demo", body_0);
+
+			function body_0(chk, ctx) {
+			return chk.write("Hello ").reference(ctx.get("name"), ctx, "h").write("! You have ").reference(ctx.get("count"),
+			ctx, "h").write(" new messages.");
+			}
+			return body_0;
+			})();</code></pre></div>
+		<div class="col2"><p>3. Control template behavior with contexts and helpers:</p>
+		  <textarea id="input-context" class="console"></textarea>
+			<div class="status ok">
+			  <i class="icon davinci-selectable" data-davinci="icon"></i> Ready
+			</div>
+			<p>4. Render or stream the result:</p>
+			<pre id="output-text" class="console">Hello Mick! You have 30 new messages.</pre>
+		</div>
+	</div>
+</div>
+<script src="./dust_files/hijs.js"></script>
+</body>
+</html>

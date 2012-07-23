@@ -1,7 +1,9 @@
-var uutest    = require('./uutest'),
-    dust      = require('../lib/dust'),
-    tests     = require('./jasmine-test/spec/grammarTests'),
-    coreSetup = require('./core').coreSetup;
+var uutest    = require('../../test/uutest'),
+    dust      = require('dustjs-linkedin'),
+    tests     = require('./jasmine-test/spec/helpersTests'),
+    coreSetup = require('../../test/core').coreSetup;
+
+dust.helpers = require('../lib/dust-helpers').helpers;
 
 function dumpError(err) {
   var out = err.testName + " -> ";
@@ -30,6 +32,6 @@ var suite = new uutest.Suite({
 
 global.dust = dust;
 
-coreSetup(suite, tests.slice(1));
+coreSetup(suite, tests);
 
 suite.run();

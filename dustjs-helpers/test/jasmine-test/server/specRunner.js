@@ -3,8 +3,10 @@ var jasmine = require('jasmine-node'),
     path = require('path');
 
 /* this should be declared global in order to access them in the spec*/
-dust = require('../../../lib/dust'),
-grammarTests = require('../spec/grammarTests');
+dust = require('dustjs-linkedin'),
+dust.helpers = require("../../../lib/dust-helpers").helpers,
+
+helpersTests = require('../spec/helpersTests');
 
 for(key in jasmine) 
   global[key] = jasmine[key];
