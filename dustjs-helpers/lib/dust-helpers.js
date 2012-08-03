@@ -119,6 +119,23 @@ var helpers = {
     return chunk;
   },
   
+  /**
+   * math helper
+   * @param expression is the mathematical
+   * expression to evaluate
+   */
+  "math": function ( chunk, context, bodies, params ) {
+    if( params && params.expression ){
+      var expression = params.expression;
+      return chunk.write( eval( expression ) );
+    }
+    // no divisor
+    else {
+      _console.log( "No expression given to the math helper!" );
+    }
+    return chunk;
+  },
+  
    /**
    select/eq/lt/lte/gt/gte/default helper 
    @param key, either a string literal value or a dust reference

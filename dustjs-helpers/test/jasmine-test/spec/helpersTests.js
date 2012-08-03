@@ -42,6 +42,48 @@ var helpersTests = [
     message: "should test the if helper using $idx"
   },
   {
+    name:     "math helper addition",
+    source:   '<div>{@math expression="1 + 1"/}</div>',  
+    context:  {},
+    expected: "<div>2</div>",
+    message: "testing addition with math helper"
+  },
+  {
+    name:     "math helper subtraction",
+    source:   '<div>{@math expression="1 - 1"/}</div>',  
+    context:  {},
+    expected: "<div>0</div>",
+    message: "testing subtraction with math helper"
+  },
+  {
+    name:     "math helper multiplication",
+    source:   '<div>{@math expression="1 * 5"/}</div>',  
+    context:  {},
+    expected: "<div>5</div>",
+    message: "testing mutiplication with math helper"
+  },
+  {
+    name:     "math helper division",
+    source:   '<div>{@math expression="4 / 2"/}</div>',  
+    context:  {},
+    expected: "<div>2</div>",
+    message: "testing division with math helper"
+  },
+  {
+    name:     "math helper modulus",
+    source:   '<div>{@math expression="4 % 4"/}</div>',  
+    context:  {},
+    expected: "<div>0</div>",
+    message: "testing modulus with math helper"
+  },
+  {
+    name:     "math helper Math.ceil",
+    source:   '<div>{@math expression="Math.ceil(2.7)"/}</div>',  
+    context:  {},
+    expected: "<div>3</div>",
+    message: "testing Math.ceil with math helper"
+  },
+  {
     name:     "select helper with a constant string and condition eq",
     source:   ["{@select key=\"foo\"}",
                  "{@eq value=\"foo\"}foo{/eq}",
