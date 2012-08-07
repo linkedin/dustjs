@@ -13,7 +13,7 @@
 <script src="../lib/dust-helpers.js"></script>
 <script src="../lib/parser.js"></script>
 <script src="../lib/compiler.js"></script>
-<script src="./jasmine-test/spec/examples.js"></script>
+<script src="./jasmine-test/spec/grammarTests.js"></script>
 <script src="./uutest.js"></script>
 <script src="./core.js"></script>
 <script type="text/javascript">
@@ -114,7 +114,7 @@
 	});
 	}
 	});
-	coreSetup(suite, dustExamples.slice(1), dust);
+	coreSetup(suite, grammarTests.slice(1), dust);
 	suite.run();
 	}
 
@@ -128,9 +128,9 @@
 	}
 
 	$(document).ready(function() {
-          dustExamples.forEach(function(ex) {
+          grammarTests.forEach(function(ex) {
           if (ex.error) {
-              dustExamples.splice(dustExamples.indexOf(ex), 1);  
+              grammarTests.splice(grammarTests.indexOf(ex), 1);  
             } else {
 	      dust.loadSource(dust.compile(ex.source, ex.name));
            }
@@ -139,8 +139,8 @@
      runSuite();
     
     $('#tagline').empty().show().css({left: ($(window).width() * .02) + 165});
-	  dust.loadSource(dust.compile(dustExamples[0].source, "intro"));
-	  dust.stream("intro", dustExamples[0].context())
+	  dust.loadSource(dust.compile(grammarTests[0].source, "intro"));
+	  dust.stream("intro", grammarTests[0].context())
 	    .on('data', function(data) {
 	      $('#tagline').append(data);
 	    })
@@ -150,7 +150,7 @@
 
 	  dust.render("select", 
 	    {
-	      examples: dustExamples,
+	      examples: grammarTests,
 	      selected: function(chk, ctx) {
 	        if (ctx.current().name === "replace") return "selected";
 	      }
@@ -160,8 +160,8 @@
 
 	$('#select > select').change(function() {
 	var idx = $(this).val();
-	$('#input-source').val(dustExamples[idx].source);
-	$('#input-context').val(dump(dustExamples[idx].context));
+	$('#input-source').val(grammarTests[idx].source);
+	$('#input-context').val(dump(grammarTests[idx].context));
 	$('#input-source').change();
 	});
 
