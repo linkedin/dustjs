@@ -62,13 +62,16 @@ function stream(test) {
 
 function pipe(test) {
   return function() {
-    var output, flag;
+    var output, outputTwo, flag, flagTwo;
     runs(function(){
       flag = false;
+      flagTwo = false;
       output = "";
+      outputTwo = "";
       try {
         dust.loadSource(dust.compile(test.source, test.name));
-        dust.stream(test.name, test.context).pipe({
+        var tpl = dust.stream(test.name, test.context);
+        tpl.pipe({
           write: function (data) {
             output += data;
           },
@@ -80,21 +83,38 @@ function pipe(test) {
             output = err.message;
           }
         });
+        // Pipe to a second stream to test multiple event-listeners
+        tpl.pipe({
+          write: function (data) {
+            outputTwo += data;
+          },
+          end: function () {
+            flagTwo = true;
+          },
+          error: function (err) {
+            flagTwo = true;
+            outputTwo = err.message;
+          }
+        });
       } catch(error) {
         output = error.message;
+        outputTwo = error.message;
         flag= true;
+        flagTwo= true;
       }
     });
     
     waitsFor(function(){
-      return flag;
+      return flag && flagTwo;
     }, "the output", 500);
     
     runs(function(){
       if (test.error) {
         expect(test.error || {} ).toEqual(output);
+        expect(test.error || {} ).toEqual(outputTwo);
       } else {
         expect(test.expected).toEqual(output);
+        expect(test.expected).toEqual(outputTwo);
       }
     });
   }
