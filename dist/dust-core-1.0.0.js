@@ -550,13 +550,18 @@ dust.escapeJs = function(s) {
 
 if (typeof exports !== "undefined") {
   //TODO: Remove the helpers from dust core in the next release.
-  dust.helpers = require("../dust-helpers/lib/dust-helpers").helpers;
+  dust.helpers = require("./dust-helpers").helpers;
   if (typeof process !== "undefined") {
       require('./server')(dust);
   }
   module.exports = dust;
 }
 (function(dust){
+
+if (typeof exports !== "undefined")
+{
+  require("dustjs-linkedin");
+}
 
 /* make a safe version of console if it is not available
  * currently supporting:
