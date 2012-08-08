@@ -550,7 +550,7 @@ dust.escapeJs = function(s) {
 
 if (typeof exports !== "undefined") {
   //TODO: Remove the helpers from dust core in the next release.
-  dust.helpers = require("../dust-helpers/lib/dust-helpers").helpers;
+  dust.helpers = require("./dust-helpers").helpers;
   if (typeof process !== "undefined") {
       require('./server')(dust);
   }
@@ -719,6 +719,24 @@ var helpers = {
 
   "default": function(chunk, context, bodies, params) {
     return filter(chunk, context, bodies, params, function(expected, actual) { return true; });
+  },
+  size: function( chunk, context, bodies, params ) {
+    var subject = params.subject; 
+    var value   = 0;
+    if (!subject) { //undefined, "", 0
+      value = 0;  
+    } else if(dust.isArray(subject)) { //array 
+      value = subject.length;  
+    } else if (!isNaN(subject)) { //numeric values  
+      value = subject;  
+    } else if (Object(subject) === subject) { //object test
+      var nr = 0;  
+      for(var k in subject) if(Object.hasOwnProperty.call(subject,k)) nr++;  
+        value = nr;
+    } else { 
+      value = (subject + '').length; //any other value (strings etc.)  
+    } 
+    return chunk.write(value); 
   }
 };
 
