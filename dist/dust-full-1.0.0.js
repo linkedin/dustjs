@@ -577,11 +577,6 @@ if (typeof exports !== "undefined") {
 }
 (function(dust){
 
-if (typeof exports !== "undefined")
-{
-  require("dustjs-linkedin");
-}
-
 /* make a safe version of console if it is not available
  * currently supporting:
  *   _console.log
