@@ -5,6 +5,13 @@ var uutest    = require('../../test/uutest'),
 
 dust.helpers = require('../lib/dust-helpers').helpers;
 
+//Add the tapper helper to test the Tap helper.
+dust.helpers.tapper = function(chunk, context, bodies, params) {
+  var result = dust.helpers.tap(params.value,chunk,context); 
+  chunk.write(result); 
+  return chunk;
+};
+
 function dumpError(err) {
   var out = err.testName + " -> ";
   if (!err.message) {
