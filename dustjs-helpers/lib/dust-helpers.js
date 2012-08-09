@@ -2,7 +2,7 @@
 
 /* make a safe version of console if it is not available
  * currently supporting:
- *   _console.log 
+ *   _console.log
  * */
 var _console = (typeof console !== 'undefined')? console: {
   log: function(){
@@ -12,12 +12,12 @@ var _console = (typeof console !== 'undefined')? console: {
 
 function isSelect(context) {
   var value = context.current();
-  return typeof value === "object" && value.isSelect === true;    
+  return typeof value === "object" && value.isSelect === true;   
 }
 
 function filter(chunk, context, bodies, params, filter) {
   var params = params || {},
-      actual, 
+      actual,
       expected;
   if (params.key) {
     actual = helpers.tap(params.key, chunk, context);
@@ -80,15 +80,19 @@ var helpers = {
     var output = input;
     // dust compiles a string to function, if there are references
     if( typeof input === "function"){
-      output = '';
-      chunk.tap(function(data){
-        output += data;
-        return '';
-      }).render(input, context).untap();
-      if( output === '' ){
-        output = false;
+      if( ( typeof input.isReference !== "undefined" ) && ( input.isReference === true ) ){ // just a plain function, not a dust `body` function
+        output = input();
+      } else {
+        output = '';
+        chunk.tap(function(data){
+          output += data;
+          return '';
+        }).render(input, context).untap();
+        if( output === '' ){
+          output = false;
+        }
       }
-    } 
+    }
     return output;
   },
 
@@ -120,7 +124,7 @@ var helpers = {
   },
   
    /**
-   select/eq/lt/lte/gt/gte/default helper 
+   select/eq/lt/lte/gt/gte/default helper
    @param key, either a string literal value or a dust reference
                 a string literal value, is enclosed in double quotes, e.g. key="foo"
                 a dust reference may or may not be enclosed in double quotes, e.g. key="{val}" and key=val are both valid

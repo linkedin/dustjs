@@ -275,10 +275,16 @@ Stream.prototype.flush = function() {
 };
 
 Stream.prototype.emit = function(type, data) {
-  var events = this.events;
-
-  if (events && events[type]) {
-    events[type](data);
+  if (!this.events) return false;
+  var handler = this.events[type];
+  if (!handler) return false;
+  if (typeof handler == 'function') {
+    handler(data);
+  } else {
+    var listeners = handler.slice(0);
+    for (var i = 0, l = listeners.length; i < l; i++) {
+      listeners[i](data);
+    }
   }
 };
 
@@ -286,7 +292,13 @@ Stream.prototype.on = function(type, callback) {
   if (!this.events) {
     this.events = {};
   }
-  this.events[type] = callback;
+  if (!this.events[type]) {
+    this.events[type] = callback;
+  } else if(typeof this.events[type] === 'function') {
+    this.events[type] = [this.events[type], callback];
+  } else {
+    this.events[type].push(callback);
+  }
   return this;
 };
 
@@ -360,6 +372,7 @@ Chunk.prototype.render = function(body, context) {
 
 Chunk.prototype.reference = function(elem, context, auto, filters) {
   if (typeof elem === "function") {
+    elem.isReference = true;
     elem = elem(this, context, null, {auto: auto, filters: filters});
     if (elem instanceof Chunk) {
       return elem;
@@ -550,7 +563,7 @@ dust.escapeJs = function(s) {
 
 if (typeof exports !== "undefined") {
   //TODO: Remove the helpers from dust core in the next release.
-  dust.helpers = require("../dust-helpers/lib/dust-helpers").helpers;
+  dust.helpers = require("../dustjs-helpers/lib/dust-helpers").helpers;
   if (typeof process !== "undefined") {
       require('./server')(dust);
   }
@@ -560,7 +573,7 @@ if (typeof exports !== "undefined") {
 
 /* make a safe version of console if it is not available
  * currently supporting:
- *   _console.log 
+ *   _console.log
  * */
 var _console = (typeof console !== 'undefined')? console: {
   log: function(){
@@ -570,12 +583,12 @@ var _console = (typeof console !== 'undefined')? console: {
 
 function isSelect(context) {
   var value = context.current();
-  return typeof value === "object" && value.isSelect === true;    
+  return typeof value === "object" && value.isSelect === true;   
 }
 
 function filter(chunk, context, bodies, params, filter) {
   var params = params || {},
-      actual, 
+      actual,
       expected;
   if (params.key) {
     actual = helpers.tap(params.key, chunk, context);
@@ -638,15 +651,19 @@ var helpers = {
     var output = input;
     // dust compiles a string to function, if there are references
     if( typeof input === "function"){
-      output = '';
-      chunk.tap(function(data){
-        output += data;
-        return '';
-      }).render(input, context).untap();
-      if( output === '' ){
-        output = false;
+      if( ( typeof input.isReference !== "undefined" ) && ( input.isReference === true ) ){ // just a plain function, not a dust `body` function
+        output = input();
+      } else {
+        output = '';
+        chunk.tap(function(data){
+          output += data;
+          return '';
+        }).render(input, context).untap();
+        if( output === '' ){
+          output = false;
+        }
       }
-    } 
+    }
     return output;
   },
 
@@ -678,7 +695,7 @@ var helpers = {
   },
   
    /**
-   select/eq/lt/lte/gt/gte/default helper 
+   select/eq/lt/lte/gt/gte/default helper
    @param key, either a string literal value or a dust reference
                 a string literal value, is enclosed in double quotes, e.g. key="foo"
                 a dust reference may or may not be enclosed in double quotes, e.g. key="{val}" and key=val are both valid
