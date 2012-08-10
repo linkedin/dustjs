@@ -247,6 +247,20 @@ var helpersTests = [
     message: "should test a select helper inside a array with ."
   },
   {
+    name:     "modulus helper",
+    source: ["{#loop}",
+             "{@mod key=\"{$idx}\" divisor=2 value=0}",
+             "*{$idx} is even*{/mod}",
+             "{@mod key=\"{$idx}\" divisor=\"2\" value=1}", // divisor is coerced to a number
+             "*{$idx} is odd*{/mod}",
+             "{@mod divisor=3 value=0}",   //key defaults to $idx so it is optional
+             "*{$idx} is divisible by 3*{/mod}",
+             "{/loop}"].join('\n'),
+    expected: "*0 is even**0 is divisible by 3**1 is odd**2 is even**3 is odd**3 is divisible by 3*",
+    context: {"loop": [ { a:"a"},{ b:"b"},{c:"c"},{d:"d"}  ]},
+    message: "should test modulus helper with $idx"
+  },
+  {
     name:     "select helper inside a array with {.}",
     source:   ["{#skills}{@select key=\"{.}\"}",
                "{@eq value=\"java\"}JAVA,{/eq}",
