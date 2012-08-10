@@ -5,8 +5,14 @@ var jasmine = require('jasmine-node'),
 /* this should be declared global in order to access them in the spec*/
 dust = require('dustjs-linkedin'),
 dust.helpers = require("../../../lib/dust-helpers").helpers,
-
 helpersTests = require('../spec/helpersTests');
+
+//Add the tapper helper to test the Tap helper.
+dust.helpers.tapper = function(chunk, context, bodies, params) {
+  var result = dust.helpers.tap(params.value,chunk,context); 
+  chunk.write(result); 
+  return chunk;
+};
 
 for(key in jasmine) 
   global[key] = jasmine[key];

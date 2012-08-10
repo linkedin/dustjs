@@ -294,6 +294,69 @@ var helpersTests = [
     expected: "3, 2, 1",
     message: "should test async iterator"
   },
+  {
+    name:     "tapHelper: Plain text string literal",
+    source:   'plain text. {@tapper value="plain text"/}',
+    context:  {},
+    expected: "plain text. plain text",
+    message: "should test if tap Helper is working properly when the value is plain text"
+  },
+  {
+    name:     "tapHelper: string literal that includes a string-valued {context variable}",
+    source:   'a is {a}. {@tapper value="a is {a}"/}',
+    context:  { a : "Alpha" },
+    expected: "a is Alpha. a is Alpha",
+    message: "should test if tap Helper is working properly when the value is a text that inclues a string-valued {context variable}"
+  },
+  {
+    name:     "tapHelper: reference to string-valued context variable",
+    source:   '{a}. {@tapper value=a/}',
+    context:  { a : "Alpha" },
+    expected: "Alpha. Alpha",
+    message: "should test if tap Helper is working properly when it makes referece to string-valued context variable"
+  },
+  {
+    name:     "tapHelper: string literal that includes a string-valued {context function}",
+    source:   'b is {b}. {@tapper value="b is {b}"/}',
+    context:  { "b" : function() { return "beta"; } },
+    expected: "b is beta. b is beta",
+    message: "should test if tap Helper is working properly when the value is a string literal that includes a string-valued {context function}"
+  },
+  {
+    name:     "tapHelper: reference to a a string-valued {context function}",
+    source:   '{b}. {@tapper value=b/}',
+    context:  { "b" : function() { return "beta"; } },
+    expected: "beta. beta",
+    message: "should test if tap Helper is working properly when it makes reference to a a string-valued {context function}"
+  },
+  {
+    name:     "tapHelper: string literal that includes an object-valued {context variable}",
+    source:   'a.foo is {a.foo}. {@tapper value="a.foo is {a.foo}"/}',
+    context:  { "a" : {"foo":"bar"} },
+    expected: "a.foo is bar. a.foo is bar",
+    message: "should test if tap Helper is working properly when the value is a string literal that includes an object-valued {context variable}"
+  },
+  {
+    name:     "tapHelper: reference to an object-valued {context variable}",
+    source:   '{a.foo}. {@tapper value=a.foo/}',
+    context:  { "a" : {"foo":"bar"} },
+    expected: "bar. bar",
+    message: "should test if tap Helper is working properly when it makes reference to an object-valued {context variable}"
+  },
+  {
+    name:     "tapHelper: string literal that calls a function within an object-valued {context variable}",
+    source:   'a.foo is {a.foo}. {@tapper value="a.foo is {a.foo}"/}',
+    context:  { "a" : {"foo" : function() { return "bar"; } } },
+    expected: "a.foo is bar. a.foo is bar",
+    message: "should test if tap Helper is working properly when the value is string literal that calls a function within an object-valued {context variable}"
+  },
+  {
+    name:     "tapHelper: reference to a function within an object-valued {context variable}",
+    source:   '{a.foo} {@tapper value=a.foo/}',
+    context:  { "a" : {"foo" : function() { return "bar"; } } },
+    expected: "bar bar",
+    message: "should test if tap Helper is working properly when it makes reference to a function within an object-valued {context variable}"
+  }
 ];
 
 if (typeof module !== "undefined" && typeof require !== "undefined") {
