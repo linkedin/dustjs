@@ -109,7 +109,7 @@ integer "integer"
   path is defined as matching a key plus one or more characters of key preceded by a dot 
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 path "path"
-  = k:key? d:(nestedKey / array)+ {
+  = k:key? d:(nested_key / array)+ {
     d = d[0]; 
     if (k && d) {
       d.unshift(k);
@@ -117,7 +117,7 @@ path "path"
     }
     return [true, d];
   }
-  / "." d:(nestedKey / array)* { 
+  / "." d:(nested_key / array)* { 
     if (d.length > 0) {
       return [true, d[0]];
     }
@@ -131,11 +131,11 @@ key "key"
   = h:[a-zA-Z_$] t:[0-9a-zA-Z_$]*
   { return h + t.join('') }
   
-nestedKey "nestedKey"
+nested_key "nested_key"
   = d:("." k:key {return k})+ a:(array)? { if (a) { return d.concat(a); } else { return d; } }
 
 array "array"
-  = i:("[" a:([0-9]+) "]" {return a.join('')}) nk: nestedKey? { if(nk) { nk.unshift(i); } else {nk = [i] } return nk; }
+  = i:("[" a:([0-9]+) "]" {return a.join('')}) nk: nested_key? { if(nk) { nk.unshift(i); } else {nk = [i] } return nk; }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
    inline params is defined as matching two double quotes or double quotes plus literal followed by closing double quotes or  
