@@ -120,18 +120,22 @@ var helpers = {
   },
   
   /**
-   * math helper
-   * @param expression is the mathematical
-   * expression to evaluate
+   * modulus helper
+   * @param dividend is the value to divide
+   * @param divisor is the how many to divide 
+   * dividend by
    */
-  "math": function ( chunk, context, bodies, params ) {
-    if( params && params.expression ){
-      var expression = params.expression;
-      return chunk.write( eval( expression ) );
+  "mod": function ( chunk, context, bodies, params ) {
+    if( params && params.dividend && params.divisor ){
+      var dividend = params.dividend;
+      var divisor = params.divisor;
+      dividend = this.tap(dividend, chunk, context);
+      divisor = this.tap(divisor, chunk, context);
+      return chunk.write( eval( dividend % divisor ) );
     }
-    // no divisor
+    // no dividend or divisor
     else {
-      _console.log( "No expression given to the math helper!" );
+      _console.log( "No dividend or divisor passed to mod helper!" );
     }
     return chunk;
   },
