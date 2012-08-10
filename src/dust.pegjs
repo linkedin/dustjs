@@ -113,11 +113,16 @@ path "path"
     d = d[0]; 
     if (k && d) {
       d.unshift(k);
-      return [false, d];;
+      return [false, d];
     }
     return [true, d];
   }
-  / "." { return [true, []] }
+  / "." d:(nestedKey / array)* { 
+    if (d.length > 0) {
+      return [true, d[0]];
+    }
+    return [true, []] 
+  }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
    key is defined as a character matching a to z, upper or lower case, followed by 0 or more alphanumeric characters  
