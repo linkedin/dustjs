@@ -120,22 +120,65 @@ var helpers = {
   },
   
   /**
-   * modulus helper
-   * @param dividend is the value to divide
-   * @param divisor is the how many to divide 
-   * dividend by
+   * math helper
+   * @param key is the value to perform math against
+   * @param eq is the value to test for equality with key
+   * @param method is the math method we will employ
+   * in the absence of an equality test
+   * @param operand is the second value needed fof
+   * operations like mod, add, subtract, etc.
    */
-  "mod": function ( chunk, context, bodies, params ) {
-    if( params && params.dividend && params.divisor ){
-      var dividend = params.dividend;
-      var divisor = params.divisor;
-      dividend = this.tap(dividend, chunk, context);
-      divisor = this.tap(divisor, chunk, context);
-      return chunk.write( eval( dividend % divisor ) );
+  "math": function ( chunk, context, bodies, params ) {
+    //make sure we have key and eq or method params before continuing
+    if( params && params.key && (params.eq ||  params.method) ){
+      var key  = params.key;
+      key  = this.tap(key, chunk, context);
+      if (params.eq) {
+        var eq = params.eq;
+        return chunk.write(key === eq);
+      } 
+      //we are going to operate with math methods if not equals
+      else {
+        var method = params.method;
+        var operand = params.operand || null;
+        var operError = function(){_console.log("operand is required for this math method")};
+        var returnExpression = function(exp){chunk.write( eval( exp ) )};
+        if (operand) {
+          operand = this.tap(operand, chunk, context);
+        }
+        switch(method) {
+            case "mod":
+              (operand) ? returnExpression( parseFloat(key) % parseFloat(operand) ) : operError();
+              break;
+            case "add":
+              (operand) ? returnExpression( parseFloat(key) + parseFloat(operand) ) : operError();
+              break;
+            case "subtract":
+              (operand) ? returnExpression( parseFloat(key) - parseFloat(operand) ) : operError();
+              break;
+            case "multiply":
+              (operand) ? returnExpression( parseFloat(key) * parseFloat(operand) ) : operError();
+              break;
+            case "divide":
+              (operand) ? returnExpression( parseFloat(key) / parseFloat(operand) ) : operError();
+              break;
+            case "ceil": 
+              returnExpression( Math.ceil(parseFloat(key)) );
+              break;
+            case "floor":
+              returnExpression( Math.floor(parseFloat(key)) );
+              break;
+            case "abs": 
+              returnExpression( Math.abs(parseFloat(key)) );
+              break;
+            default: 
+              _console.log( "method passed is not supported" );
+        }
+      }
     }
-    // no dividend or divisor
+    // no key parameter and no method or eq passed 
     else {
-      _console.log( "No dividend or divisor passed to mod helper!" );
+      _console.log( "Key is a required parameter along with eq or method/operand!" );
     }
     return chunk;
   },
