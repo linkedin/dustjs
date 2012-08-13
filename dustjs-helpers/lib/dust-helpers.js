@@ -125,7 +125,7 @@ var helpers = {
    * @param eq is the value to test for equality with key
    * @param method is the math method we will employ
    * in the absence of an equality test
-   * @param operand is the second value needed fof
+   * @param operand is the second value needed for
    * operations like mod, add, subtract, etc.
    */
   "math": function ( chunk, context, bodies, params ) {
