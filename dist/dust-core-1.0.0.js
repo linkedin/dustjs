@@ -275,10 +275,16 @@ Stream.prototype.flush = function() {
 };
 
 Stream.prototype.emit = function(type, data) {
-  var events = this.events;
-
-  if (events && events[type]) {
-    events[type](data);
+  if (!this.events) return false;
+  var handler = this.events[type];
+  if (!handler) return false;
+  if (typeof handler == 'function') {
+    handler(data);
+  } else {
+    var listeners = handler.slice(0);
+    for (var i = 0, l = listeners.length; i < l; i++) {
+      listeners[i](data);
+    }
   }
 };
 
@@ -286,7 +292,13 @@ Stream.prototype.on = function(type, callback) {
   if (!this.events) {
     this.events = {};
   }
-  this.events[type] = callback;
+  if (!this.events[type]) {
+    this.events[type] = callback;
+  } else if(typeof this.events[type] === 'function') {
+    this.events[type] = [this.events[type], callback];
+  } else {
+    this.events[type].push(callback);
+  }
   return this;
 };
 
@@ -550,7 +562,7 @@ dust.escapeJs = function(s) {
 
 if (typeof exports !== "undefined") {
   //TODO: Remove the helpers from dust core in the next release.
-  dust.helpers = require("../dust-helpers/lib/dust-helpers").helpers;
+  dust.helpers = require("../dustjs-helpers/lib/dust-helpers").helpers;
   if (typeof process !== "undefined") {
       require('./server')(dust);
   }
