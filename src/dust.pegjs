@@ -109,7 +109,7 @@ integer "integer"
   path is defined as matching a key plus one or more characters of key preceded by a dot 
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 path "path"
-  = k:key? d:(nested_key / array)+ {
+  = k:key? d:(array_part / array)+ {
     d = d[0]; 
     if (k && d) {
       d.unshift(k);
@@ -117,7 +117,7 @@ path "path"
     }
     return [true, d];
   }
-  / "." d:(nested_key / array)* { 
+  / "." d:(array_part / array)* {
     if (d.length > 0) {
       return [true, d[0]];
     }
@@ -130,12 +130,12 @@ path "path"
 key "key"
   = h:[a-zA-Z_$] t:[0-9a-zA-Z_$]*
   { return h + t.join('') }
-  
-nested_key "nested_key"
-  = d:("." k:key {return k})+ a:(array)? { if (a) { return d.concat(a); } else { return d; } }
 
 array "array"
-  = i:("[" a:([0-9]+) "]" {return a.join('')}) nk: nested_key? { if(nk) { nk.unshift(i); } else {nk = [i] } return nk; }
+  = i:("[" a:([0-9]+) "]" {return a.join('')}) nk: array_part? { if(nk) { nk.unshift(i); } else {nk = [i] } return nk; }
+
+array_part "array_part"
+  = d:("." k:key {return k})+ a:(array)? { if (a) { return d.concat(a); } else { return d; } }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
    inline params is defined as matching two double quotes or double quotes plus literal followed by closing double quotes or  
