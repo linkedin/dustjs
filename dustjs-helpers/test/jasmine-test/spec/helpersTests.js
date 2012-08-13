@@ -311,7 +311,7 @@ var helpersTests = [
     context:  { b : { "x": "foo", "y": "bar", "z": "baz" } },
     expected: "foofoo",
     message: "should test select helper with key matching the else condition"
-  },
+  }, 
   {
     name:     "select helper inside a array with .",
     source:   ["{#skills}{@select key=.}",

@@ -181,7 +181,7 @@ var helpers = {
       _console.log( "Key is a required parameter along with eq or method/operand!" );
     }
     return chunk;
-  },
+  }, 
   
    /**
    select/eq/lt/lte/gt/gte/default helper 
