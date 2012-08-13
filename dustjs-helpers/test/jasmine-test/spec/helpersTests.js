@@ -6,7 +6,7 @@ var helpersTests = [
     expected: "Hello Mick! You have 30 new messages.",
     message: "should test a basic replace"
   },
-	{
+  {
     name:     "if helper without else",
     source:   '{@if cond="{x}<{y}"}<div> X < Y </div>{/if}',  
     context:  { x: 2, y: 3 },
@@ -335,7 +335,7 @@ var helpersTests = [
     message: "should test select helper inside a array with {.}"
   },
   {
-  	name:     "partial within a array",
+    name:     "partial within a array",
     source:   '{#n}{>replace name=. count="30"/}{@sep} {/sep}{/n}',
     context:  { n: ["Mick", "Tom", "Bob"] },
     expected: "Hello Mick! You have 30 new messages. Hello Tom! You have 30 new messages. Hello Bob! You have 30 new messages.",
