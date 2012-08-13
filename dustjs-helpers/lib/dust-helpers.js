@@ -142,7 +142,7 @@ var helpers = {
         var method = params.method;
         var operand = params.operand || null;
         var operError = function(){_console.log("operand is required for this math method")};
-        var returnExpression = function(exp){chunk.write( eval( exp ) )};
+        var returnExpression = function(exp){chunk.write( exp )};
         if (operand) {
           operand = this.tap(operand, chunk, context);
         }
