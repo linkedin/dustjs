@@ -79,8 +79,8 @@ min: dust
 	@@echo minifying...
 	@@echo "$$HEADER" > ${CORE_MIN}
 	@@echo "$$HEADER" > ${FULL_MIN}
-	@@minmin ${CORE} >> ${CORE_MIN}
-	@@minmin ${FULL} >> ${FULL_MIN}
+	uglifyjs -b -i -nmf -o ${CORE_MIN} ${CORE}
+	uglifyjs -b -i -nmf -o ${FULL_MIN} ${FULL}
 
 clean:
 	git rm dist/*
