@@ -79,8 +79,8 @@ min: dust
 	@@echo minifying...
 	@@echo "$$HEADER" > ${CORE_MIN}
 	@@echo "$$HEADER" > ${FULL_MIN}
-	@@minmin ${CORE} >> ${CORE_MIN}
-	@@minmin ${FULL} >> ${FULL_MIN}
+	node utils/minifier ${CORE} ${CORE_MIN} 
+	node utils/minifier ${FULL} ${FULL_MIN} 
 
 clean:
 	git rm dist/*
