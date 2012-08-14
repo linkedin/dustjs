@@ -484,6 +484,13 @@ var grammarTests = [
     message: "should objectify a JSON string when using the jp filter"
   },
   {
+      name:     "invalid filter test",
+      source:   "{obj|iminvalid}",
+      context:  { obj: 'foo' },
+      expected: 'foo',
+      message:  "tests the dust behaviour when an invalid filter is provided"
+  },
+  {
     name: "ignore whitespaces also means ignoring eol",
     source: ['{#authors ',
               'name="theAuthors"',
