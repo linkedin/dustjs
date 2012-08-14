@@ -135,6 +135,7 @@ var helpers = {
       key  = this.tap(key, chunk, context);
       if (params.eq) {
         var eq = params.eq;
+        eq = this.tap(eq, chunk, context);
         return chunk.write(key === eq);
       } 
       //we are going to operate with math methods if not equals
