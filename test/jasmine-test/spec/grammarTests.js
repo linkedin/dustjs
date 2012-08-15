@@ -555,6 +555,34 @@ var grammarTests = [
     context: { "val1" : "title", "val2" : "A", "obj" : { "name" : ["A", "B"] } },
     expected: "AAA",
     message: "should test blocks with dynamic key values as arrays"
+  },
+  {
+    name:     "test that the scope of the function is correct",
+    source:   "Hello {#foo}{bar}{/foo} World!",
+    context:  {
+                foo: {
+                  foobar: 'Foo Bar',
+                  bar: function () {
+                    return this.foobar;
+                  }
+                }
+              },
+    expected: "Hello Foo Bar World!",
+    message: "should test scope of context function"
+  },
+  {
+    name:     "test that the scope of the function is correct",
+    source:   "Hello {#foo}{#bar}{.}{/bar}{/foo} World!",
+    context:  {
+                foo: {
+                  foobar: 'Foo Bar',
+                  bar: function () {
+                    return this.foobar;
+                  }
+                }
+              },
+    expected: "Hello Foo Bar World!",
+    message: "should test scope of context function"
   }
 ];
 
