@@ -70,6 +70,20 @@ var grammarTests = [
       message: "should test an array"
   },
   {
+     name:     "array",
+     source:   "{#names}({$idx}).{title} {.}{~n}{/names}",
+     context:  { title: "Sir", names: [ "Moe", "Larry", "Curly" ] },
+     expected: "(0).Sir Moe\n(1).Sir Larry\n(2).Sir Curly\n",
+     message: "should test an array with non-object elements using $idx"
+   },
+  {
+      name:     "array",
+      source:   "{#names}Size=({$len}).{title} {.}{~n}{/names}",
+      context:  { title: "Sir", names: [ "Moe", "Larry", "Curly" ] },
+      expected: "Size=(3).Sir Moe\nSize=(3).Sir Larry\nSize=(3).Sir Curly\n",
+      message: "should test an array with non-object elements using $len"
+  },
+  {
     name:     "empty_array",
     source:   "{#names}{title} {name}{~n}{/names}",
     context:  { title: "Sir", names: [] },
