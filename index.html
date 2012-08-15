@@ -123,7 +123,7 @@ registered under the same name as the source file:</p>
 <pre><code>$ make jasmine
 </code></pre>
 
-
+<h2>Coverage report</h2>
 
 <p>To generate code coverage report:</p>
 
@@ -133,8 +133,20 @@ $ make coverage
 
 <p>To view HTML test coverage report:</p>
 
-<pre><code>$ open cover_html/index.html
-</code></pre>
+<pre><code>$ open cover_html/index.html</code></pre>
+
+<h2>Minify dust files</h2>
+
+<p>If you want to use a minified version of dust, 
+  you will find it in the "dist" folder, inside the dust project. 
+If the files are not there, you can generate those youself using this make target: </p>
+
+<pre><code>$ make min</code></pre>
+
+<p>Before executing the command mentioned above, make sure that you have all the dependencies installed by running the following command on your root project folder: </p>
+
+<pre><code>$ npm install</code></pre>
+
         </section>
 
         <aside id="sidebar">
