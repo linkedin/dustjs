@@ -3,7 +3,7 @@ var jasmine = require('jasmine-node'),
     path = require('path');
 
 /* this should be declared global in order to access them in the spec*/
-dust = require('dustjs-linkedin'),
+dust = require('../../../../lib/dust'),
 dust.helpers = require("../../../lib/dust-helpers").helpers,
 helpersTests = require('../spec/helpersTests');
 

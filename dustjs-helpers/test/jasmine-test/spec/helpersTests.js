@@ -280,68 +280,47 @@ var helpersTests = [
     expected: "3, 2, 1",
     message: "should test async iterator"
   },
-  {
-    name:     "tapHelper: Plain text string literal",
-    source:   'plain text. {@tapper value="plain text"/}',
-    context:  {},
-    expected: "plain text. plain text",
-    message: "should test if tap Helper is working properly when the value is plain text"
+      {
+     name:     "array: reference $idx in iteration on objects",
+     source:   "{#names}({$idx}).{title} {name}{~n}{/names}",
+     context:  { title: "Sir", names: [ { name: "Moe" }, { name: "Larry" }, { name: "Curly" } ] },
+     expected: "(0).Sir Moe\n(1).Sir Larry\n(2).Sir Curly\n",
+     message: "array: reference $idx in iteration on objects"
   },
   {
-    name:     "tapHelper: string literal that includes a string-valued {context variable}",
-    source:   'a is {a}. {@tapper value="a is {a}"/}',
-    context:  { a : "Alpha" },
-    expected: "a is Alpha. a is Alpha",
-    message: "should test if tap Helper is working properly when the value is a text that inclues a string-valued {context variable}"
+      name:     "array: reference $len in iteration on objects",
+      source:   "{#names}Size=({$len}).{title} {name}{~n}{/names}",
+      context:  { title: "Sir", names: [ { name: "Moe" }, { name: "Larry" }, { name: "Curly" } ] },
+      expected: "Size=(3).Sir Moe\nSize=(3).Sir Larry\nSize=(3).Sir Curly\n",
+      message: "test array: reference $len in iteration on objects"
   },
   {
-    name:     "tapHelper: reference to string-valued context variable",
-    source:   '{a}. {@tapper value=a/}',
-    context:  { a : "Alpha" },
-    expected: "Alpha. Alpha",
-    message: "should test if tap Helper is working properly when it makes referece to string-valued context variable"
+     name:     "array reference $idx in iteration on simple type",
+     source:   "{#names}({$idx}).{title} {.}{~n}{/names}",
+     context:  { title: "Sir", names: [ "Moe", "Larry", "Curly" ] },
+     expected: "(0).Sir Moe\n(1).Sir Larry\n(2).Sir Curly\n",
+     message: "test array reference $idx in iteration on simple types"
   },
   {
-    name:     "tapHelper: string literal that includes a string-valued {context function}",
-    source:   'b is {b}. {@tapper value="b is {b}"/}',
-    context:  { "b" : function() { return "beta"; } },
-    expected: "b is beta. b is beta",
-    message: "should test if tap Helper is working properly when the value is a string literal that includes a string-valued {context function}"
+      name:     "array reference $len in iteration on simple type",
+      source:   "{#names}Size=({$len}).{title} {.}{~n}{/names}",
+      context:  { title: "Sir", names: [ "Moe", "Larry", "Curly" ] },
+      expected: "Size=(3).Sir Moe\nSize=(3).Sir Larry\nSize=(3).Sir Curly\n",
+      message: "test array reference $len in iteration on simple types"
   },
   {
-    name:     "tapHelper: reference to a a string-valued {context function}",
-    source:   '{b}. {@tapper value=b/}',
-    context:  { "b" : function() { return "beta"; } },
-    expected: "beta. beta",
-    message: "should test if tap Helper is working properly when it makes reference to a a string-valued {context function}"
+      name:     "array reference $idx/$len on empty array case",
+      source:   "{#names}Idx={$idx} Size=({$len}).{title} {.}{~n}{/names}",
+      context:  { title: "Sir", names: [ ] },
+      expected: "",
+      message: "test array reference $idx/$len on empty array case"
   },
   {
-    name:     "tapHelper: string literal that includes an object-valued {context variable}",
-    source:   'a.foo is {a.foo}. {@tapper value="a.foo is {a.foo}"/}',
-    context:  { "a" : {"foo":"bar"} },
-    expected: "a.foo is bar. a.foo is bar",
-    message: "should test if tap Helper is working properly when the value is a string literal that includes an object-valued {context variable}"
-  },
-  {
-    name:     "tapHelper: reference to an object-valued {context variable}",
-    source:   '{a.foo}. {@tapper value=a.foo/}',
-    context:  { "a" : {"foo":"bar"} },
-    expected: "bar. bar",
-    message: "should test if tap Helper is working properly when it makes reference to an object-valued {context variable}"
-  },
-  {
-    name:     "tapHelper: string literal that calls a function within an object-valued {context variable}",
-    source:   'a.foo is {a.foo}. {@tapper value="a.foo is {a.foo}"/}',
-    context:  { "a" : {"foo" : function() { return "bar"; } } },
-    expected: "a.foo is bar. a.foo is bar",
-    message: "should test if tap Helper is working properly when the value is string literal that calls a function within an object-valued {context variable}"
-  },
-  {
-    name:     "tapHelper: reference to a function within an object-valued {context variable}",
-    source:   '{a.foo} {@tapper value=a.foo/}',
-    context:  { "a" : {"foo" : function() { return "bar"; } } },
-    expected: "bar bar",
-    message: "should test if tap Helper is working properly when it makes reference to a function within an object-valued {context variable}"
+      name:     "array reference $idx/$len on single element case",
+      source:   "{#names}Idx={$idx} Size={$len} {.}{/names}",
+      context:  { names: "Just one name" },
+      expected: "Idx=0 Size=1 Just one name",
+      message: "test array reference $idx/$len on single element case"
   }
 ];
 
