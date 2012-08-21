@@ -391,6 +391,13 @@ var helpersTests = [
       context:  { names:  ["Moe", "Larry", "Curly"] },
       expected: "0Moe 1Larry 2Curly ",
       message: "test array reference $idx/$len {#.} section case"
+  },
+  {
+      name:     "array reference $idx/$len nested loops",
+      source:   "{#A}A loop:{$idx}-{$len},{#B}B loop:{$idx}-{$len}C[0]={.C[0]} {/B}A loop trailing: {$idx}-{$len}{/A}",
+      context:  {"A": [ {"B": [ {"C": ["Ca1", "C2"]}, {"C": ["Ca2", "Ca22"]} ] }, {"B": [ {"C": ["Cb1", "C2"]}, {"C": ["Cb2", "Ca2"]} ] } ] },
+      expected: "A loop:0-2,B loop:0-2C[0]=Ca1 B loop:1-2C[0]=Ca2 A loop trailing: 0-2A loop:1-2,B loop:0-2C[0]=Cb1 B loop:1-2C[0]=Cb2 A loop trailing: 1-2",
+      message: "test array reference $idx/$len nested loops"
   }
 ];
 
