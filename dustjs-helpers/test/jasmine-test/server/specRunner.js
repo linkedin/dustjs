@@ -4,7 +4,7 @@ var jasmine = require('jasmine-node'),
 
 /* this should be declared global in order to access them in the spec*/
 dust = require('dustjs-linkedin'),
-dust.helpers = require("../../../lib/dust-helpers").helpers,
+dust.helpers = require('../../../lib/dust-helpers').helpers,
 helpersTests = require('../spec/helpersTests');
 
 //Add the tapper helper to test the Tap helper.

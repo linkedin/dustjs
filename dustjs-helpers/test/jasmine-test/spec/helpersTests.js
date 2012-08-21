@@ -342,6 +342,62 @@ var helpersTests = [
     context:  { "a" : {"foo" : function() { return "bar"; } } },
     expected: "bar bar",
     message: "should test if tap Helper is working properly when it makes reference to a function within an object-valued {context variable}"
+  },
+  {
+     name:     "array: reference $idx in iteration on objects",
+     source:   "{#names}({$idx}).{title} {name}{~n}{/names}",
+     context:  { title: "Sir", names: [ { name: "Moe" }, { name: "Larry" }, { name: "Curly" } ] },
+     expected: "(0).Sir Moe\n(1).Sir Larry\n(2).Sir Curly\n",
+     message: "array: reference $idx in iteration on objects"
+  },
+  {
+      name:     "array: reference $len in iteration on objects",
+      source:   "{#names}Size=({$len}).{title} {name}{~n}{/names}",
+      context:  { title: "Sir", names: [ { name: "Moe" }, { name: "Larry" }, { name: "Curly" } ] },
+      expected: "Size=(3).Sir Moe\nSize=(3).Sir Larry\nSize=(3).Sir Curly\n",
+      message: "test array: reference $len in iteration on objects"
+  },
+  {
+     name:     "array reference $idx in iteration on simple type",
+     source:   "{#names}({$idx}).{title} {.}{~n}{/names}",
+     context:  { title: "Sir", names: [ "Moe", "Larry", "Curly" ] },
+     expected: "(0).Sir Moe\n(1).Sir Larry\n(2).Sir Curly\n",
+     message: "test array reference $idx in iteration on simple types"
+  },
+  {
+      name:     "array reference $len in iteration on simple type",
+      source:   "{#names}Size=({$len}).{title} {.}{~n}{/names}",
+      context:  { title: "Sir", names: [ "Moe", "Larry", "Curly" ] },
+      expected: "Size=(3).Sir Moe\nSize=(3).Sir Larry\nSize=(3).Sir Curly\n",
+      message: "test array reference $len in iteration on simple types"
+  },
+  {
+      name:     "array reference $idx/$len on empty array case",
+      source:   "{#names}Idx={$idx} Size=({$len}).{title} {.}{~n}{/names}",
+      context:  { title: "Sir", names: [ ] },
+      expected: "",
+      message: "test array reference $idx/$len on empty array case"
+  },
+  {
+      name:     "array reference $idx/$len on single element case",
+      source:   "{#names}Idx={$idx} Size={$len} {.}{/names}",
+      context:  { names: "Just one name" },
+      expected: "Idx=0 Size=1 Just one name",
+      message: "test array reference $idx/$len on single element case"
+  },
+  {
+      name:     "array reference $idx/$len {#.} section case",
+      source:   "{#names}{#.}{$idx}{.} {/.}{/names}",
+      context:  { names:  ["Moe", "Larry", "Curly"] },
+      expected: "0Moe 1Larry 2Curly ",
+      message: "test array reference $idx/$len {#.} section case"
+  },
+  {
+      name:     "array reference $idx/$len nested loops",
+      source:   "{#A}A loop:{$idx}-{$len},{#B}B loop:{$idx}-{$len}C[0]={.C[0]} {/B}A loop trailing: {$idx}-{$len}{/A}",
+      context:  {"A": [ {"B": [ {"C": ["Ca1", "C2"]}, {"C": ["Ca2", "Ca22"]} ] }, {"B": [ {"C": ["Cb1", "C2"]}, {"C": ["Cb2", "Ca2"]} ] } ] },
+      expected: "A loop:0-2,B loop:0-2C[0]=Ca1 B loop:1-2C[0]=Ca2 A loop trailing: 0-2A loop:1-2,B loop:0-2C[0]=Cb1 B loop:1-2C[0]=Cb2 A loop trailing: 1-2",
+      message: "test array reference $idx/$len nested loops"
   }
 ];
 
