@@ -384,6 +384,13 @@ var helpersTests = [
       context:  { names: "Just one name" },
       expected: "Idx=0 Size=1 Just one name",
       message: "test array reference $idx/$len on single element case"
+  },
+  {
+      name:     "array reference $idx/$len {#.} section case",
+      source:   "{#names}{#.}{$idx}{.} {/.}{/names}",
+      context:  { names:  ["Moe", "Larry", "Curly"] },
+      expected: "0Moe 1Larry 2Curly ",
+      message: "test array reference $idx/$len {#.} section case"
   }
 ];
 
