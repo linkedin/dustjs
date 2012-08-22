@@ -6,7 +6,7 @@ var helpersTests = [
     expected: "Hello Mick! You have 30 new messages.",
     message: "should test a basic replace"
   },
-	{
+  {
     name:     "if helper without else",
     source:   '{@if cond="{x}<{y}"}<div> X < Y </div>{/if}',  
     context:  { x: 2, y: 3 },
@@ -40,6 +40,83 @@ var helpersTests = [
     context:  { x : 1, list: [ { y: 'foo' }, { y: 'bar'} ]},
     expected: "<div>bar</div>",
     message: "should test the if helper using $idx"
+  },
+  {
+    name:     "math helper mod numbers",
+    source:   '<div>{@math key="16" method="mod" operand="4"/}</div>',  
+    context:  {},
+    expected: "<div>0</div>",
+    message: "testing math/mod helper with two numbers"
+  },
+  {
+    name:     "math helper mod using $idx",
+    source:   '{#list}<div>{@math key="{$idx}" method="mod" operand="5"/}</div>{/list}',
+    context:  { list: [ { y: 'foo' } ]},
+    expected: "<div>0</div>",
+    message: "should test the math/mod helper using $idx"
+  },
+  {
+    name:     "math helper subtract numbers",
+    source:   '<div>{@math key="16" method="subtract" operand="4"/}</div>',
+    context:  {},
+    expected: "<div>12</div>",
+    message: "testing math/subtract helper with two numbers"
+  },
+  {
+    name:     "math helper subtract number and string",
+    source:   '<div>{@math key="16" method="subtract" operand="doh"/}</div>',
+    context:  {},
+    expected: "<div>NaN</div>",
+    message: "testing math/subtract helper with a number and a string"
+  },
+  {
+    name:     "math helper add numbers",
+    source:   '<div>{@math key="5" method="add" operand="4"/}</div>',
+    context:  {},
+    expected: "<div>9</div>",
+    message: "testing math/add helper with two numbers"
+  },
+  {
+    name:     "math helper multiply numbers",
+    source:   '<div>{@math key="5" method="multiply" operand="4"/}</div>',
+    context:  {},
+    expected: "<div>20</div>",
+    message: "testing math/multiply helper with two numbers"
+  },
+  {
+    name:     "math helper divide using variable",
+    source:   '<div>{@math key="16" method="divide" operand="{y}"/}</div>',
+    context:  { y : 4 },
+    expected: "<div>4</div>",
+    message: "testing math/divide helper with variable as operand"
+  },
+  {
+    name:     "math helper floor numbers",
+    source:   '<div>{@math key="16.5" method="floor"/}</div>',
+    context:  {},
+    expected: "<div>16</div>",
+    message: "testing math/floor helper with two numbers"
+  },
+  {
+    name:     "math helper ceil numbers",
+    source:   '<div>{@math key="16.5" method="ceil"/}</div>',
+    context:  {},
+    expected: "<div>17</div>",
+    message: "testing math/ceil helper with two numbers"
+  },
+  {
+    name:     "math helper abs numbers",
+    source:   '<div>{@math key="-16" method="abs"/}</div>',
+    context:  {},
+    expected: "<div>16</div>",
+    message: "testing math/abs helper with two numbers"
+  },
+  { 
+    name:     "math helper eq  numbers",
+    source:   '<div>{@math key="15" eq="16"/}</div>',
+    context:  {},
+    expected: "<div>false</div>",
+    message: "testing math/eq helper with two numbers"
   },
   {
     name:     "select helper with a constant string and condition eq",
@@ -234,7 +311,7 @@ var helpersTests = [
     context:  { b : { "x": "foo", "y": "bar", "z": "baz" } },
     expected: "foofoo",
     message: "should test select helper with key matching the else condition"
-  },
+  }, 
   {
     name:     "select helper inside a array with .",
     source:   ["{#skills}{@select key=.}",
@@ -258,7 +335,7 @@ var helpersTests = [
     message: "should test select helper inside a array with {.}"
   },
   {
-  	name:     "partial within a array",
+    name:     "partial within a array",
     source:   '{#n}{>replace name=. count="30"/}{@sep} {/sep}{/n}',
     context:  { n: ["Mick", "Tom", "Bob"] },
     expected: "Hello Mick! You have 30 new messages. Hello Tom! You have 30 new messages. Hello Bob! You have 30 new messages.",
