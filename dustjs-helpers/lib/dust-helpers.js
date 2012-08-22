@@ -123,6 +123,71 @@ var helpers = {
     return chunk;
   },
   
+  /**
+   * math helper
+   * @param key is the value to perform math against
+   * @param eq is the value to test for equality with key
+   * @param method is the math method we will employ
+   * in the absence of an equality test
+   * @param operand is the second value needed for
+   * operations like mod, add, subtract, etc.
+   */
+  "math": function ( chunk, context, bodies, params ) {
+    //make sure we have key and eq or method params before continuing
+    if( params && params.key && (params.eq ||  params.method) ){
+      var key  = params.key;
+      key  = this.tap(key, chunk, context);
+      if (params.eq) {
+        var eq = params.eq;
+        eq = this.tap(eq, chunk, context);
+        return chunk.write(key === eq);
+      } 
+      //we are going to operate with math methods if not equals
+      else {
+        var method = params.method;
+        var operand = params.operand || null;
+        var operError = function(){_console.log("operand is required for this math method")};
+        var returnExpression = function(exp){chunk.write( exp )};
+        if (operand) {
+          operand = this.tap(operand, chunk, context);
+        }
+        switch(method) {
+            case "mod":
+              (operand) ? returnExpression( parseFloat(key) % parseFloat(operand) ) : operError();
+              break;
+            case "add":
+              (operand) ? returnExpression( parseFloat(key) + parseFloat(operand) ) : operError();
+              break;
+            case "subtract":
+              (operand) ? returnExpression( parseFloat(key) - parseFloat(operand) ) : operError();
+              break;
+            case "multiply":
+              (operand) ? returnExpression( parseFloat(key) * parseFloat(operand) ) : operError();
+              break;
+            case "divide":
+              (operand) ? returnExpression( parseFloat(key) / parseFloat(operand) ) : operError();
+              break;
+            case "ceil": 
+              returnExpression( Math.ceil(parseFloat(key)) );
+              break;
+            case "floor":
+              returnExpression( Math.floor(parseFloat(key)) );
+              break;
+            case "abs": 
+              returnExpression( Math.abs(parseFloat(key)) );
+              break;
+            default: 
+              _console.log( "method passed is not supported" );
+        }
+      }
+    }
+    // no key parameter and no method or eq passed 
+    else {
+      _console.log( "Key is a required parameter along with eq or method/operand!" );
+    }
+    return chunk;
+  }, 
+  
    /**
    select/eq/lt/lte/gt/gte/default helper
    @param key, either a string literal value or a dust reference
