@@ -70,7 +70,7 @@ var helpers = {
   },
   
   contextDump: function(chunk, context, bodies) {
-    _console.log(JSON.stringify(context.stack));
+    _console.log(JSON.stringify(context.stack.head));
     return chunk;
   },
   
