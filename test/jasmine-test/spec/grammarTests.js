@@ -442,6 +442,13 @@ var grammarTests = [
     message: "should return a specific array element by index when element is list of primitives"
   },
   {
+    name:     "Accessing array inside a loop using the current context",
+    source:   '{#list3}{.[0].biz}{/list3}',  
+    context:  { "list3": [[ { "biz" : "123" } ], [ { "biz" : "345" } ]]},
+    expected: "123345",
+    message: "should return a specific array element using the current context"
+  },
+  {
     name:     "inline params as integer",
     source:   "{#helper foo=10 /}",
     context:  { helper: function(chunk, context, bodies, params) { return chunk.write(params.foo); } },
