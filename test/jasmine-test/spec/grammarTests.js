@@ -569,6 +569,13 @@ var grammarTests = [
               },
     expected: "Hello Foo Bar World!",
     message: "should test scope of context function"
+  },
+  {
+    name:     "preserve new lines",
+    source:   "{text_with_new_lines|s|h|pn}{~n}{text_with_new_lines}",
+    context:  { text_with_new_lines: "Hello\nWorld!\nHello\r\nWorld!" },
+    expected: "Hello<br/>World!<br/>Hello<br/>World!\nHello\nWorld!\nHello\r\nWorld!",
+    message: "should convert new lines to <br/>"
   }
 ];
 
