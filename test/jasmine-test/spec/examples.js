@@ -845,6 +845,42 @@ var dustExamples = [
     context: { "first-name": "Mick", "c": 30 },
     expected: "Hello Mick! You have 30 new messages.",
     message: "using dash should be allowed in partial's params"
+  },
+  {
+    name: "Use dash in loop",
+    source:   "{#first-names}{name}{/first-names}",
+    context:  { "first-names": [ { name: "Moe" }, { name: "Larry" }, { name: "Curly" } ] },
+    expected: "MoeLarryCurly",
+    message: "should test an array using dash in key"
+  },
+  {
+    name:     "Use dash with conditional",
+    source:   "{?tags-a}tag found!{:else}No Tags!{/tags-a}" ,
+    context:  { "tags-a": "tag" },
+    expected: "tag found!",
+    message: "should test dash in conditional tags"
+  },
+  { name:     "base_template with dash",
+    source:   "Start{~n}\n"       +
+              "{+title-t}\n"        +
+              "  Template Title\n"    +
+              "{/title-t}\n"        +
+              "{~n}\n"            +
+              "{+main-t}\n"         +
+              "  Template Content\n"  +
+              "{/main-t}\n"         +
+              "{~n}\n"            +
+              "End",
+    context:  {},
+    expected: "Start\nTemplate Title\nTemplate Content\nEnd",
+    message: "should test base template with dash"
+  },
+  {
+    name:     "child_template with dash",
+    source:   "{^xhr-n}tag not found!{:else}tag found!{/xhr-n}",              
+    context:  {"xhr": false},
+    expected: "tag not found!",
+    message: "should test child template with dash"
   }
 ];
 
