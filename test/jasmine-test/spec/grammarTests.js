@@ -22,7 +22,7 @@ var grammarTests = [
                       }, d++ * 15);
                     });
                   }
-                }
+                };
               }),
     expected: '',
     message: "should test the stream tag"
@@ -386,14 +386,14 @@ var grammarTests = [
   },
   {
     name:     "ignore extra whitespaces between opening brace plus any of (#,?,@,^,+,%) and the tag identifier",
-    source:   '{# helper foo="bar" boo="boo" } {/helper}',  
+    source:   '{# helper foo="bar" boo="boo" } {/helper}',
     context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
     expected: "boo bar",
     message: "should ignore extra whitespaces between opening brace plus any of (#,?,@,^,+,%) and the tag identifier"
   },
   {
     name:     "error: whitespaces between the opening brace and any of (#,?,@,^,+,%) is not allowed",
-    source:   '{ # helper foo="bar" boo="boo" } {/helper}',  
+    source:   '{ # helper foo="bar" boo="boo" } {/helper}',
     context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
     error: 'Expected buffer, comment, partial, reference, section or special but "{" found. At line : 1, column : 34',
     message: "should show an error for whitespces between the opening brace and any of (#,?,@,^,+,%)"
@@ -442,35 +442,35 @@ var grammarTests = [
   },
   {
     name: "whitespaces before the forward slash and the closing brace in partials supported",
-    source: '{>replace /} {>"plain" /} {>"{ref}" /}',  
+    source: '{>replace /} {>"plain" /} {>"{ref}" /}',
     context: { "name": "Jim", "count": 42, "ref": "plain" },
     expected: "Hello Jim! You have 42 new messages. Hello World! Hello World!",
     message: "should ignore extra whitespacesbefore the forward slash and the closing brace in partials"
   },
   {
     name:     "Accessing array element by index when element value is a primitive",
-    source:   '{do.re[0]}',  
+    source:   '{do.re[0]}',
     context:  { "do": { "re" : ["hello!","bye!"] } },
     expected: "hello!",
     message: "should return a specific array element by index when element value is a primitive"
   },
   {
     name:     "Accessing array by index when element value is a object",
-    source:   '{do.re[0].mi}',  
+    source:   '{do.re[0].mi}',
     context:  { "do": { "re" : [{"mi" : "hello!"},"bye!"] } },
     expected: "hello!",
     message: "should return a specific array element by index when element value is a object"
   },
   {
     name:     "Accessing array by index when element is a nested object",
-    source:   '{do.re[0].mi[1].fa}',  
+    source:   '{do.re[0].mi[1].fa}',
     context:  { "do": { "re" : [{"mi" : ["one", {"fa" : "hello!"}]},"bye!"] } },
     expected: "hello!",
     message: "should return a specific array element by index when element is a nested object"
   },
   {
     name:     "Accessing array by index when element is list of primitives",
-    source:   '{do[0]}',  
+    source:   '{do[0]}',
     context:  { "do": ["lala", "lele"] },
     expected: "lala",
     message: "should return a specific array element by index when element is list of primitives"
@@ -510,7 +510,7 @@ var grammarTests = [
               'lastname="authorlastname" ',
               'maxtext=300}',
               '{>"otherTemplate"/}',
-              '{/authors}',].join("\n"),
+              '{/authors}'].join("\n"),
     context: {},
     expected: "",
     message: "should ignore eol"
@@ -522,7 +522,7 @@ var grammarTests = [
             ' "} {/helper}'].join("\n"),
     context: {},
     expected: "",
-    message: "should ignore carriage return or tab in inline param values"   
+    message: "should ignore carriage return or tab in inline param values"
   },
   {
     name: "blocks with dynamic keys",
