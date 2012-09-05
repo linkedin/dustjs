@@ -22,7 +22,7 @@ var grammarTests = [
                       }, d++ * 15);
                     });
                   }
-                }
+                };
               }),
     expected: '',
     message: "should test the stream tag"
@@ -277,11 +277,25 @@ var grammarTests = [
     expected: "Hello Mick! You have 30 new messages.",
     message: "should test partial with inline params"
   },
+  {
+    name:     "partial with inline params tree walk up",
+    source:   '{#a}{#b}{#c}{#d}{#e}{>replace name=n count="{x}"/}{/e}{/d}{/c}{/b}{/a}',
+    context:  { n: "Mick", x: 30, a:{b:{c:{d:{e:"1"}}}} },
+    expected: "Hello Mick! You have 30 new messages.",
+    message: "should test partial with inline params tree walk up"
+  },
   {name:     "partial with inline params and context",
     source:   '{>replace:profile name="{n}" count="{c}"/}',
     context:  { profile:  { n: "Mick", c: 30 } },
     expected: "Hello Mick! You have 30 new messages.",
     message: "should test partial with inline params and context"
+  },
+  {
+    name:     "partial with inline params and context tree walk up",
+    source:   '{#profile}{#a}{#b}{#c}{#d}{#e}{>replace:profile name=n count="{x}"/}{/e}{/d}{/c}{/b}{/a}{/profile}',
+    context:  { profile:{ n: "Mick", x: 30, a:{b:{c:{d:{e:"1"}}}} } },
+    expected: "Hello Mick! You have 30 new messages.",
+    message: "should test partial with inline params and context tree walk up"
   },
   {name:     "partial with literal inline param and context",
     source:   '{>replace:profile name="Joe" count="99"/}',
@@ -352,14 +366,14 @@ var grammarTests = [
   },
   {
     name:     "ignore extra whitespaces between opening brace plus any of (#,?,@,^,+,%) and the tag identifier",
-    source:   '{# helper foo="bar" boo="boo" } {/helper}',  
+    source:   '{# helper foo="bar" boo="boo" } {/helper}',
     context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
     expected: "boo bar",
     message: "should ignore extra whitespaces between opening brace plus any of (#,?,@,^,+,%) and the tag identifier"
   },
   {
     name:     "error: whitespaces between the opening brace and any of (#,?,@,^,+,%) is not allowed",
-    source:   '{ # helper foo="bar" boo="boo" } {/helper}',  
+    source:   '{ # helper foo="bar" boo="boo" } {/helper}',
     context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
     error: 'Expected buffer, comment, partial, reference, section or special but "{" found. At line : 1, column : 34',
     message: "should show an error for whitespces between the opening brace and any of (#,?,@,^,+,%)"
@@ -408,42 +422,42 @@ var grammarTests = [
   },
   {
     name: "whitespaces before the forward slash and the closing brace in partials supported",
-    source: '{>replace /} {>"plain" /} {>"{ref}" /}',  
+    source: '{>replace /} {>"plain" /} {>"{ref}" /}',
     context: { "name": "Jim", "count": 42, "ref": "plain" },
     expected: "Hello Jim! You have 42 new messages. Hello World! Hello World!",
     message: "should ignore extra whitespacesbefore the forward slash and the closing brace in partials"
   },
   {
     name:     "Accessing array element by index when element value is a primitive",
-    source:   '{do.re[0]}',  
+    source:   '{do.re[0]}',
     context:  { "do": { "re" : ["hello!","bye!"] } },
     expected: "hello!",
     message: "should return a specific array element by index when element value is a primitive"
   },
   {
     name:     "Accessing array by index when element value is a object",
-    source:   '{do.re[0].mi}',  
+    source:   '{do.re[0].mi}',
     context:  { "do": { "re" : [{"mi" : "hello!"},"bye!"] } },
     expected: "hello!",
     message: "should return a specific array element by index when element value is a object"
   },
   {
     name:     "Accessing array by index when element is a nested object",
-    source:   '{do.re[0].mi[1].fa}',  
+    source:   '{do.re[0].mi[1].fa}',
     context:  { "do": { "re" : [{"mi" : ["one", {"fa" : "hello!"}]},"bye!"] } },
     expected: "hello!",
     message: "should return a specific array element by index when element is a nested object"
   },
   {
     name:     "Accessing array by index when element is list of primitives",
-    source:   '{do[0]}',  
+    source:   '{do[0]}',
     context:  { "do": ["lala", "lele"] },
     expected: "lala",
     message: "should return a specific array element by index when element is list of primitives"
   },
   {
     name:     "Accessing array inside a loop using the current context",
-    source:   '{#list3}{.[0].biz}{/list3}',  
+    source:   '{#list3}{.[0].biz}{/list3}',
     context:  { "list3": [[ { "biz" : "123" } ], [ { "biz" : "345" } ]]},
     expected: "123345",
     message: "should return a specific array element using the current context"
@@ -483,7 +497,7 @@ var grammarTests = [
               'lastname="authorlastname" ',
               'maxtext=300}',
               '{>"otherTemplate"/}',
-              '{/authors}',].join("\n"),
+              '{/authors}'].join("\n"),
     context: {},
     expected: "",
     message: "should ignore eol"
@@ -495,7 +509,7 @@ var grammarTests = [
             ' "} {/helper}'].join("\n"),
     context: {},
     expected: "",
-    message: "should ignore carriage return or tab in inline param values"   
+    message: "should ignore carriage return or tab in inline param values"
   },
   {
     name: "blocks with dynamic keys",
@@ -629,7 +643,7 @@ var grammarTests = [
   },
   {
     name:     "child_template with dash",
-    source:   "{^xhr-n}tag not found!{:else}tag found!{/xhr-n}",              
+    source:   "{^xhr-n}tag not found!{:else}tag found!{/xhr-n}",
     context:  {"xhr": false},
     expected: "tag not found!",
     message: "should test child template with dash"
