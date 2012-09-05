@@ -56,20 +56,6 @@ var grammarTests = [
     message: "should test an array"
   },
   {
-     name:     "array",
-     source:   "{#names}({$idx}).{title} {name}{~n}{/names}",
-     context:  { title: "Sir", names: [ { name: "Moe" }, { name: "Larry" }, { name: "Curly" } ] },
-     expected: "(0).Sir Moe\n(1).Sir Larry\n(2).Sir Curly\n",
-     message: "should test an array"
-   },
-  {
-      name:     "array",
-      source:   "{#names}Size=({$len}).{title} {name}{~n}{/names}",
-      context:  { title: "Sir", names: [ { name: "Moe" }, { name: "Larry" }, { name: "Curly" } ] },
-      expected: "Size=(3).Sir Moe\nSize=(3).Sir Larry\nSize=(3).Sir Curly\n",
-      message: "should test an array"
-  },
-  {
     name:     "empty_array",
     source:   "{#names}{title} {name}{~n}{/names}",
     context:  { title: "Sir", names: [] },
@@ -470,6 +456,13 @@ var grammarTests = [
     message: "should return a specific array element by index when element is list of primitives"
   },
   {
+    name:     "Accessing array inside a loop using the current context",
+    source:   '{#list3}{.[0].biz}{/list3}',  
+    context:  { "list3": [[ { "biz" : "123" } ], [ { "biz" : "345" } ]]},
+    expected: "123345",
+    message: "should return a specific array element using the current context"
+  },
+  {
     name:     "inline params as integer",
     source:   "{#helper foo=10 /}",
     context:  { helper: function(chunk, context, bodies, params) { return chunk.write(params.foo); } },
@@ -569,6 +562,91 @@ var grammarTests = [
     context: { "val1" : "title", "val2" : "A", "obj" : { "name" : ["A", "B"] } },
     expected: "AAA",
     message: "should test blocks with dynamic key values as arrays"
+  },
+  {
+    name:     "test that the scope of the function is correct",
+    source:   "Hello {#foo}{bar}{/foo} World!",
+    context:  {
+                foo: {
+                  foobar: 'Foo Bar',
+                  bar: function () {
+                    return this.foobar;
+                  }
+                }
+              },
+    expected: "Hello Foo Bar World!",
+    message: "should test scope of context function"
+  },
+  {
+    name:     "test that the scope of the function is correct",
+    source:   "Hello {#foo}{#bar}{.}{/bar}{/foo} World!",
+    context:  {
+                foo: {
+                  foobar: 'Foo Bar',
+                  bar: function () {
+                    return this.foobar;
+                  }
+                }
+              },
+    expected: "Hello Foo Bar World!",
+    message: "should test scope of context function"
+  },
+  {
+    name: "Use dash in key",
+    source: 'Hello {first-name}, {last-name}! You have {count} new messages.',
+    context: { "first-name": "Mick", "last-name" : "Jagger", "count": 30 },
+    expected: "Hello Mick, Jagger! You have 30 new messages.",
+    message: "using dash should be allowed in keys"
+  },
+  {
+    name: "Use dash in partial's key",
+    source: '{<title-a}foo-bar{/title-a}{+"{foo-title}-{bar-letter}"/}',
+    context: { "foo-title" : "title", "bar-letter": "a" },
+    expected: "foo-bar",
+    message: "using dash should be allowed in partial's keys"
+  },
+  {
+    name: "Use dash in partial's params",
+    source: '{>replace name=first-name count="{c}"/}',
+    context: { "first-name": "Mick", "c": 30 },
+    expected: "Hello Mick! You have 30 new messages.",
+    message: "using dash should be allowed in partial's params"
+  },
+  {
+    name: "Use dash in loop",
+    source:   "{#first-names}{name}{/first-names}",
+    context:  { "first-names": [ { name: "Moe" }, { name: "Larry" }, { name: "Curly" } ] },
+    expected: "MoeLarryCurly",
+    message: "should test an array using dash in key"
+  },
+  {
+    name:     "Use dash with conditional",
+    source:   "{?tags-a}tag found!{:else}No Tags!{/tags-a}" ,
+    context:  { "tags-a": "tag" },
+    expected: "tag found!",
+    message: "should test dash in conditional tags"
+  },
+  { name:     "base_template with dash",
+    source:   "Start{~n}\n"       +
+              "{+title-t}\n"        +
+              "  Template Title\n"    +
+              "{/title-t}\n"        +
+              "{~n}\n"            +
+              "{+main-t}\n"         +
+              "  Template Content\n"  +
+              "{/main-t}\n"         +
+              "{~n}\n"            +
+              "End",
+    context:  {},
+    expected: "Start\nTemplate Title\nTemplate Content\nEnd",
+    message: "should test base template with dash"
+  },
+  {
+    name:     "child_template with dash",
+    source:   "{^xhr-n}tag not found!{:else}tag found!{/xhr-n}",              
+    context:  {"xhr": false},
+    expected: "tag not found!",
+    message: "should test child template with dash"
   }
 ];
 

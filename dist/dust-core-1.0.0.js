@@ -160,7 +160,6 @@ Context.prototype.getPath = function(cur, down) {
       len = down.length;
 
   if (cur && len === 0) return ctx.head;
-  if (!ctx.isObject) return undefined;
   ctx = ctx.head;
   var i = 0;
   while(ctx && i < len) {
@@ -171,12 +170,6 @@ Context.prototype.getPath = function(cur, down) {
 };
 
 Context.prototype.push = function(head, idx, len) {
-  if( head ){
-   // loop index for a block section
-   head['$idx'] = idx;
-   // loop size for a block section
-   head['$len'] = len;
-  }
   return new Context(new Stack(head, this.stack, idx, len), this.global, this.blocks);
 };
 
@@ -373,7 +366,8 @@ Chunk.prototype.render = function(body, context) {
 Chunk.prototype.reference = function(elem, context, auto, filters) {
   if (typeof elem === "function") {
     elem.isReference = true;
-    elem = elem(this, context, null, {auto: auto, filters: filters});
+    // Changed the function calling to use apply with the current context to make sure that "this" is wat we expect it to be inside the function
+    elem = elem.apply(context.current(), [this, context, null, {auto: auto, filters: filters}]);
     if (elem instanceof Chunk) {
       return elem;
     }
@@ -387,7 +381,7 @@ Chunk.prototype.reference = function(elem, context, auto, filters) {
 
 Chunk.prototype.section = function(elem, context, bodies, params) {
   if (typeof elem === "function") {
-    elem = elem(this, context, bodies, params);
+    elem = elem.apply(context.current(), [this, context, bodies, params]);
     if (elem instanceof Chunk) {
       return elem;
     }
@@ -403,15 +397,26 @@ Chunk.prototype.section = function(elem, context, bodies, params) {
   if (dust.isArray(elem)) {
     if (body) {
       var len = elem.length, chunk = this;
+      context.stack.head['$len'] = len;
       for (var i=0; i<len; i++) {
+        context.stack.head['$idx'] = i;
         chunk = body(chunk, context.push(elem[i], i, len));
       }
+      context.stack.head['$idx'] = undefined;
+      context.stack.head['$len'] = undefined;
       return chunk;
     }
   } else if (elem === true) {
     if (body) return body(this, context);
   } else if (elem || elem === 0) {
-    if (body) return body(this, context.push(elem));
+    if (body) {
+      context.stack.head['$idx'] = 0;
+      context.stack.head['$len'] = 1;
+      chunk = body(this, context.push(elem));
+      context.stack.head['$idx'] = undefined;
+      context.stack.head['$len'] = undefined;
+      return chunk;
+    }
   } else if (skip) {
     return skip(this, context);
   }
@@ -563,7 +568,7 @@ dust.escapeJs = function(s) {
 
 if (typeof exports !== "undefined") {
   //TODO: Remove the helpers from dust core in the next release.
-  dust.helpers = require("../dustjs-helpers/lib/dust-helpers").helpers;
+  dust.helpers = require("./dust-helpers").helpers;
   if (typeof process !== "undefined") {
       require('./server')(dust);
   }
@@ -736,6 +741,24 @@ var helpers = {
 
   "default": function(chunk, context, bodies, params) {
     return filter(chunk, context, bodies, params, function(expected, actual) { return true; });
+  },
+  size: function( chunk, context, bodies, params ) {
+    var subject = params.subject; 
+    var value   = 0;
+    if (!subject) { //undefined, "", 0
+      value = 0;  
+    } else if(dust.isArray(subject)) { //array 
+      value = subject.length;  
+    } else if (!isNaN(subject)) { //numeric values  
+      value = subject;  
+    } else if (Object(subject) === subject) { //object test
+      var nr = 0;  
+      for(var k in subject) if(Object.hasOwnProperty.call(subject,k)) nr++;  
+        value = nr;
+    } else { 
+      value = (subject + '').length; //any other value (strings etc.)  
+    } 
+    return chunk.write(value); 
   }
 };
 

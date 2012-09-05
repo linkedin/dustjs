@@ -11,6 +11,10 @@
     {
       "name": "Veena Basavaraj",
       "email":"vbasavaraj@linkedin.com"
+    },
+    {
+      "name": "Sarah Clatterbuck",
+      "email": "sclatter@linkedin.com"
     }
   ],
   "scripts": {
@@ -24,9 +28,10 @@
     "url": "https://jairodemorais@github.com/linkedin/dustjs.git"
   },
   "keywords": ["templates", "views"],
-  "devDependencies": {
+  "dependencies": {
     "jasmine-node"   :  "1.0.x",
-    "cover"          :  "0.2.x"
+    "cover"          :  "0.2.x",
+    "uglify-js"      :  "1.3.3"
   },
   "license": "MIT",
   "engine": {

@@ -109,28 +109,33 @@ integer "integer"
   path is defined as matching a key plus one or more characters of key preceded by a dot 
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 path "path"
-  = k:key? d:(nestedKey / array)+ {
+  = k:key? d:(array_part / array)+ {
     d = d[0]; 
     if (k && d) {
       d.unshift(k);
-      return [false, d];;
+      return [false, d];
     }
     return [true, d];
   }
-  / "." { return [true, []] }
+  / "." d:(array_part / array)* {
+    if (d.length > 0) {
+      return [true, d[0]];
+    }
+    return [true, []] 
+  }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
    key is defined as a character matching a to z, upper or lower case, followed by 0 or more alphanumeric characters  
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 key "key"
-  = h:[a-zA-Z_$] t:[0-9a-zA-Z_$]*
+  = h:[a-zA-Z_$] t:[0-9a-zA-Z_$-]*
   { return h + t.join('') }
-  
-nestedKey "nestedKey"
-  = d:("." k:key {return k})+ a:(array)? { if (a) { return d.concat(a); } else { return d; } }
 
 array "array"
-  = i:("[" a:([0-9]+) "]" {return a.join('')}) nk: nestedKey? { if(nk) { nk.unshift(i); } else {nk = [i] } return nk; }
+  = i:("[" a:([0-9]+) "]" {return a.join('')}) nk: array_part? { if(nk) { nk.unshift(i); } else {nk = [i] } return nk; }
+
+array_part "array_part"
+  = d:("." k:key {return k})+ a:(array)? { if (a) { return d.concat(a); } else { return d; } }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
    inline params is defined as matching two double quotes or double quotes plus literal followed by closing double quotes or  
