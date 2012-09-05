@@ -292,31 +292,25 @@ var grammarTests = [
     message: "should test partial with inline params"
   },
   {
-    name:     "partial with inline params test",
-    source:   '{#a}{#b}{>replace name=n count="{c}"/}{/b}{/a}',
-    context:  { n: "Mick", c: 30, a:{b:"1"} },
+    name:     "partial with inline params tree walk up",
+    source:   '{#a}{#b}{#c}{#d}{#e}{>replace name=n count="{x}"/}{/e}{/d}{/c}{/b}{/a}',
+    context:  { n: "Mick", x: 30, a:{b:{c:{d:{e:"1"}}}} },
     expected: "Hello Mick! You have 30 new messages.",
-    message: "should test partial with inline params"
+    message: "should test partial with inline params tree walk up"
   },
-  // {
-    // name:     "partial with inline params tree walk up",
-    // source:   '{#d}{#e}{#f}{#g}{#h}{>replace name=n count="{c}"/}{@contextDump/}{/h}{/g}{/f}{/e}{/d}',
-    // context:  { n: "Mick", c: 30, "d": {"e": {"f":{"g": {"h": "i"}}}} },
-    // expected: "Hello Mick! You have 30 new messages.",
-    // message: "should test partial with inline params tree walk up"
-  // },
   {name:     "partial with inline params and context",
     source:   '{>replace:profile name="{n}" count="{c}"/}',
     context:  { profile:  { n: "Mick", c: 30 } },
     expected: "Hello Mick! You have 30 new messages.",
     message: "should test partial with inline params and context"
   },
-  // {name:     "partial with inline params and context tree walk up",
-    // source:   '{#d}{#e}{#f}{#g}{#h}{>replace:profile name=n count="{c}"/}{/h}{/g}{/f}{/e}{/d}',
-    // context:  { profile:  { n: "Mick", c: 30, "d": {"e": {"f":{"g": {"h": "i"}}}}}},
-    // expected: "Hello Mick! You have 30 new messages.",
-    // message: "should test partial with inline params and context tree walk up"
-  // },
+  {
+    name:     "partial with inline params and context tree walk up",
+    source:   '{#profile}{#a}{#b}{#c}{#d}{#e}{>replace:profile name=n count="{x}"/}{/e}{/d}{/c}{/b}{/a}{/profile}',
+    context:  { profile:{ n: "Mick", x: 30, a:{b:{c:{d:{e:"1"}}}} } },
+    expected: "Hello Mick! You have 30 new messages.",
+    message: "should test partial with inline params and context tree walk up"
+  },
   {name:     "partial with literal inline param and context",
     source:   '{>replace:profile name="Joe" count="99"/}',
     context:  { profile:  { n: "Mick", count: 30 } },
