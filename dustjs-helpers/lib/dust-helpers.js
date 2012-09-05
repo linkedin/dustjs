@@ -15,11 +15,6 @@ function isSelect(context) {
   return typeof value === "object" && value.isSelect === true;   
 }
 
-function isLoop(context) {
-  var value = context.get('$idx');
-  return typeof value !== "undefined";    
-}
-
 function filter(chunk, context, bodies, params, filter) {
   var params = params || {},
       actual,
@@ -31,8 +26,6 @@ function filter(chunk, context, bodies, params, filter) {
     if (context.current().isResolved) {
       filter = function() { return false; };
     }
-  } else if (isLoop(context)){
-    actual = context.get('$idx');
   } else {
     throw "No key specified for filter and no key found in context from select statement";
   }
@@ -170,16 +163,6 @@ var helpers = {
     return filter(chunk, context, bodies, params, function(expected, actual) { return actual >= expected; });
   },
 
-  mod: function(chunk, context, bodies, params) {
-    var divisor;
-    if (params && params.divisor){
-      divisor = coerce(params.divisor, 'number');
-      return filter(chunk, context, bodies, params, function(expected, actual) { return actual % divisor === expected; });
-    }else{
-      _console.log( "No divisor given in the mod helper!")
-    }
-    return chunk;
-  },
   "default": function(chunk, context, bodies, params) {
     return filter(chunk, context, bodies, params, function(expected, actual) { return true; });
   }
