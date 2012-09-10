@@ -22,7 +22,7 @@ var grammarTests = [
                       }, d++ * 15);
                     });
                   }
-                }
+                };
               }),
     expected: '',
     message: "should test the stream tag"
@@ -490,7 +490,7 @@ var grammarTests = [
               'lastname="authorlastname" ',
               'maxtext=300}',
               '{>"otherTemplate"/}',
-              '{/authors}',].join("\n"),
+              '{/authors}'].join("\n"),
     context: {},
     expected: "",
     message: "should ignore eol"
@@ -583,6 +583,27 @@ var grammarTests = [
               },
     expected: "Hello Foo Bar World!",
     message: "should test scope of context function"
+  },
+  {
+    name:     "test that deep stack functions have the correct scope",
+    source:   "{getName1}{getName2}{getName3}",
+    context:  (function(){
+                var context = dust.makeBase({
+                  name: '1Bob',
+                  getName1: function(){ return this.name;}
+                });
+                var instance = context.push({
+                  name: '2Joe',
+                  getName2: function(){ return this.name;}
+                });
+                instance = instance.push({
+                  name: '3Tim',
+                  getName3: function(){ return this.name;}
+                });
+                return instance;
+              }()),
+    expected: "1Bob2Joe3Tim",
+    message: "Should allow for deep stack functions"
   }
 ];
 
