@@ -149,6 +149,13 @@ var grammarTests = [
     message:"should test the else block"
   },
   {
+    name:   "empty_else_block",
+    source: "{#foo}full foo{:else}empty foo{/foo}",
+    context: { foo: []},
+    expected: "empty foo",
+    message: "should test else block when array empty"
+  },
+  {
     name:     "conditional",
     source:   "{?tags}\n"                     +
               "  <ul>{~n}\n"                  +
