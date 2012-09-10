@@ -42,9 +42,30 @@ var grammarTests = [
     message: "should test a basic replace"
   },
   {
-    name:     "zero",
-    source:   "{#zero}{.}{/zero}",
-    context:  { zero: 0 },
+    name:     "false value in context is treated as empty, same as undefined",
+    source:   "{false}",
+    context:  { "false": false },
+    expected: "",
+    message: "should test for false values, evaluated and prints nothing"
+  },
+  {
+    name:     "Numeric 0 value in context is treated as non empty",
+    source:   "{zero}",
+    context:  { "zero": 0 },
+    expected: "0",
+    message: "should test for numeric zero in the context, prints zero"
+  },
+  {
+    name:     "String 0 value in context is treated as non empty",
+    source:   "{zero}",
+    context:  { "zero": "0" },
+    expected: "0",
+    message: "should test for string zero in the context, prints zero"
+  },
+  {
+    name:     "one",
+    source:   "{#one}{.}{/one}",
+    context:  { one: 0 },
     expected: "0",
     message: "should test one basic section"
   },
