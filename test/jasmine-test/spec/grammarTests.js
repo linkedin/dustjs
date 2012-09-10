@@ -1,6 +1,6 @@
 var grammarTests = [
   {
-    name: "error",
+    name: "syntax error",
     source: "RRR {##}",
     context: { name: "Mick", count: 30 },
     error: 'Expected buffer, comment, partial, reference, section or special but "{" found. At line : 1, column : 5',
@@ -56,18 +56,109 @@ var grammarTests = [
     message: "should test for numeric zero in the context, prints zero"
   },
   {
+    name:     "emptyString context is treated as empty",
+    source:   "{emptyString}",
+    context:  { "emptyString": "" },
+    expected: "",
+    message: "should test emptyString, prints nothing"
+  },
+  {
+     name:     "emptyString, single quoted in context is treated as empty",
+     source:   "{emptyString}",
+     context:  { "emptyString": '' },
+     expected: "",
+     message: "should test emptyString single quoted, prints nothing"
+  },
+  {
+      name:     "null in the context treated as empty",
+      source:   "{NULL}",
+      context:  { "NULL": null },
+      expected: "",
+      message: "should test null in the context treated as empty"
+  },
+  {
+      name:     "undefined in the context treated as empty",
+      source:   "{UNDEFINED}",
+      context:   {"UNDEFINED": undefined },
+      expected: "",
+      message: "should test undefined in the context treated as empty"
+  },
+  {
+       name:     "undefined string in the context treated as non empty",
+       source:   "{UNDEFINED}",
+       context:   {"UNDEFINED": "undefined"},
+       expected: "undefined",
+       message: "should test string undefined in the context treated as non empty"
+  },
+  {
+        name:     "null is treated as empty in exists",
+        source:   "{?array}true{:else}false{/array}",
+        context:   {"array": null},
+        expected: "false",
+        message:  "null is treated as empty in exists"
+  },
+  {
+        name:     "null is treated as empty in section",
+        source:   "{#array}true{:else}false{/array}",
+        context:   {"array": null},
+        expected: "false",
+        message:  "null is treated as empty in exists"
+  },
+  {
+        name:     "empty array is treated as empty in exists",
+        source:   "{?array}true{:else}false{/array}",
+        context:   {"array": []},
+        expected: "false",
+        message:  "empty array is treated as empty in exists"
+  },
+  {
+        name:     "empty {} is treated as non empty in exists",
+        source:   "{?object}true{:else}false{/object}",
+        context:  {"object": {}},
+        expected: "true",
+        message:  "empty {} is treated as non empty in exists"
+  },
+  {
+        name:     "empty array is treated as empty in a section",
+        source:   "{#array}true{:else}false{/array}",
+        context:   {"array": []},
+        expected: "false",
+        message:  "empty array is treated as empty in a section"
+  },
+  {
+        name:     "empty {} is treated as non empty in a section",
+        source:   "{#object}true{:else}false{/object}",
+        context:  {"object": {}},
+        expected: "true",
+        message:  "empty {} is treated as non empty"
+  },
+  {
+        name:     "non-empty array in a reference",
+        source:   "{array}",
+        context:   {"array": ['1','2']},
+        expected: "1,2",
+        message: "non-empty array in a reference"
+  },
+  {
+      name:     "null string in the context treated as non empty",
+      source:   "{NULL}",
+      context:   {"NULL": "null" },
+      expected: "null",
+      message: "should test null string in the context treated as non empty"
+  },
+  {
     name:     "String 0 value in context is treated as non empty",
     source:   "{zero}",
-    context:  { "zero": "0" },
+    context:   {"zero": "0" },
     expected: "0",
     message: "should test for string zero in the context, prints zero"
   },
   {
-    name:     "one",
-    source:   "{#one}{.}{/one}",
-    context:  { one: 0 },
+    name:     "should test one basic reference",
+    source:   "{?one}{one}{/one}",
+    context:   {"one": 0 },
     expected: "0",
-    message: "should test one basic section"
+    message: "should test one basic reference"
   },
   {
     name:     "array",
@@ -307,7 +398,7 @@ var grammarTests = [
   },
   {
     name:     "partial with inline params tree walk up",
-    source:   '{#a}{#b}{#c}{#d}{#e}{>replace name=n count="{x}"/}{/e}{/d}{/c}{/b}{/a}',
+    source:   '{#a}{#b}{#c}{#d}{>replace name=n count="{x}"/}{/d}{/c}{/b}{/a}',
     context:  { n: "Mick", x: 30, a:{b:{c:{d:{e:"1"}}}} },
     expected: "Hello Mick! You have 30 new messages.",
     message: "should test partial with inline params tree walk up"
@@ -320,7 +411,7 @@ var grammarTests = [
   },
   {
     name:     "partial with inline params and context tree walk up",
-    source:   '{#profile}{#a}{#b}{#c}{#d}{#e}{>replace:profile name=n count="{x}"/}{/e}{/d}{/c}{/b}{/a}{/profile}',
+    source:   '{#profile}{#a}{#b}{#c}{#d}{>replace:profile name=n count="{x}"/}{/d}{/c}{/b}{/a}{/profile}',
     context:  { profile:{ n: "Mick", x: 30, a:{b:{c:{d:{e:"1"}}}} } },
     expected: "Hello Mick! You have 30 new messages.",
     message: "should test partial with inline params and context tree walk up"
