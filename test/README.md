@@ -43,21 +43,24 @@ Running code coverage report
 ----------------------------
 
 * follow the node server test instructions above to install dependencies
-* install our coverage tool called node-cover using npm:
+* install our coverage tool called node-cover using npm
 
         npm install cover -g
 
-* you can now use it to generate the code coverage results:
-  * run all the test and create a folder with results:
+* you can now use it to generate the code coverage results
+
+  * run all the test and create a folder with results
 
             cover run test/jasmine-test/server/specRunner.js
 
-  * show a table with % code covered, missed lines, #lines, %blocks, missed blocks and # blocks:
+  * show a table with % code covered, missed lines, #lines, %blocks, missed blocks and #blocks
 
             cover report
 
-  * create a folder the location where you run the command and the report is in html:
+  * create a folder in the location where you run the command. Inside it is the coverage report in html
 
             cover report html
 
-Cover creates one html file per js file used by the test. The lines that are not covered are shown on red.
+  * Cover creates one html file per js file used in the unit-test
+  
+  * The lines that are not covered by the unit-tests are shown on red
