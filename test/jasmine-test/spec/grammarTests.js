@@ -477,6 +477,13 @@ var grammarTests = [
     message: "Block handlers syntax should support decimal number parameters"
   },
   {
+     name:     "Invalid filter",
+     source:   "{obj|nullcheck|invalid}",
+     context:  { obj: "test" },
+     expected: "test",
+     message: "should fail gracefully for invalid filter"
+   },
+  {
     name:     "JSON.stringify filter",
     source:   "{obj|js|s}",
     context:  { obj: { id: 1, name: "bob", occupation: "construction" } },
