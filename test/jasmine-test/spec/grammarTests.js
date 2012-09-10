@@ -42,9 +42,30 @@ var grammarTests = [
     message: "should test a basic replace"
   },
   {
-    name:     "zero",
-    source:   "{#zero}{.}{/zero}",
-    context:  { zero: 0 },
+    name:     "false value in context is treated as empty, same as undefined",
+    source:   "{false}",
+    context:  { "false": false },
+    expected: "",
+    message: "should test for false values, evaluated and prints nothing"
+  },
+  {
+    name:     "Numeric 0 value in context is treated as non empty",
+    source:   "{zero}",
+    context:  { "zero": 0 },
+    expected: "0",
+    message: "should test for numeric zero in the context, prints zero"
+  },
+  {
+    name:     "String 0 value in context is treated as non empty",
+    source:   "{zero}",
+    context:  { "zero": "0" },
+    expected: "0",
+    message: "should test for string zero in the context, prints zero"
+  },
+  {
+    name:     "one",
+    source:   "{#one}{.}{/one}",
+    context:  { one: 0 },
     expected: "0",
     message: "should test one basic section"
   },
@@ -54,20 +75,6 @@ var grammarTests = [
     context:  { title: "Sir", names: [ { name: "Moe" }, { name: "Larry" }, { name: "Curly" } ] },
     expected: "Sir Moe\nSir Larry\nSir Curly\n",
     message: "should test an array"
-  },
-  {
-     name:     "array",
-     source:   "{#names}({$idx}).{title} {name}{~n}{/names}",
-     context:  { title: "Sir", names: [ { name: "Moe" }, { name: "Larry" }, { name: "Curly" } ] },
-     expected: "(0).Sir Moe\n(1).Sir Larry\n(2).Sir Curly\n",
-     message: "should test an array"
-   },
-  {
-      name:     "array",
-      source:   "{#names}Size=({$len}).{title} {name}{~n}{/names}",
-      context:  { title: "Sir", names: [ { name: "Moe" }, { name: "Larry" }, { name: "Curly" } ] },
-      expected: "Size=(3).Sir Moe\nSize=(3).Sir Larry\nSize=(3).Sir Curly\n",
-      message: "should test an array"
   },
   {
     name:     "empty_array",
@@ -291,11 +298,25 @@ var grammarTests = [
     expected: "Hello Mick! You have 30 new messages.",
     message: "should test partial with inline params"
   },
+  {
+    name:     "partial with inline params tree walk up",
+    source:   '{#a}{#b}{#c}{#d}{#e}{>replace name=n count="{x}"/}{/e}{/d}{/c}{/b}{/a}',
+    context:  { n: "Mick", x: 30, a:{b:{c:{d:{e:"1"}}}} },
+    expected: "Hello Mick! You have 30 new messages.",
+    message: "should test partial with inline params tree walk up"
+  },
   {name:     "partial with inline params and context",
     source:   '{>replace:profile name="{n}" count="{c}"/}',
     context:  { profile:  { n: "Mick", c: 30 } },
     expected: "Hello Mick! You have 30 new messages.",
     message: "should test partial with inline params and context"
+  },
+  {
+    name:     "partial with inline params and context tree walk up",
+    source:   '{#profile}{#a}{#b}{#c}{#d}{#e}{>replace:profile name=n count="{x}"/}{/e}{/d}{/c}{/b}{/a}{/profile}',
+    context:  { profile:{ n: "Mick", x: 30, a:{b:{c:{d:{e:"1"}}}} } },
+    expected: "Hello Mick! You have 30 new messages.",
+    message: "should test partial with inline params and context tree walk up"
   },
   {name:     "partial with literal inline param and context",
     source:   '{>replace:profile name="Joe" count="99"/}',
@@ -366,14 +387,14 @@ var grammarTests = [
   },
   {
     name:     "ignore extra whitespaces between opening brace plus any of (#,?,@,^,+,%) and the tag identifier",
-    source:   '{# helper foo="bar" boo="boo" } {/helper}',  
+    source:   '{# helper foo="bar" boo="boo" } {/helper}',
     context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
     expected: "boo bar",
     message: "should ignore extra whitespaces between opening brace plus any of (#,?,@,^,+,%) and the tag identifier"
   },
   {
     name:     "error: whitespaces between the opening brace and any of (#,?,@,^,+,%) is not allowed",
-    source:   '{ # helper foo="bar" boo="boo" } {/helper}',  
+    source:   '{ # helper foo="bar" boo="boo" } {/helper}',
     context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
     error: 'Expected buffer, comment, partial, reference, section or special but "{" found. At line : 1, column : 34',
     message: "should show an error for whitespces between the opening brace and any of (#,?,@,^,+,%)"
@@ -422,38 +443,45 @@ var grammarTests = [
   },
   {
     name: "whitespaces before the forward slash and the closing brace in partials supported",
-    source: '{>replace /} {>"plain" /} {>"{ref}" /}',  
+    source: '{>replace /} {>"plain" /} {>"{ref}" /}',
     context: { "name": "Jim", "count": 42, "ref": "plain" },
     expected: "Hello Jim! You have 42 new messages. Hello World! Hello World!",
     message: "should ignore extra whitespacesbefore the forward slash and the closing brace in partials"
   },
   {
     name:     "Accessing array element by index when element value is a primitive",
-    source:   '{do.re[0]}',  
+    source:   '{do.re[0]}',
     context:  { "do": { "re" : ["hello!","bye!"] } },
     expected: "hello!",
     message: "should return a specific array element by index when element value is a primitive"
   },
   {
     name:     "Accessing array by index when element value is a object",
-    source:   '{do.re[0].mi}',  
+    source:   '{do.re[0].mi}',
     context:  { "do": { "re" : [{"mi" : "hello!"},"bye!"] } },
     expected: "hello!",
     message: "should return a specific array element by index when element value is a object"
   },
   {
     name:     "Accessing array by index when element is a nested object",
-    source:   '{do.re[0].mi[1].fa}',  
+    source:   '{do.re[0].mi[1].fa}',
     context:  { "do": { "re" : [{"mi" : ["one", {"fa" : "hello!"}]},"bye!"] } },
     expected: "hello!",
     message: "should return a specific array element by index when element is a nested object"
   },
   {
     name:     "Accessing array by index when element is list of primitives",
-    source:   '{do[0]}',  
+    source:   '{do[0]}',
     context:  { "do": ["lala", "lele"] },
     expected: "lala",
     message: "should return a specific array element by index when element is list of primitives"
+  },
+  {
+    name:     "Accessing array inside a loop using the current context",
+    source:   '{#list3}{.[0].biz}{/list3}',
+    context:  { "list3": [[ { "biz" : "123" } ], [ { "biz" : "345" } ]]},
+    expected: "123345",
+    message: "should return a specific array element using the current context"
   },
   {
     name:     "inline params as integer",
@@ -469,6 +497,13 @@ var grammarTests = [
     expected: "3.14159",
     message: "Block handlers syntax should support decimal number parameters"
   },
+  {
+     name:     "Invalid filter",
+     source:   "{obj|nullcheck|invalid}",
+     context:  { obj: "test" },
+     expected: "test",
+     message: "should fail gracefully for invalid filter"
+   },
   {
     name:     "JSON.stringify filter",
     source:   "{obj|js|s}",
@@ -502,7 +537,7 @@ var grammarTests = [
             ' "} {/helper}'].join("\n"),
     context: {},
     expected: "",
-    message: "should ignore carriage return or tab in inline param values"   
+    message: "should ignore carriage return or tab in inline param values"
   },
   {
     name: "blocks with dynamic keys",
@@ -583,6 +618,63 @@ var grammarTests = [
               },
     expected: "Hello Foo Bar World!",
     message: "should test scope of context function"
+  },
+  {
+    name: "Use dash in key",
+    source: 'Hello {first-name}, {last-name}! You have {count} new messages.',
+    context: { "first-name": "Mick", "last-name" : "Jagger", "count": 30 },
+    expected: "Hello Mick, Jagger! You have 30 new messages.",
+    message: "using dash should be allowed in keys"
+  },
+  {
+    name: "Use dash in partial's key",
+    source: '{<title-a}foo-bar{/title-a}{+"{foo-title}-{bar-letter}"/}',
+    context: { "foo-title" : "title", "bar-letter": "a" },
+    expected: "foo-bar",
+    message: "using dash should be allowed in partial's keys"
+  },
+  {
+    name: "Use dash in partial's params",
+    source: '{>replace name=first-name count="{c}"/}',
+    context: { "first-name": "Mick", "c": 30 },
+    expected: "Hello Mick! You have 30 new messages.",
+    message: "using dash should be allowed in partial's params"
+  },
+  {
+    name: "Use dash in loop",
+    source:   "{#first-names}{name}{/first-names}",
+    context:  { "first-names": [ { name: "Moe" }, { name: "Larry" }, { name: "Curly" } ] },
+    expected: "MoeLarryCurly",
+    message: "should test an array using dash in key"
+  },
+  {
+    name:     "Use dash with conditional",
+    source:   "{?tags-a}tag found!{:else}No Tags!{/tags-a}" ,
+    context:  { "tags-a": "tag" },
+    expected: "tag found!",
+    message: "should test dash in conditional tags"
+  },
+  { name:     "base_template with dash",
+    source:   "Start{~n}\n"       +
+              "{+title-t}\n"        +
+              "  Template Title\n"    +
+              "{/title-t}\n"        +
+              "{~n}\n"            +
+              "{+main-t}\n"         +
+              "  Template Content\n"  +
+              "{/main-t}\n"         +
+              "{~n}\n"            +
+              "End",
+    context:  {},
+    expected: "Start\nTemplate Title\nTemplate Content\nEnd",
+    message: "should test base template with dash"
+  },
+  {
+    name:     "child_template with dash",
+    source:   "{^xhr-n}tag not found!{:else}tag found!{/xhr-n}",
+    context:  {"xhr": false},
+    expected: "tag not found!",
+    message: "should test child template with dash"
   },
   {
     name:     "test that deep stack functions have the correct scope",
