@@ -245,7 +245,14 @@ var grammarTests = [
     context:  { foo: true, bar: false },
     expected: "",
     message:"should test scalar values true and false are not supported in # nor else blocks"
-  },
+  },  
+  {
+     name:   ". creating a block and use it to set aliases",
+     source: "{#. test=\"you\"}{name} {test}{/.}",
+     context: { name: "me"},
+     expected: "me you",
+     message: ". creating a block"
+   },
   {
     name:   "empty_else_block",
     source: "{#foo}full foo{:else}empty foo{/foo}",
