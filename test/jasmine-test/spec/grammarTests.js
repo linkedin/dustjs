@@ -46,14 +46,14 @@ var grammarTests = [
     source:   "{false}",
     context:  { "false": false },
     expected: "",
-    message: "should test for false values, evaluated and prints nothing"
+    message: "should test for false in the context, evaluated and prints nothing"
   },
   {
-    name:     "Numeric 0 value in context is treated as non empty",
+    name:     "numeric 0 value in context is treated as non empty",
     source:   "{zero}",
     context:  { "zero": 0 },
     expected: "0",
-    message: "should test for numeric zero in the context, prints zero"
+    message: "should test for numeric zero in the context, prints the numeric zero"
   },
   {
     name:     "emptyString context is treated as empty",
@@ -88,37 +88,79 @@ var grammarTests = [
        source:   "{UNDEFINED}",
        context:   {"UNDEFINED": "undefined"},
        expected: "undefined",
-       message: "should test string undefined in the context treated as non empty"
+       message: "should test string undefined in the context as non empty"
   },
   {
         name:     "null is treated as empty in exists",
-        source:   "{?array}true{:else}false{/array}",
-        context:   {"array": null},
+        source:   "{?scalar}true{:else}false{/scalar}",
+        context:   {"scalar": null},
         expected: "false",
-        message:  "null is treated as empty in exists"
+        message:  "should test null as empty in exists section"
   },
   {
-        name:     "do not allow # section for scalar null value",
-        source:   "{#array}true{:else}false{/array}",
-        context:   {"array": null},
-        expected: "",
-        message:  "do not allow #section for scalar null value"
+        name:     "undefined is treated as empty in exists",
+        source:   "{?scalar}true{:else}false{/scalar}",
+        context:   {"scalar": undefined},
+        expected: "false",
+        message:  "should test null treated as empty in exists"
   },
   {
-         name:     "do not allow # section for scalar false value",
-         source:   "{#array}true{:else}false{/array}",
-         context:   {"array": false},
-         expected: "",
-         message:  "do not allow #section for scalar false value"
+         name:     "null is treated as truthy in not exists",
+         source:   "{^scalar}true{:else}false{/scalar}",
+         context:   {"scalar": null},
+         expected: "true",
+         message:  "should test null as truthy in not exists"
    },
-  {
+   {
+           name:     "undefined is treated as truthy in not exists",
+           source:   "{^scalar}true{:else}false{/scalar}",
+           context:   {"scalar": undefined},
+           expected: "true",
+           message:  "should test undefined as truthy in not exists"
+   },
+   {
+         name:     "undefined is treated as empty in exists",
+         source:   "{?scalar}true{:else}false{/scalar}",
+         context:   {"scalar": undefined},
+         expected: "false",
+         message:  "should test null treated as empty in exists"
+   },
+   {
+        name:     "scalar null in a # section",
+        source:   "{#scalar}true{:else}false{/scalar}",
+        context:   {"scalar": null},
+        expected: "false",
+        message:  "should test for a scalar null in a # section"
+   },
+   {
+         name:     "scalar numeric 0 in a # section",
+         source:   "{#scalar}true{:else}false{/scalar}",
+         context:   {"scalar": 0},
+         expected: "true",
+         message:  "should test for a scalar numeric 0 in a # section"
+   },
+   {
+          name:     "missing scalar value",
+          source:   "{#scalar}true{:else}false{/scalar}",
+          context:   {"foo": 0},
+          expected: "false",
+          message:  "should test a missing/undefined scalar value"
+   },
+   {
+         name:     "scalar false value in the # section",
+         source:   "{#scalar}true{:else}false{/scalar}",
+         context:   {"scalar": false},
+         expected: "false",
+         message:  "shoud test for scalar false value in the # section"
+   },
+   {
         name:     "empty array is treated as empty in exists",
         source:   "{?array}true{:else}false{/array}",
         context:   {"array": []},
         expected: "false",
         message:  "empty array is treated as empty in exists"
-  },
-  {
+   },
+   {
         name:     "empty {} is treated as non empty in exists",
         source:   "{?object}true{:else}false{/object}",
         context:  {"object": {}},
@@ -231,7 +273,7 @@ var grammarTests = [
     message: "should test escape_pragma"
   },
   {
-    name:     "Scalar values true and false are not supported in # nor else blocks ",
+    name:     "scalar values true and false are supported in # nor else blocks ",
     source:   "{#foo}\n"         +
               "  foo,{~s}\n"     +
               "{:else}\n"        +
@@ -243,8 +285,8 @@ var grammarTests = [
               "  not bar!\n"     +
               "{/bar}",
     context:  { foo: true, bar: false },
-    expected: "",
-    message:"should test scalar values true and false are not supported in # nor else blocks"
+    expected: "foo, not bar!",
+    message:"should test scalar values true and false are supported in # nor else blocks"
   },  
   {
      name:   ". creating a block and use it to set aliases",
