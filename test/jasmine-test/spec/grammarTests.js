@@ -98,12 +98,19 @@ var grammarTests = [
         message:  "null is treated as empty in exists"
   },
   {
-        name:     "null is treated as empty in section",
+        name:     "do not allow # section for scalar null value",
         source:   "{#array}true{:else}false{/array}",
         context:   {"array": null},
-        expected: "false",
-        message:  "null is treated as empty in exists"
+        expected: "",
+        message:  "do not allow #section for scalar null value"
   },
+  {
+         name:     "do not allow # section for scalar false value",
+         source:   "{#array}true{:else}false{/array}",
+         context:   {"array": false},
+         expected: "",
+         message:  "do not allow #section for scalar false value"
+   },
   {
         name:     "empty array is treated as empty in exists",
         source:   "{?array}true{:else}false{/array}",
@@ -224,7 +231,7 @@ var grammarTests = [
     message: "should test escape_pragma"
   },
   {
-    name:     "else_block",
+    name:     "Scalar values true and false are not supported in # nor else blocks ",
     source:   "{#foo}\n"         +
               "  foo,{~s}\n"     +
               "{:else}\n"        +
@@ -236,8 +243,8 @@ var grammarTests = [
               "  not bar!\n"     +
               "{/bar}",
     context:  { foo: true, bar: false },
-    expected: "foo, not bar!",
-    message:"should test the else block"
+    expected: "",
+    message:"should test scalar values true and false are not supported in # nor else blocks"
   },
   {
     name:   "empty_else_block",
