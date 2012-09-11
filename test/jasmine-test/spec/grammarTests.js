@@ -704,20 +704,6 @@ var grammarTests = [
     message: "should test scope of context function"
   },
   {
-    name:     "test that the scope of the function is correct",
-    source:   "Hello {#foo}{#bar}{.}{/bar}{/foo} World!",
-    context:  {
-                foo: {
-                  foobar: 'Foo Bar',
-                  bar: function () {
-                    return this.foobar;
-                  }
-                }
-              },
-    expected: "Hello Foo Bar World!",
-    message: "should test scope of context function"
-  },
-  {
     name: "Use dash in key",
     source: 'Hello {first-name}, {last-name}! You have {count} new messages.',
     context: { "first-name": "Mick", "last-name" : "Jagger", "count": 30 },
