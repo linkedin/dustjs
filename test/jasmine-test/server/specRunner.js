@@ -4,7 +4,7 @@ var jasmine = require('jasmine-node'),
 
 /* this should be declared global in order to access them in the spec*/
 dust = require('../../../lib/dust'),
-grammarTests = require('../spec/grammarTests');
+coreTests = require('../spec/coreTests');
 
 for(key in jasmine) 
   global[key] = jasmine[key];
