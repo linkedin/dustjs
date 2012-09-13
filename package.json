@@ -1,6 +1,6 @@
 {
   "name": "dustjs-linkedin",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "Aleksander Williams",
   "description": "Asynchronous templates for the browser and node.js",
   "contributors": [
@@ -15,6 +15,14 @@
     {
       "name": "Sarah Clatterbuck",
       "email": "sclatter@linkedin.com"
+    },
+    {
+      "name": "Jimmy Chan",
+      "email": "jchan@linkedin.com"
+    },
+    {
+      "name": "Richard Ragan",
+      "email": "rragan@ebay.com"
     }
   ],
   "scripts": {
@@ -25,7 +33,7 @@
   "main": "./lib/dust",
   "repository": {
     "type": "git",
-    "url": "https://jairodemorais@github.com/linkedin/dustjs.git"
+    "url": "https://github.com/linkedin/dustjs.git"
   },
   "keywords": ["templates", "views"],
   "dependencies": {
