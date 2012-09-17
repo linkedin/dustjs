@@ -41,7 +41,7 @@ Leaving jsps in the Dust</a></p>
 Dust for client templates at LinkedIn  
 </a> </p>
 
-<p>We will gradually be extending this library with helper functions and bug fixes. </p>
+<p>We will gradually be extending this library with core feature enhancements, helper functions and bug fixes. </p>
 
 
 <h2>Dust Highlights!</h2>
@@ -64,33 +64,61 @@ Dust for client templates at LinkedIn
 
 <h3>Release 1.0</h3>
 
+<h4>Core enhancements</h4>
 <ul>
-<li>Fix to peg.js to print the line and column number for syntax errors in dust templates</li>
-<li>Fix to support &gt; node0.4 </li>
-<li>Addition of jasmine test suite, BDD with Dust </li>
-<li>There are cases of rendering logic that are best done in templates. The if helper that relies entirely on the js eval for expression evaluation, The perf results are here: <a href="http://jsperf.com/dust-if">http://jsperf.com/dust-if</a>. 
-We intend to replace the slow js eval with a expression parser soon </li>
-<li>Section index for lists of maps stored in the dust context for ease of writing simple logic in templates</li>
-<li>Section size for lists of maps stored in the dust context for ease of  writing simple logic in templates</li>
-<li>Automated Travis CI integration, jasmine for BDD, code coverage report</li>
-<li>Extend grammar to relax whitespace/eol </li>
-<li>Add support for rhino in the dust core</li>
-<li>improve compile times by 10X with changes to how we use peg parser</li>
-<li>Extend filters for JSON.stringify and JSON.parse</li>
-<li>logic helpers for select/ switch</li>
-<li>Support numbers in the inline params</li>
 <li>Extend partials to support inline params</li>
+<li>Section index for lists of objects,$idx in the context</li>
+<li>Section size/length for lists of objects, $len in the context</li>
+<li>Extend grammar to relax whitespace/eol </li>
+<li>Support numbers in the inline params</li>
 <li>Support for array references, hence list elements can be accessed via the [] notation</li>
 <li>Support dynamic blocks, similar to dynamic partials</li>
-<li>Add pipe support for node</li>
+<li>Add pipe support for Node.js</li>
+<li>Add support for rhino in the dust core</li>
+<li>Extend filters for JSON.stringify and JSON.parse</li>
+<li>Jasmine for unit tests</li>
+<li>Travis CI for continuos build and Cover for code coverage report</li>
 <li>Documentation/wiki on the best practices for using Dust</li>
+
+
+<h4>Bug fixes/ perf improvements</h4>
+<ul>
+<li>Fix to support &gt; node0.4 </li>
+<li>Fix to peg.js to print the line and column number for syntax errors in dust templates</li>
+<li>Improved compile times by 10X by optimizing the way we used the peg parser</li>
 </ul>
+
+<h4>Extensions and helpers </h4>
+<ul>
+<li>Simple logic/branching helpers with @select/ @eq/ @lt etc</li>
+<li> versatile @if helper relies on the eval for complex expression evaluation, Here are the perf results for eval <a href="http://jsperf.com/dust-if">http://jsperf.com/dust-if</a>.  Use with caution, since eval is known to be slow.
+</ul>
+
 
 <h3>Release 1.1</h3>
 
+
+<h4>Core enhancements</h4>
 <ul>
-  <li> TODO </li>
+<li>Extend </li>
+
+
+<h4>Bug fixes/ perf improvements</h4>
+<ul>
+<li>Fix the #section block on how it behaves with empty []. Maintain consistency between ?, # and ^ for truthy/falsy evaluations </li>
+<li>Fix the #section block to support $idx and $len for lists of primitives </li>
 </ul>
+
+<h4>Extensions and helpers </h4>
+<ul>
+<li>@math for simple math operations such as add/subtract/mod/ceil etc. It also supports branching based on the output of math operation</li>
+<li>@size helper for determining the size of lists/objects/primitives</li>
+<li>@contextDump helper for debugging the current context in the dust stack</li>
+</ul>
+
+
+
+
 
 <h2>Dust Quick Tutorial</h2>
 
