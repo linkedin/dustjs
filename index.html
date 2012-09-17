@@ -62,9 +62,9 @@ Dust for client templates at LinkedIn
 
 
 <h2>Dust Quick Tutorial</h2>
-
+<p>
 <a href="https://github.com/linkedin/dustjs/wiki/Dust-Tutorial">Learn how to use LinkedIn fork of Dust</a>
-
+</p>
 
 
 <h2>LinkedIn additions include:</h2>
@@ -73,19 +73,18 @@ Dust for client templates at LinkedIn
 
 <h4>Core enhancements</h4>
 <ul>
-<li>Extend partials to support inline params</li>
+<li>Extend partials to support inline params like #sections</li>
 <li>Section index for lists of objects,$idx in the context</li>
 <li>Section size/length for lists of objects, $len in the context</li>
-<li>Extend grammar to relax whitespace/eol </li>
+<li>Extend grammar to relax whitespace/eol for certain Dust tags</li>
 <li>Support numbers in the inline params</li>
 <li>Extend core support for accessing single dimensional array with [] notation</li>
 <li>Support dynamic blocks, similar to dynamic partials</li>
 <li>Add pipe support for Node.js</li>
-<li>Add support for rhino in the dust core</li>
+<li>Add support for runnin on V8/rhino</li>
 <li>Extend filters for JSON.stringify and JSON.parse</li>
 <li>Jasmine for unit tests</li>
 <li>Travis CI for continuos build and Cover for code coverage report</li>
-<li>Documentation/wiki on the best practices for using Dust</li>
 </ul>
 
 <h4>Bug fixes/ perf improvements</h4>
@@ -108,7 +107,7 @@ Dust for client templates at LinkedIn
 <h4>Core enhancements</h4>
 <ul>
 <li>Extend the #section block to support $idx and $len for lists of primitives </li>
-<li>Add support in assigning multiple event-listeners on stream</li>
+<li>Add support for assigning multiple event-listeners on stream</li>
 </ul>
 
 <h4>Bug fixes/ perf improvements</h4>
@@ -120,11 +119,10 @@ Dust for client templates at LinkedIn
 
 <h4>Extensions and helpers </h4>
 <ul>
-<li>helpers are now in its own node package></li>
+<li>helpers are now in its own node package</li>
 <li>@math for simple math operations such as add/subtract/mod/ceil etc. It also supports branching based on the output of math operation</li>
 <li>@size helper for determining the size of lists/objects/primitives</li>
 <li>@contextDump helper for debugging the current context in the dust stack</li>
-
 </ul>
 
 
@@ -196,8 +194,9 @@ If the files are not there, you can generate those youself using this make targe
 
 
 <h2>Guidelines - Contributing to LinkedIn Dust</h2>
+<p><a href="https://github.com/linkedin/dustjs/wiki/How-to-Contribute">If you love to contribute to this fork</a>
+</p>
 
-<a href="https://github.com/linkedin/dustjs/wiki/How-to-Contribute">If you love to contribute to this fork</a>
 
 
 
