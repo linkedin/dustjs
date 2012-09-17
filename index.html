@@ -60,6 +60,13 @@ Dust for client templates at LinkedIn
   <li> Take a look to the dust coverage <a href="http://linkedin.github.com/dustjs/cover_html/index.html">here</a></li>
 </ul>
 
+
+<h2>Dust Quick Tutorial</h2>
+
+<a href="https://github.com/linkedin/dustjs/wiki/Dust-Tutorial">Learn how to use LinkedIn fork of Dust</a>
+
+
+
 <h2>LinkedIn additions include:</h2>
 
 <h3>Release 1.0</h3>
@@ -71,7 +78,7 @@ Dust for client templates at LinkedIn
 <li>Section size/length for lists of objects, $len in the context</li>
 <li>Extend grammar to relax whitespace/eol </li>
 <li>Support numbers in the inline params</li>
-<li>Support for array references, hence list elements can be accessed via the [] notation</li>
+<li>Extend core support for accessing single dimensional array with [] notation</li>
 <li>Support dynamic blocks, similar to dynamic partials</li>
 <li>Add pipe support for Node.js</li>
 <li>Add support for rhino in the dust core</li>
@@ -79,7 +86,7 @@ Dust for client templates at LinkedIn
 <li>Jasmine for unit tests</li>
 <li>Travis CI for continuos build and Cover for code coverage report</li>
 <li>Documentation/wiki on the best practices for using Dust</li>
-
+</ul>
 
 <h4>Bug fixes/ perf improvements</h4>
 <ul>
@@ -91,7 +98,7 @@ Dust for client templates at LinkedIn
 <h4>Extensions and helpers </h4>
 <ul>
 <li>Simple logic/branching helpers with @select/ @eq/ @lt etc</li>
-<li> versatile @if helper relies on the eval for complex expression evaluation, Here are the perf results for eval <a href="http://jsperf.com/dust-if">http://jsperf.com/dust-if</a>.  Use with caution, since eval is known to be slow.
+<li>Versatile @if helper relies on the eval for complex expression evaluation, Here are the perf results for eval <a href="http://jsperf.com/dust-if">http://jsperf.com/dust-if</a>.  Use with caution, since eval is known to be slow.
 </ul>
 
 
@@ -100,29 +107,25 @@ Dust for client templates at LinkedIn
 
 <h4>Core enhancements</h4>
 <ul>
-<li>Extend </li>
-
+<li>Extend the #section block to support $idx and $len for lists of primitives </li>
+<li>Add support in assigning multiple event-listeners on stream</li>
+</ul>
 
 <h4>Bug fixes/ perf improvements</h4>
 <ul>
-<li>Fix the #section block on how it behaves with empty []. Maintain consistency between ?, # and ^ for truthy/falsy evaluations </li>
-<li>Fix the #section block to support $idx and $len for lists of primitives </li>
+<li>Fix the #section block on how it behaves with empty arrays. Maintain consistency between ?, # and ^ for truthy/falsy evaluations </li>
+<li>Fix "this" value in anonymous functions passed into the context object</li>
+<li>Handle undefined filters and helpers gracefully</li>
 </ul>
 
 <h4>Extensions and helpers </h4>
 <ul>
+<li>helpers are now in its own node package></li>
 <li>@math for simple math operations such as add/subtract/mod/ceil etc. It also supports branching based on the output of math operation</li>
 <li>@size helper for determining the size of lists/objects/primitives</li>
 <li>@contextDump helper for debugging the current context in the dust stack</li>
+
 </ul>
-
-
-
-
-
-<h2>Dust Quick Tutorial</h2>
-
-<a href="https://github.com/linkedin/dustjs/wiki/Dust-Tutorial">Learn how to use Dust</a>
 
 
 
