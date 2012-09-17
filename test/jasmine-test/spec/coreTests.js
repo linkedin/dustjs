@@ -815,7 +815,21 @@ var coreTests = [
     context:  {"xhr": false},
     expected: "tag not found!",
     message: "should test child template with dash"
-  }
+  },
+  {
+    name: "using idx in array reference Accessing",
+    source: "{#list4} {name} {number[$idx]} {$idx}{/list4}",
+    context: { list4: [ {name:"Dog", number: [1,2,3]}, {name:"Cat", number: [4,5,6]}] },
+    expected: " Dog 1 0 Cat 5 1",
+    message: "should test the array reference access with idx"
+  },
+  {
+    name: "using idx in array reference Accessing",
+    source: "{#list3}{.[$idx].biz}{/list3}",
+    context: { "list3": [[ { "biz" : "123" } ], [ { "biz" : "345" }, { "biz" : "456" } ]]},
+    expected: "123456",
+    message: "should test the array reference access with idx and current context"
+  },
 ];
 
 if (typeof module !== "undefined" && typeof require !== "undefined") {

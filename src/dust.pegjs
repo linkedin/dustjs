@@ -132,7 +132,7 @@ key "key"
   { return h + t.join('') }
 
 array "array"
-  = i:("[" a:([0-9]+) "]" {return a.join('')}) nk: array_part? { if(nk) { nk.unshift(i); } else {nk = [i] } return nk; }
+  = i:( lb a:( n:([0-9]+) {return n.join('')} / identifier) rb  {return a; }) nk: array_part? { if(nk) { nk.unshift(i); } else {nk = [i] } return nk; }
 
 array_part "array_part"
   = d:("." k:key {return k})+ a:(array)? { if (a) { return d.concat(a); } else { return d; } }
@@ -185,6 +185,12 @@ ld
 
 rd
   = "}"
+
+lb
+  = "["
+
+rb
+  = "]"
 
 eol 
   = "\n"        //line feed
