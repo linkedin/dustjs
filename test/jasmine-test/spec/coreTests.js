@@ -315,7 +315,7 @@ var coreTests = [
     context:  { foo: true, bar: false },
     expected: "foo, not bar!",
     message:"should test scalar values true and false are supported in # nor else blocks"
-  },  
+  },
   {
      name:   ". creating a block and use it to set aliases",
      source: "{#. test=\"you\"}{name} {test}{/.}",
@@ -788,7 +788,7 @@ var coreTests = [
     message: "should test scope of context function"
   },
   {
-    name: "test that the scope of the function is correct",
+    name: "test that the scope of the function is correct and that a non-chunk return value is used for truthiness checks",
     source: "Hello {#foo}{#bar}{.}{/bar}{/foo} World!",
     context: {
                foo: {
@@ -800,6 +800,28 @@ var coreTests = [
              },
     expected: "Hello Foo Bar World!",
     message: "should test scope of context function"
+  },
+  {
+    name: "test that function that do not return chunk and return falsy are treated as falsy",
+    source: "{#bar}{.}{:else}false{/bar}",
+    context: {
+               bar: function () {
+                 return false;
+               }
+             },
+    expected: "false",
+    message: "should functions that return false are falsy"
+  },
+  {
+    name: "test that function that do not return chunk and return 0 are treated as truthy (in the Dust sense)",
+    source: "{#bar}{.}{:else}false{/bar}",
+    context: {
+               bar: function () {
+                 return 0;
+               }
+             },
+    expected: "0",
+    message: "should functions that return 0 are truthy"
   },
   {
     name: "Use dash in key",
