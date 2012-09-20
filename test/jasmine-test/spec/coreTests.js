@@ -140,11 +140,39 @@ var coreTests = [
          message:  "should test for a scalar numeric 0 in a # section"
    },
    {
+         name:     "scalar numeric non-zero in a # section",
+         source:   "{#scalar}true{:else}false{/scalar}",
+         context:   {"scalar": 42},
+         expected: "true",
+         message:  "should test for a scalar numeric non-zero in a # section"
+   },
+   {
+         name:     "scalar non empty string in a # section",
+         source:   "{#scalar}true{:else}false{/scalar}",
+         context:   {"scalar": 'abcde'},
+         expected: "true",
+         message:  "should test for a scalar string in a # section"
+   },
+   {
+         name:     "scalar non empty string in a # section",
+         source:   "{#scalar}{.}{:else}false{/scalar}",
+         context:   {"scalar": 'abcde'},
+         expected: "abcde",
+         message:  "should test for a scalar string in a # section"
+   },
+   {
           name:     "missing scalar value",
           source:   "{#scalar}true{:else}false{/scalar}",
           context:   {"foo": 0},
           expected: "false",
           message:  "should test a missing/undefined scalar value"
+   },
+   {
+         name:     "scalar true value in the # section",
+         source:   "{#scalar}true{:else}false{/scalar}",
+         context:   {"scalar": true},
+         expected: "true",
+         message:  "shoud test for scalar true value in the # section"
    },
    {
          name:     "scalar false value in the # section",
@@ -287,7 +315,7 @@ var coreTests = [
     context:  { foo: true, bar: false },
     expected: "foo, not bar!",
     message:"should test scalar values true and false are supported in # nor else blocks"
-  },  
+  },
   {
      name:   ". creating a block and use it to set aliases",
      source: "{#. test=\"you\"}{name} {test}{/.}",
@@ -758,6 +786,42 @@ var coreTests = [
               },
     expected: "Hello Foo Bar World!",
     message: "should test scope of context function"
+  },
+  {
+    name: "test that the scope of the function is correct and that a non-chunk return value is used for truthiness checks",
+    source: "Hello {#foo}{#bar}{.}{/bar}{/foo} World!",
+    context: {
+               foo: {
+                 foobar: 'Foo Bar',
+                 bar: function () {
+                   return this.foobar;
+                 }
+               }
+             },
+    expected: "Hello Foo Bar World!",
+    message: "should test scope of context function"
+  },
+  {
+    name: "test that function that do not return chunk and return falsy are treated as falsy",
+    source: "{#bar}{.}{:else}false{/bar}",
+    context: {
+               bar: function () {
+                 return false;
+               }
+             },
+    expected: "false",
+    message: "should functions that return false are falsy"
+  },
+  {
+    name: "test that function that do not return chunk and return 0 are treated as truthy (in the Dust sense)",
+    source: "{#bar}{.}{:else}false{/bar}",
+    context: {
+               bar: function () {
+                 return 0;
+               }
+             },
+    expected: "0",
+    message: "should functions that return 0 are truthy"
   },
   {
     name: "Use dash in key",
