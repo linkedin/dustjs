@@ -140,11 +140,39 @@ var coreTests = [
          message:  "should test for a scalar numeric 0 in a # section"
    },
    {
+         name:     "scalar numeric non-zero in a # section",
+         source:   "{#scalar}true{:else}false{/scalar}",
+         context:   {"scalar": 42},
+         expected: "true",
+         message:  "should test for a scalar numeric non-zero in a # section"
+   },
+   {
+         name:     "scalar non empty string in a # section",
+         source:   "{#scalar}true{:else}false{/scalar}",
+         context:   {"scalar": 'abcde'},
+         expected: "true",
+         message:  "should test for a scalar string in a # section"
+   },
+   {
+         name:     "scalar non empty string in a # section",
+         source:   "{#scalar}{.}{:else}false{/scalar}",
+         context:   {"scalar": 'abcde'},
+         expected: "abcde",
+         message:  "should test for a scalar string in a # section"
+   },
+   {
           name:     "missing scalar value",
           source:   "{#scalar}true{:else}false{/scalar}",
           context:   {"foo": 0},
           expected: "false",
           message:  "should test a missing/undefined scalar value"
+   },
+   {
+         name:     "scalar true value in the # section",
+         source:   "{#scalar}true{:else}false{/scalar}",
+         context:   {"scalar": true},
+         expected: "true",
+         message:  "shoud test for scalar true value in the # section"
    },
    {
          name:     "scalar false value in the # section",
@@ -756,6 +784,20 @@ var coreTests = [
                   }
                 }
               },
+    expected: "Hello Foo Bar World!",
+    message: "should test scope of context function"
+  },
+  {
+    name: "test that the scope of the function is correct",
+    source: "Hello {#foo}{#bar}{.}{/bar}{/foo} World!",
+    context: {
+               foo: {
+                 foobar: 'Foo Bar',
+                 bar: function () {
+                   return this.foobar;
+                 }
+               }
+             },
     expected: "Hello Foo Bar World!",
     message: "should test scope of context function"
   },
