@@ -488,25 +488,25 @@ var coreTests = [
     message:  "should test partial with context"
   },
   {
-    name:     "partial with blocks, with no default values for blocks",
-    source:   '{>partial_with_blocks_and_no_defaults/}',
-    context:  { name: "Mick", count: 30 },
-    expected: "Hello Mick! You have 30 new messages.",
-    message:  "partial with blocks, with no default values for blocks"
-  },
-  {
-    name:     "partial with blocks, with no default values for blocks, but override with globals",
-    source:   '{>partial_with_blocks_and_no_defaults/}{<header}override header {/header}',
-    context:  { name: "Mick", count: 30 },
-    expected: "override header Hello Mick! You have 30 new messages.",
-    message:  "partial with blocks, with no default values for blocks, but override with globals"
-  },
-  {
-    name:     "partial with blocks, overriden with globals",
-    source:   '{>partial_with_blocks/}{<header}my header {/header}',
-    context:  { name: "Mick", count: 30 },
-    expected: "my header Hello Mick! You have 30 new messages.",
-    message: "partial with blocks, overriden with globals"
+     name:     "partial with blocks, with no default values for blocks",
+     source:   '{>partial_with_blocks_and_no_defaults/}',
+     context:  { name: "Mick", count: 30 },
+     expected: "Hello Mick! You have 30 new messages.",
+     message:  "partial with blocks, with no default values for blocks"
+   },
+   {
+     name:     "partial with blocks, with no default values for blocks, but override default values with inline partials",
+     source:   '{>partial_with_blocks_and_no_defaults/}{<header}override header {/header}',
+     context:  { name: "Mick", count: 30 },
+     expected: "override header Hello Mick! You have 30 new messages.",
+     message:  "partial with blocks, with no default values for blocks, but override default values with inline partials"
+   },
+   {
+     name:     "partial with blocks, override default values with inline partials",
+     source:   '{>partial_with_blocks/}{<header}my header {/header}',
+     context:  { name: "Mick", count: 30 },
+     expected: "my header Hello Mick! You have 30 new messages.",
+     message: "partial with blocks, override default values with inline partials"
   },
   {
     name:     "partial with inline params",
@@ -514,20 +514,6 @@ var coreTests = [
     context:  { n: "Mick", c: 30 },
     expected: "Hello Mick! You have 30 new messages.",
     message: "should test partial with inline params"
-  },
-  {
-    name:     "partial with blocks and inline params",
-    source:   '{>partial_with_blocks name=n count="{c}"/}',
-    context:  { n: "Mick", c: 30 },
-    expected: "default header Hello Mick! You have 30 new messages.",
-    message: "should test partial with blocks and inline params"
-  },
-  {
-    name:     "partial with blocks, override default values for blocks and inline params",
-    source:   '{>partial_with_blocks name=n count="{c}"/}{<header}my header {/header}',
-    context:  { n: "Mick", c: 30 },
-    expected: "my header Hello Mick! You have 30 new messages.",
-    message: "should test partial with blocks, override default values for blocks and inline params"
   },
   {
     name:     "partial with inline params tree walk up",
@@ -555,6 +541,34 @@ var coreTests = [
     expected: "Hello Joe! You have 30 new messages.",
     message: "should test partial with literal inline param and context. Fallback values for name or count are undefined"
   },
+  {
+    name:     "partial with blocks and inline params",
+    source:   '{>partial_with_blocks name=n count="{c}"/}',
+    context:  { n: "Mick", c: 30 },
+    expected: "default header Hello Mick! You have 30 new messages.",
+    message: "should test partial with blocks and inline params"
+  },
+  {
+    name:     "partial with blocks, override default values for blocks and inline params",
+    source:   '{>partial_with_blocks name=n count="{c}"/}{<header}my header {/header}',
+    context:  { n: "Mick", c: 30 },
+    expected: "my header Hello Mick! You have 30 new messages.",
+    message: "should test partial with blocks, override default values for blocks and inline params"
+  },
+  {
+    name:     "partial with blocks and no defaults, override default values for blocks and inline params",
+    source:   '{>partial_with_blocks_and_no_defaults name=n count="{c}"/}{<header}my header {/header}',
+    context:  { n: "Mick", c: 30 },
+    expected: "my header Hello Mick! You have 30 new messages.",
+    message: "should test partial blocks and no defaults, override default values for blocks and inline params"
+  },
+  {
+     name:     "partial with no blocks, ignore the override inline partials",
+     source:   '{>replace name=n count="{c}"/}{<header}my header {/header}',
+     context:  { n: "Mick", c: 30 },
+     expected: "Hello Mick! You have 30 new messages.",
+     message: "should test partial with no blocks, ignore the override inline partials"
+   },
   {
     name:     "base_template",
     source:   "Start{~n}\n"       +
