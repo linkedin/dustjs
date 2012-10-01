@@ -820,9 +820,9 @@ var coreTests = [
       message: "test array reference $idx/$len on empty array case"
   },
   {
-      name:     "array reference $idx/$len on single element case",
-      source:   "{#names}Idx={$idx} Size={$len} {.}{/names}",
-      context:  { names: "Just one name" },
+      name:     "array reference $idx/$len on single element case (scalar case)",
+      source:   "{#name}Idx={$idx} Size={$len} {.}{/name}",
+      context:  { name: "Just one name" },
       expected: "Idx= Size= Just one name",
       message: "test array reference $idx/$len on single element case"
   },
