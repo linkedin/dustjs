@@ -1007,11 +1007,33 @@ var coreTests = [
     message: "should test the array reference access with idx"
   },
   {
+    name: "using len in array reference Accessing",
+    source: "{#list4} {name} {number[$len]}{/list4}",
+    context: { list4: [ {name:"Dog", number: [1,2,3]}, {name:"Cat", number: [4,5,6]}] },
+    expected: " Dog 3 Cat 6",
+    message: "should test the array reference access with len"
+  },
+  {
     name: "using idx in array reference Accessing",
     source: "{#list3}{.[$idx].biz}{/list3}",
     context: { "list3": [[ { "biz" : "123" } ], [ { "biz" : "345" }, { "biz" : "456" } ]]},
     expected: "123456",
     message: "should test the array reference access with idx and current context"
+  },
+  {
+    name: "using len in array reference Accessing",
+    source: "{#list3}{.[$len].idx}{/list3}",
+    context: { "list3": [ 
+                [{"idx": "0"},
+                 {"idx": "1"},
+                 {"idx": "2"}],
+                [{"idx": "0"},
+                 {"idx": "1"},
+                 {"idx": "2"}]
+                ]
+    },
+    expected: "22",
+    message: "should test the array reference access with len and current context"
   }
 ];
 
