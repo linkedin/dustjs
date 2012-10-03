@@ -80,7 +80,7 @@ $(document).ready(function() {
   dust.render("select", {
       examples: coreTests,
       selected: function(chk, ctx) {
-        if (ctx.current().name === "replace") return " selected ";
+        if (ctx.current().name === "intro") return " selected ";
       }
     }, function(err, output) {
       $('#select').html(output);
