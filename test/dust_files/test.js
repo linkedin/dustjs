@@ -69,16 +69,26 @@ function assignValue(){
 	})
 }
 
+function getParamValue(paramName) {
+  parName = paramName.replace(/[\[]/, '\\\[').replace(/[\]]/, '\\\]');
+  var pattern = '[\\?&]' + paramName + '=([^&#]*)';
+  var regex = new RegExp(pattern);
+  var matches = regex.exec(window.location.href);
+  if (matches == null) return '';
+  else return decodeURIComponent(matches[1].replace(/\+/g, ' '));
+}
+
 $(document).ready(function() {
-  coreTests.forEach(function(ex) {
+  var tests = getParamValue('q') == "helpers" ? helpersTests : coreTests;
+  tests.forEach(function(ex) {
     if (ex.error) {
-      coreTests.splice(coreTests.indexOf(ex), 1);  
+      tests.splice(tests.indexOf(ex), 1);  
     } else {
       dust.loadSource(dust.compile(ex.source, ex.name));
     }
   });
   dust.render("select", {
-      examples: coreTests,
+      examples: tests,
       selected: function(chk, ctx) {
         if (ctx.current().name === "intro") return " selected ";
       }
@@ -89,8 +99,8 @@ $(document).ready(function() {
 
 	$('#select > select').change(function() {
 	  var idx = $(this).val();
-	  $('#input-source').val(coreTests[idx].source);
-	  $('#input-context').val(dump(coreTests[idx].context));
+	  $('#input-source').val(tests[idx].source);
+	  $('#input-context').val(dump(tests[idx].context));
 	  $('#input-source').change();
 	});
 
