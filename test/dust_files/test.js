@@ -79,6 +79,12 @@ function getParamValue(paramName) {
 }
 
 $(document).ready(function() {
+  //Add the tapper helper to test the Tap helper.
+  dust.helpers.tapper = function(chunk, context, bodies, params) {
+    var result = dust.helpers.tap(params.value,chunk,context);
+    chunk.write(result);
+    return chunk;
+  };
   var tests = getParamValue('q') == "helpers" ? helpersTests : coreTests;
   tests.forEach(function(ex) {
     if (ex.error) {
