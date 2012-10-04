@@ -1,13 +1,6 @@
 var coreTests = [
   {
-    name: "syntax error",
-    source: "RRR {##}",
-    context: { name: "Mick", count: 30 },
-    error: 'Expected buffer, comment, partial, reference, section or special but "{" found. At line : 1, column : 5',
-    message: "should test that the error message shows line and column."
-  },
-  {
-    name:     "intro",
+    name:     "Try me",
     source:   "{#stream}{#delay}{.}{/delay}{/stream}",
     context:  (function(){
                 var d = 1;
@@ -28,7 +21,7 @@ var coreTests = [
     message: "should test the stream tag"
   },
   {
-    name:     "plain",
+    name:     "Hello World",
     source:   "Hello World!",
     context:  {},
     expected: "Hello World!",
@@ -68,6 +61,13 @@ var coreTests = [
     context:  { "zero": 0 },
     expected: "0",
     message: "should test for numeric zero in the context, prints the numeric zero"
+  },
+  {
+    name: "Dust syntax error",
+    source: "RRR {##}",
+    context: { name: "Mick", count: 30 },
+    error: 'Expected buffer, comment, partial, reference, section or special but "{" found. At line : 1, column : 5',
+    message: "should test that the error message shows line and column."
   },
   {
     name:     "emptyString context is treated as empty",
@@ -964,7 +964,7 @@ var coreTests = [
     message: "using dash should be allowed in partial's params"
   },
   {
-    name: "Use dash in loop",
+    name: "support dash in # sections",
     source:   "{#first-names}{name}{/first-names}",
     context:  { "first-names": [ { name: "Moe" }, { name: "Larry" }, { name: "Curly" } ] },
     expected: "MoeLarryCurly",
