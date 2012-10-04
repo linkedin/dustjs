@@ -1,15 +1,22 @@
 (function(){
-    dust.register("select",body_0);
-    function body_0(chk,ctx){
-      return chk.write("<select style=\"clear: both;width: 496px;\">").section(ctx.get("examples"),ctx,{"block":body_1},null).write("</select>");
-    }
-    function body_1(chk,ctx){
-      return chk.write("<option ").reference(ctx.get("selected"),ctx,"h").write("value=\"").write("\">").reference(ctx.get("name"),ctx,"h").write("</option>");
-    }
-    function body_2(chk,ctx){
-      return chk.reference(ctx.getPath(true,[]),ctx,"h");
-    }
-    return body_0;})();
+  //Add the tapper helper to test the Tap helper.
+  dust.helpers.tapper = function(chunk, context, bodies, params) {
+    var result = dust.helpers.tap(params.value,chunk,context);
+    chunk.write(result);
+    return chunk;
+  };
+  dust.register("select",body_0);
+  function body_0(chk,ctx){
+    return chk.write("<select style=\"clear: both;width: 496px;\">").section(ctx.get("examples"),ctx,{"block":body_1},null).write("</select>");
+  }
+  function body_1(chk,ctx){
+    return chk.write("<option ").reference(ctx.get("selected"),ctx,"h").write("value=\"").write("\">").reference(ctx.get("name"),ctx,"h").write("</option>");
+  }
+  function body_2(chk,ctx){
+    return chk.reference(ctx.getPath(true,[]),ctx,"h");
+  }
+  return body_0;
+})();
 
 jsDump.parsers['function'] = function(fn) { return fn.toString(); }
 
@@ -79,12 +86,6 @@ function getParamValue(paramName) {
 }
 
 $(document).ready(function() {
-  //Add the tapper helper to test the Tap helper.
-  dust.helpers.tapper = function(chunk, context, bodies, params) {
-    var result = dust.helpers.tap(params.value,chunk,context);
-    chunk.write(result);
-    return chunk;
-  };
   var tests = getParamValue('q') == "helpers" ? helpersTests : coreTests;
   tests.forEach(function(ex) {
     if (ex.error) {
