@@ -21,7 +21,7 @@ var coreTests = [
     message: "should test the stream tag"
   },
   {
-    name:     "Hello World",
+    name:     "hello_world",
     source:   "Hello World!",
     context:  {},
     expected: "Hello World!",
@@ -475,8 +475,8 @@ var coreTests = [
   },
   {
     name:     "partials",
-    source:   '{>replace/} {>"plain"/} {>"{ref}"/}',
-    context:  { name: "Jim", count: 42, ref: "plain" },
+    source:   '{>replace/} {>"hello_world"/} {>"{ref}"/}',
+    context:  { name: "Jim", count: 42, ref: "hello_world" },
     expected: "Hello Jim! You have 42 new messages. Hello World! Hello World!",
     message:  "should test partials"
   },
@@ -681,15 +681,15 @@ var coreTests = [
   },
   {
     name: "error : whitespaces between the '{' plus '>' and partial identifier is not supported",
-    source: '{> replace/} {> "plain"/} {> "{ref}"/}',
-    context: { "name": "Jim", "count": 42, "ref": "plain" },
+    source: '{> replace/} {> "hello_world"/} {> "{ref}"/}',
+    context: { "name": "Jim", "count": 42, "ref": "hello_world" },
     error: 'Expected buffer, comment, partial, reference, section or special but "{" found. At line : 1, column : 1',
     message: "should show an error for whitespaces between the '{' plus '>' and partial identifier"
   },
   {
     name: "whitespaces before the forward slash and the closing brace in partials supported",
-    source: '{>replace /} {>"plain" /} {>"{ref}" /}',
-    context: { "name": "Jim", "count": 42, "ref": "plain" },
+    source: '{>replace /} {>"hello_world" /} {>"{ref}" /}',
+    context: { "name": "Jim", "count": 42, "ref": "hello_world" },
     expected: "Hello Jim! You have 42 new messages. Hello World! Hello World!",
     message: "should ignore extra whitespacesbefore the forward slash and the closing brace in partials"
   },
