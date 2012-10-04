@@ -21,14 +21,14 @@ var coreTests = [
     message: "should test the stream tag"
   },
   {
-    name:     "Hello World",
+    name:     "hello_world",
     source:   "Hello World!",
     context:  {},
     expected: "Hello World!",
     message: "should test basic"
   },
   {
-    name:     "replace",
+    name:     "partial",
     source:   "Hello {name}! You have {count} new messages.",
     context:  { name: "Mick", count: 30 },
     expected: "Hello Mick! You have 30 new messages.",
@@ -331,7 +331,7 @@ var coreTests = [
     message:"should test scalar values true and false are supported in # nor else blocks"
   },
   {
-     name:   ". creating a block and use it to set aliases",
+     name:   "use . for creating a block and use it to set params",
      source: "{#. test=\"you\"}{name} {test}{/.}",
      context: { name: "me"},
      expected: "me you",
@@ -475,14 +475,14 @@ var coreTests = [
   },
   {
     name:     "partials",
-    source:   '{>replace/} {>"plain"/} {>"{ref}"/}',
-    context:  { name: "Jim", count: 42, ref: "plain" },
+    source:   '{>partial/} {>"hello_world"/} {>"{ref}"/}',
+    context:  { name: "Jim", count: 42, ref: "hello_world" },
     expected: "Hello Jim! You have 42 new messages. Hello World! Hello World!",
     message:  "should test partials"
   },
   {
     name:     "partial with context",
-    source:   "{>replace:.profile/}",
+    source:   "{>partial:.profile/}",
     context:  { profile: { name: "Mick", count: 30 } },
     expected: "Hello Mick! You have 30 new messages.",
     message:  "should test partial with context"
@@ -510,33 +510,33 @@ var coreTests = [
   },
   {
     name:     "partial with inline params",
-    source:   '{>replace name=n count="{c}"/}',
+    source:   '{>partial name=n count="{c}"/}',
     context:  { n: "Mick", c: 30 },
     expected: "Hello Mick! You have 30 new messages.",
     message: "should test partial with inline params"
   },
   {
     name:     "partial with inline params tree walk up",
-    source:   '{#a}{#b}{#c}{#d}{>replace name=n count="{x}"/}{/d}{/c}{/b}{/a}',
+    source:   '{#a}{#b}{#c}{#d}{>partial name=n count="{x}"/}{/d}{/c}{/b}{/a}',
     context:  { n: "Mick", x: 30, a:{b:{c:{d:{e:"1"}}}} },
     expected: "Hello Mick! You have 30 new messages.",
     message: "should test partial with inline params tree walk up"
   },
   {name:     "partial with inline params and context",
-    source:   '{>replace:profile name="{n}" count="{c}"/}',
+    source:   '{>partial:profile name="{n}" count="{c}"/}',
     context:  { profile:  { n: "Mick", c: 30 } },
     expected: "Hello Mick! You have 30 new messages.",
     message: "should test partial with inline params and context"
   },
   {
     name:     "partial with inline params and context tree walk up",
-    source:   '{#profile}{#a}{#b}{#c}{#d}{>replace:profile name=n count="{x}"/}{/d}{/c}{/b}{/a}{/profile}',
+    source:   '{#profile}{#a}{#b}{#c}{#d}{>partial:profile name=n count="{x}"/}{/d}{/c}{/b}{/a}{/profile}',
     context:  { profile:{ n: "Mick", x: 30, a:{b:{c:{d:{e:"1"}}}} } },
     expected: "Hello Mick! You have 30 new messages.",
     message: "should test partial with inline params and context tree walk up"
   },
   {name:     "partial with literal inline param and context",
-    source:   '{>replace:profile name="Joe" count="99"/}',
+    source:   '{>partial:profile name="Joe" count="99"/}',
     context:  { profile:  { n: "Mick", count: 30 } },
     expected: "Hello Joe! You have 30 new messages.",
     message: "should test partial with literal inline param and context. Fallback values for name or count are undefined"
@@ -564,7 +564,7 @@ var coreTests = [
   },
   {
      name:     "partial with no blocks, ignore the override inline partials",
-     source:   '{>replace name=n count="{c}"/}{<header}my header {/header}',
+     source:   '{>partial name=n count="{c}"/}{<header}my header {/header}',
      context:  { n: "Mick", c: 30 },
      expected: "Hello Mick! You have 30 new messages.",
      message: "should test partial with no blocks, ignore the override inline partials"
@@ -681,15 +681,15 @@ var coreTests = [
   },
   {
     name: "error : whitespaces between the '{' plus '>' and partial identifier is not supported",
-    source: '{> replace/} {> "plain"/} {> "{ref}"/}',
-    context: { "name": "Jim", "count": 42, "ref": "plain" },
+    source: '{> partial/} {> "hello_world"/} {> "{ref}"/}',
+    context: { "name": "Jim", "count": 42, "ref": "hello_world" },
     error: 'Expected buffer, comment, partial, reference, section or special but "{" found. At line : 1, column : 1',
     message: "should show an error for whitespaces between the '{' plus '>' and partial identifier"
   },
   {
     name: "whitespaces before the forward slash and the closing brace in partials supported",
-    source: '{>replace /} {>"plain" /} {>"{ref}" /}',
-    context: { "name": "Jim", "count": 42, "ref": "plain" },
+    source: '{>partial /} {>"hello_world" /} {>"{ref}" /}',
+    context: { "name": "Jim", "count": 42, "ref": "hello_world" },
     expected: "Hello Jim! You have 42 new messages. Hello World! Hello World!",
     message: "should ignore extra whitespacesbefore the forward slash and the closing brace in partials"
   },
@@ -943,41 +943,41 @@ var coreTests = [
     message: "should functions that return 0 are truthy"
   },
   {
-    name: "Use dash in key",
+    name: "support dash in key/reference",
     source: 'Hello {first-name}, {last-name}! You have {count} new messages.',
     context: { "first-name": "Mick", "last-name" : "Jagger", "count": 30 },
     expected: "Hello Mick, Jagger! You have 30 new messages.",
-    message: "using dash should be allowed in keys"
+    message: "should test using dash in key/reference"
   },
   {
-    name: "Use dash in partial's key",
+    name: "support dash in partial's key",
     source: '{<title-a}foo-bar{/title-a}{+"{foo-title}-{bar-letter}"/}',
     context: { "foo-title" : "title", "bar-letter": "a" },
     expected: "foo-bar",
-    message: "using dash should be allowed in partial's keys"
+    message: "should test dash in partial's keys"
   },
   {
-    name: "Use dash in partial's params",
-    source: '{>replace name=first-name count="{c}"/}',
+    name: "support dash in partial's params",
+    source: '{>partial name=first-name count="{c}"/}',
     context: { "first-name": "Mick", "c": 30 },
     expected: "Hello Mick! You have 30 new messages.",
-    message: "using dash should be allowed in partial's params"
+    message: "should test dash in partial's params"
   },
   {
     name: "support dash in # sections",
     source:   "{#first-names}{name}{/first-names}",
     context:  { "first-names": [ { name: "Moe" }, { name: "Larry" }, { name: "Curly" } ] },
     expected: "MoeLarryCurly",
-    message: "should test an array using dash in key"
+    message: "should test dash in # sections"
   },
   {
-    name:     "Use dash with conditional",
+    name:     "support dash in a referece for exists section",
     source:   "{?tags-a}tag found!{:else}No Tags!{/tags-a}" ,
     context:  { "tags-a": "tag" },
     expected: "tag found!",
-    message: "should test dash in conditional tags"
+    message: "should test for dash in a referece for exists section"
   },
-  { name:     "base_template with dash",
+  { name:     "base_template with dash in the reference",
     source:   "Start{~n}\n"       +
               "{+title-t}\n"        +
               "  Template Title\n"    +
@@ -990,14 +990,14 @@ var coreTests = [
               "End",
     context:  {},
     expected: "Start\nTemplate Title\nTemplate Content\nEnd",
-    message: "should test base template with dash"
+    message: "should test base template with dash in the reference"
   },
   {
-    name:     "child_template with dash",
+    name:     "child_template with dash in the reference",
     source:   "{^xhr-n}tag not found!{:else}tag found!{/xhr-n}",
     context:  {"xhr": false},
     expected: "tag not found!",
-    message: "should test child template with dash"
+    message: "should test child template with dash in the reference"
   }
 ];
 
