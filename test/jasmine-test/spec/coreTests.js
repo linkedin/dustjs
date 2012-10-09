@@ -311,7 +311,7 @@ var coreTests = [
     name:     "escape_pragma",
     source:   "{%esc:s}\n  {unsafe}{~n}\n  {%esc:h}\n    {unsafe}\n  {/esc}\n{/esc}",
     context:  { unsafe: "<script>alert('Goodbye!')</script>" },
-    minify: true,
+    strip: true,
     expected: "<script>alert('Goodbye!')</script>\n&lt;script&gt;alert(&#39;Goodbye!&#39;)&lt;/script&gt;",
     message: "should test escape_pragma"
   },
@@ -328,7 +328,7 @@ var coreTests = [
               "  not bar!\n"     +
               "{/bar}",
     context:  { foo: true, bar: false },
-    minify: true,
+    strip: true,
     expected: "foo, not bar!",
     message:"should test scalar values true and false are supported in # nor else blocks"
   },
@@ -368,7 +368,7 @@ var coreTests = [
               "  </ul>\n"                     +
               "{/likes}",
     context:  { tags: [], likes: ["moe", "larry", "curly", "shemp"] },
-    minify: true,
+    strip: true,
     expected: "No Tags!\n"                    +
               "<ul>\n"                        +
               "  <li>moe</li>\n"              +
