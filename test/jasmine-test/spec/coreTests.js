@@ -1034,6 +1034,35 @@ var coreTests = [
     },
     expected: "22",
     message: "should test the array reference access with len and current context"
+  },
+  {
+    name:     "nested_scope_with_paths",
+    source:   "{person.fullName} has a {settee.color} settee",
+    context:  { person: { fullName: "Peter" }, settee: { color: "blue" } },
+    expected: "Peter has a blue settee",
+    message:  "should test path resolution within a nested scope"
+  },
+  {
+    name:     "nested scopes and path resolution",
+    source:   "{nested_scope_with_paths}",
+    context:  {
+      nested_scope_with_paths: function( chunk, context ) {
+        return chunk.map(function( chunk ) {
+            var inner = { settee: { color: "Red" } };
+            dust.render('nested_scope_with_paths', context.push( inner ), function( err, result ) {
+              chunk.end( result );
+            });
+        });
+      },
+      person: {
+        firstName: "Harry",
+        lastName:  "Lime",
+        fullName: function() { return this.firstName+' '+this.lastName; }
+      },
+      settee: { color: 'mauve' }
+    },
+    expected: "Harry Lime has a Red settee",
+    message:  "should test dotted path resolution and function invocation from a nested scope"
   }
 ];
 
