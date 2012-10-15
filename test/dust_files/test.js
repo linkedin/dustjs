@@ -1,7 +1,7 @@
 (function(){
     dust.register("select",body_0);
     function body_0(chk,ctx){
-      return chk.write("<select style=\"clear: both;width: 496px;\">").section(ctx.get("examples"),ctx,{"block":body_1},null).write("</select>");
+      return chk.write("<select style=\"clear: both;width: 230px;\">").section(ctx.get("examples"),ctx,{"block":body_1},null).write("</select>");
     }
     function body_1(chk,ctx){
       return chk.write("<option ").reference(ctx.get("selected"),ctx,"h").write("value=\"").write("\">").reference(ctx.get("name"),ctx,"h").write("</option>");
@@ -63,36 +63,46 @@ function setError(sel, err) {
 function dump(obj) {
 	return js_beautify(jsDump.parse(obj), { indent_size: 2 });
 }
-function assignValue(){
-	$("#select option").each(function(index, option) {
+function assignValue(id){
+	$("#"+id+" option").each(function(index, option) {
 		option.value = index;
 	})
 }
 
+function renderSelect(examples, defaultTemplate, id) { 
+  dust.render("select", 
+    {
+      examples: examples,
+      selected: function(chk, ctx) {
+        if (ctx.current().name === defaultTemplate) return " selected ";
+      } 
+    }, function(err, output) { $('#' + id).html(output); assignValue(id);}
+);};
+
 $(document).ready(function() {
   coreTests.forEach(function(ex) {
-    if (ex.error) {
-      coreTests.splice(coreTests.indexOf(ex), 1);  
-    } else {
-      dust.loadSource(dust.compile(ex.source, ex.name));
-    }
-  });
-  dust.render("select", {
-      examples: coreTests,
-      selected: function(chk, ctx) {
-        if (ctx.current().name === "replace") return " selected ";
+    ex.tests.forEach(function(test, ex) { 
+      if (test.error) {
+       coreTests[ex].tests.splice(coreTests[ex].tests.indexOf(test), 1);  
+      } else {
+        dust.loadSource(dust.compile(test.source, test.name));
       }
-    }, function(err, output) {
-      $('#select').html(output);
-      assignValue();
+    });
   });
 
-	$('#select > select').change(function() {
-	  var idx = $(this).val();
-	  $('#input-source').val(coreTests[idx].source);
-	  $('#input-context').val(dump(coreTests[idx].context));
-	  $('#input-source').change();
-	});
+  renderSelect(coreTests, "replace", "select-group")
+
+  $('#select-group > select').change(function() {
+    var groupIdx = $(this).val();
+    renderSelect(coreTests[groupIdx].tests, "replace", "select-test"); 
+    $('#select-test > select').change(function() {
+      var test = coreTests[groupIdx].tests[$(this).val()];
+      $('#input-source').val(test.source);
+      $('#input-context').val(dump(test.context));
+      $('#input-source').change();
+    });  
+    $('#select-test > select').change();  
+  });
 
 	$('#input-source').change(function() {
 		setPending('#input-source');
@@ -108,5 +118,5 @@ $(document).ready(function() {
 	});
 
 	$('#input-context').change(renderDemo);
-	$('#select > select').change();
+	$('#select-group > select').change();
 });
