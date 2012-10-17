@@ -7,7 +7,7 @@
   };
   dust.register("select",body_0);
   function body_0(chk,ctx){
-    return chk.write("<select style=\"clear: both;width: 496px;\">").section(ctx.get("examples"),ctx,{"block":body_1},null).write("</select>");
+    return chk.write("<select style=\"clear: both;width: 150px;\">").section(ctx.get("examples"),ctx,{"block":body_1},null).write("</select>");
   }
   function body_1(chk,ctx){
     return chk.write("<option ").reference(ctx.get("selected"),ctx,"h").write("value=\"").write("\">").reference(ctx.get("name"),ctx,"h").write("</option>");
@@ -70,11 +70,20 @@ function setError(sel, err) {
 function dump(obj) {
 	return js_beautify(jsDump.parse(obj), { indent_size: 2 });
 }
-function assignValue(){
-	$("#select option").each(function(index, option) {
+function assignValue(id){
+	$("#" +id+ " select option").each(function(index, option) {
 		option.value = index;
 	})
 }
+
+function renderSelect(examples, defaultTemplate, id) { 
+  dust.render("select", {
+    examples: examples,
+    selected: function(chk, ctx) {
+      if (ctx.current().name === defaultTemplate) return " selected ";
+    } 
+  }, function(err, output) { $('#' + id).html(output); assignValue(id);});
+};
 
 function getParamValue(paramName) {
   parName = paramName.replace(/[\[]/, '\\\[').replace(/[\]]/, '\\\]');
@@ -86,30 +95,30 @@ function getParamValue(paramName) {
 }
 
 $(document).ready(function() {
-  var tests = getParamValue('q') == "helpers" ? helpersTests : coreTests;
-  tests.forEach(function(ex) {
-    if (ex.error) {
-      tests.splice(tests.indexOf(ex), 1);  
-    } else {
-      dust.loadSource(dust.compile(ex.source, ex.name));
-    }
-  });
-  dust.render("select", {
-      examples: tests,
-      selected: function(chk, ctx) {
-        if (ctx.current().name === "intro") return " selected ";
+  var testGroup = getParamValue('q') == "helpers" ? helpersTests : coreTests;
+  testGroup.forEach(function(ex) {
+    ex.tests.forEach(function(test, ex) { 
+      if (test.error) {
+        testGroup[ex].tests.splice(testGroup[ex].tests.indexOf(test), 1);  
+      } else {
+        dust.loadSource(dust.compile(test.source, test.name));
       }
-    }, function(err, output) {
-      $('#select').html(output);
-      assignValue();
+    });
   });
 
-	$('#select > select').change(function() {
-	  var idx = $(this).val();
-	  $('#input-source').val(tests[idx].source);
-	  $('#input-context').val(dump(tests[idx].context));
-	  $('#input-source').change();
-	});
+	renderSelect(testGroup, "intro", "select-group");
+
+  $('#select-group > select').change(function() {
+    var groupIdx = $(this).val();
+    renderSelect(testGroup[groupIdx].tests, "replace", "select-test"); 
+    $('#select-test > select').change(function() {
+      var test = testGroup[groupIdx].tests[$(this).val()];
+      $('#input-source').val(test.source);
+      $('#input-context').val(dump(test.context));
+      $('#input-source').change();
+    });   
+    $('#select-test > select').change();  
+  });
 
 	$('#input-source').change(function() {
 		setPending('#input-source');
@@ -125,5 +134,5 @@ $(document).ready(function() {
 	});
 
 	$('#input-context').change(renderDemo);
-	$('#select > select').change();
+	$('#select-group > select').change();
 });
