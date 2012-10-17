@@ -1,7 +1,7 @@
 (function(){
     dust.register("select",body_0);
     function body_0(chk,ctx){
-      return chk.write("<select style=\"clear: both;width: 230px;\">").section(ctx.get("examples"),ctx,{"block":body_1},null).write("</select>");
+      return chk.write("<select style=\"clear: both;width: 130px;\">").section(ctx.get("examples"),ctx,{"block":body_1},null).write("</select>");
     }
     function body_1(chk,ctx){
       return chk.write("<option ").reference(ctx.get("selected"),ctx,"h").write("value=\"").write("\">").reference(ctx.get("name"),ctx,"h").write("</option>");
