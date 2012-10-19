@@ -85,6 +85,36 @@ Dust for client templates at LinkedIn
 
 <h3>Release 1.0</h3>
 
+
+<h3>Release 1.1</h3>
+
+
+<h4>Core enhancements</h4>
+<ul>
+<li>Extend the #section block to support $idx and $len for lists of primitives </li>
+<li>Add support for assigning multiple event-listeners on stream</li>
+</ul>
+
+<h4>Bug fixes/ perf improvements</h4>
+<ul>
+<li>Fix the #section block on how it behaves with empty arrays. Maintain consistency between ?, # and ^ for truthy/falsy evaluations </li>
+<li>Fix "this" value in anonymous functions passed into the context object</li>
+<li>Handle undefined filters and helpers gracefully</li>
+</ul>
+
+<h4>Extensions and helpers </h4>
+<ul>
+<li>Helpers are now in its own node package<a href="https://github.com/linkedin/dustjs-helpers"> See here </a></li>
+<li>@math for simple math operations such as add/subtract/mod/ceil etc. It also supports branching based on the output of math operation</li>
+<li>@size helper for determining the size of lists/objects/primitives</li>
+<li>@contextDump helper for debugging the current context in the dust stack</li>
+</ul>
+
+<h2>NOTE: We have removed dust helpers code from the dustjs-linkedin repo from V1.1.1, use
+  npm install dustjs-helpers instead for using the helpers
+</h2>
+
+
 <h4>Core enhancements</h4>
 <ul>
 <li>Extend partials to support inline params like #sections</li>
@@ -114,34 +144,6 @@ Dust for client templates at LinkedIn
 <li>Versatile @if helper relies on the eval for complex expression evaluation, Here are the perf results for eval <a href="http://jsperf.com/dust-if">http://jsperf.com/dust-if</a>.  Use with caution, since eval is known to be slow.
 </ul>
 
-
-<h3>Release 1.1</h3>
-
-
-<h4>Core enhancements</h4>
-<ul>
-<li>Extend the #section block to support $idx and $len for lists of primitives </li>
-<li>Add support for assigning multiple event-listeners on stream</li>
-</ul>
-
-<h4>Bug fixes/ perf improvements</h4>
-<ul>
-<li>Fix the #section block on how it behaves with empty arrays. Maintain consistency between ?, # and ^ for truthy/falsy evaluations </li>
-<li>Fix "this" value in anonymous functions passed into the context object</li>
-<li>Handle undefined filters and helpers gracefully</li>
-</ul>
-
-<h4>Extensions and helpers </h4>
-<ul>
-<li>Helpers are now in its own node package<a href="https://github.com/linkedin/dustjs-helpers"> See here </a></li>
-<li>@math for simple math operations such as add/subtract/mod/ceil etc. It also supports branching based on the output of math operation</li>
-<li>@size helper for determining the size of lists/objects/primitives</li>
-<li>@contextDump helper for debugging the current context in the dust stack</li>
-</ul>
-
-<h2>NOTE: We have removed dust helpers code from the dustjs-linkedin repo from V1.1.1, use
-  npm install dustjs-helpers instead for using the helpers
-</h2>
 
 
 
