@@ -12,7 +12,7 @@ describe ("Test the basic functionality of dust", function() {
 function render(test) {
   return function() {
     try {
-      dust.loadSource(dust.compile(test.source, test.name));
+      dust.loadSource(dust.compile(test.source, test.name, test.strip));
       dust.render(test.name, test.context, function(err, output) {
         expect(err).toBeNull();
         expect(test.expected).toEqual(output);
