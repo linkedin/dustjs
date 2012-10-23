@@ -2,8 +2,8 @@ Dust  [![Build Status](https://secure.travis-ci.org/linkedin/dustjs.png)](http:/
 ====
 
 
-This is the LinkedIn fork of Dust. 
+This is the LinkedIn fork of Dust.
 
-Read more here : <http://linkedin.github.com/dustjs/>
+Read more here: <http://linkedin.github.com/dustjs/>.
 
-For LinkedIn dust-helpers :  <https://github.com/linkedin/dustjs-helpers>
+For LinkedIn dust-helpers:  <https://github.com/linkedin/dustjs-helpers>.

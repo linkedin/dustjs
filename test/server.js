@@ -1,6 +1,6 @@
 var uutest    = require('./uutest'),
     dust      = require('../lib/dust'),
-    tests     = require('./jasmine-test/spec/coreTests'),
+    coreTests     = require('./jasmine-test/spec/coreTests'),
     coreSetup = require('./core').coreSetup;
 
 function dumpError(err) {
@@ -12,24 +12,26 @@ function dumpError(err) {
   return out + err.stack;
 }
 
-var suite = new uutest.Suite({
-  pass: function() {
-    process.stdout.write(".");
-  },
-  fail: function(err) {
-    process.stdout.write("F");
-  },
-  done: function(passed, failed, elapsed) {
-    process.stdout.write("\n");
-    console.log(passed + " passed " + failed + " failed " + "(" + elapsed + "ms)");
-    this.errors.forEach(function(err) {
-      console.log(dumpError(err));
-    });
-  }
-});
+for (var i=0; i<coreTests.length; i++) {
+  var suite = new uutest.Suite({
+    pass: function() {
+      process.stdout.write(".");
+    },
+    fail: function(err) {
+      process.stdout.write("F");
+    },
+    done: function(passed, failed, elapsed) {
+      process.stdout.write("\n");
+      console.log(passed + " passed " + failed + " failed " + "(" + elapsed + "ms)");
+      this.errors.forEach(function(err) {
+        console.log(dumpError(err));
+      });
+    }
+  });
 
-global.dust = dust;
+  global.dust = dust;
 
-coreSetup(suite, tests.slice(1));
+  coreSetup(suite, coreTests[i].tests);
 
-suite.run();
+  suite.run();
+}
