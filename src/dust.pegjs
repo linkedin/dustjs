@@ -72,7 +72,7 @@ reference "reference"
   context followed by slash and closing brace
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 partial "partial"
-  = ld s:(">"/"+") n:(k:key {return ["literal", k]} / inline) c:context p:params ws* "/" rd
+  = ld s:(">"/"+") ws* n:(k:key {return ["literal", k]} / inline) c:context p:params ws* "/" rd
   { var key = (s ===">")? "partial" : s; return [key, n, c, p] }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
@@ -177,7 +177,7 @@ comment "comment"
    doesn't match rd or eol plus 0 or more whitespaces plus a closing brace
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 tag
-  = ld [#?^><+%:@/~%] ws* (!rd !eol .)+  ws* rd
+  = ld ws* [#?^><+%:@/~%] ws* (!rd !eol .)+ ws* rd
   / reference
 
 ld
