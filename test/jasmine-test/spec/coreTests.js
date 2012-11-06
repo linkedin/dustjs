@@ -1116,6 +1116,18 @@ var coreTests = [
         message: "should test child template with dash"
       }
     ]
+  },
+  {
+    name: "Buffer",
+    tests: [
+      {
+        name: "buffer ",
+        source: "{&partial/}",
+        context: {},
+        expected: "{&partial/}",
+        message: "This content {&partial/} should be parsed as buffer"
+      }
+    ]
   }
 ];
 
