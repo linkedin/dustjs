@@ -68,8 +68,8 @@ dust:
 	@@touch ${FULL}
 	@@echo "$$HEADER" > ${FULL}
 	@@cat ${SRC}/dust.js\
-	      ${SRC}/compiler.js\
-	      ${SRC}/parser.js >> ${FULL}
+		    ${SRC}/parser.js\
+	      ${SRC}/compiler.js >> ${FULL}
 	@@echo ${FULL} built
 
 min: dust
