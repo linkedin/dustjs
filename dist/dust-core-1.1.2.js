@@ -1,3 +1,11 @@
+//
+// Dust - Asynchronous Templating v1.1.2
+// http://akdubya.github.com/dustjs
+//
+// Copyright (c) 2010, Aleksander Williams
+// Released under the MIT License.
+//
+
 /*
  * Uses CommonJS, Node, AMD or browser globals to create a module
  * per pattern of UMD
