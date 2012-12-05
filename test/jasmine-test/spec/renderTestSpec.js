@@ -31,7 +31,7 @@ function stream(test) {
       flag = false;
       output = "";
       try {
-        dust.loadSource(dust.compile(test.source, test.name));
+        dust.loadSource(dust.compile(test.source, test.name, test.strip));
         dust.stream(test.name, test.context)
         .on("data", function(data) {
           output += data;
@@ -71,7 +71,7 @@ function pipe(test) {
       output = "";
       outputTwo = "";
       try {
-        dust.loadSource(dust.compile(test.source, test.name));
+        dust.loadSource(dust.compile(test.source, test.name, test.strip));
         var tpl = dust.stream(test.name, test.context);
         tpl.pipe({
           write: function (data) {

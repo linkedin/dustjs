@@ -3,7 +3,7 @@
 exports.coreSetup = function(suite, auto) {
   auto.forEach(function(test) {
     suite.test(test.name, function(){
-      testRender(this, test.source, test.context, test.expected, test.error || {});
+      testRender(this, test.source, test.strip, test.context, test.expected, test.error || {});
     });
   });
 
@@ -11,11 +11,11 @@ exports.coreSetup = function(suite, auto) {
     var base = dust.makeBase({
       sayHello: function() { return "Hello!" }
     });
-    testRender(this, "{sayHello} {foo}", base.push({foo: "bar"}), "Hello! bar");
+    testRender(this, "{sayHello} {foo}", true, base.push({foo: "bar"}), "Hello! bar");
   });
 
   suite.test("valid keys", function() {
-    testRender(this, "{_foo}{$bar}{baz1}", {_foo: 1, $bar: 2, baz1: 3}, "123");
+    testRender(this, "{_foo}{$bar}{baz1}", true, {_foo: 1, $bar: 2, baz1: 3}, "123");
   });
 
   suite.test("onLoad callback", function() {
@@ -105,10 +105,10 @@ exports.coreSetup = function(suite, auto) {
   });
 }
 
-function testRender(unit, source, context, expected, error) {
+function testRender(unit, source, strip, context, expected, error) {
   var name = unit.id;
    try {
-     dust.loadSource(dust.compile(source, name));
+     dust.loadSource(dust.compile(source, name, strip));
      dust.render(name, context, function(err, output) {
        unit.ifError(err);
        unit.equals(output, expected);
