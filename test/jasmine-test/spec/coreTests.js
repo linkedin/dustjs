@@ -910,6 +910,14 @@ var coreTests = [
         context: {},
         expected: "",
         message: "should ignore carriage return or tab in inline param values"
+      },
+      {
+        name: "disabling extra whitespace removal preserves eol and following spaces",
+        source: ['<input', '    type="text">'].join("\n"),
+        strip: false,
+        context: {},
+        expected: ['<input', '    type="text">'].join("\n"),
+        message: "preserves eol and following spaces"
       }
     ]
   },
