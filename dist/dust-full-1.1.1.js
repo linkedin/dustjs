@@ -646,11 +646,11 @@ dust.compile = function(source, name, strip) {
 function filterAST(ast) {
   var context = {};
   return dust.filterNode(context, ast);
-}
+};
 
 dust.filterNode = function(context, node) {
   return dust.optimizers[node[0]](context, node);
-}
+};
 
 dust.optimizers = {
   body:      compactBuffers,
@@ -675,7 +675,7 @@ dust.optimizers = {
   path:      noop,
   literal:   noop,
   comment:   nullify
-}
+};
 
 dust.pragmas = {
   esc: function(compiler, context, bodies, params) {
@@ -686,7 +686,7 @@ dust.pragmas = {
     compiler.auto = old;
     return out;
   }
-}
+};
 
 function visit(context, node) {
   var out = [node[0]];
@@ -695,7 +695,7 @@ function visit(context, node) {
     if (res) out.push(res);
   }
   return out;
-}
+};
 
 // Compacts consecutive buffer nodes into a single node
 function compactBuffers(context, node) {
@@ -717,7 +717,7 @@ function compactBuffers(context, node) {
     }
   }
   return out;
-}
+};
 
 var specialChars = {
   "s": " ",
@@ -727,9 +727,9 @@ var specialChars = {
   "rb": "}"
 };
 
-function convertSpecial(context, node) { return ['buffer', specialChars[node[1]]] }
-function noop(context, node) { return node }
-function nullify(){}
+function convertSpecial(context, node) { return ['buffer', specialChars[node[1]]] };
+function noop(context, node) { return node };
+function nullify(){};
 
 function compile(ast, name) {
   var context = {
@@ -748,7 +748,7 @@ function compile(ast, name) {
     + compileBodies(context)
     + "return body_0;"
     + "})();";
-}
+};
 
 function compileBlocks(context) {
   var out = [],
@@ -762,7 +762,7 @@ function compileBlocks(context) {
     return "var blocks={" + out.join(',') + "};";
   }
   return context.blocks = "";
-}
+};
 
 function compileBodies(context) {
   var out = [],
@@ -774,7 +774,7 @@ function compileBodies(context) {
       + blx + "return chk" + bodies[i] + ";}";
   }
   return out.join('');
-}
+};
 
 function compileParts(context, body) {
   var parts = '';
@@ -782,11 +782,11 @@ function compileParts(context, body) {
     parts += dust.compileNode(context, body[i]);
   }
   return parts;
-}
+};
 
 dust.compileNode = function(context, node) {
   return dust.nodes[node[0]](context, node);
-}
+};
 
 dust.nodes = {
   body: function(context, node) {
@@ -951,7 +951,7 @@ dust.nodes = {
   literal: function(context, node) {
     return escape(node[1]);
   }
-}
+};
 
 function compileSection(context, node, cmd) {
   return "." + cmd + "("
@@ -960,7 +960,7 @@ function compileSection(context, node, cmd) {
     + dust.compileNode(context, node[4]) + ","
     + dust.compileNode(context, node[3])
     + ")";
-}
+};
 
 var escape = (typeof JSON === "undefined")
   ? function(str) { return "\"" + dust.escapeJs(str) + "\"" }
