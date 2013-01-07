@@ -650,7 +650,7 @@ function filterAST(ast) {
 
 dust.filterNode = function(context, node) {
   return dust.optimizers[node[0]](context, node);
-};
+}
 
 dust.optimizers = {
   body:      compactBuffers,
@@ -675,7 +675,7 @@ dust.optimizers = {
   path:      noop,
   literal:   noop,
   comment:   nullify
-};
+}
 
 dust.pragmas = {
   esc: function(compiler, context, bodies, params) {
@@ -686,7 +686,7 @@ dust.pragmas = {
     compiler.auto = old;
     return out;
   }
-};
+}
 
 function visit(context, node) {
   var out = [node[0]];
@@ -738,7 +738,7 @@ function compile(ast, name) {
     blocks: {},
     index: 0,
     auto: "h"
-  };
+  }
 
   return "(function(){dust.register("
     + (name ? "\"" + name + "\"" : "null") + ","
@@ -786,7 +786,7 @@ function compileParts(context, body) {
 
 dust.compileNode = function(context, node) {
   return dust.nodes[node[0]](context, node);
-};
+}
 
 dust.nodes = {
   body: function(context, node) {
@@ -951,7 +951,7 @@ dust.nodes = {
   literal: function(context, node) {
     return escape(node[1]);
   }
-};
+}
 
 function compileSection(context, node, cmd) {
   return "." + cmd + "("
