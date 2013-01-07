@@ -290,7 +290,7 @@ var coreTests = [
     name:     "force_local",
     source:   "{#person}{.root}: {name}, {age}{/person}",
     context:  { root: "Subject", person: { name: "Larry", age: 45 } },
-    expected: ": Larry, 45",
+    expected: "Subject: Larry, 45",
     message: "should test force a key"
   },
   {
