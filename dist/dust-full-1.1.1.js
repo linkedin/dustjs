@@ -1,11 +1,3 @@
-//
-// Dust - Asynchronous Templating v1.1.1
-// http://akdubya.github.com/dustjs
-//
-// Copyright (c) 2010, Aleksander Williams
-// Released under the MIT License.
-//
-
 var dust = {};
 
 function getGlobal(){
@@ -164,13 +156,35 @@ Context.prototype.getPath = function(cur, down) {
       len = down.length;
 
   if (cur && len === 0) return ctx.head;
-  ctx = ctx.head;
-  var i = 0;
-  while(ctx && i < len) {
-    ctx = ctx[down[i]];
-    i++;
+
+  var key = down[0], obj, value;
+  while(ctx) {
+    // Process context if head is an object or key is a number and head is an array.
+    if(ctx.isObject || (!isNaN( key ) && dust.isArray( ctx.head ))) {
+      obj = ctx.head;
+      value = ctx.head[key];
+      // Find a value on the stack bound to the first name in the path.
+      if( value !== undefined ) {
+        var i = 1;
+        // Resolve the rest of the path.
+        while(value && i < len) {
+          obj = value;
+          value = value[down[i++]];
+        }
+        // Wrap function values to preserve the 'this' reference.
+        // (Otherwise Chunk.section and Chunk.reference won't propertly resolve
+        // the correct 'this' object).
+        if( typeof value == 'function' ) {
+          var fn = value;
+          value = function() { return fn.apply( obj, arguments ); }
+        }
+        return value;
+      }
+    }
+    // Continue down the stack.
+    ctx = ctx.tail;
   }
-  return ctx;
+  return undefined;
 };
 
 Context.prototype.push = function(head, idx, len) {
@@ -937,7 +951,10 @@ dust.nodes = {
         list = [];
 
     for (var i=0,len=keys.length; i<len; i++) {
-      list.push("\"" + keys[i] + "\"");
+      if (Array.isArray(keys[i]))
+        list.push(dust.compileNode(context, keys[i]));
+      else
+        list.push("\"" + keys[i] + "\"");
     }
     return "ctx.getPath(" + current + ",[" + list.join(',') + "])";
   },
@@ -1031,6 +1048,8 @@ var parser = (function(){
         "tag": parse_tag,
         "ld": parse_ld,
         "rd": parse_rd,
+        "lb": parse_lb,
+        "rb": parse_rb,
         "eol": parse_eol,
         "ws": parse_ws
       };
@@ -2323,23 +2342,16 @@ var parser = (function(){
       
       function parse_array() {
         var result0, result1, result2;
-        var pos0, pos1, pos2, pos3;
+        var pos0, pos1, pos2, pos3, pos4;
         
         reportFailures++;
         pos0 = clone(pos);
         pos1 = clone(pos);
         pos2 = clone(pos);
         pos3 = clone(pos);
-        if (input.charCodeAt(pos.offset) === 91) {
-          result0 = "[";
-          advance(pos, 1);
-        } else {
-          result0 = null;
-          if (reportFailures === 0) {
-            matchFailed("\"[\"");
-          }
-        }
+        result0 = parse_lb();
         if (result0 !== null) {
+          pos4 = clone(pos);
           if (/^[0-9]/.test(input.charAt(pos.offset))) {
             result2 = input.charAt(pos.offset);
             advance(pos, 1);
@@ -2367,15 +2379,16 @@ var parser = (function(){
             result1 = null;
           }
           if (result1 !== null) {
-            if (input.charCodeAt(pos.offset) === 93) {
-              result2 = "]";
-              advance(pos, 1);
-            } else {
-              result2 = null;
-              if (reportFailures === 0) {
-                matchFailed("\"]\"");
-              }
-            }
+            result1 = (function(offset, line, column, n) {return n.join('')})(pos4.offset, pos4.line, pos4.column, result1);
+          }
+          if (result1 === null) {
+            pos = clone(pos4);
+          }
+          if (result1 === null) {
+            result1 = parse_identifier();
+          }
+          if (result1 !== null) {
+            result2 = parse_rb();
             if (result2 !== null) {
               result0 = [result0, result1, result2];
             } else {
@@ -2391,7 +2404,7 @@ var parser = (function(){
           pos = clone(pos3);
         }
         if (result0 !== null) {
-          result0 = (function(offset, line, column, a) {return a.join('')})(pos2.offset, pos2.line, pos2.column, result0[1]);
+          result0 = (function(offset, line, column, a) {return a; })(pos2.offset, pos2.line, pos2.column, result0[1]);
         }
         if (result0 === null) {
           pos = clone(pos2);
@@ -3353,6 +3366,36 @@ var parser = (function(){
           result0 = null;
           if (reportFailures === 0) {
             matchFailed("\"}\"");
+          }
+        }
+        return result0;
+      }
+      
+      function parse_lb() {
+        var result0;
+        
+        if (input.charCodeAt(pos.offset) === 91) {
+          result0 = "[";
+          advance(pos, 1);
+        } else {
+          result0 = null;
+          if (reportFailures === 0) {
+            matchFailed("\"[\"");
+          }
+        }
+        return result0;
+      }
+      
+      function parse_rb() {
+        var result0;
+        
+        if (input.charCodeAt(pos.offset) === 93) {
+          result0 = "]";
+          advance(pos, 1);
+        } else {
+          result0 = null;
+          if (reportFailures === 0) {
+            matchFailed("\"]\"");
           }
         }
         return result0;
