@@ -2704,7 +2704,7 @@ var parser = (function(){
       }
       
       function parse_buffer() {
-        var result0, result1, result2, result3, result4;
+        var result0, result1, result2, result3;
         var pos0, pos1, pos2, pos3;
         
         reportFailures++;
@@ -2751,7 +2751,7 @@ var parser = (function(){
           if (result1 !== null) {
             pos3 = clone(pos);
             reportFailures++;
-            result2 = parse_eol();
+            result2 = parse_comment();
             reportFailures--;
             if (result2 === null) {
               result2 = "";
@@ -2760,32 +2760,17 @@ var parser = (function(){
               pos = clone(pos3);
             }
             if (result2 !== null) {
-              pos3 = clone(pos);
-              reportFailures++;
-              result3 = parse_comment();
-              reportFailures--;
-              if (result3 === null) {
-                result3 = "";
+              if (input.length > pos.offset) {
+                result3 = input.charAt(pos.offset);
+                advance(pos, 1);
               } else {
                 result3 = null;
-                pos = clone(pos3);
+                if (reportFailures === 0) {
+                  matchFailed("any character");
+                }
               }
               if (result3 !== null) {
-                if (input.length > pos.offset) {
-                  result4 = input.charAt(pos.offset);
-                  advance(pos, 1);
-                } else {
-                  result4 = null;
-                  if (reportFailures === 0) {
-                    matchFailed("any character");
-                  }
-                }
-                if (result4 !== null) {
-                  result1 = [result1, result2, result3, result4];
-                } else {
-                  result1 = null;
-                  pos = clone(pos2);
-                }
+                result1 = [result1, result2, result3];
               } else {
                 result1 = null;
                 pos = clone(pos2);
@@ -2799,7 +2784,7 @@ var parser = (function(){
             pos = clone(pos2);
           }
           if (result1 !== null) {
-            result1 = (function(offset, line, column, c) {return c})(pos1.offset, pos1.line, pos1.column, result1[3]);
+            result1 = (function(offset, line, column, c) {return c})(pos1.offset, pos1.line, pos1.column, result1[2]);
           }
           if (result1 === null) {
             pos = clone(pos1);
@@ -2823,7 +2808,7 @@ var parser = (function(){
               if (result1 !== null) {
                 pos3 = clone(pos);
                 reportFailures++;
-                result2 = parse_eol();
+                result2 = parse_comment();
                 reportFailures--;
                 if (result2 === null) {
                   result2 = "";
@@ -2832,32 +2817,17 @@ var parser = (function(){
                   pos = clone(pos3);
                 }
                 if (result2 !== null) {
-                  pos3 = clone(pos);
-                  reportFailures++;
-                  result3 = parse_comment();
-                  reportFailures--;
-                  if (result3 === null) {
-                    result3 = "";
+                  if (input.length > pos.offset) {
+                    result3 = input.charAt(pos.offset);
+                    advance(pos, 1);
                   } else {
                     result3 = null;
-                    pos = clone(pos3);
+                    if (reportFailures === 0) {
+                      matchFailed("any character");
+                    }
                   }
                   if (result3 !== null) {
-                    if (input.length > pos.offset) {
-                      result4 = input.charAt(pos.offset);
-                      advance(pos, 1);
-                    } else {
-                      result4 = null;
-                      if (reportFailures === 0) {
-                        matchFailed("any character");
-                      }
-                    }
-                    if (result4 !== null) {
-                      result1 = [result1, result2, result3, result4];
-                    } else {
-                      result1 = null;
-                      pos = clone(pos2);
-                    }
+                    result1 = [result1, result2, result3];
                   } else {
                     result1 = null;
                     pos = clone(pos2);
@@ -2871,7 +2841,7 @@ var parser = (function(){
                 pos = clone(pos2);
               }
               if (result1 !== null) {
-                result1 = (function(offset, line, column, c) {return c})(pos1.offset, pos1.line, pos1.column, result1[3]);
+                result1 = (function(offset, line, column, c) {return c})(pos1.offset, pos1.line, pos1.column, result1[2]);
               }
               if (result1 === null) {
                 pos = clone(pos1);

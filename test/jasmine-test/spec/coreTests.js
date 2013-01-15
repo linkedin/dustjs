@@ -118,15 +118,15 @@ var coreTests = [
       },
       {
         name:     "base_template",
-        source:   "Start{~n}\n"       +
-                  "{+title}\n"        +
-                  "  Base Title\n"    +
-                  "{/title}\n"        +
-                  "{~n}\n"            +
-                  "{+main}\n"         +
-                  "  Base Content\n"  +
-                  "{/main}\n"         +
-                  "{~n}\n"            +
+        source:   "Start{~n}"       +
+                  "{+title}"        +
+                  "Base Title"    +
+                  "{/title}"        +
+                  "{~n}"            +
+                  "{+main}"         +
+                  "Base Content"  +
+                  "{/main}"         +
+                  "{~n}"            +
                   "End",
         context:  {},
         expected: "Start\nBase Title\nBase Content\nEnd",
@@ -134,17 +134,17 @@ var coreTests = [
       },
       {
         name:     "child_template",
-        source:   "{^xhr}\n"              +
-                  "  {>base_template/}\n" +
-                  "{:else}\n"             +
-                  "  {+main/}\n"          +
-                  "{/xhr}\n"              +
-                  "{<title}\n"            +
-                  "  Child Title\n"       +
-                  "{/title}\n"            +
-                  "{<main}\n"             +
-                  "  Child Content\n"     +
-                  "{/main}\n",
+        source:   "{^xhr}"              +
+                  "{>base_template/}" +
+                  "{:else}"             +
+                  "{+main/}"          +
+                  "{/xhr}"              +
+                  "{<title}"            +
+                  "Child Title"       +
+                  "{/title}"            +
+                  "{<main}"             +
+                  "Child Content"     +
+                  "{/main}",
         context:  {xhr: false},
         expected: "Start\nChild Title\nChild Content\nEnd",
         message: "should test child template"
@@ -402,15 +402,15 @@ var coreTests = [
       },
       {
         name:     "scalar values true and false are supported in # nor else blocks ",
-        source:   "{#foo}\n"         +
-                  "  foo,{~s}\n"     +
-                  "{:else}\n"        +
-                  "  not foo,{~s}\n" +
-                  "{/foo}\n"         +
-                  "{#bar}\n"         +
-                  "  bar!\n"         +
-                  "{:else}\n"        +
-                  "  not bar!\n"     +
+        source:   "{#foo}"         +
+                  "foo,{~s}"     +
+                  "{:else}"        +
+                  "not foo,{~s}" +
+                  "{/foo}"         +
+                  "{#bar}"         +
+                  "bar!"         +
+                  "{:else}"        +
+                  "not bar!"     +
                   "{/bar}",
         context:  { foo: true, bar: false },
         expected: "foo, not bar!",
@@ -642,24 +642,24 @@ var coreTests = [
     tests: [
       {
         name:     "conditional",
-        source:   "{?tags}\n"                     +
-                  "  <ul>{~n}\n"                  +
-                  "    {#tags}\n"                 +
-                  "      {~s} <li>{.}</li>{~n}\n" +
-                  "    {/tags}\n"                 +
-                  "  </ul>\n"                     +
-                  "{:else}\n"                     +
-                  "  No Tags!\n"                  +
-                  "{/tags}\n"                     +
-                  "{~n}\n"                        +
-                  "{^likes}\n"                    +
-                  "  No Likes!\n"                 +
-                  "{:else}\n"                     +
-                  "  <ul>{~n}\n"                  +
-                  "    {#likes}\n"                +
-                  "      {~s} <li>{.}</li>{~n}\n" +
-                  "    {/likes}\n"                +
-                  "  </ul>\n"                     +
+        source:   "{?tags}"                     +
+                  "<ul>{~n}"                  +
+                  "{#tags}"                 +
+                  "{~s} <li>{.}</li>{~n}" +
+                  "{/tags}"                 +
+                  "</ul>"                     +
+                  "{:else}"                     +
+                  "No Tags!"                  +
+                  "{/tags}"                     +
+                  "{~n}"                        +
+                  "{^likes}"                    +
+                  "No Likes!"                 +
+                  "{:else}"                     +
+                  "<ul>{~n}"                  +
+                  "{#likes}"                +
+                  "{~s} <li>{.}</li>{~n}" +
+                  "{/likes}"                +
+                  "</ul>"                     +
                   "{/likes}",
         context:  { tags: [], likes: ["moe", "larry", "curly", "shemp"] },
         expected: "No Tags!\n"                    +
@@ -956,7 +956,7 @@ var coreTests = [
                   '{/title_B}',
                   '{+"title_{val}"/}'].join("\n"),
         context: { "val" : "A" },
-        expected: "AAA",
+        expected: "AAA\n",
         message: "should test blocks with dynamic keys"
       },
       {
@@ -969,7 +969,7 @@ var coreTests = [
                   '{/title_B}',
                   '{+"{val1}_{val2}"/}'].join("\n"),
         context: { "val1" : "title", "val2" : "A" },
-        expected: "AAA",
+        expected: "AAA\n",
         message: "should test blocks with more than one dynamic keys"
       },
       {
@@ -982,7 +982,7 @@ var coreTests = [
                   '{/title_B}',
                   '{+"{val1}_{obj.name}"/}'].join("\n"),
         context: { "val1" : "title", "val2" : "A", "obj" : { "name" : "B" } },
-        expected: "BBB",
+        expected: "BBB\n",
         message: "should test blocks with dynamic key values as objects"
       },
       {
@@ -995,7 +995,7 @@ var coreTests = [
                   '{/title_B}',
                   '{+"{val1}_{obj.name[0]}"/}'].join("\n"),
         context: { "val1" : "title", "val2" : "A", "obj" : { "name" : ["A", "B"] } },
-        expected: "AAA",
+        expected: "AAA\n",
         message: "should test blocks with dynamic key values as arrays"
       }
     ]
@@ -1094,15 +1094,15 @@ var coreTests = [
         message: "should test for dash in a referece for exists section"
       },
       { name:     "base_template with dash in the reference",
-        source:   "Start{~n}\n"       +
-                  "{+title-t}\n"        +
-                  "  Template Title\n"    +
-                  "{/title-t}\n"        +
-                  "{~n}\n"            +
-                  "{+main-t}\n"         +
-                  "  Template Content\n"  +
-                  "{/main-t}\n"         +
-                  "{~n}\n"            +
+        source:   "Start{~n}"       +
+                  "{+title-t}"        +
+                  "Template Title"    +
+                  "{/title-t}"        +
+                  "{~n}"            +
+                  "{+main-t}"         +
+                  "Template Content"  +
+                  "{/main-t}"         +
+                  "{~n}"            +
                   "End",
         context:  {},
         expected: "Start\nTemplate Title\nTemplate Content\nEnd",
@@ -1126,6 +1126,34 @@ var coreTests = [
         context: {},
         expected: "{&partial/}",
         message: "This content {&partial/} should be parsed as buffer"
+      },
+      {
+        name: "buffer does not ignore ws",
+        source: "Hi {name}:   you won a blue car",
+        context: { "name" : "Jairo"},
+        expected: "Hi Jairo:   you won a blue car",
+        message: "Buffer should not ignore ws"
+      },
+      {
+        name: "buffer: does not ignore line feed",
+        source: "Hi {name}:\n   you won a blue car",
+        context: { "name" : "Jairo"},
+        expected: "Hi Jairo:\n   you won a blue car",
+        message: "Buffer should not ignore line feed"
+      },
+      {
+        name: "buffer: does not ignore line feed and carriage",
+        source: "Hi {name}:\r\n   you won a blue car",
+        context: { "name" : "Jairo"},
+        expected: "Hi Jairo:\r\n   you won a blue car",
+        message: "Buffer should not ignore line feed and carriage"
+      },
+      {
+        name: "buffer: does not ignore carriage return",
+        source: "Hi {name}:\r   you won a blue car",
+        context: { "name" : "Jairo"},
+        expected: "Hi Jairo:\r   you won a blue car",
+        message: "Buffer should not ignore carriage return"
       }
     ]
   }
