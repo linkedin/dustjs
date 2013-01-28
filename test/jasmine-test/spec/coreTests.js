@@ -1135,6 +1135,18 @@ var coreTests = [
         message: "This content {&partial/} should be parsed as buffer"
       }
     ]
+  },
+  {
+    name:"Helpers",
+    tests: [
+      {
+        name:     "nonexistant helper",
+        source:   "some text {@notfound}foo{/notfound} some text",
+        context:  {},
+        expected: "some text  some text",
+        message: "Should not crash the application if an helper is not found"
+      }
+    ]
   }
 ];
 
