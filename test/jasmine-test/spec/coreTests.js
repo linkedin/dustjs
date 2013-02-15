@@ -835,6 +835,13 @@ var coreTests = [
         context:  { n: "Mick", c: 30 },
         expected: "this is a buffer \n Hello Mick! You have 30 new messages.",
         message: "should test that the buffer followed by a partial renders fine"
+      },
+      {
+        name:    "buffer followed by partial with params",
+        source:  'Hello I am a buffer. \n {>partial \n name=n \n count="{c}"/}{<header}my header {/header}',
+        context: { n: "Mick", c: 30 },
+        expected: "Hello I am a buffer. \n Hello Mick! You have 30 new messages.",
+        message: "should test that the buffer followed by a partial with params renders fine"
       }
     ]
   },
