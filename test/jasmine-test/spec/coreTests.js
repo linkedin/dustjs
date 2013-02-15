@@ -828,6 +828,13 @@ var coreTests = [
         context:  { n: "Mick", c: 30 },
         expected: "Hello Mick! You have 30 new messages.",
         message: "should test partial with no blocks, ignore the override inline partials"
+      },
+      {
+        name:     "buffer followed by partial",
+        source:   'this is a buffer \n {>partial name=n count="{c}"/}{<header}my header {/header}',
+        context:  { n: "Mick", c: 30 },
+        expected: "this is a buffer \n Hello Mick! You have 30 new messages.",
+        message: "should test that the buffer followed by a partial renders fine"
       }
     ]
   },
@@ -1161,6 +1168,32 @@ var coreTests = [
         context: { "name" : "Jairo"},
         expected: "Hi Jairo:\r   you won a blue car",
         message: "Buffer should not ignore carriage return"
+      }
+    ]
+  },
+  {
+    name: "format",
+    tests: [
+      {
+        name: "format template with whitespaces",
+        source: "Hello   {name},     you    have      {count}     messages",
+        context: {"name" : "Brad", "count" : 3},
+        expected: "Hello   Brad,     you    have      3     messages",
+        message: "should test that the template contains the same ws after compilation"
+      },
+      {
+        name: "format template with carriage return",
+        source: "Hello \n {name}, \n you \n have \n {count} \n messages",
+        context: {"name" : "Brad", "count" : 3},
+        expected: "Hello \n Brad, \n you \n have \n 3 \n messages",
+        message: "should test that the template contains the same carriage returns after compilation"
+      },
+      {
+        name: "format template with carriage return and whitespaces",
+        source: "Hello \n    {name}, \n    you \n     have \n     {count} \n     messages",
+        context: {"name" : "Brad", "count" : 3},
+        expected: "Hello \n    Brad, \n    you \n     have \n     3 \n     messages",
+        message: "should test that the template contains the same carriage returns and whitespaces after compilation"
       }
     ]
   }

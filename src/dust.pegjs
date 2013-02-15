@@ -177,7 +177,7 @@ comment "comment"
    doesn't match rd or eol plus 0 or more whitespaces plus a closing brace
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 tag
-  = ld ws* [#?^><+%:@/~%] ws* (!rd !eol .)+ ws* rd
+  = ld ws* [#?^><+%:@/~%] ws* (!rd .)+ ws* rd
   / reference
 
 ld
