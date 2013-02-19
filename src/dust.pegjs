@@ -155,7 +155,7 @@ inline_part
 buffer "buffer"
   = e:eol w:ws*
   { return ["format", e, w.join('')] }
-  / b:(!tag !comment c:. {return c})+
+  / b:(!tag !comment !eol c:. {return c})+
   { return ["buffer", b.join('')] }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
