@@ -963,7 +963,7 @@ var coreTests = [
                   '{/title_B}',
                   '{+"title_{val}"/}'].join("\n"),
         context: { "val" : "A" },
-        expected: "AAA\n",
+        expected: "AAA",
         message: "should test blocks with dynamic keys"
       },
       {
@@ -976,7 +976,7 @@ var coreTests = [
                   '{/title_B}',
                   '{+"{val1}_{val2}"/}'].join("\n"),
         context: { "val1" : "title", "val2" : "A" },
-        expected: "AAA\n",
+        expected: "AAA",
         message: "should test blocks with more than one dynamic keys"
       },
       {
@@ -989,7 +989,7 @@ var coreTests = [
                   '{/title_B}',
                   '{+"{val1}_{obj.name}"/}'].join("\n"),
         context: { "val1" : "title", "val2" : "A", "obj" : { "name" : "B" } },
-        expected: "BBB\n",
+        expected: "BBB",
         message: "should test blocks with dynamic key values as objects"
       },
       {
@@ -1002,7 +1002,7 @@ var coreTests = [
                   '{/title_B}',
                   '{+"{val1}_{obj.name[0]}"/}'].join("\n"),
         context: { "val1" : "title", "val2" : "A", "obj" : { "name" : ["A", "B"] } },
-        expected: "AAA\n",
+        expected: "AAA",
         message: "should test blocks with dynamic key values as arrays"
       }
     ]
@@ -1133,34 +1133,6 @@ var coreTests = [
         context: {},
         expected: "{&partial/}",
         message: "This content {&partial/} should be parsed as buffer"
-      },
-      {
-        name: "buffer does not ignore ws",
-        source: "Hi {name}:   you won a blue car",
-        context: { "name" : "Jairo"},
-        expected: "Hi Jairo:   you won a blue car",
-        message: "Buffer should not ignore ws"
-      },
-      {
-        name: "buffer: does not ignore line feed",
-        source: "Hi {name}:\n   you won a blue car",
-        context: { "name" : "Jairo"},
-        expected: "Hi Jairo:\n   you won a blue car",
-        message: "Buffer should not ignore line feed"
-      },
-      {
-        name: "buffer: does not ignore line feed and carriage",
-        source: "Hi {name}:\r\n   you won a blue car",
-        context: { "name" : "Jairo"},
-        expected: "Hi Jairo:\r\n   you won a blue car",
-        message: "Buffer should not ignore line feed and carriage"
-      },
-      {
-        name: "buffer: does not ignore carriage return",
-        source: "Hi {name}:\r   you won a blue car",
-        context: { "name" : "Jairo"},
-        expected: "Hi Jairo:\r   you won a blue car",
-        message: "Buffer should not ignore carriage return"
       }
     ]
   }
