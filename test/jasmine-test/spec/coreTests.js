@@ -1147,6 +1147,18 @@ var coreTests = [
         message: "Should not crash the application if an helper is not found"
       }
     ]
+  },
+  {
+    name:"Helpers",
+    tests: [
+      {
+        name:     "nonexistant helper",
+        source:   "some text {@notfound}foo{/notfound} some text",
+        context:  {},
+        expected: "some text  some text",
+        message: "Should not crash the application if an helper is not found"
+      }
+    ]
   }
 ];
 
