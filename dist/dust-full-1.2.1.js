@@ -792,6 +792,7 @@ dust.nodes = {
   },
 
   format: function(context, node) {
+    debugger;
     return ".write(" + escape(node[1] + node[2]) + ")";
   },
 
@@ -1162,7 +1163,7 @@ var parser = (function(){
       
       function parse_section() {
         var result0, result1, result2, result3, result4, result5, result6;
-        var pos0, pos1, pos2;
+        var pos0, pos1;
         
         reportFailures++;
         pos0 = clone(pos);
@@ -1182,17 +1183,10 @@ var parser = (function(){
               if (result3 !== null) {
                 result4 = parse_bodies();
                 if (result4 !== null) {
-                  pos2 = clone(pos);
                   result5 = parse_end_tag();
                   result5 = result5 !== null ? result5 : "";
                   if (result5 !== null) {
-                    result5 = (function(offset, line, column, et) {if(!et) {matchFailed("section");} return et;})(pos2.offset, pos2.line, pos2.column, result5);
-                  }
-                  if (result5 === null) {
-                    pos = clone(pos2);
-                  }
-                  if (result5 !== null) {
-                    result6 = (function(offset, line, column, t, b, e, n) { return t[1].text === n.text;})(pos.offset, pos.line, pos.column, result0, result3, result4, result5) ? "" : null;
+                    result6 = (function(offset, line, column, t, b, e, n) {if( (!n) || (t[1].text !== n.text) ) { throw new Error("Expected end tag for "+t[1].text+" but it was not found. At line : "+line+", column : " + column)} return true;})(pos.offset, pos.line, pos.column, result0, result3, result4, result5) ? "" : null;
                     if (result6 !== null) {
                       result0 = [result0, result1, result2, result3, result4, result5, result6];
                     } else {

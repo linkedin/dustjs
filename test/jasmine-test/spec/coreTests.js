@@ -345,7 +345,7 @@ var coreTests = [
                 "{#&2}",
                 "{/s}"].join("\n"),
         context: {},
-        error: 'Expected section but "{" found. At line : 2, column : 1',
+        error: 'Expected end tag for s but it was not found. At line : 2, column : 1',
         message: "should test the errors message for section with error."
       },
       {
@@ -358,7 +358,7 @@ var coreTests = [
                 "buffer",
                 "{/s}"].join("\n"),
         context: {},
-        error: 'Expected section but "{" found. At line : 4, column : 1',
+        error: 'Expected end tag for s but it was not found. At line : 4, column : 1',
         message: "should test the errors message for section with a buffer and error inside."
       },
       {
@@ -369,7 +369,7 @@ var coreTests = [
                 "a second",
                 "buffer"].join("\n"),
         context: {},
-        error: 'Expected section but end of input found. At line : 5, column : 7',
+        error: 'Expected end tag for s but it was not found. At line : 5, column : 7',
         message: "should test the errors message for section without end tag shows."
       },
       {
@@ -381,7 +381,7 @@ var coreTests = [
                 "default header ",
                 "{/header}"].join("\n"),
         context: {},
-        error: 'Expected section but "{" found. At line : 4, column : 5',
+        error: 'Expected end tag for header but it was not found. At line : 4, column : 5',
         message: "should test the errors message for partials with a buffer inside."
       },
       {
@@ -392,7 +392,7 @@ var coreTests = [
                 "a second",
                 "buffer"].join("\n"),
         context: {},
-        error: 'Expected section but end of input found. At line : 5, column : 7',
+        error: 'Expected end tag for header but it was not found. At line : 5, column : 7',
         message: "should test the errors message for partial without end tag."
       },
       {
@@ -404,7 +404,7 @@ var coreTests = [
                 "false",
                 "{/scalar}"].join("\n"),
         context: {},
-        error: 'Expected section but "{" found. At line : 3, column : 2',
+        error: 'Expected end tag for scalar but it was not found. At line : 3, column : 2',
         message: "should test the errors message for Scalar."
       },
       {
@@ -416,7 +416,7 @@ var coreTests = [
                 " {#@#fger}",
                 "{/scalar}"].join("\n"),
         context: {},
-        error: 'Expected section but "{" found. At line : 5, column : 2',
+        error: 'Expected end tag for scalar but it was not found. At line : 5, column : 2',
         message: "should test the errors message for Scalar."
       },
       {
@@ -431,7 +431,7 @@ var coreTests = [
                   "No Tags!",
                 "{/tags}"].join("\n"),
         context: {},
-        error: 'Expected section but "{" found. At line : 4, column : 5',
+        error: 'Expected end tag for tags but it was not found. At line : 4, column : 5',
         message: "should test the errors message for Conditionals."
       },
       {
@@ -447,7 +447,7 @@ var coreTests = [
                   "No Tags!",
                 "{/tags}"].join("\n"),
         context: {},
-        error: 'Expected section but "{" found. At line : 8, column : 1',
+        error: 'Expected end tag for tags but it was not found. At line : 8, column : 1',
         message: "should test the errors message for Conditional's else."
       },
       {
@@ -461,7 +461,7 @@ var coreTests = [
                 "{:else}",
                   "No Tags!"].join("\n"),
         context: {},
-        error: 'Expected section but end of input found. At line : 8, column : 9',
+        error: 'Expected end tag for tags but it was not found. At line : 8, column : 9',
         message: "should test the errors message for Conditional without end tag."
       }
     ]
@@ -984,7 +984,7 @@ var coreTests = [
         name:     "error: whitespaces between the openning curly brace and forward slash in the closing tags not supported",
         source:   '{# helper foo="bar" boo="boo"} { / helper }',
         context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
-        error:    'Expected section but \"{\" found. At line : 1, column : 32',
+        error:    'Expected end tag for helper but it was not found. At line : 1, column : 32',
         message: "should show an error because whitespaces between the '{' and the forward slash are not allowed in the closing tags"
       },
       {
