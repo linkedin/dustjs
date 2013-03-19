@@ -1,142 +1,233 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Dustjs by linkedin</title>
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="javascripts/main.js"></script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<head>
+<meta charset='utf-8'>
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+<!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-
-  </head>
-  <body>
-
-      <header>
-        <h1>Dustjs</h1>
-        <p>Asynchronous templates for the browser and node.js</p>
-      </header>
-
-      <div id="banner">
-        <span id="logo"></span>
-
-        <a href="https://github.com/linkedin/dustjs" class="button fork"><strong>View On GitHub</strong></a>
-        <div class="downloads">
-          <span>Downloads:</span>
-          <ul>
-            <li><a href="https://github.com/linkedin/dustjs/zipball/master" class="button">ZIP</a></li>
-            <li><a href="https://github.com/linkedin/dustjs/tarball/master" class="button">TAR</a></li>
-          </ul>
-        </div>
-      </div><!-- end banner -->
-
-    <div class="wrapper">
-      <nav>
-        <ul></ul>
-      </nav>
-      <section>
-        <h1>Dust  <a href="http://travis-ci.org/linkedin/dustjs"><img src="https://secure.travis-ci.org/linkedin/dustjs.png" alt="Build Status"></a>
-</h1>
-
-<h2>Demo &amp; Guide</h2>
-
-<p>Extensive docs and a full demo are available at <a href="http://akdubya.github.com/dustjs">http://akdubya.github.com/dustjs</a></p>
-
-<h2>Highlights!</h2>
-
-<p>Use Dust if you want these things:</p>
-
-<ul>
-<li>async/streaming operation</li>
-<li>browser/node compatibility</li>
-<li>extended Mustache/ctemplate syntax</li>
-<li>clean, low-level API</li>
-<li><a href="http://akdubya.github.com/dustjs/benchmark/index.html">high performance</a></li>
-<li>composable templates</li>
-</ul><h1>This is the LinkedIn fork of dust.js</h1>
-
-<p>Details in the blog post : <a href="http://engineering.linkedin.com/frontend/leaving-jsps-dust-moving-linkedin-dustjs-client-side-templates">http://engineering.linkedin.com/frontend/leaving-jsps-dust-moving-linkedin-dustjs-client-side-templates</a></p>
-
-<p>We will gradually be extending this library with helper functions and bug fixes. </p>
-
-<h2>Current LinkedIn additions include:</h2>
-
-<ul>
-<li>Fix to peg.js to print the line and column number for syntax errors in dust templates</li>
-<li>Fix to support &gt; node0.4 </li>
-<li>Addition of jasmine test suite, BDD with dust.js </li>
-<li>There are cases of rendering logic that are best done in templates. <a href="https://github.com/if" class="user-mention">@if</a> helper that relies entirely on the js eval for expression evaluation, The perf results are here: <a href="http://jsperf.com/dust-if">http://jsperf.com/dust-if</a>. We intend to replace the slow js eval with a expression parser soon </li>
-<li>Section index for lists of maps stored in the dust context for ease of writing simple logic in templates</li>
-<li>Section size for lists of maps stored in the dust context for ease of  writing simple logic in templates</li>
-<li>Automated Travis CI integration, jasmine for BDD, code coverage report</li>
-<li>Extend grammar to relax whitespace/eol </li>
-<li>Add support for rhino in the dust core</li>
-<li>improve compile times by 10X with changes to how we use peg parser</li>
-<li>Extend filters for JSON.stringify and JSON.parse</li>
-<li>logic helpers for select/ switch</li>
-<li>Support numbers in dust inline params</li>
-<li>Extend partials to support inline params</li>
-<li>Support for array references, hence list elements can be accessed via the [] notation</li>
-<li>Support dynamic blocks, similar to dynamic partials</li>
-<li>Add pipe support for node</li>
-<li>Documentation/wiki on the best practices for using dustjs</li>
-</ul><h2>Installation</h2>
-
-<p>For Linkedin Dustjs</p>
-
-<pre><code>$ npm install dustjs-linkedin
-</code></pre>
-
-<p>To render compiled templates in the browser:</p>
-
-<pre><code>&lt;script src="dust-core-1.0.0.min.js"&gt;&lt;/script&gt;
-</code></pre>
-
-<p>To compile a template on the command line, use the dustc command.
-Its syntax is:</p>
-
-<pre><code>dustc [{-n|--name}=&lt;template_name&gt;] {inputfilename|-} [&lt;outputfilename&gt;]
-</code></pre>
-
-<p>For example, to compile a template on the command line and have it
-registered under the same name as the source file:</p>
-
-<pre><code>$ dustc template.html
-</code></pre>
-
-<p>You can customize the name under which the template is registered:</p>
-
-<pre><code>$ dustc --name=mytemplate template.html
-</code></pre>
-
-<h2>Running Tests</h2>
-
-<p>To run tests:</p>
-
-<pre><code>$ make test
-</code></pre>
-
-<p>To generate code coverage report:</p>
-
-<pre><code>$ npm install cover -g
-$ make coverage
-</code></pre>
-
-<p>To view HTML test coverage report:</p>
-
-<pre><code>$ open cover_html/index.html
-</code></pre>
-      </section>
-      <footer>
-        <p>Project maintained by <a href="https://github.com/linkedin">linkedin</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></small></p>
-      </footer>
-    </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-    
-  </body>
+<title>Dust by LinkedIn</title>
+</head>
+<body>
+<header>
+<div class="inner">
+  <h1>Dust</h1>
+  <h2>Asynchronous templates for the browser and node.js</h2>
+  <a href="https://github.com/linkedin/dustjs" class="button"><small>View project on</small>GitHub</a>
+</div>
+</header>
+<div id="content-wrapper">
+  <div class="inner clearfix">
+    <section id="main-content">
+    <h1>Dust<a href="http://travis-ci.org/linkedin/dustjs"><img src="https://secure.travis-ci.org/linkedin/dustjs.png" alt="Build Status"></a>
+    </h1>
+    <h1>This is the LinkedIn fork of Dust</h1>
+    <p>
+      Details in the blog post : <a href="http://engineering.linkedin.com/frontend/leaving-jsps-dust-moving-linkedin-dustjs-client-side-templates">
+      Leaving jsps in the Dust</a>
+    </p>
+    <p>
+      We chose Dust after evaluating a bunch of others. Read more here : <a href="http://engineering.linkedin.com/frontend/client-side-templating-throwdown-mustache-handlebars-dustjs-and-more">
+      Dust for client templates at LinkedIn </a>
+    </p>
+    <p>
+      We will gradually be extending this library with core feature enhancements, helper functions and bug fixes.
+    </p>
+    <h2>Dust Highlights!</h2>
+    <ul>
+      <li>async/streaming operation</li>
+      <li>browser/node compatibility</li>
+      <li>extended Mustache/ctemplate syntax</li>
+      <li>clean, low-level API</li>
+      <li><a href="http://linkedin.github.com/dustjs/benchmark/index.html">high performance</a></li>
+      <li>composable templates</li>
+    </ul>
+    <h2>Dust Quick Tutorial</h2>
+    <p>
+      <a href="https://github.com/linkedin/dustjs/wiki/Dust-Tutorial">Learn how to use LinkedIn fork of Dust</a>
+    </p>
+    <h2>Dust core features - Code examples</h2>
+    <p>
+      <a href="http://linkedin.github.com/dustjs/test/test.html">Learn by playing with the dust templates</a>
+    </p>
+    <h2>Dust helpers - Code examples </h2>
+    <p>
+      <a href="http://linkedin.github.com/dustjs/test/test.html?q=helpers">Learn how to use the helpers</a>
+    </p>
+    <h2>Dust With Express/Node </h2>
+    <p>
+      <a href="https://github.com/chovy/express-template-demo">Get started with using dust with express in node.js</a>
+    </p>
+    <h2>LinkedIn additions include:</h2>
+    <h3>Release 1.2.0</h3>
+    <h4>Core enhancements</h4>
+    <ul>
+      <li>Added template trim of white spaces to dust.compile </li>
+      <li>Npm dependencies updated</li>
+      <li>Eol rule removed from buffer rule in the parser</li>
+    </ul>
+    <h4>Bug fixes/ perf improvements</h4>
+    <ul>
+      <li>Fixed bugs: GH-148, GH-187, GH-183, GH-166, GH-186, GH-162, GH-69, GH-173, GH-182, GH-188, GH-185, GH-184, GH-189, GH-191, GH-180, GH-61, GH-193, GH-198, GH-199, GH-203, GH-195, GH-211, GH-215, GH-216, GH-206, GH-212, GH-217, GH-96, GH-219, GH-220, GH-222</li>
+    </ul>
+    <h4>Test enhancements</h4>
+    <ul>
+      <li>Tests's description updated to be more descriptive. </li>
+      <li>Bug fixes and UI improved.</li>
+      <li>Tests grouped by category</li>
+    </ul>
+    <h3>Release 1.1.0</h3>
+    <h4>Core enhancements</h4>
+    <ul>
+      <li>Extend the #section block to support $idx and $len for lists of primitives </li>
+      <li>Add support for assigning multiple event-listeners on stream</li>
+    </ul>
+    <h4>Bug fixes/ perf improvements</h4>
+    <ul>
+      <li>Fix the #section block on how it behaves with empty arrays. Maintain consistency between ?, # and ^ for truthy/falsy evaluations </li>
+      <li>Fix "this" value in anonymous functions passed into the context object</li>
+      <li>Handle undefined filters and helpers gracefully</li>
+    </ul>
+    <h4>Extensions and helpers </h4>
+    <ul>
+      <li>Helpers are now in its own node package<a href="https://github.com/linkedin/dustjs-helpers"> See here </a></li>
+      <li>@math for simple math operations such as add/subtract/mod/ceil etc. It also supports branching based on the output of math operation</li>
+      <li>@size helper for determining the size of lists/objects/primitives</li>
+      <li>@contextDump helper for debugging the current context in the dust stack</li>
+    </ul>
+    <h2>NOTE: We have removed dust helpers code from the dustjs-linkedin repo from V1.1.1, use npm install dustjs-helpers instead for using the helpers </h2>
+    <h3>Release 1.0.0</h3>
+    <h4>Core enhancements</h4>
+    <ul>
+      <li>Extend partials to support inline params like #sections</li>
+      <li>Section index for lists of objects,$idx in the context</li>
+      <li>Section size/length for lists of objects, $len in the context</li>
+      <li>Extend grammar to relax whitespace/eol for certain Dust tags</li>
+      <li>Support numbers in the inline params</li>
+      <li>Extend core support for accessing single dimensional array with [] notation</li>
+      <li>Support dynamic blocks, similar to dynamic partials</li>
+      <li>Add pipe support for Node.js</li>
+      <li>Add support for runnin on V8/rhino</li>
+      <li>Extend filters for JSON.stringify and JSON.parse</li>
+      <li>Jasmine for unit tests</li>
+      <li>Travis CI for continuos build and Cover for code coverage report</li>
+    </ul>
+    <h4>Bug fixes/ perf improvements</h4>
+    <ul>
+      <li>Fix to support &gt; node0.4 </li>
+      <li>Fix to peg.js to print the line and column number for syntax errors in dust templates</li>
+      <li>Improved compile times by 10X by optimizing the way we used the peg parser</li>
+    </ul>
+    <h4>Extensions and helpers </h4>
+    <ul>
+      <li>Simple logic/branching helpers with @select/ @eq/ @lt etc</li>
+      <li>Versatile @if helper relies on the eval for complex expression evaluation, Here are the perf results for eval <a href="http://jsperf.com/dust-if">http://jsperf.com/dust-if</a>. Use with caution, since eval is known to be slow.
+    </ul>
+    <h2>Installation</h2>
+    <p>
+      For LinkedIn Dust
+    </p>
+    <pre>
+      <code>$ npm install dustjs-linkedin </code>
+    </pre>
+    <p>
+      For LinkedIn Dust helpers
+    </p>
+    <pre>
+      <code>$ npm install dustjs-helpers </code>
+    </pre>
+    <p>
+      To render compiled templates in the browser:
+    </p>
+    <pre>
+      <code>&lt;script src="dust-core-1.0.0.min.js"&gt;&lt;/script&gt; </code>
+    </pre>
+    <p>
+      To compile a template on the command line, use the dustc command. Its syntax is:
+    </p>
+    <pre>
+      <code>dustc [{-n|--name}=&lt;template_name&gt;] {inputfilename|-} [&lt;outputfilename&gt;] </code>
+    </pre>
+    <p>
+      For example, to compile a template on the command line and have it registered under the same name as the source file:
+    </p>
+    <pre>
+      <code>$ dustc template.html </code>
+    </pre>
+    <p>
+      You can customize the name under which the template is registered:
+    </p>
+    <pre>
+      <code>$ dustc --name=mytemplate template.html </code>
+    </pre>
+    <h2>Running Tests</h2>
+    <p>
+      To run tests:
+    </p>
+    <pre>
+      <code>$ make test </code>
+    </pre>
+    <p>
+      To run jasmine tests:
+    </p>
+    <pre>
+      <code>$ make jasmine </code>
+    </pre>
+    <h2>Coverage report</h2>
+    <p>
+      To generate code coverage report:
+    </p>
+    <pre>
+      <code>$ npm install cover -g $ make coverage </code>
+    </pre>
+    <p>
+      To view HTML test coverage report:
+    </p>
+    <pre>
+      <code>$ open cover_html/index.html</code>
+    </pre>
+    <h2>Dust Coverage Online!</h2>
+    <ul>
+      <li><a href="http://linkedin.github.com/dustjs/cover_html/index.html">Click Here</a></li>
+    </ul>
+    <h2>Minify dust files</h2>
+    <p>
+      If you need a minified version of Dust, you will find it in the "dist" folder. If the minified files do not exist, you can generate them using
+    </p>
+    <p>
+      Install all the dependencies to minify first
+    </p>
+    <pre>
+      <code>$ npm install</code>
+    </pre>
+    <pre>
+      <code>$ make min</code>
+    </pre>
+    <h2>Guidelines - Contributing to LinkedIn Dust</h2>
+    <p>
+      <a href="https://github.com/linkedin/dustjs/wiki/How-to-Contribute">If you are interested in contributing?</a>
+    </p>
+    </section>
+    <aside id="sidebar">
+    <a href="https://github.com/linkedin/dustjs/zipball/master" class="button">
+    <small>Download</small>
+    .zip file </a>
+    <a href="https://github.com/linkedin/dustjs/tarball/master" class="button">
+    <small>Download</small>
+    .tar.gz file </a>
+    <p class="repo-owner">
+      <a href="https://github.com/linkedin/dustjs"></a> is maintained by <a href="https://github.com/linkedin">linkedin</a>.
+    </p>
+    <p>
+      This page was generated by <a href="pages.github.com">GitHub Pages</a> using the Architect theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
+    </p>
+    </aside>
+  </div>
+</div>
+</body>
 </html>
