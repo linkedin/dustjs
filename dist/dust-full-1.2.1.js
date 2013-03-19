@@ -792,7 +792,6 @@ dust.nodes = {
   },
 
   format: function(context, node) {
-    debugger;
     return ".write(" + escape(node[1] + node[2]) + ")";
   },
 
