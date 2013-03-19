@@ -18,8 +18,8 @@ part
    plus bodies plus end_tag or sec_tag_start followed by a slash and closing brace
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 section "section"
-  = t:sec_tag_start ws* rd b:body e:bodies n:end_tag &{ return t[1].text === n.text;}
-  { e.push(["param", ["literal", "block"], b]); t.push(e); return t }
+  = t:sec_tag_start ws* rd b:body e:bodies n:end_tag? &{if( (!n) || (t[1].text !== n.text) ) { throw new Error("Expected end tag for "+t[1].text+" but it was not found. At line : "+line+", column : " + column)} return true;}
+    { e.push(["param", ["literal", "block"], b]); t.push(e); return t }
   / t:sec_tag_start ws* "/" rd
   { t.push(["bodies"]); return t }
 
