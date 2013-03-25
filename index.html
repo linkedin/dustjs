@@ -1,32 +1,66 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-<meta charset='utf-8'>
-<meta http-equiv="X-UA-Compatible" content="chrome=1">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
-<link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
-<link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
-<link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
-<!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Dustjs by linkedin</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/main.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-<title>Dust by LinkedIn</title>
-</head>
-<body>
-<header>
-<div class="inner">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+
+      <header>
+        <h1>Dustjs</h1>
+        <p>Asynchronous templates for the browser and node.js</p>
+      </header>
+
+      <div id="banner">
+        <span id="logo"></span>
+
+        <a href="https://github.com/linkedin/dustjs" class="button fork"><strong>View On GitHub</strong></a>
+        <div class="downloads">
+          <span>Downloads:</span>
+          <ul>
+            <li><a href="https://github.com/linkedin/dustjs/zipball/master" class="button">ZIP</a></li>
+            <li><a href="https://github.com/linkedin/dustjs/tarball/master" class="button">TAR</a></li>
+          </ul>
+        </div>
+      </div><!-- end banner -->
+
+    <div class="wrapper">
+      <nav>
+        <ul></ul>
+      </nav>
+      <section>
+        <p>
+</p>
+<p></p>Dust by LinkedIn <div>
   <h1>Dust</h1>
   <h2>Asynchronous templates for the browser and node.js</h2>
-  <a href="https://github.com/linkedin/dustjs" class="button"><small>View project on</small>GitHub</a>
+  <a href="https://github.com/linkedin/dustjs">View project onGitHub</a>
 </div>
-</header>
-<div id="content-wrapper">
-  <div class="inner clearfix">
-    <section id="main-content">
-    <h1>Dust<a href="http://travis-ci.org/linkedin/dustjs"><img src="https://secure.travis-ci.org/linkedin/dustjs.png" alt="Build Status"></a>
+
+<p></p> <div>
+  <div>
+     <h1>Dust<a href="http://travis-ci.org/linkedin/dustjs"><img src="https://secure.travis-ci.org/linkedin/dustjs.png" alt="Build Status"></a>
     </h1>
-    <h1>This is the LinkedIn fork of Dust</h1>
+   <h2>Dust Highlights!</h2>
+    <ul>
+<li>async/streaming operation</li>
+      <li>browser/node compatibility</li>
+      <li>extended Mustache/ctemplate syntax</li>
+      <li>clean, low-level API</li>
+      <li><a href="http://linkedin.github.com/dustjs/benchmark/index.html">high performance</a></li>
+      <li>composable templates</li>
+    </ul>
+<h1>This is the LinkedIn fork of Dust</h1>
     <p>
       Details in the blog post : <a href="http://engineering.linkedin.com/frontend/leaving-jsps-dust-moving-linkedin-dustjs-client-side-templates">
       Leaving jsps in the Dust</a>
@@ -38,15 +72,7 @@
     <p>
       We will gradually be extending this library with core feature enhancements, helper functions and bug fixes.
     </p>
-    <h2>Dust Highlights!</h2>
-    <ul>
-      <li>async/streaming operation</li>
-      <li>browser/node compatibility</li>
-      <li>extended Mustache/ctemplate syntax</li>
-      <li>clean, low-level API</li>
-      <li><a href="http://linkedin.github.com/dustjs/benchmark/index.html">high performance</a></li>
-      <li>composable templates</li>
-    </ul>
+    
     <h2>Dust Quick Tutorial</h2>
     <p>
       <a href="https://github.com/linkedin/dustjs/wiki/Dust-Tutorial">Learn how to use LinkedIn fork of Dust</a>
@@ -63,48 +89,51 @@
     <p>
       <a href="https://github.com/chovy/express-template-demo">Get started with using dust with express in node.js</a>
     </p>
-    <h2>LinkedIn additions include:</h2>
-    <h3>Release 1.2.0</h3>
-    <h4>Core enhancements</h4>
+    <h3>LinkedIn additions include:</h3>
+    <h4>Release 1.2.0</h4>
+    <h5>Core enhancements</h5>
     <ul>
-      <li>Added template trim of white spaces to dust.compile </li>
+<li>Added template trim of white spaces to dust.compile </li>
       <li>Npm dependencies updated</li>
       <li>Eol rule removed from buffer rule in the parser</li>
     </ul>
-    <h4>Bug fixes/ perf improvements</h4>
+<h5>Bug fixes/ perf improvements</h5>
     <ul>
-      <li>Fixed bugs: GH-148, GH-187, GH-183, GH-166, GH-186, GH-162, GH-69, GH-173, GH-182, GH-188, GH-185, GH-184, GH-189, GH-191, GH-180, GH-61, GH-193, GH-198, GH-199, GH-203, GH-195, GH-211, GH-215, GH-216, GH-206, GH-212, GH-217, GH-96, GH-219, GH-220, GH-222</li>
+<li>Fixed bugs: GH-148, GH-187, GH-183, GH-166, GH-186, GH-162, GH-69, GH-173, GH-182, GH-188, GH-185, GH-184, GH-189, GH-191, GH-180, GH-61, GH-193, GH-198, GH-199, GH-203, GH-195, GH-211, GH-215, GH-216, GH-206, GH-212, GH-217, GH-96, GH-219, GH-220, GH-222</li>
     </ul>
-    <h4>Test enhancements</h4>
+<h5>Test enhancements</h5>
     <ul>
-      <li>Tests's description updated to be more descriptive. </li>
+<li>Tests's description updated to be more descriptive. </li>
       <li>Bug fixes and UI improved.</li>
       <li>Tests grouped by category</li>
     </ul>
-    <h3>Release 1.1.0</h3>
-    <h4>Core enhancements</h4>
+<h4>Release 1.1.0</h4>
+    <h5>Core enhancements</h5>
     <ul>
-      <li>Extend the #section block to support $idx and $len for lists of primitives </li>
+<li>Extend the #section block to support $idx and $len for lists of primitives </li>
       <li>Add support for assigning multiple event-listeners on stream</li>
     </ul>
-    <h4>Bug fixes/ perf improvements</h4>
+<h5>Bug fixes/ perf improvements</h5>
     <ul>
-      <li>Fix the #section block on how it behaves with empty arrays. Maintain consistency between ?, # and ^ for truthy/falsy evaluations </li>
+<li>Fix the #section block on how it behaves with empty arrays. Maintain consistency between ?, # and ^ for truthy/falsy evaluations </li>
       <li>Fix "this" value in anonymous functions passed into the context object</li>
       <li>Handle undefined filters and helpers gracefully</li>
     </ul>
-    <h4>Extensions and helpers </h4>
+<h5>Extensions and helpers </h5>
     <ul>
-      <li>Helpers are now in its own node package<a href="https://github.com/linkedin/dustjs-helpers"> See here </a></li>
-      <li>@math for simple math operations such as add/subtract/mod/ceil etc. It also supports branching based on the output of math operation</li>
-      <li>@size helper for determining the size of lists/objects/primitives</li>
+<li>Helpers are now in its own node package<a href="https://github.com/linkedin/dustjs-helpers"> See here </a>
+</li>
+      <li>
+<a href="https://github.com/math" class="user-mention">@math</a> for simple math operations such as add/subtract/mod/ceil etc. It also supports branching based on the output of math operation</li>
+      <li>
+<a href="https://github.com/size" class="user-mention">@size</a> helper for determining the size of lists/objects/primitives</li>
       <li>@contextDump helper for debugging the current context in the dust stack</li>
     </ul>
-    <h2>NOTE: We have removed dust helpers code from the dustjs-linkedin repo from V1.1.1, use npm install dustjs-helpers instead for using the helpers </h2>
-    <h3>Release 1.0.0</h3>
-    <h4>Core enhancements</h4>
+<p>NOTE: We have removed dust helpers code from the dustjs-linkedin repo from V1.1.1, use npm install   dustjs-helpers instead for using the helpers</p>
+    <h4>Release 1.0.0</h4>
+    <h5>Core enhancements</h5>
     <ul>
-      <li>Extend partials to support inline params like #sections</li>
+<li>Extend partials to support inline params like #sections</li>
       <li>Section index for lists of objects,$idx in the context</li>
       <li>Section size/length for lists of objects, $len in the context</li>
       <li>Extend grammar to relax whitespace/eol for certain Dust tags</li>
@@ -117,18 +146,19 @@
       <li>Jasmine for unit tests</li>
       <li>Travis CI for continuos build and Cover for code coverage report</li>
     </ul>
-    <h4>Bug fixes/ perf improvements</h4>
+<h5>Bug fixes/ perf improvements</h5>
     <ul>
-      <li>Fix to support &gt; node0.4 </li>
+<li>Fix to support &gt; node0.4 </li>
       <li>Fix to peg.js to print the line and column number for syntax errors in dust templates</li>
       <li>Improved compile times by 10X by optimizing the way we used the peg parser</li>
     </ul>
-    <h4>Extensions and helpers </h4>
+<h5>Extensions and helpers </h5>
     <ul>
-      <li>Simple logic/branching helpers with @select/ @eq/ @lt etc</li>
-      <li>Versatile @if helper relies on the eval for complex expression evaluation, Here are the perf results for eval <a href="http://jsperf.com/dust-if">http://jsperf.com/dust-if</a>. Use with caution, since eval is known to be slow.
-    </ul>
-    <h2>Installation</h2>
+<li>Simple logic/branching helpers with @select/ @eq/ <a href="https://github.com/lt" class="user-mention">@lt</a> etc</li>
+      <li>Versatile <a href="https://github.com/if" class="user-mention">@if</a> helper relies on the eval for complex expression evaluation, Here are the perf results for eval <a href="http://jsperf.com/dust-if">http://jsperf.com/dust-if</a>. Use with caution, since eval is known to be slow.
+    </li>
+</ul>
+<h2>Installation</h2>
     <p>
       For LinkedIn Dust
     </p>
@@ -193,9 +223,9 @@
     </pre>
     <h2>Dust Coverage Online!</h2>
     <ul>
-      <li><a href="http://linkedin.github.com/dustjs/cover_html/index.html">Click Here</a></li>
+<li><a href="http://linkedin.github.com/dustjs/cover_html/index.html">Click Here</a></li>
     </ul>
-    <h2>Minify dust files</h2>
+<h2>Minify dust files</h2>
     <p>
       If you need a minified version of Dust, you will find it in the "dist" folder. If the minified files do not exist, you can generate them using
     </p>
@@ -212,22 +242,40 @@
     <p>
       <a href="https://github.com/linkedin/dustjs/wiki/How-to-Contribute">If you are interested in contributing?</a>
     </p>
-    </section>
-    <aside id="sidebar">
-    <a href="https://github.com/linkedin/dustjs/zipball/master" class="button">
-    <small>Download</small>
+      <a href="https://github.com/linkedin/dustjs/zipball/master">
+    Download
     .zip file </a>
-    <a href="https://github.com/linkedin/dustjs/tarball/master" class="button">
-    <small>Download</small>
+    <a href="https://github.com/linkedin/dustjs/tarball/master">
+    Download
     .tar.gz file </a>
-    <p class="repo-owner">
+    <p>
       <a href="https://github.com/linkedin/dustjs"></a> is maintained by <a href="https://github.com/linkedin">linkedin</a>.
     </p>
     <p>
       This page was generated by <a href="pages.github.com">GitHub Pages</a> using the Architect theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
     </p>
-    </aside>
-  </div>
+     </div>
 </div>
-</body>
+
+<p>
+</p>
+      </section>
+      <footer>
+        <p>Project maintained by <a href="https://github.com/linkedin">linkedin</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-39567786-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
 </html>
