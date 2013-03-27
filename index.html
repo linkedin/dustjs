@@ -93,12 +93,18 @@
     <h4>Release 1.2.0</h4>
     <h5>Core enhancements</h5>
     <ul>
-<li>Added trimming of white spaces in dust templates configuration in the dust.compile ( default option is still true) </li>
+<li>GH- 166 - Added trimming of white spaces in dust templates configuration in the dust.compile ( default option is still true) </li>
     </ul>
 <h5>Bug fixes/ perf improvements</h5>
-    <ul>
-<li>Fixed bugs: GH-148, GH-187, GH-183, GH-166, GH-186, GH-162, GH-69, GH-173, GH-182, GH-188, GH-185, GH-184, GH-189, GH-191, GH-180, GH-61, GH-193, GH-198, GH-199, GH-203, GH-195, GH-211, GH-215, GH-216, GH-206, GH-212, GH-217, GH-96, GH-219, GH-220, GH-222</li>
-    </ul>
+<ul>
+<li>GH-148 - Fix the array reference access with $idx </li>
+<li>GH-187 - Whitespace grammar rule for partial is now consistent with ther tags</li>
+<li>GH-203 - Doc updated</li>
+<li>GH-212 - jam support for dust</li>
+<li>GH-216 - Add missing semicolon to help with minify</li>
+<li>GH-220 - Reverted in V1.2.1</li>
+<li>GH-222 - Fix regression add back $idx within a nested object in an array</li>
+</ul>
 <h5>Test enhancements</h5>
     <ul>
 <li>Tests's description updated to be more descriptive. </li>
