@@ -20,9 +20,6 @@ Test.prototype.run = function() {
 }
 
 Test.prototype.equals = function(actual, expected, message) {
-    if( Object.prototype.toString.call( expected ) === '[object Array]' ) {
-        expected = expected[0];
-    }
     if (actual !== expected) {
         var err = new Error();
         if (message) err.message = message;
