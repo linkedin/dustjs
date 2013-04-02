@@ -20,11 +20,11 @@ Test.prototype.run = function() {
 }
 
 Test.prototype.equals = function(actual, expected, message) {
-  if (actual !== expected) {
-    var err = new Error();
-    if (message) err.message = message;
-    throw wrapAssertionError(err, actual, expected, "===");
-  }
+    if (actual !== expected) {
+        var err = new Error();
+        if (message) err.message = message;
+        throw wrapAssertionError(err, actual, expected, "===");
+    }
 }
 
 Test.prototype.ifError = function(err) {
