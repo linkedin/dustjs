@@ -218,6 +218,13 @@ var coreTests = [
     name: "partials",
     tests: [
       {
+        name:     "static_partial",
+        source:   "Hello! You have new messages.",
+        context:  { },
+        expected: "Hello! You have new messages.",
+        message: "should test a basic partial"
+      },
+      {
         name:     "partial",
         source:   "Hello {name}! You have {count} new messages.",
         context:  { name: "Mick", count: 30 },
@@ -869,6 +876,27 @@ var coreTests = [
         context:  { profile: { name: "Mick", count: 30 } },
         expected: "Hello Mick! You have 30 new messages.",
         message:  "should test partial with context"
+      },
+      {
+        name:     "partial with dynamic name",
+        source:   "{partialName}: {>\"{partialName}\" /}",
+        context:  { partialName: "static_partial" },
+        expected: "static_partial: Hello! You have new messages.",
+        message:  "should test partial with a dynamic name"
+      },
+      {
+        name:     "partial with dynamic name and values",
+        source:   "{partialName}: {>\"{partialName}\" name=Mick, count=30 /}",
+        context:  { partialName: "partial" },
+        expected: "partial: Hello Mick! You have 30 new messages.",
+        message:  "should test partial with a dynamic name"
+      },
+      {
+        name:     "partial with dynamic name and context",
+        source:   "{partialName}: {>\"\{partialName\}\":profile /}",
+        context:  { profile: { name: "Mick", count: 30 }, partialName: "partial" },
+        expected: "partial: Hello Mick! You have 30 new messages.",
+        message:  "should test partial a dynamic name and context"
       },
       {
         name:     "partial with blocks, with no default values for blocks",
