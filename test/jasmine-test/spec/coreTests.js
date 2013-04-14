@@ -3,7 +3,7 @@ var coreTests = [
     name: "core tests",
     tests: [
       {
-        name:     "Try me",
+        name:     "streaming render",
         source:   "{#stream}{#delay}{.}{/delay}{/stream}",
         context:  (function(){
                     var d = 1;
@@ -21,66 +21,66 @@ var coreTests = [
                     };
                   }),
         expected: '',
-        message: "should test the stream tag"
+        message: "should test the stream rendering"
       },
       {
         name:     "hello_world",
         source:   "Hello World!",
         context:  {},
         expected: "Hello World!",
-        message: "should test basic"
+        message: "should test basic text rendering"
       },
       {
-        name:     "should test one basic reference",
+        name:     "should test a basic reference",
         source:   "{?one}{one}{/one}",
         context:   {"one": 0 },
         expected: "0",
-        message: "should test one basic reference"
+        message: "should test a basic reference"
       },
       {
-        name:     "implicit",
+        name:     "implicit array",
         source:   "{#names}{.}{~n}{/names}",
         context:  { names: ["Moe", "Larry", "Curly"] },
         expected: "Moe\nLarry\nCurly\n",
         message: "should test an implicit array"
       },
       {
-        name:     "rename_key",
+        name:     "rename key",
         source:   "{#person foo=root}{foo}: {name}, {age}{/person}",
         context:  { root: "Subject", person: { name: "Larry", age: 45 } },
         expected: "Subject: Larry, 45",
         message: "should test renaming a key"
       },
       {
-        name:     "force_local",
+        name:     "force local",
         source:   "{#person}{.root}: {name}, {age}{/person}",
         context:  { root: "Subject", person: { name: "Larry", age: 45 } },
         expected: ": Larry, 45",
         message: "should test force a key"
       },
       {
-        name:     "escaped",
+        name:     "filter un-escape",
         source:   "{safe|s}{~n}{unsafe}",
         context:  { safe: "<script>alert('Hello!')</script>", unsafe: "<script>alert('Goodbye!')</script>" },
         expected: "<script>alert('Hello!')</script>\n&lt;script&gt;alert(&#39;Goodbye!&#39;)&lt;/script&gt;",
         message: "should test escaped characters"
       },
       {
-        name:     "escape_pragma",
+        name:     "escape pragma",
         source:   "{%esc:s}\n  {unsafe}{~n}\n  {%esc:h}\n    {unsafe}\n  {/esc}\n{/esc}",
         context:  { unsafe: "<script>alert('Goodbye!')</script>" },
         expected: "<script>alert('Goodbye!')</script>\n&lt;script&gt;alert(&#39;Goodbye!&#39;)&lt;/script&gt;",
         message: "should test escape_pragma"
       },
       {
-         name:   "use . for creating a block and use it to set params",
+         name:   "use . for creating a block and set params",
          source: "{#. test=\"you\"}{name} {test}{/.}",
          context: { name: "me"},
          expected: "me you",
          message: ". creating a block"
       },
       {
-        name:     "sync_key",
+        name:     "functions in context",
         source:   "Hello {type} World!",
         context:  {
                     type: function(chunk) {
@@ -88,10 +88,10 @@ var coreTests = [
                     }
                   },
         expected: "Hello Sync World!",
-        message: "should test sync key"
+        message: "should functions in context"
       },
       {
-        name:     "async_key",
+        name:     "async functions in context",
         source:   "Hello {type} World!",
         context:  {
                     type: function(chunk) {
@@ -103,10 +103,10 @@ var coreTests = [
                     }
                   },
         expected: "Hello Async World!",
-        message: "should test async key"
+        message: "should test functions in context"
       },
       {
-        name:     "sync_chunk",
+        name:     "sync chunk write test",
         source:   "Hello {type} World!",
         context:  {
                     type: function(chunk) {
@@ -114,7 +114,7 @@ var coreTests = [
                     }
                   },
         expected: "Hello Chunky World!",
-        message: "should test sync chunk"
+        message: "should test sync chunk write"
       },
       {
         name:     "base_template",
@@ -214,32 +214,6 @@ var coreTests = [
       }
     ]
   },
-  { 
-    name: "partial usage tests",
-    tests: [
-      {
-        name:     "partial",
-        source:   "Hello {name}! You have {count} new messages.",
-        context:  { name: "Mick", count: 30 },
-        expected: "Hello Mick! You have 30 new messages.",
-        message: "should test a basic replace"
-      },
-      {
-        name:     "partial_with_blocks",
-        source:   "{+header}default header {/header}Hello {name}! You have {count} new messages.",
-        context:  { name: "Mick", count: 30 },
-        expected: "default header Hello Mick! You have 30 new messages.",
-        message: "should test a partial with blocks"
-      },
-      {
-        name:     "partial_with_blocks_and_no_defaults",
-        source:   "{+header/}Hello {name}! You have {count} new messages.",
-        context:  { name: "Mick", count: 30 },
-        expected: "Hello Mick! You have 30 new messages.",
-        message: "should test a partial with blocks and no defaults"
-      }
-    ]
-  },
   {
     name: "truth/falsy tests",
     tests: [
@@ -258,14 +232,14 @@ var coreTests = [
         message: "should test for numeric zero in the context, prints the numeric zero"
       },
       {
-        name:     "emptyString context is treated as empty",
+        name:     "empty string context is treated as empty",
         source:   "{emptyString}",
         context:  { "emptyString": "" },
         expected: "",
         message: "should test emptyString, prints nothing"
       },
       {
-        name:     "emptyString, single quoted in context is treated as empty",
+        name:     "empty string, single quoted in context is treated as empty",
         source:   "{emptyString}",
         context:  { "emptyString": '' },
         expected: "",
@@ -327,143 +301,6 @@ var coreTests = [
         expected: "false",
         message:  "should test null treated as empty in exists"
        }
-    ]
-  },
-  {
-    name: "syntax error tests",
-    tests: [
-      {
-        name: "Dust syntax error",
-        source: "RRR {##}",
-        context: { name: "Mick", count: 30 },
-        error: 'Expected buffer, comment, partial, reference, section or special but "{" found. At line : 1, column : 5',
-        message: "should test that the error message shows line and column."
-      },
-      {
-        name: "Dust syntax error. Error in Section",
-        source: ["{#s}",
-                "{#&2}",
-                "{/s}"].join("\n"),
-        context: {},
-        error: 'Expected end tag for s but it was not found. At line : 2, column : 1',
-        message: "should test the errors message for section with error."
-      },
-      {
-        name: "Dust syntax error. Error in Section with buffer",
-        source: ["{#s}",
-                "this is the",
-                "buffer",
-                "{#&2}",
-                "a second",
-                "buffer",
-                "{/s}"].join("\n"),
-        context: {},
-        error: 'Expected end tag for s but it was not found. At line : 4, column : 1',
-        message: "should test the errors message for section with a buffer and error inside."
-      },
-      {
-        name: "Dust syntax error. Error in Section without end tag",
-        source: ["{#s}",
-                "this is the",
-                "buffer",
-                "a second",
-                "buffer"].join("\n"),
-        context: {},
-        error: 'Expected end tag for s but it was not found. At line : 5, column : 7',
-        message: "should test the errors message for section without end tag shows."
-      },
-      {
-        name: "Dust syntax error. Error in Partial with buffer",
-        source: ["{+header}",
-                "this is a Partial",
-                "with Error",
-                "eeee{@#@$fdf}",
-                "default header ",
-                "{/header}"].join("\n"),
-        context: {},
-        error: 'Expected end tag for header but it was not found. At line : 4, column : 5',
-        message: "should test the errors message for partials with a buffer inside."
-      },
-      {
-        name: "Dust syntax error. Error in Partial without end tag",
-        source: ["{+header}",
-                "this is the",
-                "buffer",
-                "a second",
-                "buffer"].join("\n"),
-        context: {},
-        error: 'Expected end tag for header but it was not found. At line : 5, column : 7',
-        message: "should test the errors message for partial without end tag."
-      },
-      {
-        name: "Dust syntax error. Error in Scalar",
-        source:["{#scalar}",
-                "true",
-                " {#@#fger}",
-                "{:else}",
-                "false",
-                "{/scalar}"].join("\n"),
-        context: {},
-        error: 'Expected end tag for scalar but it was not found. At line : 3, column : 2',
-        message: "should test the errors message for Scalar."
-      },
-      {
-        name: "Dust syntax error. Error in Scalar's else",
-        source:["{#scalar}",
-                "true",
-                "{:else}",
-                "false",
-                " {#@#fger}",
-                "{/scalar}"].join("\n"),
-        context: {},
-        error: 'Expected end tag for scalar but it was not found. At line : 5, column : 2',
-        message: "should test the errors message for Scalar."
-      },
-      {
-        name: "Dust syntax error. Error in Conditional",
-        source:["{?tags}",
-                  "<ul>{~n}",
-                    "{#tags}{~s}", 
-                      "<li>{#@$}</li>{~n}",
-                    "{/tags}",
-                  "</ul>",
-                "{:else}",
-                  "No Tags!",
-                "{/tags}"].join("\n"),
-        context: {},
-        error: 'Expected end tag for tags but it was not found. At line : 4, column : 5',
-        message: "should test the errors message for Conditionals."
-      },
-      {
-        name: "Dust syntax error. Error in Conditional's else",
-        source:["{?tags}",
-                  "<ul>{~n}",
-                    "{#tags}{~s}", 
-                      "<li>{.}</li>{~n}",
-                    "{/tags}",
-                  "</ul>",
-                "{:else}",
-                  "{#@$}",
-                  "No Tags!",
-                "{/tags}"].join("\n"),
-        context: {},
-        error: 'Expected end tag for tags but it was not found. At line : 8, column : 1',
-        message: "should test the errors message for Conditional's else."
-      },
-      {
-        name: "Dust syntax error. Error in Conditional without end tag",
-        source:["{?tags}",
-                  "<ul>{~n}",
-                    "{#tags}{~s}", 
-                      "<li>{.}</li>{~n}",
-                    "{/tags}",
-                  "</ul>",
-                "{:else}",
-                  "No Tags!"].join("\n"),
-        context: {},
-        error: 'Expected end tag for tags but it was not found. At line : 8, column : 9',
-        message: "should test the errors message for Conditional without end tag."
-      }
     ]
   },
   {
@@ -589,14 +426,14 @@ var coreTests = [
         message: "should test null string in the context treated as non empty"
       },
       {
-        name:     "String 0 value in context is treated as non empty",
+        name:     "string 0 value in context is treated as non empty",
         source:   "{zero}",
         context:   {"zero": "0" },
         expected: "0",
         message: "should test for string zero in the context, prints zero"
       },
       {
-        name:     "empty_array",
+        name:     "empty array",
         source:   "{#names}{title} {name}{~n}{/names}",
         context:  { title: "Sir", names: [] },
         expected: "",
@@ -615,35 +452,35 @@ var coreTests = [
         message: "should test an array"
       },
       {
-        name:     "Accessing array element by index when element value is a primitive",
+        name:     "accessing array element by index when element value is a primitive",
         source:   '{do.re[0]}',
         context:  { "do": { "re" : ["hello!","bye!"] } },
         expected: "hello!",
         message: "should return a specific array element by index when element value is a primitive"
       },
       {
-        name:     "Accessing array by index when element value is a object",
+        name:     "accessing array by index when element value is a object",
         source:   '{do.re[0].mi}',
         context:  { "do": { "re" : [{"mi" : "hello!"},"bye!"] } },
         expected: "hello!",
         message: "should return a specific array element by index when element value is a object"
       },
       {
-        name:     "Accessing array by index when element is a nested object",
+        name:     "accessing array by index when element is a nested object",
         source:   '{do.re[0].mi[1].fa}',
         context:  { "do": { "re" : [{"mi" : ["one", {"fa" : "hello!"}]},"bye!"] } },
         expected: "hello!",
         message: "should return a specific array element by index when element is a nested object"
       },
       {
-        name:     "Accessing array by index when element is list of primitives",
+        name:     "accessing array by index when element is list of primitives",
         source:   '{do[0]}',
         context:  { "do": ["lala", "lele"] },
         expected: "lala",
         message: "should return a specific array element by index when element is list of primitives"
       },
       {
-        name:     "Accessing array inside a loop using the current context",
+        name:     "accessing array inside a loop using the current context",
         source:   '{#list3}{.[0].biz}{/list3}',
         context:  { "list3": [[ { "biz" : "123" } ], [ { "biz" : "345" } ]]},
         expected: "123345",
@@ -671,43 +508,43 @@ var coreTests = [
         message: "test array reference $idx in iteration on simple types"
       },
       {
-        name:     "array reference $len in iteration on simple type",
-        source:   "{#names}Size=({$len}).{title} {.}{~n}{/names}",
+        name: "array reference $len in iteration on simple type",
+        source: "{#names}Size=({$len}).{title} {.}{~n}{/names}",
         context:  { title: "Sir", names: [ "Moe", "Larry", "Curly" ] },
         expected: "Size=(3).Sir Moe\nSize=(3).Sir Larry\nSize=(3).Sir Curly\n",
         message: "test array reference $len in iteration on simple types"
       },
       {
-        name:     "array reference $idx/$len on empty array case",
-        source:   "{#names}Idx={$idx} Size=({$len}).{title} {.}{~n}{/names}",
+        name: "array reference $idx/$len on empty array case",
+        source: "{#names}Idx={$idx} Size=({$len}).{title} {.}{~n}{/names}",
         context:  { title: "Sir", names: [ ] },
         expected: "",
         message: "test array reference $idx/$len on empty array case"
       },
       {
-        name:     "array reference $idx/$len on single element case (scalar case)",
-        source:   "{#name}Idx={$idx} Size={$len} {.}{/name}",
+        name: "array reference $idx/$len on single element case (scalar case)",
+        source: "{#name}Idx={$idx} Size={$len} {.}{/name}",
         context:  { name: "Just one name" },
         expected: "Idx= Size= Just one name",
         message: "test array reference $idx/$len on single element case"
       },
       {
-        name:     "array reference $idx/$len {#.} section case",
-        source:   "{#names}{#.}{$idx}{.} {/.}{/names}",
+        name: "array reference $idx/$len {#.} section case",
+        source: "{#names}{#.}{$idx}{.} {/.}{/names}",
         context:  { names:  ["Moe", "Larry", "Curly"] },
         expected: "0Moe 1Larry 2Curly ",
         message: "test array reference $idx/$len {#.} section case"
       },
       {
-        name:     "array reference $idx/$len not changed in nested object",
-        source:   "{#results}{#info}{$idx}{name}-{$len} {/info}{/results}",
+        name: "array reference $idx/$len not changed in nested object",
+        source: "{#results}{#info}{$idx}{name}-{$len} {/info}{/results}",
         context:  { results: [ {info: {name: "Steven"}  },  {info: {name: "Richard"} } ]  },
         expected: "0Steven-2 1Richard-2 ",
         message: "test array reference $idx/$len not changed in nested object"
       },
       {
-        name:     "array reference $idx/$len nested loops",
-        source:   "{#A}A loop:{$idx}-{$len},{#B}B loop:{$idx}-{$len}C[0]={.C[0]} {/B}A loop trailing: {$idx}-{$len}{/A}",
+        name: "array reference $idx/$len nested loops",
+        source: "{#A}A loop:{$idx}-{$len},{#B}B loop:{$idx}-{$len}C[0]={.C[0]} {/B}A loop trailing: {$idx}-{$len}{/A}",
         context:  {"A": [ {"B": [ {"C": ["Ca1", "C2"]}, {"C": ["Ca2", "Ca22"]} ] }, {"B": [ {"C": ["Cb1", "C2"]}, {"C": ["Cb2", "Ca2"]} ] } ] },
         expected: "A loop:0-2,B loop:0-2C[0]=Ca1 B loop:1-2C[0]=Ca2 A loop trailing: 0-2A loop:1-2,B loop:0-2C[0]=Cb1 B loop:1-2C[0]=Cb2 A loop trailing: 1-2",
         message: "test array reference $idx/$len nested loops"
@@ -804,7 +641,7 @@ var coreTests = [
         message: "should test conditional tags"
       },
       {
-        name:   "empty_else_block",
+        name:   "empty else block",
         source: "{#foo}full foo{:else}empty foo{/foo}",
         context: { foo: []},
         expected: "empty foo",
@@ -831,7 +668,7 @@ var coreTests = [
         message: "should test the filter tag"
       },
       {
-        name:     "Invalid filter",
+        name:     "invalid filter",
         source:   "{obj|nullcheck|invalid}",
         context:  { obj: "test" },
         expected: "test",
@@ -853,8 +690,34 @@ var coreTests = [
       }
     ]
   },
+  { 
+    name: "partial definitions",
+    tests: [
+      {
+        name:     "partial",
+        source:   "Hello {name}! You have {count} new messages.",
+        context:  { name: "Mick", count: 30 },
+        expected: "Hello Mick! You have 30 new messages.",
+        message: "should test a basic replace in a template"
+      },
+      {
+        name:     "partial_with_blocks",
+        source:   "{+header}default header {/header}Hello {name}! You have {count} new messages.",
+        context:  { name: "Mick", count: 30 },
+        expected: "default header Hello Mick! You have 30 new messages.",
+        message: "should test a block with defaults"
+      },
+      {
+        name:     "partial_with_blocks_and_no_defaults",
+        source:   "{+header/}Hello {name}! You have {count} new messages.",
+        context:  { name: "Mick", count: 30 },
+        expected: "Hello Mick! You have 30 new messages.",
+        message: "should test a blocks with no defaults"
+      }
+    ]
+  },
   {
-    name: "partial tests",
+    name: "partial/params tests",
     tests : [
       {
         name:     "partials",
@@ -953,6 +816,148 @@ var coreTests = [
         context:  { n: "Mick", c: 30 },
         expected: "Hello Mick! You have 30 new messages.",
         message: "should test partial with no blocks, ignore the override inline partials"
+      }
+    ]
+  },
+  {
+    name: "inline params tests",
+    tests: [
+      {
+        name:     "params",
+        source:   "{#helper foo=\"bar\"/}",
+        context:  {
+                    helper: function(chunk, context, bodies, params) {
+                      return chunk.write(params.foo);
+                    }
+                  },
+        expected: "bar",
+        message: "should test inner params"
+      },
+      {
+        name:     "inline params as integer",
+        source:   "{#helper foo=10 /}",
+        context:  { helper: function(chunk, context, bodies, params) { return chunk.write(params.foo); } },
+        expected: "10",
+        message: "Block handlers syntax should support integer number parameters"
+      },
+      {
+        name:     "inline params as float",
+        source:   "{#helper foo=3.14159 /}",
+        context:  { helper: function(chunk, context, bodies, params) { return chunk.write(params.foo); } },
+        expected: "3.14159",
+        message: "Block handlers syntax should support decimal number parameters"
+      }
+    ]
+  },
+  {
+    name: "inline partial/block tests",
+    tests: [
+      {  
+        name: "blocks with dynamic keys",
+        source: ['{<title_A}',
+                    'AAA',
+                  '{/title_A}',
+                  '{<title_B}',
+                    'BBB',
+                  '{/title_B}',
+                  '{+"title_{val}"/}'].join("\n"),
+        context: { "val" : "A" },
+        expected: "AAA",
+        message: "should test blocks with dynamic keys"
+      },
+      {
+        name: "blocks with more than one dynamic keys",
+        source: ['{<title_A}',
+                    'AAA',
+                  '{/title_A}',
+                  '{<title_B}',
+                    'BBB',
+                  '{/title_B}',
+                  '{+"{val1}_{val2}"/}'].join("\n"),
+        context: { "val1" : "title", "val2" : "A" },
+        expected: "AAA",
+        message: "should test blocks with more than one dynamic keys"
+      },
+      {
+        name: "blocks with dynamic key values as objects",
+        source: ['{<title_A}',
+                    'AAA',
+                  '{/title_A}',
+                  '{<title_B}',
+                    'BBB',
+                  '{/title_B}',
+                  '{+"{val1}_{obj.name}"/}'].join("\n"),
+        context: { "val1" : "title", "val2" : "A", "obj" : { "name" : "B" } },
+        expected: "BBB",
+        message: "should test blocks with dynamic key values as objects"
+      },
+      {
+        name: "blocks with dynamic key values as arrays",
+        source: ['{<title_A}',
+                    'AAA',
+                  '{/title_A}',
+                  '{<title_B}',
+                    'BBB',
+                  '{/title_B}',
+                  '{+"{val1}_{obj.name[0]}"/}'].join("\n"),
+        context: { "val1" : "title", "val2" : "A", "obj" : { "name" : ["A", "B"] } },
+        expected: "AAA",
+        message: "should test blocks with dynamic key values as arrays"
+      }
+    ]
+  },
+  {
+    name: "lambda tests",
+    tests: [
+      {
+        name: "test that the scope of the function is correct and that a non-chunk return value is used for truthiness checks",
+        source: "Hello {#foo}{#bar}{.}{/bar}{/foo} World!",
+        context: {
+                   foo: {
+                     foobar: 'Foo Bar',
+                     bar: function () {
+                       return this.foobar;
+                     }
+                   }
+                 },
+        expected: "Hello Foo Bar World!",
+        message: "should test scope of context function"
+      },
+      {
+        name: "test that function that do not return chunk and return falsy are treated as falsy",
+        source: "{#bar}{.}{:else}false{/bar}",
+        context: {
+                   bar: function () {
+                     return false;
+                   }
+                 },
+        expected: "false",
+        message: "should functions that return false are falsy"
+      },
+      {
+        name: "test that function that do not return chunk and return 0 are treated as truthy (in the Dust sense)",
+        source: "{#bar}{.}{:else}false{/bar}",
+        context: {
+                   bar: function () {
+                     return 0;
+                   }
+                 },
+        expected: "0",
+        message: "should functions that return 0 are truthy"
+      },
+      {
+        name:     "test that the scope of the function is correct",
+        source:   "Hello {#foo}{bar}{/foo} World!",
+        context:  {
+                    foo: {
+                      foobar: 'Foo Bar',
+                      bar: function () {
+                        return this.foobar;
+                      }
+                    }
+                  },
+        expected: "Hello Foo Bar World!",
+        message: "should test scope of context function"
       }
     ]
   },
@@ -1103,144 +1108,139 @@ var coreTests = [
     ]
   },
   {
-    name: "inline params tests",
+    name: "syntax error tests",
     tests: [
       {
-        name:     "params",
-        source:   "{#helper foo=\"bar\"/}",
-        context:  {
-                    helper: function(chunk, context, bodies, params) {
-                      return chunk.write(params.foo);
-                    }
-                  },
-        expected: "bar",
-        message: "should test inner params"
+        name: "Dust syntax error",
+        source: "RRR {##}",
+        context: { name: "Mick", count: 30 },
+        error: 'Expected buffer, comment, partial, reference, section or special but "{" found. At line : 1, column : 5',
+        message: "should test that the error message shows line and column."
       },
       {
-        name:     "inline params as integer",
-        source:   "{#helper foo=10 /}",
-        context:  { helper: function(chunk, context, bodies, params) { return chunk.write(params.foo); } },
-        expected: "10",
-        message: "Block handlers syntax should support integer number parameters"
+        name: "Dust syntax error. Error in Section",
+        source: ["{#s}",
+                "{#&2}",
+                "{/s}"].join("\n"),
+        context: {},
+        error: 'Expected end tag for s but it was not found. At line : 2, column : 1',
+        message: "should test the errors message for section with error."
       },
       {
-        name:     "inline params as float",
-        source:   "{#helper foo=3.14159 /}",
-        context:  { helper: function(chunk, context, bodies, params) { return chunk.write(params.foo); } },
-        expected: "3.14159",
-        message: "Block handlers syntax should support decimal number parameters"
-      }
-    ]
-  },
-  {
-    name: "inline block tests",
-    tests: [
-      {  
-        name: "blocks with dynamic keys",
-        source: ['{<title_A}',
-                    'AAA',
-                  '{/title_A}',
-                  '{<title_B}',
-                    'BBB',
-                  '{/title_B}',
-                  '{+"title_{val}"/}'].join("\n"),
-        context: { "val" : "A" },
-        expected: "AAA",
-        message: "should test blocks with dynamic keys"
+        name: "Dust syntax error. Error in Section with buffer",
+        source: ["{#s}",
+                "this is the",
+                "buffer",
+                "{#&2}",
+                "a second",
+                "buffer",
+                "{/s}"].join("\n"),
+        context: {},
+        error: 'Expected end tag for s but it was not found. At line : 4, column : 1',
+        message: "should test the errors message for section with a buffer and error inside."
       },
       {
-        name: "blocks with more than one dynamic keys",
-        source: ['{<title_A}',
-                    'AAA',
-                  '{/title_A}',
-                  '{<title_B}',
-                    'BBB',
-                  '{/title_B}',
-                  '{+"{val1}_{val2}"/}'].join("\n"),
-        context: { "val1" : "title", "val2" : "A" },
-        expected: "AAA",
-        message: "should test blocks with more than one dynamic keys"
+        name: "Dust syntax error. Error in Section without end tag",
+        source: ["{#s}",
+                "this is the",
+                "buffer",
+                "a second",
+                "buffer"].join("\n"),
+        context: {},
+        error: 'Expected end tag for s but it was not found. At line : 5, column : 7',
+        message: "should test the errors message for section without end tag shows."
       },
       {
-        name: "blocks with dynamic key values as objects",
-        source: ['{<title_A}',
-                    'AAA',
-                  '{/title_A}',
-                  '{<title_B}',
-                    'BBB',
-                  '{/title_B}',
-                  '{+"{val1}_{obj.name}"/}'].join("\n"),
-        context: { "val1" : "title", "val2" : "A", "obj" : { "name" : "B" } },
-        expected: "BBB",
-        message: "should test blocks with dynamic key values as objects"
+        name: "Dust syntax error. Error in Partial with buffer",
+        source: ["{+header}",
+                "this is a Partial",
+                "with Error",
+                "eeee{@#@$fdf}",
+                "default header ",
+                "{/header}"].join("\n"),
+        context: {},
+        error: 'Expected end tag for header but it was not found. At line : 4, column : 5',
+        message: "should test the errors message for partials with a buffer inside."
       },
       {
-        name: "blocks with dynamic key values as arrays",
-        source: ['{<title_A}',
-                    'AAA',
-                  '{/title_A}',
-                  '{<title_B}',
-                    'BBB',
-                  '{/title_B}',
-                  '{+"{val1}_{obj.name[0]}"/}'].join("\n"),
-        context: { "val1" : "title", "val2" : "A", "obj" : { "name" : ["A", "B"] } },
-        expected: "AAA",
-        message: "should test blocks with dynamic key values as arrays"
-      }
-    ]
-  },
-  {
-    name: "lambda tests",
-    tests: [
-      {
-        name: "test that the scope of the function is correct and that a non-chunk return value is used for truthiness checks",
-        source: "Hello {#foo}{#bar}{.}{/bar}{/foo} World!",
-        context: {
-                   foo: {
-                     foobar: 'Foo Bar',
-                     bar: function () {
-                       return this.foobar;
-                     }
-                   }
-                 },
-        expected: "Hello Foo Bar World!",
-        message: "should test scope of context function"
+        name: "Dust syntax error. Error in Partial without end tag",
+        source: ["{+header}",
+                "this is the",
+                "buffer",
+                "a second",
+                "buffer"].join("\n"),
+        context: {},
+        error: 'Expected end tag for header but it was not found. At line : 5, column : 7',
+        message: "should test the errors message for partial without end tag."
       },
       {
-        name: "test that function that do not return chunk and return falsy are treated as falsy",
-        source: "{#bar}{.}{:else}false{/bar}",
-        context: {
-                   bar: function () {
-                     return false;
-                   }
-                 },
-        expected: "false",
-        message: "should functions that return false are falsy"
+        name: "Dust syntax error. Error in Scalar",
+        source:["{#scalar}",
+                "true",
+                " {#@#fger}",
+                "{:else}",
+                "false",
+                "{/scalar}"].join("\n"),
+        context: {},
+        error: 'Expected end tag for scalar but it was not found. At line : 3, column : 2',
+        message: "should test the errors message for Scalar."
       },
       {
-        name: "test that function that do not return chunk and return 0 are treated as truthy (in the Dust sense)",
-        source: "{#bar}{.}{:else}false{/bar}",
-        context: {
-                   bar: function () {
-                     return 0;
-                   }
-                 },
-        expected: "0",
-        message: "should functions that return 0 are truthy"
+        name: "Dust syntax error. Error in Scalar's else",
+        source:["{#scalar}",
+                "true",
+                "{:else}",
+                "false",
+                " {#@#fger}",
+                "{/scalar}"].join("\n"),
+        context: {},
+        error: 'Expected end tag for scalar but it was not found. At line : 5, column : 2',
+        message: "should test the errors message for Scalar."
       },
       {
-        name:     "test that the scope of the function is correct",
-        source:   "Hello {#foo}{bar}{/foo} World!",
-        context:  {
-                    foo: {
-                      foobar: 'Foo Bar',
-                      bar: function () {
-                        return this.foobar;
-                      }
-                    }
-                  },
-        expected: "Hello Foo Bar World!",
-        message: "should test scope of context function"
+        name: "Dust syntax error. Error in Conditional",
+        source:["{?tags}",
+                  "<ul>{~n}",
+                    "{#tags}{~s}", 
+                      "<li>{#@$}</li>{~n}",
+                    "{/tags}",
+                  "</ul>",
+                "{:else}",
+                  "No Tags!",
+                "{/tags}"].join("\n"),
+        context: {},
+        error: 'Expected end tag for tags but it was not found. At line : 4, column : 5',
+        message: "should test the errors message for Conditionals."
+      },
+      {
+        name: "Dust syntax error. Error in Conditional's else",
+        source:["{?tags}",
+                  "<ul>{~n}",
+                    "{#tags}{~s}", 
+                      "<li>{.}</li>{~n}",
+                    "{/tags}",
+                  "</ul>",
+                "{:else}",
+                  "{#@$}",
+                  "No Tags!",
+                "{/tags}"].join("\n"),
+        context: {},
+        error: 'Expected end tag for tags but it was not found. At line : 8, column : 1',
+        message: "should test the errors message for Conditional's else."
+      },
+      {
+        name: "Dust syntax error. Error in Conditional without end tag",
+        source:["{?tags}",
+                  "<ul>{~n}",
+                    "{#tags}{~s}", 
+                      "<li>{.}</li>{~n}",
+                    "{/tags}",
+                  "</ul>",
+                "{:else}",
+                  "No Tags!"].join("\n"),
+        context: {},
+        error: 'Expected end tag for tags but it was not found. At line : 8, column : 9',
+        message: "should test the errors message for Conditional without end tag."
       }
     ]
   },
@@ -1252,15 +1252,15 @@ var coreTests = [
         source: "{&partial/}",
         context: {},
         expected: "{&partial/}",
-        message: "This content {&partial/} should be parsed as buffer"
+        message: "given content should be parsed as buffer"
       }
     ]
   },
   {
-    name:"helper test",
+    name:"invalid helper test",
     tests: [
       {
-        name:     "nonexistant helper",
+        name:     "non-existing helper",
         source:   "some text {@notfound}foo{/notfound} some text",
         context:  {},
         expected: "some text  some text",
