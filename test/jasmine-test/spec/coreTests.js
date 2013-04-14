@@ -31,7 +31,7 @@ var coreTests = [
         message: "should test basic text rendering"
       },
       {
-        name:     "should test a basic reference",
+        name:     "reference",
         source:   "{?one}{one}{/one}",
         context:   {"one": 0 },
         expected: "0",
@@ -45,7 +45,7 @@ var coreTests = [
         message: "should test an implicit array"
       },
       {
-        name:     "rename key",
+        name:     "inline param from outer scope",
         source:   "{#person foo=root}{foo}: {name}, {age}{/person}",
         context:  { root: "Subject", person: { name: "Larry", age: 45 } },
         expected: "Subject: Larry, 45",
