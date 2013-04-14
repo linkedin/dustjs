@@ -1,6 +1,6 @@
 var coreTests = [
   { 
-    name: "base cases",
+    name: "core tests",
     tests: [
       {
         name:     "Try me",
@@ -215,7 +215,7 @@ var coreTests = [
     ]
   },
   { 
-    name: "partials",
+    name: "partial usage tests",
     tests: [
       {
         name:     "partial",
@@ -241,7 +241,7 @@ var coreTests = [
     ]
   },
   {
-    name: "corner cases",
+    name: "truth/falsy tests",
     tests: [
       {
         name:     "false value in context is treated as empty, same as undefined",
@@ -330,7 +330,7 @@ var coreTests = [
     ]
   },
   {
-    name: "error Message",
+    name: "syntax error tests",
     tests: [
       {
         name: "Dust syntax error",
@@ -467,7 +467,7 @@ var coreTests = [
     ]
   },
   {
-    name: "scalar",
+    name: "scalar data tests",
     tests: [
       {
         name:     "scalar null in a # section",
@@ -544,7 +544,7 @@ var coreTests = [
     ]
   },
   {
-    name: "empty cases",
+    name: "empty data tests",
     tests: [
       {
         name:     "empty array is treated as empty in exists",
@@ -605,7 +605,7 @@ var coreTests = [
     ]
   },
   {
-    name: "array",
+    name: "array/index-access tests",
     tests: [
       {
         name:     "array",
@@ -751,7 +751,7 @@ var coreTests = [
     ]
   },
   {
-    name: "object paths",
+    name: "object tests",
     tests: [
       {
         name:     "object",
@@ -770,7 +770,7 @@ var coreTests = [
     ]
   },
   {
-    name: "conditional",
+    name: "conditional tests",
     tests: [
       {
         name:     "conditional",
@@ -813,7 +813,7 @@ var coreTests = [
     ]
   },
   {
-    name: "filtrers",
+    name: "filter tests",
     tests: [
       {
         name:     "filter",
@@ -854,7 +854,7 @@ var coreTests = [
     ]
   },
   {
-    name: "partials",
+    name: "partial tests",
     tests : [
       {
         name:     "partials",
@@ -957,7 +957,7 @@ var coreTests = [
     ]
   },
   {
-    name: "whitespaces",
+    name: "core-grammar tests",
     tests: [
       {
         name:     "ignore extra whitespaces between opening brace plus any of (#,?,@,^,+,%) and the tag identifier",
@@ -1042,155 +1042,8 @@ var coreTests = [
         context: {},
         expected: "",
         message: "should ignore carriage return or tab in inline param values"
-      }
-    ]
-  },
-  {
-    name: "params",
-    tests: [
-      {
-        name:     "params",
-        source:   "{#helper foo=\"bar\"/}",
-        context:  {
-                    helper: function(chunk, context, bodies, params) {
-                      return chunk.write(params.foo);
-                    }
-                  },
-        expected: "bar",
-        message: "should test inner params"
       },
-      {
-        name:     "inline params as integer",
-        source:   "{#helper foo=10 /}",
-        context:  { helper: function(chunk, context, bodies, params) { return chunk.write(params.foo); } },
-        expected: "10",
-        message: "Block handlers syntax should support integer number parameters"
-      },
-      {
-        name:     "inline params as float",
-        source:   "{#helper foo=3.14159 /}",
-        context:  { helper: function(chunk, context, bodies, params) { return chunk.write(params.foo); } },
-        expected: "3.14159",
-        message: "Block handlers syntax should support decimal number parameters"
-      }
-    ]
-  },
-  {
-    name: "dynamics keys",
-    tests: [
-      {  
-        name: "blocks with dynamic keys",
-        source: ['{<title_A}',
-                    'AAA',
-                  '{/title_A}',
-                  '{<title_B}',
-                    'BBB',
-                  '{/title_B}',
-                  '{+"title_{val}"/}'].join("\n"),
-        context: { "val" : "A" },
-        expected: "AAA",
-        message: "should test blocks with dynamic keys"
-      },
-      {
-        name: "blocks with more than one dynamic keys",
-        source: ['{<title_A}',
-                    'AAA',
-                  '{/title_A}',
-                  '{<title_B}',
-                    'BBB',
-                  '{/title_B}',
-                  '{+"{val1}_{val2}"/}'].join("\n"),
-        context: { "val1" : "title", "val2" : "A" },
-        expected: "AAA",
-        message: "should test blocks with more than one dynamic keys"
-      },
-      {
-        name: "blocks with dynamic key values as objects",
-        source: ['{<title_A}',
-                    'AAA',
-                  '{/title_A}',
-                  '{<title_B}',
-                    'BBB',
-                  '{/title_B}',
-                  '{+"{val1}_{obj.name}"/}'].join("\n"),
-        context: { "val1" : "title", "val2" : "A", "obj" : { "name" : "B" } },
-        expected: "BBB",
-        message: "should test blocks with dynamic key values as objects"
-      },
-      {
-        name: "blocks with dynamic key values as arrays",
-        source: ['{<title_A}',
-                    'AAA',
-                  '{/title_A}',
-                  '{<title_B}',
-                    'BBB',
-                  '{/title_B}',
-                  '{+"{val1}_{obj.name[0]}"/}'].join("\n"),
-        context: { "val1" : "title", "val2" : "A", "obj" : { "name" : ["A", "B"] } },
-        expected: "AAA",
-        message: "should test blocks with dynamic key values as arrays"
-      }
-    ]
-  },
-  {
-    name: "functions",
-    tests: [
-      {
-        name: "test that the scope of the function is correct and that a non-chunk return value is used for truthiness checks",
-        source: "Hello {#foo}{#bar}{.}{/bar}{/foo} World!",
-        context: {
-                   foo: {
-                     foobar: 'Foo Bar',
-                     bar: function () {
-                       return this.foobar;
-                     }
-                   }
-                 },
-        expected: "Hello Foo Bar World!",
-        message: "should test scope of context function"
-      },
-      {
-        name: "test that function that do not return chunk and return falsy are treated as falsy",
-        source: "{#bar}{.}{:else}false{/bar}",
-        context: {
-                   bar: function () {
-                     return false;
-                   }
-                 },
-        expected: "false",
-        message: "should functions that return false are falsy"
-      },
-      {
-        name: "test that function that do not return chunk and return 0 are treated as truthy (in the Dust sense)",
-        source: "{#bar}{.}{:else}false{/bar}",
-        context: {
-                   bar: function () {
-                     return 0;
-                   }
-                 },
-        expected: "0",
-        message: "should functions that return 0 are truthy"
-      },
-      {
-        name:     "test that the scope of the function is correct",
-        source:   "Hello {#foo}{bar}{/foo} World!",
-        context:  {
-                    foo: {
-                      foobar: 'Foo Bar',
-                      bar: function () {
-                        return this.foobar;
-                      }
-                    }
-                  },
-        expected: "Hello Foo Bar World!",
-        message: "should test scope of context function"
-      }
-    ]
-  },
-  {
-    name: "dash in keys",
-    tests: [
-      {
+       {
         name: "support dash in key/reference",
         source: 'Hello {first-name}, {last-name}! You have {count} new messages.',
         context: { "first-name": "Mick", "last-name" : "Jagger", "count": 30 },
@@ -1250,7 +1103,149 @@ var coreTests = [
     ]
   },
   {
-    name: "Buffer",
+    name: "inline params tests",
+    tests: [
+      {
+        name:     "params",
+        source:   "{#helper foo=\"bar\"/}",
+        context:  {
+                    helper: function(chunk, context, bodies, params) {
+                      return chunk.write(params.foo);
+                    }
+                  },
+        expected: "bar",
+        message: "should test inner params"
+      },
+      {
+        name:     "inline params as integer",
+        source:   "{#helper foo=10 /}",
+        context:  { helper: function(chunk, context, bodies, params) { return chunk.write(params.foo); } },
+        expected: "10",
+        message: "Block handlers syntax should support integer number parameters"
+      },
+      {
+        name:     "inline params as float",
+        source:   "{#helper foo=3.14159 /}",
+        context:  { helper: function(chunk, context, bodies, params) { return chunk.write(params.foo); } },
+        expected: "3.14159",
+        message: "Block handlers syntax should support decimal number parameters"
+      }
+    ]
+  },
+  {
+    name: "inline block tests",
+    tests: [
+      {  
+        name: "blocks with dynamic keys",
+        source: ['{<title_A}',
+                    'AAA',
+                  '{/title_A}',
+                  '{<title_B}',
+                    'BBB',
+                  '{/title_B}',
+                  '{+"title_{val}"/}'].join("\n"),
+        context: { "val" : "A" },
+        expected: "AAA",
+        message: "should test blocks with dynamic keys"
+      },
+      {
+        name: "blocks with more than one dynamic keys",
+        source: ['{<title_A}',
+                    'AAA',
+                  '{/title_A}',
+                  '{<title_B}',
+                    'BBB',
+                  '{/title_B}',
+                  '{+"{val1}_{val2}"/}'].join("\n"),
+        context: { "val1" : "title", "val2" : "A" },
+        expected: "AAA",
+        message: "should test blocks with more than one dynamic keys"
+      },
+      {
+        name: "blocks with dynamic key values as objects",
+        source: ['{<title_A}',
+                    'AAA',
+                  '{/title_A}',
+                  '{<title_B}',
+                    'BBB',
+                  '{/title_B}',
+                  '{+"{val1}_{obj.name}"/}'].join("\n"),
+        context: { "val1" : "title", "val2" : "A", "obj" : { "name" : "B" } },
+        expected: "BBB",
+        message: "should test blocks with dynamic key values as objects"
+      },
+      {
+        name: "blocks with dynamic key values as arrays",
+        source: ['{<title_A}',
+                    'AAA',
+                  '{/title_A}',
+                  '{<title_B}',
+                    'BBB',
+                  '{/title_B}',
+                  '{+"{val1}_{obj.name[0]}"/}'].join("\n"),
+        context: { "val1" : "title", "val2" : "A", "obj" : { "name" : ["A", "B"] } },
+        expected: "AAA",
+        message: "should test blocks with dynamic key values as arrays"
+      }
+    ]
+  },
+  {
+    name: "lambda tests",
+    tests: [
+      {
+        name: "test that the scope of the function is correct and that a non-chunk return value is used for truthiness checks",
+        source: "Hello {#foo}{#bar}{.}{/bar}{/foo} World!",
+        context: {
+                   foo: {
+                     foobar: 'Foo Bar',
+                     bar: function () {
+                       return this.foobar;
+                     }
+                   }
+                 },
+        expected: "Hello Foo Bar World!",
+        message: "should test scope of context function"
+      },
+      {
+        name: "test that function that do not return chunk and return falsy are treated as falsy",
+        source: "{#bar}{.}{:else}false{/bar}",
+        context: {
+                   bar: function () {
+                     return false;
+                   }
+                 },
+        expected: "false",
+        message: "should functions that return false are falsy"
+      },
+      {
+        name: "test that function that do not return chunk and return 0 are treated as truthy (in the Dust sense)",
+        source: "{#bar}{.}{:else}false{/bar}",
+        context: {
+                   bar: function () {
+                     return 0;
+                   }
+                 },
+        expected: "0",
+        message: "should functions that return 0 are truthy"
+      },
+      {
+        name:     "test that the scope of the function is correct",
+        source:   "Hello {#foo}{bar}{/foo} World!",
+        context:  {
+                    foo: {
+                      foobar: 'Foo Bar',
+                      bar: function () {
+                        return this.foobar;
+                      }
+                    }
+                  },
+        expected: "Hello Foo Bar World!",
+        message: "should test scope of context function"
+      }
+    ]
+  },
+  {
+    name: "buffer test",
     tests: [
       {
         name: "buffer ",
@@ -1262,7 +1257,7 @@ var coreTests = [
     ]
   },
   {
-    name:"Helpers",
+    name:"helper test",
     tests: [
       {
         name:     "nonexistant helper",
