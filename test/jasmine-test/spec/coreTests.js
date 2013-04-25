@@ -675,6 +675,20 @@ var coreTests = [
         message: "should fail gracefully for invalid filter"
       },
       {
+        name:     "escapeJs filter without DQ",
+        source:   "{obj|j|s}",
+        context:  { obj: "<script>\\testBS\\ \rtestCR\r \u2028testLS\u2028 \u2029testPS\u2029 \ntestNL\n \ftestLF\f 'testSQ' \ttestTB\t /testFS/</script>" },
+        expected: "<script>\\\\testBS\\\\ \\rtestCR\\r \\u2028testLS\\u2028 \\u2029testPS\\u2029 \\ntestNL\\n \\ftestLF\\f \\'testSQ\\' \\ttestTB\\t \\/testFS\\/<\\/script>",
+        message: "should escapeJs a string when using the j filter"
+      },
+      {
+        name:     "escapeJs filter with only DQ",
+        source:   "{obj|j|s}",
+        context:  { obj: '"testDQ"' },
+        expected: '\\"testDQ\\"',
+        message: "should escapeJs a string with double quotes when using the j filter"
+      },
+      {
         name:     "JSON.stringify filter",
         source:   "{obj|js|s}",
         context:  { obj: { id: 1, name: "bob", occupation: "construction" } },
