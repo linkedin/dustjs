@@ -1,5 +1,5 @@
 var coreTests = [
-  { 
+  {
     name: "core tests",
     tests: [
       {
@@ -573,7 +573,7 @@ var coreTests = [
       {
         name: "using len in array reference Accessing",
         source: "{#list3}{.[$len].idx}{/list3}",
-        context: { "list3": [ 
+        context: { "list3": [
                     [{"idx": "0"},
                      {"idx": "1"},
                      {"idx": "2"}],
@@ -687,10 +687,52 @@ var coreTests = [
         context:  { obj: JSON.stringify({ id: 1, name: "bob", occupation: "construction" }) },
         expected: JSON.parse(JSON.stringify({ id: 1, name: "bob", occupation: "construction" })).toString(),
         message: "should objectify a JSON string when using the jp filter"
+      },
+      {
+        name:     "filter with literal argument",
+        source:   "{foo|link_to:\"http://linkedin.com/\"}",
+        context:  { foo:"My Website" },
+        expected: "<a href=\"http://linkedin.com/\" title=\"\">My Website</a>",
+        message: "should accept filters that have a literal argument"
+      },
+      {
+        name:     "filter with whitespace and literal argument",
+        source:   "{foo  |   link_to :  \"http://linkedin.com/\"  }",
+        context:  { foo:"My Website" },
+        expected: "<a href=\"http://linkedin.com/\" title=\"\">My Website</a>",
+        message: "should accept filters that have a literal argument and extra whitespace"
+      },
+      {
+        name:     "filter with variable argument",
+        source:   "{foo|link_to:\"{link}\"}",
+        context:  { foo:"My Website", link:"http://linkedin.com/" },
+        expected: "<a href=\"http://linkedin.com/\" title=\"\">My Website</a>",
+        message: "should accept filters that have a variable argument"
+      },
+      {
+        name:     "filter with argument containing multiple Chunks",
+        source:   "{foo|link_to:\"http://{link}/\"}",
+        context:  { foo:"My Website", link:"linkedin.com" },
+        expected: "<a href=\"http://linkedin.com/\" title=\"\">My Website</a>",
+        message: "should accept filters that contain multiple Chunks as an argument"
+      },
+      {
+        name:     "filter with multiple arguments",
+        source:   "{foo|link_to:\"{link}\",\"test\"}",
+        context:  { foo:"My Website", link:"http://linkedin.com/" },
+        expected: "<a href=\"http://linkedin.com/\" title=\"test\">My Website</a>",
+        message: "should accept filters that have multiple arguments"
+      },
+      {
+        name:     "filter with variable argument that uses a filter",
+        source:   "{foo|link_to:\"{link|replace:\"google.com\",\"linkedin.com\"}\"}",
+        context:  { foo:"My Website", link:"http://google.com/" },
+        expected: "<a href=\"http://linkedin.com/\" title=\"\">My Website</a>",
+        message: "should accept filters that have a variable argument that contains a filter itself (filterception!)"
       }
     ]
   },
-  { 
+  {
     name: "partial definitions",
     tests: [
       {
@@ -852,7 +894,7 @@ var coreTests = [
   {
     name: "inline partial/block tests",
     tests: [
-      {  
+      {
         name: "blocks with dynamic keys",
         source: ['{<title_A}',
                     'AAA',
@@ -1201,7 +1243,7 @@ var coreTests = [
         name: "Dust syntax error. Error in Conditional",
         source:["{?tags}",
                   "<ul>{~n}",
-                    "{#tags}{~s}", 
+                    "{#tags}{~s}",
                       "<li>{#@$}</li>{~n}",
                     "{/tags}",
                   "</ul>",
@@ -1216,7 +1258,7 @@ var coreTests = [
         name: "Dust syntax error. Error in Conditional's else",
         source:["{?tags}",
                   "<ul>{~n}",
-                    "{#tags}{~s}", 
+                    "{#tags}{~s}",
                       "<li>{.}</li>{~n}",
                     "{/tags}",
                   "</ul>",
@@ -1232,7 +1274,7 @@ var coreTests = [
         name: "Dust syntax error. Error in Conditional without end tag",
         source:["{?tags}",
                   "<ul>{~n}",
-                    "{#tags}{~s}", 
+                    "{#tags}{~s}",
                       "<li>{.}</li>{~n}",
                     "{/tags}",
                   "</ul>",
