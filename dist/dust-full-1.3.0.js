@@ -1998,7 +1998,13 @@ var parser = (function(){
                         result10 = parse_ws();
                       }
                       if (result9 !== null) {
-                        result10 = parse_inline();
+                        result10 = parse_number();
+                        if (result10 === null) {
+                          result10 = parse_identifier();
+                          if (result10 === null) {
+                            result10 = parse_inline();
+                          }
+                        }
                         if (result10 !== null) {
                           pos7 = clone(pos);
                           result11 = [];
@@ -2083,7 +2089,13 @@ var parser = (function(){
                             result10 = parse_ws();
                           }
                           if (result9 !== null) {
-                            result10 = parse_inline();
+                            result10 = parse_number();
+                            if (result10 === null) {
+                              result10 = parse_identifier();
+                              if (result10 === null) {
+                                result10 = parse_inline();
+                              }
+                            }
                             if (result10 !== null) {
                               pos7 = clone(pos);
                               result11 = [];
@@ -2208,8 +2220,8 @@ var parser = (function(){
         }
         if (result1 !== null) {
           result1 = (function(offset, line, column, filter, params) {
-        if(params) { return [filter, params] }
-        else { return filter }})(pos1.offset, pos1.line, pos1.column, result1[3], result1[5]);
+            if(params) { return [filter, params] }
+            else { return filter }})(pos1.offset, pos1.line, pos1.column, result1[3], result1[5]);
         }
         if (result1 === null) {
           pos = clone(pos1);
@@ -2279,7 +2291,13 @@ var parser = (function(){
                           result10 = parse_ws();
                         }
                         if (result9 !== null) {
-                          result10 = parse_inline();
+                          result10 = parse_number();
+                          if (result10 === null) {
+                            result10 = parse_identifier();
+                            if (result10 === null) {
+                              result10 = parse_inline();
+                            }
+                          }
                           if (result10 !== null) {
                             pos7 = clone(pos);
                             result11 = [];
@@ -2364,7 +2382,13 @@ var parser = (function(){
                               result10 = parse_ws();
                             }
                             if (result9 !== null) {
-                              result10 = parse_inline();
+                              result10 = parse_number();
+                              if (result10 === null) {
+                                result10 = parse_identifier();
+                                if (result10 === null) {
+                                  result10 = parse_inline();
+                                }
+                              }
                               if (result10 !== null) {
                                 pos7 = clone(pos);
                                 result11 = [];
@@ -2489,8 +2513,8 @@ var parser = (function(){
           }
           if (result1 !== null) {
             result1 = (function(offset, line, column, filter, params) {
-          if(params) { return [filter, params] }
-          else { return filter }})(pos1.offset, pos1.line, pos1.column, result1[3], result1[5]);
+              if(params) { return [filter, params] }
+              else { return filter }})(pos1.offset, pos1.line, pos1.column, result1[3], result1[5]);
           }
           if (result1 === null) {
             pos = clone(pos1);

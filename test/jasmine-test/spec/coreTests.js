@@ -710,6 +710,13 @@ var coreTests = [
         message: "should accept filters that have a literal argument"
       },
       {
+        name:     "filter with inline param argument",
+        source:   "{foo|link_to:link}",
+        context:  { foo:"My Website", link: "http://linkedin.com/" },
+        expected: "<a href=\"http://linkedin.com/\" title=\"\">My Website</a>",
+        message: "should accept filters that have an inline param argument"
+      },
+      {
         name:     "filter with whitespace and literal argument",
         source:   "{foo  |   link_to :  \"http://linkedin.com/\"  }",
         context:  { foo:"My Website" },

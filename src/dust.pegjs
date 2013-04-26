@@ -80,7 +80,7 @@ partial "partial"
    optionally followed by a colon and an inline param
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 filters "filters"
-  = f:(ws* "|" ws* filter:key ws* params:(":" ws* p:(ws* param:inline (ws* "," ws*)? ws* {return param})+ {return p})? {
+  = f:(ws* "|" ws* filter:key ws* params:(":" ws* p:(ws* param:(number / identifier / inline) (ws* "," ws*)? ws* {return param})+ {return p})? {
     if(params) { return [filter, params] }
     else { return filter }})*
   { return ["filters"].concat(f) }
