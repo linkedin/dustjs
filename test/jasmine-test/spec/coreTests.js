@@ -1,5 +1,5 @@
 var coreTests = [
-  { 
+  {
     name: "core tests",
     tests: [
       {
@@ -573,7 +573,7 @@ var coreTests = [
       {
         name: "using len in array reference Accessing",
         source: "{#list3}{.[$len].idx}{/list3}",
-        context: { "list3": [ 
+        context: { "list3": [
                     [{"idx": "0"},
                      {"idx": "1"},
                      {"idx": "2"}],
@@ -704,7 +704,7 @@ var coreTests = [
       }
     ]
   },
-  { 
+  {
     name: "partial definitions",
     tests: [
       {
@@ -866,7 +866,7 @@ var coreTests = [
   {
     name: "inline partial/block tests",
     tests: [
-      {  
+      {
         name: "blocks with dynamic keys",
         source: ['{<title_A}',
                     'AAA',
@@ -1215,7 +1215,7 @@ var coreTests = [
         name: "Dust syntax error. Error in Conditional",
         source:["{?tags}",
                   "<ul>{~n}",
-                    "{#tags}{~s}", 
+                    "{#tags}{~s}",
                       "<li>{#@$}</li>{~n}",
                     "{/tags}",
                   "</ul>",
@@ -1230,7 +1230,7 @@ var coreTests = [
         name: "Dust syntax error. Error in Conditional's else",
         source:["{?tags}",
                   "<ul>{~n}",
-                    "{#tags}{~s}", 
+                    "{#tags}{~s}",
                       "<li>{.}</li>{~n}",
                     "{/tags}",
                   "</ul>",
@@ -1246,7 +1246,7 @@ var coreTests = [
         name: "Dust syntax error. Error in Conditional without end tag",
         source:["{?tags}",
                   "<ul>{~n}",
-                    "{#tags}{~s}", 
+                    "{#tags}{~s}",
                       "<li>{.}</li>{~n}",
                     "{/tags}",
                   "</ul>",
@@ -1255,6 +1255,20 @@ var coreTests = [
         context: {},
         error: 'Expected end tag for tags but it was not found. At line : 8, column : 9',
         message: "should test the errors message for Conditional without end tag."
+      },
+      {
+        name: "Helper syntax error. TypeError",
+        source:"{#hello/}",
+        context: {"hello":function() { var a; a.slice(1); }},
+        error: "Cannot call method 'slice' of undefined",
+        message: "should test helper syntax errors being handled gracefully"
+      },
+      {
+        name: "Helper syntax error. async TypeError",
+        source:"{#hello/}",
+        context: {"hello":function(chunk, context, bodies, params) { return chunk.map(function(chunk) { var a; a.slice(1); chunk.end(); })}},
+        error: "Cannot call method 'slice' of undefined",
+        message: "should test helper syntax errors inside an async block being handled gracefully"
       }
     ]
   },

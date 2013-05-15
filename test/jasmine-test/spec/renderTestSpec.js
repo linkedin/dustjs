@@ -14,7 +14,7 @@ function render(test) {
     try {
       dust.loadSource(dust.compile(test.source, test.name, test.strip));
       dust.render(test.name, test.context, function(err, output) {
-        expect(err).toBeNull();
+        if(err) throw err;
         expect(test.expected).toEqual(output);
       });
     }
@@ -41,17 +41,18 @@ function stream(test) {
         })
         .on("error", function(err) {
           output = err.message;
+          flag = true;
         });
       } catch(error) {
         output = error.message;
-        flag= true;
+        flag = true;
       }
     });
-    
+
     waitsFor(function(){
       return flag;
     }, "the output", 500);
-    
+
     runs(function(){
       if (test.error) {
         expect(test.error || {} ).toEqual(output);
@@ -105,11 +106,11 @@ function pipe(test) {
         flagTwo= true;
       }
     });
-    
+
     waitsFor(function(){
       return flag && flagTwo;
     }, "the output", 500);
-    
+
     runs(function(){
       if (test.error) {
         expect(test.error || {} ).toEqual(output);
