@@ -46,11 +46,18 @@ FULL_MIN = dist/dust-full-${VERSION}.min.js
 
 define HEADER
 //
-// Dust - Asynchronous Templating v${VERSION}
+// Dust - Asynchronous Templating v1.2.3
+//
+// Original source (up to v0.30, Jan 2011)
 // http://akdubya.github.com/dustjs
 //
 // Copyright (c) 2010, Aleksander Williams
 // Released under the MIT License.
+//
+// Active Fork
+// http://linkedin.github.io/dustjs/
+// Core - Runtime code for rendering templates
+// Full - code for compiling and rendering templates
 //
 
 endef
@@ -62,14 +69,18 @@ dust:
 	@@mkdir -p dist
 	@@touch ${CORE}
 	@@echo "$$HEADER" > ${CORE}
-	@@cat ${SRC}/dust.js >> ${CORE}
+	@@cat ${SRC}/umdheader.js\
+	      ${SRC}/dust.js\
+	      ${SRC}/umdfooter.js >> ${CORE}
 	@@echo ${CORE} built
 
 	@@touch ${FULL}
 	@@echo "$$HEADER" > ${FULL}
-	@@cat ${SRC}/dust.js\
+	@@cat ${SRC}/umdheader.js\
+	      ${SRC}/dust.js\
 	      ${SRC}/compiler.js\
-	      ${SRC}/parser.js >> ${FULL}
+	      ${SRC}/parser.js\
+	      ${SRC}/umdfooter.js >> ${FULL}
 	@@echo ${FULL} built
 
 min: dust
