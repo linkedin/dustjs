@@ -56,8 +56,6 @@ define HEADER
 //
 // Active Fork
 // http://linkedin.github.io/dustjs/
-// Core - Runtime code for rendering templates
-// Full - code for compiling and rendering templates
 //
 
 endef
