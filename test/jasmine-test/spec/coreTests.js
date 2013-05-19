@@ -96,7 +96,7 @@ var coreTests = [
         context:  {
                     type: function(chunk) {
                       return chunk.map(function(chunk) {
-                        dust.nextTick(function() {
+                        (typeof dust !== 'undefined' ? dust : dustAMD).nextTick(function() {
                           chunk.end("Async");
                         });
                       });
