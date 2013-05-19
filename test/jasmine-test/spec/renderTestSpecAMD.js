@@ -12,7 +12,7 @@ if (typeof process === 'undefined') {
 	});
 } else {
 	// Node based require (for CI testing)
-	var dust = require('./dist/dust-full-' + testVersion);
+	var dust = require('../../../dist/dust-full-' + testVersion);
 	runTests(dust);
 }
 
