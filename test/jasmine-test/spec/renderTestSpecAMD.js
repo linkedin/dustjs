@@ -6,31 +6,21 @@ var testVersion = '1.2.4';
 var dustAMD = {}
 
 if (typeof process === 'undefined') {
-	// Browser based Aysnc AMD require
+	// Browser based Aysnc AMD require, don't run if on Node server
 	require(['../../../dist/dust-full-' + testVersion], function(dust){
-		runTests(dust);
+		dustAMD = dust;
+		describe ("Test the basic functionality of dust with require", function() {
+		  for (var index = 0; index < coreTests.length; index++) {
+		    for (var i = 0; i < coreTests[index].tests.length; i++) {
+		      var test = coreTests[index].tests[i];
+		      it ("RENDER: " + test.message, render(test, dust));
+		      it ("STREAM: " + test.message, stream(test, dust));
+		      it ("PIPE: " + test.message, pipe(test, dust));
+		    }
+		  };
+		});
 	});
-} else {
-	// Node based require (for CI testing)
-	var dust = require('../../../dist/dust-full-' + testVersion);
-	runTests(dust);
 }
-
-function runTests(dust) {
-	dustAMD = dust;
-	describe ("Test the basic functionality of dust with require", function() {
-	  for (var index = 0; index < coreTests.length; index++) {
-	    for (var i = 0; i < coreTests[index].tests.length; i++) {
-	      var test = coreTests[index].tests[i];
-	      it ("RENDER: " + test.message, render(test, dust));
-	      it ("STREAM: " + test.message, stream(test, dust));
-	      it ("PIPE: " + test.message, pipe(test, dust));
-	    }
-	  };
-	});
-
-}
-
 
 function render(test, dust) {
   return function() {
