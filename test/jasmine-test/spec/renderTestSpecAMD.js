@@ -5,8 +5,18 @@ var testVersion = '1.2.4';
 
 var dustAMD = {}
 
-require(['../../../dist/dust-full-' + testVersion], function(dust){
-	
+if (typeof process === 'undefined') {
+	// Browser based Aysnc AMD require
+	require(['../../../dist/dust-full-' + testVersion], function(dust){
+		runTests(dust);
+	});
+} else {
+	// Node based require (for CI testing)
+	var dust = require('./dist/dust-full-' + testVersion);
+	runTests(dust);
+}
+
+function runTests(dust) {
 	dustAMD = dust;
 	describe ("Test the basic functionality of dust with require", function() {
 	  for (var index = 0; index < coreTests.length; index++) {
@@ -18,7 +28,8 @@ require(['../../../dist/dust-full-' + testVersion], function(dust){
 	    }
 	  };
 	});
-});
+
+}
 
 
 function render(test, dust) {

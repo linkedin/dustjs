@@ -1,14 +1,7 @@
-var uutest    = require('./uutest')
-
-console.log('Loaded uutest');
-
-var	dust      = require('../lib/dust')
-	
-console.log('Loading dust');
-
-var coreTests     = require('./jasmine-test/spec/coreTests'),
+var uutest    = require('./uutest'),
+    dust      = require('../lib/dust'),
+    coreTests     = require('./jasmine-test/spec/coreTests'),
     coreSetup = require('./core').coreSetup;
-
 
 function dumpError(err) {
   var out = err.testName + " -> ";

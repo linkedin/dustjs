@@ -46,7 +46,7 @@ FULL_MIN = dist/dust-full-${VERSION}.min.js
 
 define HEADER
 //
-// Dust - Asynchronous Templating v1.2.3
+// Dust - Asynchronous Templating v${VERSION}
 //
 // Original source (up to v0.30, Jan 2011)
 // http://akdubya.github.com/dustjs
