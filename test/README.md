@@ -10,6 +10,10 @@ Dust unit-tests using jasmine
 If you want to run the client version just open the html page called specRunner.html located in:
  
      test/jasmine-test/client/specRunner.html
+     
+The same tests can be run using AMD (require) by running;
+
+     test/jasmine-test/client/specRunnerAMD.html
 
 **Note:** Unlike the node.js version, the browser version needs pre-compiled distribution files to run. If you made local changes to your dust code, use the `make` command to run tests _(see below)_.
 
