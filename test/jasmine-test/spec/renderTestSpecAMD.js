@@ -10,8 +10,8 @@ if (typeof process === 'undefined') {
 	require(['../../../dist/dust-full-' + testVersion], runTests);
 } else {
 	// Load the client AMD require library in the Node session
-	var requireAMD = require('../client/lib/require');
-	requireAMD(['../../dist/dust-full-' + testVersion], runTests);
+	var requireAMD = require('../server/lib/r');
+	requireAMD(['../../../dist/dust-full-' + testVersion], runTests);
 }
 
 function runTests(dust) {
