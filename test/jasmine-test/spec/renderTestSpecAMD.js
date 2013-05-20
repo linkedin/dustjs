@@ -7,7 +7,14 @@ var dustAMD = {}
 
 if (typeof process === 'undefined') {
 	// Browser based Aysnc AMD require, don't run if on Node server
-	require(['../../../dist/dust-full-' + testVersion], function(dust){
+	require(['../../../dist/dust-full-' + testVersion], runTests);
+} else {
+	// Load the client AMD require library in the Node session 
+	var requireAMD = require('../client/lib/require');
+	requireAMD(['../../../dist/dust-full-' + testVersion], runTests);
+}
+
+function runTests(dust) {
 		dustAMD = dust;
 		describe ("Test the basic functionality of dust with require", function() {
 		  for (var index = 0; index < coreTests.length; index++) {
@@ -19,7 +26,6 @@ if (typeof process === 'undefined') {
 		    }
 		  };
 		});
-	});
 }
 
 function render(test, dust) {
