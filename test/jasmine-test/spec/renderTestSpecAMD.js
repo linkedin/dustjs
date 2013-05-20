@@ -9,9 +9,9 @@ if (typeof process === 'undefined') {
 	// Browser based Aysnc AMD require, don't run if on Node server
 	require(['../../../dist/dust-full-' + testVersion], runTests);
 } else {
-	// Load the client AMD require library in the Node session 
+	// Load the client AMD require library in the Node session
 	var requireAMD = require('../client/lib/require');
-	requireAMD(['../../../dist/dust-full-' + testVersion], runTests);
+	requireAMD(['../../dist/dust-full-' + testVersion], runTests);
 }
 
 function runTests(dust) {
