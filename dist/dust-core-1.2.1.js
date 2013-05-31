@@ -1,3 +1,11 @@
+//
+// Dust - Asynchronous Templating v1.2.1
+// http://akdubya.github.com/dustjs
+//
+// Copyright (c) 2010, Aleksander Williams
+// Released under the MIT License.
+//
+
 var dust = {};
 
 function getGlobal(){
@@ -181,8 +189,8 @@ Context.prototype.current = function() {
 
 Context.prototype.getBlock = function(key, chk, ctx) {
   if (typeof key === "function") {
-    key = key(chk, ctx).data.join("");
-    chk.data = []; //ie7 perf
+    key = key(chk, ctx).data;
+    chk.data = "";
   }
 
   var blocks = this.blocks;
@@ -229,7 +237,7 @@ Stub.prototype.flush = function() {
 
   while (chunk) {
     if (chunk.flushable) {
-      this.out += chunk.data.join(""); //ie7 perf
+      this.out += chunk.data;
     } else if (chunk.error) {
       this.callback(chunk.error);
       this.flush = function() {};
@@ -252,7 +260,7 @@ Stream.prototype.flush = function() {
 
   while(chunk) {
     if (chunk.flushable) {
-      this.emit('data', chunk.data.join("")); //ie7 perf
+      this.emit('data', chunk.data);
     } else if (chunk.error) {
       this.emit('error', chunk.error);
       this.flush = function() {};
@@ -308,7 +316,7 @@ Stream.prototype.pipe = function(stream) {
 function Chunk(root, next, taps) {
   this.root = root;
   this.next = next;
-  this.data = []; //ie7 perf
+  this.data = '';
   this.flushable = false;
   this.taps = taps;
 }
@@ -319,7 +327,7 @@ Chunk.prototype.write = function(data) {
   if (taps) {
     data = taps.go(data);
   }
-  this.data.push(data);
+  this.data += data;
   return this;
 };
 
@@ -577,7 +585,6 @@ dust.escapeHtml = function(s) {
 };
 
 var BS = /\\/g,
-    FS = /\//g,
     CR = /\r/g,
     LS = /\u2028/g,
     PS = /\u2029/g,
@@ -591,7 +598,6 @@ dust.escapeJs = function(s) {
   if (typeof s === "string") {
     return s
       .replace(BS, '\\\\')
-      .replace(FS, '\\/')
       .replace(DQ, '\\"')
       .replace(SQ, "\\'")
       .replace(CR, '\\r')

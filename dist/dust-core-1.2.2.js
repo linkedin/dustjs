@@ -1,3 +1,11 @@
+//
+// Dust - Asynchronous Templating v1.2.2
+// http://akdubya.github.com/dustjs
+//
+// Copyright (c) 2010, Aleksander Williams
+// Released under the MIT License.
+//
+
 var dust = {};
 
 function getGlobal(){
@@ -577,7 +585,6 @@ dust.escapeHtml = function(s) {
 };
 
 var BS = /\\/g,
-    FS = /\//g,
     CR = /\r/g,
     LS = /\u2028/g,
     PS = /\u2029/g,
@@ -591,7 +598,6 @@ dust.escapeJs = function(s) {
   if (typeof s === "string") {
     return s
       .replace(BS, '\\\\')
-      .replace(FS, '\\/')
       .replace(DQ, '\\"')
       .replace(SQ, "\\'")
       .replace(CR, '\\r')
