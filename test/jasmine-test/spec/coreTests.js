@@ -30,6 +30,20 @@ var coreTests = [
         expected: "Hello World!",
         message: "should test basic text rendering"
       },
+            {
+        name:     "global_template",
+        source:   '{#helper foo="bar" boo="boo"} {/helper}',
+        context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(context.global._t); } },
+        expected: "global_template",
+        message: "should render the template name"
+      },
+      {
+        name:     "apps/test/foo.tl&v=0.1",
+        source:   '{#helper foo="bar" boo="boo" template="tl/apps/test"} {/helper}',
+        context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(context.global._t); } },
+        expected: "apps/test/foo.tl&v=0.1",
+        message: "should render the template name with paths"
+      },
       {
         name:     "reference",
         source:   "{?one}{one}{/one}",
