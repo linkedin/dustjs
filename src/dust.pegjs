@@ -97,9 +97,9 @@ identifier "identifier"
   / k:key      { var arr = ["key", k]; arr.text = k; return arr; }
 
 number "number"
-  = n:(frac / integer) { return ['literal', n]; }
+  = n:(float / integer) { return ['literal', n]; }
 
-frac "frac"
+float "float"
   = l:integer "." r:integer+ { return parseFloat(l + "." + r.join('')); }
 
 integer "integer"
