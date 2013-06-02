@@ -33,14 +33,14 @@ var coreTests = [
             {
         name:     "global_template",
         source:   '{#helper foo="bar" boo="boo"} {/helper}',
-        context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(context.global._t); } },
+        context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(context.global.__template_name__); } },
         expected: "global_template",
         message: "should render the template name"
       },
       {
         name:     "apps/test/foo.tl&v=0.1",
         source:   '{#helper foo="bar" boo="boo" template="tl/apps/test"} {/helper}',
-        context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(context.global._t); } },
+        context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(context.global.__template_name__); } },
         expected: "apps/test/foo.tl&v=0.1",
         message: "should render the template name with paths"
       },
