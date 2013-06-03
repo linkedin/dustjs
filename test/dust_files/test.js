@@ -69,39 +69,45 @@ function assignValue(id){
 	})
 }
 
-function renderSelect(examples, defaultTemplate, id) { 
-  dust.render("select", 
+function renderSelect(examples, defaultTemplate, id) {
+  dust.render("select",
     {
       examples: examples,
       selected: function(chk, ctx) {
         if (ctx.current().name === defaultTemplate) return " selected ";
-      } 
+      }
     }, function(err, output) { $('#' + id).html(output); assignValue(id);}
 );};
 
 $(document).ready(function() {
-  coreTests.forEach(function(ex) {
-    ex.tests.forEach(function(test, ex) { 
-      if (test.error) {
-       coreTests[ex].tests.splice(coreTests[ex].tests.indexOf(test), 1);  
+  var suite, test, i, j;
+  for(i=coreTests.length-1; i>=0; i--) {
+    suite = coreTests[i];
+    for(j=suite.tests.length-1; j>=0; j--) {
+      test = suite.tests[j];
+      if(test.error) {
+        suite.tests.splice(j, 1);
       } else {
         dust.loadSource(dust.compile(test.source, test.name));
       }
-    });
-  });
+    }
+    if(!suite.tests.length) {
+        coreTests.splice(i, 1);
+    }
+  }
 
   renderSelect(coreTests, "replace", "select-group")
 
   $('#select-group > select').change(function() {
     var groupIdx = $(this).val();
-    renderSelect(coreTests[groupIdx].tests, "replace", "select-test"); 
+    renderSelect(coreTests[groupIdx].tests, "replace", "select-test");
     $('#select-test > select').change(function() {
       var test = coreTests[groupIdx].tests[$(this).val()];
       $('#input-source').val(test.source);
       $('#input-context').val(dump(test.context));
       $('#input-source').change();
-    });  
-    $('#select-test > select').change();  
+    });
+    $('#select-test > select').change();
   });
 
 	$('#input-source').change(function() {
