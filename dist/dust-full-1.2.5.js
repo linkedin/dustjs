@@ -73,7 +73,7 @@ dust.register = function(name, tmpl) {
     dust.log(2, 'template name is undefined');
     return;
   } 
-  else if(typeof tmpl !== 'function') {
+  if(typeof tmpl !== 'function') {
     dust.log(2, 'template [' + name + '] cannot be resolved to a dust function');
   }
   dust.cache[name] = tmpl;
@@ -81,7 +81,7 @@ dust.register = function(name, tmpl) {
 
 dust.render = function(name, context, callback) {
   var chunk = new Stub(callback).head,
-      loadedChunk = dust.load(name, chunk, Context.wrap(context));
+      loadedChunk = dust.load(name, chunk, Context.wrap(context, name));
   // catch errors from dust.load
   if(loadedChunk.error && loadedChunk.error.message) {
     dust.log(2, loadedChunk.error.message);
@@ -92,7 +92,7 @@ dust.render = function(name, context, callback) {
 dust.stream = function(name, context) {
   var stream = new Stream();
   dust.nextTick(function() {
-    var loadedChunk = dust.load(name, stream.head, Context.wrap(context));
+    var loadedChunk = dust.load(name, stream.head, Context.wrap(context, name));
     // catch errors from dust.load
     if(loadedChunk.error && loadedChunk.error.message) {
       dust.log(2, loadedChunk.error.message);
@@ -112,7 +112,7 @@ dust.compileFn = function(source, name) {
     var master = callback ? new Stub(callback) : new Stream();
     dust.nextTick(function() {
       if(typeof tmpl === 'function') {
-        tmpl(master.head, Context.wrap(context)).end();
+        tmpl(master.head, Context.wrap(context, name)).end();
       }
       else {
         dust.log(2, 'template [' + name + '] cannot be resolved to a dust function');
@@ -212,11 +212,13 @@ dust.makeBase = function(global) {
   return new Context(new Stack(), global);
 };
 
-Context.wrap = function(context) {
+Context.wrap = function(context, name) {
   if (context instanceof Context) {
     return context;
   }
-  return new Context(new Stack(context));
+  var global= {};
+  global.__template_name__ = name;
+  return new Context(new Stack(context), global);
 };
 
 Context.prototype.get = function(key) {
@@ -328,7 +330,7 @@ Context.prototype.shiftBlocks = function(locals) {
 function Stack(head, tail, idx, len) {
   this.tail = tail;
   this.isObject = !dust.isArray(head) && head && typeof head === "object";
-  if(head) {
+  if(head !== undefined && head !== null) {
     this.head = head;
   }
   else {
@@ -401,7 +403,7 @@ Stream.prototype.emit = function(type, data) {
   }
   if (typeof handler == 'function') {
     handler(data);
-  } else if (typeof handler == 'array') {
+  } else if (dust.isArray(handler)) {
     var listeners = handler.slice(0);
     for (var i = 0, l = listeners.length; i < l; i++) {
       listeners[i](data);
@@ -512,7 +514,7 @@ Chunk.prototype.reference = function(elem, context, auto, filters) {
   if (!dust.isEmpty(elem)) {
     return this.write(dust.filter(elem, auto, filters));
   } else {
-    dust.log(1, 'reference for element [' + elem + '] was not found. defaulting to chunk.')
+    dust.log(1, 'reference for element [' + elem + '] was not found. defaulting to chunk.');
     return this;
   }
 };
@@ -581,7 +583,7 @@ Chunk.prototype.section = function(elem, context, bodies, params) {
    // undefined are all falsy
   } else if (skip) {
      return skip(this, context);
-   }
+  }
   dust.log(2, 'can not handle the element [' + elem + '] given for the section tag');  
   return this;
 };
