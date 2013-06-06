@@ -22,7 +22,9 @@
     }
   ],
   "main": "./dist/dust-full-1.2.5.js",
-  "scripts": "./dist/dust-full-1.2.5.js",
+  "scripts": [
+    "./dist/dust-full-1.2.5.js"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/linkedin/dustjs.git"
