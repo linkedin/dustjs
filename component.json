@@ -23,8 +23,9 @@
   ],
   "main": "lib/dust.js",
   "scripts": [
-    "lib/dust.js",
     "lib/compiler.js",
+    "lib/dust.js",
+    "lib/full.js",
     "lib/parser.js",
     "lib/server.js"
   ],
