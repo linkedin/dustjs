@@ -21,9 +21,12 @@
       "email": "rragan@ebay.com"
     }
   ],
-  "main": "dist/dust-full-1.2.5.js",
+  "main": "lib/dust.js",
   "scripts": [
-    "dist/dust-full-1.2.5.js"
+    "lib/dust.js",
+    "lib/compiler.js",
+    "lib/parser.js",
+    "lib/server.js"
   ],
   "repository": {
     "type": "git",
