@@ -986,7 +986,51 @@ var coreTests = [
                   },
         expected: "Hello Foo Bar World!",
         message: "should test scope of context function"
-      }
+      },
+      {
+          name:     "test that function returning object is resolved",
+          source:   "Hello {#foo}{bar}{/foo} World!",
+          context:  {
+                      foo: {
+                        foobar: 'Foo Bar',
+                        bar: function () {
+                          return this.foobar;
+                        }
+                      }
+                    },
+          expected: "Hello Foo Bar World!",
+          message: "should test scope of context function"
+        },
+        {
+            name:     "test that nested object result from lambda resolves",
+            source:   "Hello {lambda.lambda.ding.dong} World!",
+            context:  {
+                        lambda : {
+                          lambda : function () {
+                            return { 
+                            	ding : {
+                            		dong : 'Foo Bar'
+                            	}
+                              };
+                            }
+                        }
+                      },
+            expected: "Hello Foo Bar World!",
+            message: "should resolve paths with lambdas in scope of context function"
+        },
+        {
+          name:     "test that nested lambda result resolve",
+          source:   "Hello {ding.dong} World!",
+          context:  {
+                      ding : {
+                        dong: function () {
+                          return 'Foo Bar';
+                        }
+                      }
+                    },
+          expected: "Hello Foo Bar World!",
+          message: "should test scope of context function"
+        }
     ]
   },
   {
