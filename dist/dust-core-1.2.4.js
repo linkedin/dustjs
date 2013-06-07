@@ -1,3 +1,11 @@
+//
+// Dust - Asynchronous Templating v1.2.4
+// http://akdubya.github.com/dustjs
+//
+// Copyright (c) 2010, Aleksander Williams
+// Released under the MIT License.
+//
+
 var dust = {};
 
 function getGlobal(){
@@ -140,11 +148,8 @@ Context.wrap = function(context, name) {
   return new Context(new Stack(context), global);
 };
 
-
 Context.prototype.get = function(key) {
-  var ctx = this.stack, value, keyPath;
-  
-  keyPath = key.split(".");
+  var ctx = this.stack, value;
 
   while(ctx) {
     if (ctx.isObject) {
@@ -152,64 +157,24 @@ Context.prototype.get = function(key) {
       if (!(value === undefined)) {
         return value;
       }
-      value = Context.getDot(ctx.head,keyPath);
-      if (!(value === undefined)) {
-        return value;
-      }
     }
     ctx = ctx.tail;
   }
-  if (this.global && this.global[key]){
-     return this.global[key];
-  }
-  return Context.getDot(this.global,keyPath);
+  return this.global ? this.global[key] : undefined;
 };
-
-Context.getDot = function(object,keyPath) {
-  var value = object, i, key;
-
-  for (i=0; i<keyPath.length; i++) {
-	//if it was a function, apply first
-	value = Context.getValue(value);
-    if (value) {
-      value = value[keyPath[i]];
-    }
-  }
-  return value ? value : undefined;
-};
-
-Context.getValue = function(value) {
-  if (typeof value === "function") {
-    value= value.apply(this);
-  }
-  return value;	
-}
 
 Context.prototype.getPath = function(cur, down) {
   var ctx = this.stack,
-      len = down.length,      
-      tail = cur ? undefined : this.stack.tail; 
+      len = down.length;
 
   if (cur && len === 0) return ctx.head;
   ctx = ctx.head;
   var i = 0;
   while(ctx && i < len) {
-	ctx = Context.getValue(ctx);
     ctx = ctx[down[i]];
     i++;
-    if (!ctx && tail){
-    	ctx = tail.head;
-    	tail = ctx.tail;
-    	i=0;
-    }    
   }
-  if (ctx) 
-    return ctx;
-  else {
-	//check the the global for the path as well
-    return Context.getDot(this.global,down);
-  }
-	  
+  return ctx;
 };
 
 Context.prototype.push = function(head, idx, len) {
