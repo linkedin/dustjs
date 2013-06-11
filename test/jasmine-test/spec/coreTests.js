@@ -295,6 +295,17 @@ var coreTests = [
         message:  "should test null treated as empty in exists"
       },
       {
+          name:     "functions is evaluated in exists",
+          source:   "{?faux}sacre bleu{:else}oui oui{/faux}",
+          context : { 
+        	  faux : function(){ 
+        		  return false; 
+        	  } 
+          },
+          expected: "oui oui",
+          message: "should evaluate functions when used with exists"
+      },
+      {
         name:     "null is treated as truthy in not exists",
         source:   "{^scalar}true{:else}false{/scalar}",
         context:   {"scalar": null},
