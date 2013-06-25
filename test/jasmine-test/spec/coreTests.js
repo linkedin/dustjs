@@ -225,6 +225,27 @@ var coreTests = [
                   "<li>Thunder</li>\n" +
                   "</ul>",
         message: "should test the context"
+      },
+      {
+        name: "dotted path resolution up context",
+        source: "{#data.A.list}Aname{data.A.name}{/data.A.list}",
+        context: { "data":{"A":{"name":"Al","list":[{"name": "Joe"},{"name": "Mary"}],"B":{"name":"Bob","Blist":["BB1","BB2"]}}} },
+        expected: "AnameAlAnameAl",
+        message: "should test usage of dotted path resolution up context"
+      },
+      {
+        name: "dotted path resolution up context 2",
+        source: "{#data.A.B.Blist}Aname{data.A.name}{/data.A.B.Blist}",
+        context: { "data":{"A":{"name":"Al","list":[{"name": "Joe"},{"name": "Mary"}],"B":{"name":"Bob","Blist":["BB1","BB2"]}}} },
+        expected: "AnameAlAnameAl",
+        message: "should test usage of dotted path resolution up context"
+      },
+      {
+        name: "nested dotted path resolution",
+        source: "{#data.A.list}{#data.A.B.Blist}{.}Aname{data.A.name}{/data.A.B.Blist}{/data.A.list}",
+        context: { "data":{"A":{"name":"Al","list":[{"name": "Joe"},{"name": "Mary"}],"B":{"name":"Bob","Blist":["BB1"]}}} },
+        expected: "BB1AnameAlBB1AnameAl",
+        message: "should test nested usage of dotted path resolution"
       }
     ]
   },
