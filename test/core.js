@@ -3,7 +3,11 @@
 exports.coreSetup = function(suite, auto) {
   auto.forEach(function(test) {
     suite.test(test.name, function(){
-      testRender(this, test.source, test.context, test.expected, test.error || {});
+      var base = dust.makeBase({
+        glob: { globChild: "testGlobal"}
+      });
+      testRender(this, test.source, base.push(test.context), test.expected, test.options, test.error || {});
+
     });
   });
 
@@ -105,10 +109,11 @@ exports.coreSetup = function(suite, auto) {
   });
 }
 
-function testRender(unit, source, context, expected, error) {
+function testRender(unit, source, context, expected, options, error) {
   var name = unit.id;
    try {
      dust.loadSource(dust.compile(source, name));
+     dust.setOptions(options);
      dust.render(name, context, function(err, output) {
        unit.ifError(err);
        unit.equals(output, expected);

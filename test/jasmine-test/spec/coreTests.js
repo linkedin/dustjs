@@ -664,6 +664,119 @@ var coreTests = [
     ]
   },
   {
+    name: "nested path tests",
+    tests: [
+       { 
+        name: "Verify local mode leading dot path in local mode",
+        source: "{#people}{.name} is {?.age}{.age} years old.{:else}not telling us their age.{/age}{/people}",
+        context:  {
+             "name": "List of people",
+             "age": "8 hours",
+             "people": [
+               { "name": "Alice" },
+               { "name": "Bob", "age": 42 },
+              ]
+           },
+        expected: "Alice is not telling us their age.Bob is 42 years old.",
+        message: "should test the leading dot behavior in local mode"
+      },
+      {
+        name: "check nested ref in global does not work in local mode",
+        source: "{glob.globChild}",
+        context: { },
+        expected: "",
+        message: "Should not find glob.globChild which is in context.global"
+      },
+      {
+        name: "dotted path resolution up context should not work in local mode",
+        source: "{#data.A.list}Aname{data.A.name}{/data.A.list}",
+        context: { "data":{"A":{"name":"Al","list":[{"name": "Joe"},{"name": "Mary"}],"B":{"name":"Bob","Blist":["BB1","BB2"]}}} },
+        expected: "AnameAname",
+        message: "should test usage of dotted path resolution up context in original dust mode"
+      },
+      {
+        name:     "Verify leading dot path not affected in global mode",
+        source:   "{#people}{.name} is {?.age}{.age} years old.{:else}not telling us their age.{/age}{/people}",
+        options: {pathScope: "global"},
+        context:  {
+             "name": "List of people",
+             "age": "8 hours",
+             "people": [
+               { "name": "Alice" },
+               { "name": "Bob", "age": 42 },
+              ]
+        },
+        expected: "Alice is not telling us their age.Bob is 42 years old.",
+        message: "should test the leading dot behavior preserved"
+     },
+     {
+        name: "dotted path resolution up context",
+        source: "{#data.A.list}Aname{data.A.name}{/data.A.list}",
+        options: {pathScope: "global"},
+        context: { "data":{"A":{"name":"Al","list":[{"name": "Joe"},{"name": "Mary"}],"B":{"name":"Bob","Blist":["BB1","BB2"]}}} },
+        expected: "AnameAlAnameAl",
+        message: "should test usage of dotted path resolution up context"
+     },
+     {
+        name: "dotted path resolution up context 2",
+        source: "{#data.A.B.Blist}Aname{data.A.name}{/data.A.B.Blist}",
+        options: {pathScope: "global"},
+        context: { "data":{"A":{"name":"Al","list":[{"name": "Joe"},{"name": "Mary"}],"B":{"name":"Bob","Blist":["BB1","BB2"]}}} },
+        expected: "AnameAlAnameAl",
+        message: "should test usage of dotted path resolution up context"
+      },
+      {
+        name: "dotted path resolution without explicit context",
+        source: "{#data.A}Aname{name}{data.C.name}{/data.A}",
+        options: {pathScope: "global"},
+        context: { "data":{"A":{"name":"Al","list":[{"name": "Joe"},{"name": "Mary"}],"B":{"name":"Bob","Blist":["BB1","BB2"]}},C:{name:"cname"}} },
+        expected: "AnameAlcname",
+        message: "should test usage of dotted path resolution up context"
+      },
+      {
+        name: "same as previous test but with explicit context",
+        source: "{#data.A:B}Aname{name}{data.C.name}{/data.A}",
+        options: {pathScope: "global"},
+        context: { "data":{"A":{"name":"Al","list":[{"name": "Joe"},{"name": "Mary"}],"B":{"name":"Bob","Blist":["BB1","BB2"]}},C:{name:"cname"}} },
+        expected: "AnameAl",
+        message: "should test explicit context blocks looking further up stack"
+      },
+      {
+        name: "explicit context but gets value from global",
+        source: "{#data.A:B}Aname{name}{glob.globChild}{/data.A}",
+        options: {pathScope: "global"},
+        context: { "data":{"A":{"name":"Al","list":[{"name": "Joe"},{"name": "Mary"}],"B":{"name":"Bob","Blist":["BB1","BB2"]}},C:{name:"cname"}} },
+        expected: "AnameAltestGlobal",
+        message: "should test access global despite explicit context"
+      },
+      {
+        name: "nested dotted path resolution",
+        source: "{#data.A.list}{#data.A.B.Blist}{.}Aname{data.A.name}{/data.A.B.Blist}{/data.A.list}",
+        options: {pathScope: "global"},
+        context: { "data":{"A":{"name":"Al","list":[{"name": "Joe"},{"name": "Mary"}],"B":{"name":"Bob","Blist":["BB1"]}}} },
+        expected: "BB1AnameAlBB1AnameAl",
+        message: "should test nested usage of dotted path resolution"
+      },
+      {
+        name: "check nested ref in global works in global mode",
+        source: "{glob.globChild}",
+        options: {pathScope: "global"},
+        context: { },
+        expected: "testGlobal",
+        message: "Should find glob.globChild which is in context.global"
+      },
+      {
+        name: "dotted path resolution - test switch back to local mode",
+        source: "{#data.A.list}Aname{data.A.name}{/data.A.list}",
+        options: {pathScope: "local"},
+        context: { "data":{"A":{"name":"Al","list":[{"name": "Joe"},{"name": "Mary"}],"B":{"name":"Bob","Blist":["BB1","BB2"]}}} },
+        expected: "AnameAname",
+        message: "should test usage of dotted path resolution up context in original dust mode"
+      }
+
+    ]
+  },
+  {
     name: "filter tests",
     tests: [
       {
@@ -1015,6 +1128,7 @@ var coreTests = [
                             }
                         }
                       },
+	    options: {pathScope: "global"},
             expected: "Hello Foo Bar World!",
             message: "should resolve paths with lambdas in scope of context function"
         },
