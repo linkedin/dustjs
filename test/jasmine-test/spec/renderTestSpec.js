@@ -11,9 +11,15 @@ describe ("Test the basic functionality of dust", function() {
 
 function render(test) {
   return function() {
+    var context;
     try {
       dust.loadSource(dust.compile(test.source, test.name, test.strip));
-      dust.render(test.name, test.context, function(err, output) {
+      dust.setOptions(test.options);
+      context = test.context;
+      if (test.base){
+         context = dust.makeBase(test.base).push(context);
+      }
+      dust.render(test.name, context, function(err, output) {
         expect(err).toBeNull();
         expect(test.expected).toEqual(output);
       });
@@ -26,13 +32,18 @@ function render(test) {
 
 function stream(test) {
   return function() {
-    var output ="", flag;
+    var output ="", flag, context;
     runs(function(){
       flag = false;
       output = "";
       try {
         dust.loadSource(dust.compile(test.source, test.name));
-        dust.stream(test.name, test.context)
+        dust.setOptions(test.options);
+        context = test.context;
+        if (test.base){
+           context = dust.makeBase(test.base).push(context);
+        }
+        dust.stream(test.name, context)
         .on("data", function(data) {
           output += data;
         })
@@ -64,7 +75,7 @@ function stream(test) {
 
 function pipe(test) {
   return function() {
-    var output, outputTwo, flag, flagTwo;
+    var output, outputTwo, flag, flagTwo, context;
     runs(function(){
       flag = false;
       flagTwo = false;
@@ -72,7 +83,12 @@ function pipe(test) {
       outputTwo = "";
       try {
         dust.loadSource(dust.compile(test.source, test.name));
-        var tpl = dust.stream(test.name, test.context);
+        context = test.context;
+        if (test.base){
+           context = dust.makeBase(test.base).push(context);
+        }
+        dust.setOptions(test.options);
+        var tpl = dust.stream(test.name, context);
         tpl.pipe({
           write: function (data) {
             output += data;
