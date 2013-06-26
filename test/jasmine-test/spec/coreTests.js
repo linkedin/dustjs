@@ -745,6 +745,7 @@ var coreTests = [
         name: "explicit context but gets value from global",
         source: "{#data.A:B}Aname{name}{glob.globChild}{/data.A}",
         options: {pathScope: "global"},
+        base: { glob: { globChild: "testGlobal"} },
         context: { "data":{"A":{"name":"Al","list":[{"name": "Joe"},{"name": "Mary"}],"B":{"name":"Bob","Blist":["BB1","BB2"]}},C:{name:"cname"}} },
         expected: "AnameAltestGlobal",
         message: "should test access global despite explicit context"
@@ -761,6 +762,7 @@ var coreTests = [
         name: "check nested ref in global works in global mode",
         source: "{glob.globChild}",
         options: {pathScope: "global"},
+        base: { glob: { globChild: "testGlobal"} },
         context: { },
         expected: "testGlobal",
         message: "Should find glob.globChild which is in context.global"
