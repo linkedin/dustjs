@@ -774,8 +774,15 @@ var coreTests = [
         context: { "data":{"A":{"name":"Al","list":[{"name": "Joe"},{"name": "Mary"}],"B":{"name":"Bob","Blist":["BB1","BB2"]}}} },
         expected: "AnameAname",
         message: "should test usage of dotted path resolution up context in original dust mode"
-      }
-
+      },
+      {
+          name: "dotted path resolution up context with partial match in current context",
+          source: "{#data}{#A}{C.name}{/A}{/data}",
+          options: {pathScope: "global"},
+          context: { "data":{ "A":{ "name":"Al", "B": "Ben", "C": { namex: "Charlie"} }, C: {name: "Charlie Sr."} } },
+          expected: "",
+          message: "should test usage of dotted path resolution up context"
+       }
     ]
   },
   {
