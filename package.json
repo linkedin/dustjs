@@ -2,7 +2,7 @@
   "name": "dustjs-linkedin",
   "version": "1.2.6",
   "author": "Aleksander Williams",
-  "description": "Asynchronous templates for the browser and node.js ( LinkedIn fork )",
+  "description": "Asynchronous templates for the browser and node.js ( LinkedIn fork ) (InnerFunction fork)",
   "contributors": [
     {
       "name": "Jairo de Morais",
@@ -29,7 +29,7 @@
   "main": "./lib/dust",
   "repository": {
     "type": "git",
-    "url": "https://github.com/linkedin/dustjs.git"
+    "url": "https://github.com/juliangoacher/dustjs"
   },
   "keywords": ["templates", "views"],
     "devDependencies": {

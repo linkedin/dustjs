@@ -1,12 +1,8 @@
-//
-// Dust - Asynchronous Templating v1.1.1
-// http://akdubya.github.com/dustjs
-//
-// Copyright (c) 2010, Aleksander Williams
-// Released under the MIT License.
-//
-
-var dust = {};
+var dust = {
+    options: {
+        nestedScopeDottedPathResolution: true
+    }
+};
 
 function getGlobal(){
   return (function(){
@@ -164,13 +160,47 @@ Context.prototype.getPath = function(cur, down) {
       len = down.length;
 
   if (cur && len === 0) return ctx.head;
-  ctx = ctx.head;
-  var i = 0;
-  while(ctx && i < len) {
-    ctx = ctx[down[i]];
-    i++;
+
+  if( dust.options.nestedScopeDottedPathResolution ) {
+      var key = down[0], obj, value;
+      while(ctx) {
+        // Process context if head is an object or key is a number and head is an array.
+        if(ctx.isObject || (!isNaN( key ) && dust.isArray( ctx.head ))) {
+          obj = ctx.head;
+          value = ctx.head[key];
+          // Find a value on the stack bound to the first name in the path.
+          if( value !== undefined ) {
+            var i = 1;
+            // Resolve the rest of the path.
+            while(value && i < len) {
+              obj = value;
+              value = value[down[i++]];
+            }
+            // Wrap function values to preserve the 'this' reference.
+            // (Otherwise Chunk.section and Chunk.reference won't propertly resolve
+            // the correct 'this' object).
+            if( typeof value == 'function' ) {
+              var fn = value;
+              value = function() { return fn.apply( obj, arguments ); }
+            }
+            return value;
+          }
+        }
+        // Continue down the stack.
+        ctx = ctx.tail;
+      }
+      return undefined;
   }
-  return ctx;
+  else {
+    // Original getPath() behaviour.
+    ctx = ctx.head;
+    var i = 0;
+    while(ctx && i < len) {
+      ctx = ctx[down[i]];
+      i++;
+    }
+    return ctx;
+  }
 };
 
 Context.prototype.push = function(head, idx, len) {
