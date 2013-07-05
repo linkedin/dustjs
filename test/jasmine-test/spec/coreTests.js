@@ -620,6 +620,19 @@ var coreTests = [
       },
       // INFU addition
       {
+        name:     "method invocation",
+        source:   "{person.fullName}",
+        context:  {
+          person: {
+            firstName: "Peter",
+            lastName:  "Jones",
+            fullName: function() { return this.firstName+' '+this.lastName; }
+          }
+        },
+        expected: "Peter Jones",
+        message:  "should test resolve correct 'this' when invoking method"
+      },
+      {
         name:     "nested_scope_with_paths",
         source:   "{person.fullName} has a {settee.color} settee",
         context:  { person: { fullName: "Peter" }, settee: { color: "blue" } },
