@@ -1,3 +1,11 @@
+//
+// Dust - Asynchronous Templating v1.2.0
+// http://akdubya.github.com/dustjs
+//
+// Copyright (c) 2010, Aleksander Williams
+// Released under the MIT License.
+//
+
 var dust = {};
 
 function getGlobal(){
@@ -8,8 +16,6 @@ function getGlobal(){
 
 (function(dust) {
 
-dust.helpers = {};
-
 dust.cache = {};
 
 dust.register = function(name, tmpl) {
@@ -19,13 +25,13 @@ dust.register = function(name, tmpl) {
 
 dust.render = function(name, context, callback) {
   var chunk = new Stub(callback).head;
-  dust.load(name, chunk, Context.wrap(context, name)).end();
+  dust.load(name, chunk, Context.wrap(context)).end();
 };
 
 dust.stream = function(name, context) {
   var stream = new Stream();
   dust.nextTick(function() {
-    dust.load(name, stream.head, Context.wrap(context, name)).end();
+    dust.load(name, stream.head, Context.wrap(context)).end();
   });
   return stream;
 };
@@ -39,7 +45,7 @@ dust.compileFn = function(source, name) {
   return function(context, callback) {
     var master = callback ? new Stub(callback) : new Stream();
     dust.nextTick(function() {
-      tmpl(master.head, Context.wrap(context, name)).end();
+      tmpl(master.head, Context.wrap(context)).end();
     });
     return master;
   };
@@ -131,13 +137,11 @@ dust.makeBase = function(global) {
   return new Context(new Stack(), global);
 };
 
-Context.wrap = function(context, name) {
+Context.wrap = function(context) {
   if (context instanceof Context) {
     return context;
   }
-  var global= {};
-  global.__template_name__ = name;
-  return new Context(new Stack(context), global);
+  return new Context(new Stack(context));
 };
 
 Context.prototype.get = function(key) {
@@ -183,8 +187,8 @@ Context.prototype.current = function() {
 
 Context.prototype.getBlock = function(key, chk, ctx) {
   if (typeof key === "function") {
-    key = key(chk, ctx).data.join("");
-    chk.data = []; //ie7 perf
+    key = key(chk, ctx).data;
+    chk.data = "";
   }
 
   var blocks = this.blocks;
@@ -231,7 +235,7 @@ Stub.prototype.flush = function() {
 
   while (chunk) {
     if (chunk.flushable) {
-      this.out += chunk.data.join(""); //ie7 perf
+      this.out += chunk.data;
     } else if (chunk.error) {
       this.callback(chunk.error);
       this.flush = function() {};
@@ -254,7 +258,7 @@ Stream.prototype.flush = function() {
 
   while(chunk) {
     if (chunk.flushable) {
-      this.emit('data', chunk.data.join("")); //ie7 perf
+      this.emit('data', chunk.data);
     } else if (chunk.error) {
       this.emit('error', chunk.error);
       this.flush = function() {};
@@ -310,7 +314,7 @@ Stream.prototype.pipe = function(stream) {
 function Chunk(root, next, taps) {
   this.root = root;
   this.next = next;
-  this.data = []; //ie7 perf
+  this.data = '';
   this.flushable = false;
   this.taps = taps;
 }
@@ -321,7 +325,7 @@ Chunk.prototype.write = function(data) {
   if (taps) {
     data = taps.go(data);
   }
-  this.data.push(data);
+  this.data += data;
   return this;
 };
 
@@ -518,8 +522,6 @@ Chunk.prototype.helper = function(name, context, bodies, params) {
   // handle invalid helpers, similar to invalid filters
   if( dust.helpers[name]){
    return dust.helpers[name](this, context, bodies, params);
-  } else {
-    return this;
   }
 };
 
@@ -579,7 +581,6 @@ dust.escapeHtml = function(s) {
 };
 
 var BS = /\\/g,
-    FS = /\//g,
     CR = /\r/g,
     LS = /\u2028/g,
     PS = /\u2029/g,
@@ -593,7 +594,6 @@ dust.escapeJs = function(s) {
   if (typeof s === "string") {
     return s
       .replace(BS, '\\\\')
-      .replace(FS, '\\/')
       .replace(DQ, '\\"')
       .replace(SQ, "\\'")
       .replace(CR, '\\r')

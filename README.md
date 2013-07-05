@@ -7,3 +7,5 @@ This is the LinkedIn fork of Dust.
 Read more here: <http://linkedin.github.com/dustjs/>.
 
 For LinkedIn dust-helpers:  <https://github.com/linkedin/dustjs-helpers>.
+
+For LinkedIn secure-filters : <https://github.com/linkedin/dustjs-filters-secure>.

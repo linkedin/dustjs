@@ -18,8 +18,8 @@ part
    plus bodies plus end_tag or sec_tag_start followed by a slash and closing brace
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 section "section"
-  = t:sec_tag_start ws* rd b:body e:bodies n:end_tag &{ return t[1].text === n.text;}
-  { e.push(["param", ["literal", "block"], b]); t.push(e); return t }
+  = t:sec_tag_start ws* rd b:body e:bodies n:end_tag? &{if( (!n) || (t[1].text !== n.text) ) { throw new Error("Expected end tag for "+t[1].text+" but it was not found. At line : "+line+", column : " + column)} return true;}
+    { e.push(["param", ["literal", "block"], b]); t.push(e); return t }
   / t:sec_tag_start ws* "/" rd
   { t.push(["bodies"]); return t }
 
@@ -72,7 +72,7 @@ reference "reference"
   context followed by slash and closing brace
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 partial "partial"
-  = ld s:(">"/"+") n:(k:key {return ["literal", k]} / inline) c:context p:params ws* "/" rd
+  = ld s:(">"/"+") ws* n:(k:key {return ["literal", k]} / inline) c:context p:params ws* "/" rd
   { var key = (s ===">")? "partial" : s; return [key, n, c, p] }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
@@ -97,9 +97,9 @@ identifier "identifier"
   / k:key      { var arr = ["key", k]; arr.text = k; return arr; }
 
 number "number"
-  = n:(frac / integer) { return ['literal', n]; }
+  = n:(float / integer) { return ['literal', n]; }
 
-frac "frac"
+float "float"
   = l:integer "." r:integer+ { return parseFloat(l + "." + r.join('')); }
 
 integer "integer"
@@ -155,7 +155,7 @@ inline_part
 buffer "buffer"
   = e:eol w:ws*
   { return ["format", e, w.join('')] }
-  / b:(!tag !eol !comment c:. {return c})+
+  / b:(!tag !comment !eol c:. {return c})+
   { return ["buffer", b.join('')] }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
@@ -177,7 +177,7 @@ comment "comment"
    doesn't match rd or eol plus 0 or more whitespaces plus a closing brace
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 tag
-  = ld [#?^><+%:@/~%] ws* (!rd !eol .)+  ws* rd
+  = ld ws* [#?^><+%:@/~%] ws* (!rd !eol .)+ ws* rd
   / reference
 
 ld

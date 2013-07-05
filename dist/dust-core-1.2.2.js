@@ -1,3 +1,11 @@
+//
+// Dust - Asynchronous Templating v1.2.2
+// http://akdubya.github.com/dustjs
+//
+// Copyright (c) 2010, Aleksander Williams
+// Released under the MIT License.
+//
+
 var dust = {};
 
 function getGlobal(){
@@ -19,13 +27,13 @@ dust.register = function(name, tmpl) {
 
 dust.render = function(name, context, callback) {
   var chunk = new Stub(callback).head;
-  dust.load(name, chunk, Context.wrap(context, name)).end();
+  dust.load(name, chunk, Context.wrap(context)).end();
 };
 
 dust.stream = function(name, context) {
   var stream = new Stream();
   dust.nextTick(function() {
-    dust.load(name, stream.head, Context.wrap(context, name)).end();
+    dust.load(name, stream.head, Context.wrap(context)).end();
   });
   return stream;
 };
@@ -39,7 +47,7 @@ dust.compileFn = function(source, name) {
   return function(context, callback) {
     var master = callback ? new Stub(callback) : new Stream();
     dust.nextTick(function() {
-      tmpl(master.head, Context.wrap(context, name)).end();
+      tmpl(master.head, Context.wrap(context)).end();
     });
     return master;
   };
@@ -131,13 +139,11 @@ dust.makeBase = function(global) {
   return new Context(new Stack(), global);
 };
 
-Context.wrap = function(context, name) {
+Context.wrap = function(context) {
   if (context instanceof Context) {
     return context;
   }
-  var global= {};
-  global.__template_name__ = name;
-  return new Context(new Stack(context), global);
+  return new Context(new Stack(context));
 };
 
 Context.prototype.get = function(key) {
@@ -579,7 +585,6 @@ dust.escapeHtml = function(s) {
 };
 
 var BS = /\\/g,
-    FS = /\//g,
     CR = /\r/g,
     LS = /\u2028/g,
     PS = /\u2029/g,
@@ -593,7 +598,6 @@ dust.escapeJs = function(s) {
   if (typeof s === "string") {
     return s
       .replace(BS, '\\\\')
-      .replace(FS, '\\/')
       .replace(DQ, '\\"')
       .replace(SQ, "\\'")
       .replace(CR, '\\r')
