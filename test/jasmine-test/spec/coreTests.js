@@ -225,6 +225,44 @@ var coreTests = [
                   "<li>Thunder</li>\n" +
                   "</ul>",
         message: "should test the context"
+      },
+      {
+        name: "dotted path resolution up context",
+        source: "{#data.A.list}Aname{data.A.name}{/data.A.list}",
+        context: { "data":{"A":{"name":"Al","list":[{"name": "Joe"},{"name": "Mary"}],"B":{"name":"Bob","Blist":["BB1","BB2"]}}} },
+        expected: "AnameAlAnameAl",
+        message: "should test usage of dotted path resolution up context"
+      },
+      {
+        name: "dotted path resolution up context 2",
+        source: "{#data.A.B.Blist}Aname{data.A.name}{/data.A.B.Blist}",
+        context: { "data":{"A":{"name":"Al","list":[{"name": "Joe"},{"name": "Mary"}],"B":{"name":"Bob","Blist":["BB1","BB2"]}}} },
+        expected: "AnameAlAnameAl",
+        message: "should test usage of dotted path resolution up context"
+      },
+      {
+        name: "nested dotted path resolution",
+        source: "{#data.A.list}{#data.A.B.Blist}{.}Aname{data.A.name}{/data.A.B.Blist}{/data.A.list}",
+        context: { "data":{"A":{"name":"Al","list":[{"name": "Joe"},{"name": "Mary"}],"B":{"name":"Bob","Blist":["BB1"]}}} },
+        expected: "BB1AnameAlBB1AnameAl",
+        message: "should test nested usage of dotted path resolution"
+      },
+      {
+        name: "dotted path resolution up context with partial match in current context",
+        source: "{#data}{#A}{C.name}{/A}{/data}",
+        options: {pathScope: "global"},
+        context: { "data":{ "A":{ "name":"Al", "B": "Ben", "C": { namex: "Charlie"} }, C: {name: "Charlie Sr."} } },
+        expected: "",
+        message: "should test usage of dotted path resolution up context"
+      },
+      {
+        name: "check nested ref not found in global if partial match",
+        source: "{#data}{#A}{C.name}{/A}{/data}",
+        options: {pathScope: "global"},
+        base: { C: {name: "Big Charlie"} },
+        context: { "data":{ "A":{ "name":"Al", "B": "Ben", "C": { namex: "Charlie"} }, C: {namey: "Charlie Sr."} } },
+        expected: "",
+        message: "Should find glob.globChild which is in context.global"
       }
     ]
   },
