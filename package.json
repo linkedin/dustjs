@@ -33,7 +33,7 @@
   },
   "keywords": ["templates", "views"],
     "devDependencies": {
-    "jasmine-node"   :  "1.0.x",
+    "jasmine-node"   :  "1.9.x",
     "cover"          :  "0.2.x",
     "uglify-js"      :  "1.3.3"
   },
