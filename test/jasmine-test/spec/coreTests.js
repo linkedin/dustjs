@@ -792,6 +792,22 @@ var coreTests = [
         expected: "",
         message: "Should find glob.globChild which is in context.global"
       },
+      {
+        name:     "method invocation",
+        source:   "Hello {person.fullName}",
+        options: {pathScope: "global"},
+        context:  {
+          person: {
+            firstName: "Peter",
+            lastName:  "Jones",
+            fullName: function() { 
+                return this.firstName + ' ' + this.lastName; 
+            }
+          }
+        },
+        expected: "Hello Peter Jones",
+        message:  "should test resolve correct 'this' when invoking method"
+      }
     ]
   },
   {
