@@ -11,7 +11,7 @@ body
    part is defined as anything that matches with comment or section or partial or special or reference or buffer
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 part
-  = comment / section / partial / special / reference / buffer
+  = strip / comment / section / partial / special / reference / buffer
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
    section is defined as matching with with sec_tag_start followed by 0 or more white spaces plus a closing brace plus body
@@ -90,6 +90,14 @@ special "special"
   { return ["special", k] }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
+   strip is defined to facilitate server- and browser-side processing of dust-templates by stripping double-curly brackets
+   to single ones in the output
+---------------------------------------------------------------------------------------------------------------------------------------*/
+strip "strip"
+  = "{{" c:(!"}}" c:. {return c})* "}}"
+  { return ["buffer", "{"+c.join('')+"}"] }
+
+/*-------------------------------------------------------------------------------------------------------------------------------------
    identifier is defined as matching a path or key
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 identifier "identifier"
@@ -155,7 +163,7 @@ inline_part
 buffer "buffer"
   = e:eol w:ws*
   { return ["format", e, w.join('')] }
-  / b:(!tag !comment !eol c:. {return c})+
+  / b:(!tag !comment !eol !strip c:. {return c})+
   { return ["buffer", b.join('')] }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
