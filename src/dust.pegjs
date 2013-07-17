@@ -97,7 +97,7 @@ identifier "identifier"
   / k:key      { var arr = ["key", k]; arr.text = k; return arr; }
 
 number "number"
-  = n:(float / integer) { return ['literal', n].concat([['line', line], ['col', column]]); }
+  = n:(float / integer) { return ['literal', n]; }
 
 float "float"
   = l:integer "." r:integer+ { return parseFloat(l + "." + r.join('')); }
