@@ -5,7 +5,7 @@ start
    body is defined as anything that matches with the part 0 or more times
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 body
-  = p:part* { return ["body"].concat(p) }
+  = p:part* { return ["body"].concat(p).concat([['line', line], ['col', column]]) }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
    part is defined as anything that matches with comment or section or partial or special or reference or buffer
@@ -21,7 +21,7 @@ section "section"
   = t:sec_tag_start ws* rd b:body e:bodies n:end_tag? &{if( (!n) || (t[1].text !== n.text) ) { throw new Error("Expected end tag for "+t[1].text+" but it was not found. At line : "+line+", column : " + column)} return true;}
     { e.push(["param", ["literal", "block"], b]); t.push(e); return t }
   / t:sec_tag_start ws* "/" rd
-  { t.push(["bodies"]); return t }
+  { t.push(["bodies"]); return t.concat([['line', line], ['col', column]]) }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
    sec_tag_start is defined as matching an opening brace followed by one of #?^<+@% plus identifier plus context plus param 
@@ -65,7 +65,7 @@ bodies "bodies"
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 reference "reference"
   = ld n:identifier f:filters rd
-  { return ["reference", n, f] }
+  { return ["reference", n, f].concat([['line', line], ['col', column]]) }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
   partial is defined as matching a opening brace followed by a > plus anything that matches with key or inline plus 
@@ -73,7 +73,7 @@ reference "reference"
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 partial "partial"
   = ld s:(">"/"+") ws* n:(k:key {return ["literal", k]} / inline) c:context p:params ws* "/" rd
-  { var key = (s ===">")? "partial" : s; return [key, n, c, p] }
+  { var key = (s ===">")? "partial" : s; return [key, n, c, p].concat([['line', line], ['col', column]]) }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
    filters is defined as matching a pipe character followed by anything that matches the key
@@ -87,7 +87,7 @@ filters "filters"
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 special "special"
   = ld "~" k:key rd
-  { return ["special", k] }
+  { return ["special", k].concat([['line', line], ['col', column]]) }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
    identifier is defined as matching a path or key
@@ -97,7 +97,7 @@ identifier "identifier"
   / k:key      { var arr = ["key", k]; arr.text = k; return arr; }
 
 number "number"
-  = n:(float / integer) { return ['literal', n]; }
+  = n:(float / integer) { return ['literal', n].concat([['line', line], ['col', column]]); }
 
 float "float"
   = l:integer "." r:integer+ { return parseFloat(l + "." + r.join('')); }
@@ -110,18 +110,18 @@ integer "integer"
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 path "path"
   = k:key? d:(array_part / array)+ {
-    d = d[0]; 
+    d = d[0];
     if (k && d) {
       d.unshift(k);
-      return [false, d];
+      return [false, d].concat([['line', line], ['col', column]]);
     }
-    return [true, d];
+    return [true, d].concat([['line', line], ['col', column]]);
   }
   / "." d:(array_part / array)* {
     if (d.length > 0) {
-      return [true, d[0]];
+      return [true, d[0]].concat([['line', line], ['col', column]]);
     }
-    return [true, []] 
+    return [true, []].concat([['line', line], ['col', column]]);
   }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
@@ -142,21 +142,21 @@ array_part "array_part"
    double quotes plus inline_part followed by the closing double quotes
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 inline "inline"
-  = '"' '"'                 { return ["literal", ""] }
-  / '"' l:literal '"'       { return ["literal", l] }
-  / '"' p:inline_part+ '"'  { return ["body"].concat(p) }
+  = '"' '"'                 { return ["literal", ""].concat([['line', line], ['col', column]]) }
+  / '"' l:literal '"'       { return ["literal", l].concat([['line', line], ['col', column]]) }
+  / '"' p:inline_part+ '"'  { return ["body"].concat(p).concat([['line', line], ['col', column]]) }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
   inline_part is defined as matching a special or reference or literal  
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 inline_part
-  = special / reference / l:literal { return ["buffer", l] }
+  = special / reference / l:literal { return ["buffer", l].concat([['line', line], ['col', column]]) }
 
 buffer "buffer"
   = e:eol w:ws*
   { return ["format", e, w.join('')] }
   / b:(!tag !comment !eol c:. {return c})+
-  { return ["buffer", b.join('')] }
+  { return ["buffer", b.join('')].concat([['line', line], ['col', column]]) }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
    literal is defined as matching esc or any character except the double quotes and it cannot be a tag
@@ -170,7 +170,7 @@ esc
 
 comment "comment"
   = "{!" c:(!"!}" c:. {return c})* "!}"
-  { return ["comment", c.join('')] }
+  { return ["comment", c.join('')].concat([['line', line], ['col', column]]) }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
    tag is defined as matching an opening brace plus any of #?^><+%:@/~% plus 0 or more whitespaces plus any character or characters that 
