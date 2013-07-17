@@ -688,13 +688,6 @@ var coreTests = [
         message: "Should not find glob.globChild which is in context.global"
       },
       {
-        name: "dotted path resolution up context should not work in local mode",
-        source: "{#data.A.list}Aname{data.A.name}{/data.A.list}",
-        context: { "data":{"A":{"name":"Al","list":[{"name": "Joe"},{"name": "Mary"}],"B":{"name":"Bob","Blist":["BB1","BB2"]}}} },
-        expected: "AnameAname",
-        message: "should test usage of dotted path resolution up context in original dust mode"
-      },
-      {
         name:     "Verify leading dot path not affected in global mode",
         source:   "{#people}{.name} is {?.age}{.age} years old.{:else}not telling us their age.{/age}{/people}",
         options: {pathScope: "global"},
@@ -766,14 +759,6 @@ var coreTests = [
         context: { },
         expected: "testGlobal",
         message: "Should find glob.globChild which is in context.global"
-      },
-      {
-        name: "dotted path resolution - test switch back to local mode",
-        source: "{#data.A.list}Aname{data.A.name}{/data.A.list}",
-        options: {pathScope: "local"},
-        context: { "data":{"A":{"name":"Al","list":[{"name": "Joe"},{"name": "Mary"}],"B":{"name":"Bob","Blist":["BB1","BB2"]}}} },
-        expected: "AnameAname",
-        message: "should test usage of dotted path resolution up context in original dust mode"
       },
       {
           name: "dotted path resolution up context with partial match in current context",
