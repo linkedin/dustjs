@@ -14,7 +14,6 @@ function render(test) {
     var context;
     try {
       dust.loadSource(dust.compile(test.source, test.name, test.strip));
-      dust.setOptions(test.options);
       context = test.context;
       if (test.base){
          context = dust.makeBase(test.base).push(context);
@@ -38,7 +37,6 @@ function stream(test) {
       output = "";
       try {
         dust.loadSource(dust.compile(test.source, test.name));
-        dust.setOptions(test.options);
         context = test.context;
         if (test.base){
            context = dust.makeBase(test.base).push(context);
@@ -87,7 +85,6 @@ function pipe(test) {
         if (test.base){
            context = dust.makeBase(test.base).push(context);
         }
-        dust.setOptions(test.options);
         var tpl = dust.stream(test.name, context);
         tpl.pipe({
           write: function (data) {
