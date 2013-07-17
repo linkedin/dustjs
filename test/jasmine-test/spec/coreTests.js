@@ -59,6 +59,18 @@ var coreTests = [
         message: "should render the template name with paths"
       },
       {
+         name:     "makeBase_missing_global",
+         source:   '{#helper}{/helper}',
+         context:  { "helper": function(chunk, context, bodies, params)
+                    {
+                      var newContext = {};
+                      return bodies.block(chunk, dust.makeBase(newContext));
+                    } 
+                   },
+        expected: "",
+        message: "should render the helper with missing global context"
+      },
+      {
         name:     "reference",
         source:   "{?one}{one}{/one}",
         context:   {"one": 0 },
@@ -887,6 +899,27 @@ var coreTests = [
         context:  { name: "Mick", count: 30 },
         expected: "Hello Mick! You have 30 new messages.",
         message: "should test a blocks with no defaults"
+      },
+      {
+        name:     "partial_print_name",
+        source:   "{#helper}{/helper}",
+        context:  {},
+        expected: "",
+        message: "should test a template with missing helper"
+      },
+      {
+        name:     "nested_partial_print_name",
+        source:   "{>partial_print_name/}",
+        context:  {},
+        expected: "",
+        message: "should test a template with missing helper"
+      },
+      {
+        name:     "nested_nested_partial_print_name",
+        source:   "{>nested_partial_print_name/}",
+        context:  {},
+        expected: "",
+        message: "should test nested partial"
       }
     ]
   },
@@ -990,7 +1023,47 @@ var coreTests = [
         context:  { n: "Mick", c: 30 },
         expected: "Hello Mick! You have 30 new messages.",
         message: "should test partial with no blocks, ignore the override inline partials"
-      }
+      },
+      {
+        name:     "partial prints the current template name",
+        source:   '{>partial_print_name/}',
+        context:  { "helper": function(chunk, context, bodies, params) 
+                      {
+                       var len = Object.keys(context.global.__templates__).length;
+                        // top of the current stack
+                      currentTemplateName = context.global.__templates__[len - 1];
+                        return chunk.write(currentTemplateName);
+                      }
+                  },
+        expected: "partial_print_name",
+        message: "should print the current template name"
+      },
+      {
+        name:     "nested partial prints the current template name",
+        source:   '{>nested_partial_print_name/}',
+        context:  { "helper": function(chunk, context, bodies, params) 
+                        {
+                         var len = Object.keys(context.global.__templates__).length;
+                          // top of the current stack
+                        currentTemplateName = context.global.__templates__[len - 1];
+                          return chunk.write(currentTemplateName);
+                        }
+                    },
+        expected: "partial_print_name",
+        message: "should print the current template name"
+      },
+      {
+        name:     "partial with makeBase_missing_global",
+        source:   '{#helper template="partial"}{/helper}',
+        context:  { "helper": function(chunk, context, bodies, params)
+                     {
+                      var newContext = {};
+                      return chunk.partial(params.template, dust.makeBase(newContext));
+                      } 
+                  },
+        expected: "Hello ! You have  new messages.",
+        message: "should render the helper with missing global context"
+      },
     ]
   },
   {
