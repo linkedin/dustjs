@@ -109,7 +109,6 @@ function testRender(unit, source, context, expected, options, baseContext, error
   var name = unit.id;
    try {
      dust.loadSource(dust.compile(source, name));
-     dust.setOptions(options);
      if (baseContext){
         context = dust.makeBase(baseContext).push(context);
      }
