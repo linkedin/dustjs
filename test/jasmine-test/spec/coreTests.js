@@ -30,17 +30,31 @@ var coreTests = [
         expected: "Hello World!",
         message: "should test basic text rendering"
       },
-            {
+      {
         name:     "global_template",
         source:   '{#helper foo="bar" boo="boo"} {/helper}',
-        context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(context.global.__template_name__); } },
+        context:  { "helper": function(chunk, context, bodies, params) 
+                     {
+                      var len = Object.keys(context.global.__templates__).length;
+                      // top of the current stack
+                      currentTemplateName = context.global.__templates__[len - 1];
+                      return chunk.write(currentTemplateName);
+                     }
+                  },
         expected: "global_template",
         message: "should render the template name"
-      },
-      {
-        name:     "apps/test/foo.tl&v=0.1",
-        source:   '{#helper foo="bar" boo="boo" template="tl/apps/test"} {/helper}',
-        context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(context.global.__template_name__); } },
+       },
+       {
+         name:     "apps/test/foo.tl&v=0.1",
+         source:   '{#helper foo="bar" boo="boo" template="tl/apps/test"} {/helper}',
+         context:  { "helper": function(chunk, context, bodies, params)
+                    {
+                      var len = Object.keys(context.global.__templates__).length;
+                      // top of the current stack
+                      currentTemplateName = context.global.__templates__[len - 1];
+                      return chunk.write(currentTemplateName);
+                    } 
+                   },
         expected: "apps/test/foo.tl&v=0.1",
         message: "should render the template name with paths"
       },
