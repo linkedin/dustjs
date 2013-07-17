@@ -59,6 +59,18 @@ var coreTests = [
         message: "should render the template name with paths"
       },
       {
+         name:     "makeBase_missing_global",
+         source:   '{#helper}{/helper}',
+         context:  { "helper": function(chunk, context, bodies, params)
+                    {
+                      var newContext = {};
+                      return bodies.block(chunk, dust.makeBase(newContext));
+                    } 
+                   },
+        expected: "",
+        message: "should render the helper with missing global context"
+      },
+      {
         name:     "reference",
         source:   "{?one}{one}{/one}",
         context:   {"one": 0 },
@@ -907,7 +919,19 @@ var coreTests = [
                     },
         expected: "partial_print_name",
         message: "should print the current template name"
-      }
+      },
+      {
+        name:     "partial with makeBase_missing_global",
+        source:   '{#helper template="partial"}{/helper}',
+        context:  { "helper": function(chunk, context, bodies, params)
+                     {
+                      var newContext = {};
+                      return chunk.partial(params.template, dust.makeBase(newContext));
+                      } 
+                  },
+        expected: "Hello ! You have  new messages.",
+        message: "should render the helper with missing global context"
+      },
     ]
   },
   {
