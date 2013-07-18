@@ -19,7 +19,7 @@ part
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 section "section"
   = t:sec_tag_start ws* rd b:body e:bodies n:end_tag? &{if( (!n) || (t[1].text !== n.text) ) { throw new Error("Expected end tag for "+t[1].text+" but it was not found. At line : "+line+", column : " + column)} return true;}
-    { e.push(["param", ["literal", "block"], b]); t.push(e); return t }
+    { e.push(["param", ["literal", "block"], b]); t.push(e); return t.concat([['line', line], ['col', column]]) }
   / t:sec_tag_start ws* "/" rd
   { t.push(["bodies"]); return t.concat([['line', line], ['col', column]]) }
 
@@ -150,11 +150,11 @@ inline "inline"
   inline_part is defined as matching a special or reference or literal  
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 inline_part
-  = special / reference / l:literal { return ["buffer", l].concat([['line', line], ['col', column]]) }
+  = special / reference / l:literal { return ["buffer", l] }
 
 buffer "buffer"
   = e:eol w:ws*
-  { return ["format", e, w.join('')] }
+  { return ["format", e, w.join('')].concat([['line', line], ['col', column]]) }
   / b:(!tag !comment !eol c:. {return c})+
   { return ["buffer", b.join('')].concat([['line', line], ['col', column]]) }
 
