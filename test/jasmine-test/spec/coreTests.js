@@ -189,6 +189,21 @@ var coreTests = [
         expected: "Start\nChild Title\nChild Content\nEnd",
         message: "should test child template"
       },
+              {
+        name:     "child_child_template",
+        source:   "{^xhr}"              +
+                  "{>child_template/}" +
+                  "{:else}"             +
+                  "{+main/}"          +
+                  "{/xhr}"              +
+                  "{<title}"            +
+                  "Child Child Title"       +
+                  "{/title}"            ,
+                  
+        context:  {xhr: false},
+        expected: "Start\nChild Child Title\nChild Content\nEnd",
+        message: "should test child template"
+      },
       {
         name:     "recursion",
         source:   "{name}{~n}{#kids}{>recursion:./}{/kids}",
