@@ -255,7 +255,7 @@ var coreTests = [
                   
         context:  {xhr: false},
         expected: "Start\nChild Child Title\nChild Child Content\nChild Content\nBase Content\nEnd",
-        message: "should test multiple child template with parent"
+        message: "should test multiple child template with multiple parent blocks"
       },              
       {
         name:     "recursion",
