@@ -3,7 +3,7 @@
 exports.coreSetup = function(suite, auto) {
   auto.forEach(function(test) {
     suite.test(test.name, function(){
-      testRender(this, test.source, test.context, test.expected, test.error || {}, test.log);
+      testRender(this, test.source, test.context, test.expected, test.options, test.base, test.error || {}, test.log);
     });
   });
 
@@ -108,11 +108,14 @@ exports.coreSetup = function(suite, auto) {
   });
 }
 
-function testRender(unit, source, context, expected, error, logMessage) {
+function testRender(unit, source, context, expected, options, baseContext, error, logMessage) {
   var name = unit.id,
       messageInLog = '';
    try {
      dust.loadSource(dust.compile(source, name));
+     if (baseContext){
+        context = dust.makeBase(baseContext).push(context);
+     }
      dust.render(name, context, function(err, output, log) {
        unit.ifError(err);
        if(logMessage) {
