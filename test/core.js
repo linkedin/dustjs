@@ -3,7 +3,7 @@
 exports.coreSetup = function(suite, auto) {
   auto.forEach(function(test) {
     suite.test(test.name, function(){
-      testRender(this, test.source, test.context, test.expected, test.error || {});
+      testRender(this, test.source, test.context, test.expected, test.error || {}, test.log);
     });
   });
 
@@ -77,6 +77,9 @@ exports.coreSetup = function(suite, auto) {
       },
       end: function () {
         unit.pass();
+      },
+      log: function() {
+        unit.pass();
       }
     })
   });
@@ -105,13 +108,24 @@ exports.coreSetup = function(suite, auto) {
   });
 }
 
-function testRender(unit, source, context, expected, error) {
-  var name = unit.id;
+function testRender(unit, source, context, expected, error, logMessage) {
+  var name = unit.id,
+      messageInLog = '';
    try {
      dust.loadSource(dust.compile(source, name));
-     dust.render(name, context, function(err, output) {
+     dust.render(name, context, function(err, output, log) {
        unit.ifError(err);
-       unit.equals(output, expected);
+       if(logMessage) {
+        for(var i=0; i<log.length; i++) {
+          if(log[i].message === logMessage) {
+            messageInLog = true;
+            break;
+          }
+        }
+        unit.equals(messageInLog, true);
+       } else {
+        unit.equals(output, expected);
+       }
      });
     } catch(err) {
       unit.equals(err.message, error);

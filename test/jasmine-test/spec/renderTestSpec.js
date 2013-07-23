@@ -10,12 +10,23 @@ describe ("Test the basic functionality of dust", function() {
 });
 
 function render(test) {
+  var messageInLog = false;
   return function() {
     try {
       dust.loadSource(dust.compile(test.source, test.name, test.strip));
-      dust.render(test.name, test.context, function(err, output) {
+      dust.render(test.name, test.context, function(err, output, log) {
         expect(err).toBeNull();
-        expect(test.expected).toEqual(output);
+        if (test.log) {
+          for(var i=0; i<log.length; i++) {
+            if(log[i].message === test.log) {
+              messageInLog = true;
+              break;
+            }
+          }
+          expect(messageInLog).toEqual(true);
+        } else {
+          expect(test.expected).toEqual(output);
+        }
       });
     }
     catch (error) {
@@ -26,10 +37,14 @@ function render(test) {
 
 function stream(test) {
   return function() {
-    var output ="", flag;
+    var output = "",
+        messageInLog = false,
+        log = [],
+        flag;
     runs(function(){
       flag = false;
       output = "";
+      logQueue = [];
       try {
         dust.loadSource(dust.compile(test.source, test.name));
         dust.stream(test.name, test.context)
@@ -41,6 +56,9 @@ function stream(test) {
         })
         .on("error", function(err) {
           output = err.message;
+        })
+        .on("log", function(logs) {
+          logQueue = logs;
         });
       } catch(error) {
         output = error.message;
@@ -55,6 +73,14 @@ function stream(test) {
     runs(function(){
       if (test.error) {
         expect(test.error || {} ).toEqual(output);
+      } else if(test.log) {
+        for(var i=0; i<logQueue.length; i++) {
+          if(logQueue[i].message === test.log) {
+            messageInLog = true;
+            break;
+          }
+        }
+        expect(messageInLog).toEqual(true);
       } else {
         expect(test.expected).toEqual(output);
       }
@@ -64,12 +90,16 @@ function stream(test) {
 
 function pipe(test) {
   return function() {
-    var output, outputTwo, flag, flagTwo;
+    var output, outputTwo, flag, flagTwo, logQueue, logQueueTwo, messageInLog, messageInLogTwo;
     runs(function(){
       flag = false;
       flagTwo = false;
       output = "";
       outputTwo = "";
+      logQueue = [];
+      logQueueTwo = [];
+      messageInLog = false;
+      messageInLogTwo = false;
       try {
         dust.loadSource(dust.compile(test.source, test.name));
         var tpl = dust.stream(test.name, test.context);
@@ -83,6 +113,9 @@ function pipe(test) {
           error: function (err) {
             flag = true;
             output = err.message;
+          },
+          log: function(logs) {
+            logQueue = logs;
           }
         });
         // Pipe to a second stream to test multiple event-listeners
@@ -96,6 +129,9 @@ function pipe(test) {
           error: function (err) {
             flagTwo = true;
             outputTwo = err.message;
+          },
+          log: function(logs) {
+            logQueueTwo = logs;
           }
         });
       } catch(error) {
@@ -114,6 +150,21 @@ function pipe(test) {
       if (test.error) {
         expect(test.error || {} ).toEqual(output);
         expect(test.error || {} ).toEqual(outputTwo);
+      } else if (test.log) { 
+        for(var i=0; i<logQueue.length; i++) {
+          if(logQueue[i].message === test.log) {
+            messageInLog = true;
+            break;
+          }
+        }
+        expect(messageInLog).toEqual(true);
+        for(var i=0; i<logQueueTwo.length; i++) {
+          if(logQueueTwo[i].message === test.log) {
+            messageInLogTwo = true;
+            break;
+          }
+        }
+        expect(messageInLogTwo).toEqual(true);
       } else {
         expect(test.expected).toEqual(output);
         expect(test.expected).toEqual(outputTwo);
