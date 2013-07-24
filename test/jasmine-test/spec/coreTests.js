@@ -223,6 +223,18 @@ var coreTests = [
         message: "should test multiple child template"
       },
       {
+        name:     "child_child_template_or_child_template_by_variable",
+        source:   "{>(xhr ? base_template : child_template)/}" +
+                  "{+main/}"          +
+                  "{<title}"            +
+                  "Child Child Title"       +
+                  "{/title}"            ,
+                  
+        context:  {xhr: true},
+        expected: "Start\nChild Child Title\nBase Content\nEnd",
+        message: "should test template inheritance with partial defined by context variable"
+      },
+      {
         name:     "child_child_template with parent",
         source:   "{^xhr}"              +
                   "{>child_template/}" +
