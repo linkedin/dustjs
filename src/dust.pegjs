@@ -72,9 +72,13 @@ reference "reference"
   context followed by slash and closing brace
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 partial "partial"
-  = ld s:(">"/"+") ws* n:(k:key {return ["literal", k]} / inline) c:context p:params ws* "/" rd
+  = ld s:(">"/"+") ws* n:(partial_key) c:context p:params ws* "/" rd
   { var key = (s ===">")? "partial" : s; return [key, n, c, p] }
+  / ld s:(">"/"+") ws* lp ws* e:identifier ws* "?" ws* n:(partial_key) ws* ":" ws* n2:(partial_key) ws* rp c:context p:params ws* "/" rd
+  { var key = (s ===">")? "partial" : s; return [key, ["mul_key" ,e, n, n2], c, p] }
 
+partial_key
+  = k:key {return ["literal", k]} / inline
 /*-------------------------------------------------------------------------------------------------------------------------------------
    filters is defined as matching a pipe character followed by anything that matches the key
 ---------------------------------------------------------------------------------------------------------------------------------------*/
@@ -191,6 +195,12 @@ lb
 
 rb
   = "]"
+
+lp
+  = "("
+
+rp
+  = ")"
 
 eol 
   = "\n"        //line feed
