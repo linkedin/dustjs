@@ -703,6 +703,14 @@ var coreTests = [
         message: "should test the leading dot behavior preserved"
      },
      {
+        name: "Standard dotted path with falsey value. Issue 317",
+        source: "{foo.bar}",
+        options: {pathScope: "global"},
+        context: { foo: {bar: 0} },
+        expected: "0",
+        message: "should work when value at end of path is falsey"
+     },
+     {
         name: "dotted path resolution up context",
         source: "{#data.A.list}Aname{data.A.name}{/data.A.list}",
         options: {pathScope: "global"},
