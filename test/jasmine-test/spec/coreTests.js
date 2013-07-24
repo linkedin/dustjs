@@ -190,6 +190,74 @@ var coreTests = [
         message: "should test child template"
       },
       {
+        name:     "child_template_with_parent",
+        source:   "{^xhr}"              +
+                  "{>base_template/}" +
+                  "{:else}"             +
+                  "{+main/}"          +
+                  "{/xhr}"              +
+                  "{<title}"            +
+                  "Child Title"       +
+                  "{/title}"            +
+                  "{<main}"             +
+                  "Child Content{~n}"     +
+                  "{+parent/}"       +
+                  "{/main}",
+        context:  {xhr: false},
+        expected: "Start\nChild Title\nChild Content\nBase Content\nEnd",
+        message: "should test child template"
+      },
+      {
+        name:     "child_child_template",
+        source:   "{^xhr}"              +
+                  "{>child_template/}" +
+                  "{:else}"             +
+                  "{+main/}"          +
+                  "{/xhr}"              +
+                  "{<title}"            +
+                  "Child Child Title"       +
+                  "{/title}"            ,
+                  
+        context:  {xhr: false},
+        expected: "Start\nChild Child Title\nChild Content\nEnd",
+        message: "should test multiple child template"
+      },
+      {
+        name:     "child_child_template with parent",
+        source:   "{^xhr}"              +
+                  "{>child_template/}" +
+                  "{:else}"             +
+                  "{+main/}"          +
+                  "{/xhr}"              +
+                  "{<title}"            +
+                  "Child Child Title{~n}"       +
+                  "{+parent/}"       +
+                  "{/title}"            ,
+                  
+        context:  {xhr: false},
+        expected: "Start\nChild Child Title\nChild Title\nChild Content\nEnd",
+        message: "should test multiple child template with parent"
+      },
+      {
+        name:     "child_child_template with multiple parents",
+        source:   "{^xhr}"              +
+                  "{>child_template_with_parent/}" +
+                  "{:else}"             +
+                  "{+main/}"          +
+                  "{/xhr}"              +
+                  "{<title}"            +
+                  "Child Child Title"       +
+                  "{/title}"            +
+                  "{<main}"             +
+                  "Child Child Content{~n}"     +
+                  "{+parent/}"       +
+                  "{/main}",
+                  
+        context:  {xhr: false},
+        expected: "Start\nChild Child Title\nChild Child Content\nChild Content\nBase Content\nEnd",
+        message: "should test multiple child template with multiple parent blocks"
+      },              
+      {
         name:     "recursion",
         source:   "{name}{~n}{#kids}{>recursion:./}{/kids}",
         context:  {
