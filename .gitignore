@@ -1,6 +1,5 @@
 /nbproject
-node_modules/
-node_modules/*
+node_modules
 .coverage_data
 cover_html
 *.DS_Store
