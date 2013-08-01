@@ -24,6 +24,12 @@ var coreTests = [
         message: "should test the stream rendering"
       },
       {
+        name: undefined,
+        source: "compilation_failure",
+        error: "name cannot be empty",
+        message: "if the name is not there compilation should be failed, unless it is called from renderSource"
+      },
+      {
         name:     "hello_world",
         source:   "Hello World!",
         context:  {},
