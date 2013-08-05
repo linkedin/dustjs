@@ -1001,7 +1001,7 @@ var coreTests = [
         name:     "partial with literal inline param and context",
         source:   '{>partial:profile name="Joe" count="99"/}',
         context:  { profile:  { n: "Mick", count: 30 } },
-        expected: "Hello Joe! You have 30 new messages.",
+        expected: "Hello Joe! You have 99 new messages.",
         message: "should test partial with literal inline param and context. Fallback values for name or count are undefined"
       },
       {
