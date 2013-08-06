@@ -1,3 +1,11 @@
+//
+// Dust - Asynchronous Templating v2.0.1
+// http://akdubya.github.com/dustjs
+//
+// Copyright (c) 2010, Aleksander Williams
+// Released under the MIT License.
+//
+
 var dust = {};
 
 function getGlobal(){
@@ -7,64 +15,25 @@ function getGlobal(){
 }
 
 (function(dust) {
-/* DEBUG */
 
-var Log = {};
-
-Log.queue = [];
-
-Log.readQueue = function() { return Log.queue; }
-
-Log.clearQueue = function() { Log.queue = []; }
-
-Log.addMessage = function(message, type) {
-  type = type || 'INFO';
-  Log.queue.push({message: message, type: type});
-};
-
-if(!dust) {
-  Log.addMessage('dust is not defined', 'ERROR');
-  return;
-}
-
-/* ENDDEBUG */
 dust.helpers = {};
 
 dust.cache = {};
 
 dust.register = function(name, tmpl) {
-  if (!name) {
-    /* DEBUG */ Log.addMessage('template name is undefined', 'WARN'); /* ENDDEBUG */
-    return;
-  }
-  /* DEBUG */
-  if(typeof tmpl !== 'function') {
-    Log.addMessage('template [' + name + '] cannot be resolved to a Dust function', 'WARN'); 
-  }/* ENDDEBUG */
+  if (!name) return;
   dust.cache[name] = tmpl;
 };
 
 dust.render = function(name, context, callback) {
-  var chunk = new Stub(callback).head,
-      loadedChunk = dust.load(name, chunk, Context.wrap(context, name));
-  /* DEBUG */ 
-  // catch errors from dust.load
-  if(loadedChunk.error && loadedChunk.error.message) {
-    Log.addMessage(loadedChunk.error.message, 'WARN'); 
-  }/* ENDDEBUG */
-  loadedChunk.end();
+  var chunk = new Stub(callback).head;
+  dust.load(name, chunk, Context.wrap(context, name)).end();
 };
 
 dust.stream = function(name, context) {
   var stream = new Stream();
   dust.nextTick(function() {
-    var loadedChunk = dust.load(name, stream.head, Context.wrap(context, name));
-    /* DEBUG */
-    // catch errors from dust.load
-    if(loadedChunk.error && loadedChunk.error.message) {
-      Log.addMessage(loadedChunk.error.message, 'WARN'); 
-    }/* ENDDEBUG */
-    loadedChunk.end();
+    dust.load(name, stream.head, Context.wrap(context, name)).end();
   });
   return stream;
 };
@@ -78,12 +47,7 @@ dust.compileFn = function(source, name) {
   return function(context, callback) {
     var master = callback ? new Stub(callback) : new Stream();
     dust.nextTick(function() {
-      if(typeof tmpl === 'function') {
-        tmpl(master.head, Context.wrap(context, name)).end();
-      }/* DEBUG */ 
-      else {
-        Log.addMessage('template [' + name + '] cannot be resolved to a dust function', 'WARN'); 
-      }/* ENDDEBUG */
+      tmpl(master.head, Context.wrap(context, name)).end();
     });
     return master;
   };
@@ -115,7 +79,7 @@ if (Array.isArray) {
   dust.isArray = Array.isArray;
 } else {
   dust.isArray = function(arr) {
-    return Object.prototype.toString.call(arr) === "[object Array]";
+    return Object.prototype.toString.call(arr) == "[object Array]";
   };
 }
 
@@ -142,14 +106,11 @@ dust.filter = function(string, auto, filters) {
       var name = filters[i];
       if (name === "s") {
         auto = null;
-        /* DEBUG */ Log.addMessage('using unescape filter on [' + string + ']', 'DEBUG'); /* ENDDEBUG */
       }
+      // fail silently for invalid filters
       else if (typeof dust.filters[name] === 'function') {
         string = dust.filters[name](string);
-      }/* DEBUG */ 
-      else {
-        Log.addMessage('invalid filter [' + name + ']', 'WARN');
-      }/* ENDDEBUG */
+      }
     }
   }
   // by default always apply the h filter, unless asked to unescape with |s
@@ -164,8 +125,8 @@ dust.filters = {
   j: function(value) { return dust.escapeJs(value); },
   u: encodeURI,
   uc: encodeURIComponent,
-  js: function(value) { if (!JSON) {/* DEBUG */ Log.addMessage('JSON is undefined.  JSON stringify has not been used on [' + value + ']', 'WARN'); /* ENDDEBUG */return value; } return JSON.stringify(value); },
-  jp: function(value) { if (!JSON) {/* DEBUG */ Log.addMessage('JSON is undefined.  JSON parse has not been used on [' + value + ']', 'WARN'); /* ENDDEBUG */return value; } return JSON.parse(value); }
+  js: function(value) { if (!JSON) { return value; } return JSON.stringify(value); },
+  jp: function(value) { if (!JSON) { return value; } return JSON.parse(value); }
 };
 
 function Context(stack, global, blocks) {
@@ -193,38 +154,21 @@ Context.prototype.get = function(key) {
 
   while(ctx) {
     if (ctx.isObject) {
-      if(ctx.head) {
-        value = ctx.head[key];
-      }/* DEBUG */ 
-      else {
-        Log.addMessage('context head is undefined for[' + key + ']', 'WARN');
-      }/* ENDDEBUG */
+      value = ctx.head[key];
       if (!(value === undefined)) {
         return value;
       }
-    }/* DEBUG */ 
-    else {
-      Log.addMessage('current context is not an object.  Cannot find value for [{' + key + '}]', 'DEBUG');
     }
-    Log.addMessage('Looking for [{' + key + '}] up the context stack', 'DEBUG'); /* ENDDEBUG */
     ctx = ctx.tail;
   }
-  /* DEBUG */ Log.addMessage('Looking for [{' + key + '}] in the globals', 'DEBUG'); /* ENDDEBUG */
   return this.global ? this.global[key] : undefined;
 };
 
 //supports dot path resolution, function wrapped apply, and searching global paths
 Context.prototype.getPath = function(cur, down) {
   var ctx = this.stack, ctxThis,
-      len = down ? down.length : 0,      
-      tail = cur ? undefined : this.stack.tail;
-  /* DEBUG */ 
-  if(!down) {
-    Log.addMessage('array parameter in getPath is not defined', 'INFO');
-  }
-  if(!dust.isArray(down)) {
-    Log.addMessage('array parameter in getPath is not an array', 'INFO');
-  }/* ENDDEBUG */
+      len = down.length,      
+      tail = cur ? undefined : this.stack.tail; 
 
   if (cur && len === 0) return ctx.head;
   ctx = ctx.head;
@@ -263,25 +207,11 @@ Context.prototype.getPath = function(cur, down) {
 };
 
 Context.prototype.push = function(head, idx, len) {
-  var context = new Context(new Stack(head, this.stack, idx, len), this.global, this.blocks);
-  if(context) {
-    return context;
-  }
-  else {
-    /* DEBUG */ Log.addMessage('Head [' + head + '] could not be resolved to a context for the template [' + this.global.__template_name__ + ']', 'WARN'); /* ENDDEBUG */
-    return Context.wrap(context);
-  }
+  return new Context(new Stack(head, this.stack, idx, len), this.global, this.blocks);
 };
 
 Context.prototype.rebase = function(head) {
-  var context = new Context(new Stack(head), this.global, this.blocks);
-  if(context) {
-    return context;
-  }
-  else {
-    /* DEBUG */ Log.addMessage('Head [' + head + '] could not be resolved to a context for the template [' + this.global.__template_name__ + ']', 'WARN'); /* ENDDEBUG */
-    return Context.wrap(context);
-  }
+  return new Context(new Stack(head), this.global, this.blocks);
 };
 
 Context.prototype.current = function() {
@@ -296,10 +226,7 @@ Context.prototype.getBlock = function(key, chk, ctx) {
 
   var blocks = this.blocks;
 
-  if (!blocks) {
-    /* DEBUG */ Log.addMessage('no blocks defined for function getBlock', 'DEBUG'); /* ENDDEBUG */
-    return;
-  }
+  if (!blocks) return;
   var len = blocks.length, fn;
   while (len--) {
     fn = blocks[len][key];
@@ -325,13 +252,7 @@ Context.prototype.shiftBlocks = function(locals) {
 function Stack(head, tail, idx, len) {
   this.tail = tail;
   this.isObject = !dust.isArray(head) && head && typeof head === "object";
-  if(head != null) {
-    this.head = head;
-  }
-  else {
-    /* DEBUG */ Log.addMessage('head was undefined. Defaulting to {}', 'DEBUG'); /* ENDDEBUG */
-    this.head = {};
-  }
+  this.head = head;
   this.index = idx;
   this.of = len;
 }
@@ -343,20 +264,13 @@ function Stub(callback) {
 }
 
 Stub.prototype.flush = function() {
-  var chunk = this.head/* DEBUG */,
-      messages = []/* ENDDEBUG */;
+  var chunk = this.head;
 
   while (chunk) {
-    /* DEBUG */
-    chunk.setLog(Log.readQueue());
-    Log.clearQueue();
-    messages = messages.concat(chunk.log);
-    /* ENDDEBUG */
     if (chunk.flushable) {
       this.out += chunk.data.join(""); //ie7 perf
     } else if (chunk.error) {
-      this.callback(chunk.error/* DEBUG */, null, log/* ENDDEBUG */);
-      /* DEBUG */ Log.addMessage('chunk error [' + chunk.error + '] thrown. Ceasing to render this template.', 'WARN'); /* ENDDEBUG */
+      this.callback(chunk.error);
       this.flush = function() {};
       return;
     } else {
@@ -365,7 +279,7 @@ Stub.prototype.flush = function() {
     chunk = chunk.next;
     this.head = chunk;
   }
-  this.callback(null, this.out/* DEBUG */, messages/* ENDDEBUG */);
+  this.callback(null, this.out);
 };
 
 function Stream() {
@@ -373,26 +287,13 @@ function Stream() {
 }
 
 Stream.prototype.flush = function() {
-  var chunk = this.head/* DEBUG */,
-      messages = []/* ENDDEBUG */;
+  var chunk = this.head;
 
   while(chunk) {
-    /* DEBUG */
-    chunk.setLog(Log.readQueue());
-    Log.clearQueue();
-    messages = messages.concat(chunk.log);
-    /* ENDDEBUG */
     if (chunk.flushable) {
       this.emit('data', chunk.data.join("")); //ie7 perf
-      /* DEBUG */
-      this.emit('log', messages);
-      /* ENDDEBUG */
     } else if (chunk.error) {
       this.emit('error', chunk.error);
-      /* DEBUG */
-      Log.addMessage('chunk error [' + chunk.error + '] thrown. Ceasing to render this template.', 'WARN');
-      this.emit('log', messages);
-      /* ENDDEBUG */
       this.flush = function() {};
       return;
     } else {
@@ -405,26 +306,17 @@ Stream.prototype.flush = function() {
 };
 
 Stream.prototype.emit = function(type, data) {
-  if (!this.events) { 
-    /* DEBUG */ Log.addMessage('no events to emit', 'INFO'); /* ENDDEBUG */
-    return false;
-  }
+  if (!this.events) return false;
   var handler = this.events[type];
-  if (!handler) {
-    /* DEBUG */ Log.addMessage('Event type [' + type + '] does not exist', 'WARN'); /* ENDDEBUG */
-    return false;
-  }
+  if (!handler) return false;
   if (typeof handler == 'function') {
     handler(data);
-  } else if (dust.isArray(handler)) {
+  } else {
     var listeners = handler.slice(0);
     for (var i = 0, l = listeners.length; i < l; i++) {
       listeners[i](data);
     }
-  }/* DEBUG */
-  else {
-    Log.addMessage('handler [' + handler + '] is not of a type that is handled by emit', 'DEBUG');
-  } /* ENDDEBUG */
+  }
 };
 
 Stream.prototype.on = function(type, callback) {
@@ -432,12 +324,7 @@ Stream.prototype.on = function(type, callback) {
     this.events = {};
   }
   if (!this.events[type]) {
-    /* DEBUG */ Log.addMessage('event type [' + type + '] does not exist. using just the specified callback.', 'WARN'); /* ENDDEBUG */
-    if(callback) {
-      this.events[type] = callback;
-    } /* DEBUG */ else {
-      Log.addMessage('callback for type [' + type + '] does not exist. listener not registered.', 'WARN'); 
-    } /* ENDDEBUG */
+    this.events[type] = callback;
   } else if(typeof this.events[type] === 'function') {
     this.events[type] = [this.events[type], callback];
   } else {
@@ -453,9 +340,7 @@ Stream.prototype.pipe = function(stream) {
     stream.end();
   }).on("error", function(err) {
     stream.error(err);
-  })/* DEBUG */.on("log", function(logs) {
-    stream.log(logs);
-  })/* ENDDEBUG */;
+  });
   return this;
 };
 
@@ -529,7 +414,6 @@ Chunk.prototype.reference = function(elem, context, auto, filters) {
   if (!dust.isEmpty(elem)) {
     return this.write(dust.filter(elem, auto, filters));
   } else {
-    /* DEBUG */ Log.addMessage('reference for element was not found.', 'INFO'); /* ENDDEBUG */
     return this;
   }
 };
@@ -564,7 +448,9 @@ Chunk.prototype.section = function(elem, context, bodies, params) {
       if (len > 0) {
         // any custom helper can blow up the stack 
         // and store a flattened context, guard defensively
-        context.stack.head['$len'] = len;
+        if(context.stack.head) {
+         context.stack.head['$len'] = len;
+        }
         for (var i=0; i<len; i++) {
           if(context.stack.head) {
            context.stack.head['$idx'] = i;
@@ -598,8 +484,7 @@ Chunk.prototype.section = function(elem, context, bodies, params) {
    // undefined are all falsy
   } else if (skip) {
      return skip(this, context);
-  }
-  /* DEBUG */ Log.addMessage('can not handle the element given for the section tag', 'WARN'); /* ENDDEBUG */  
+   }  
   return this;
 };
 
@@ -612,7 +497,6 @@ Chunk.prototype.exists = function(elem, context, bodies) {
   } else if (skip) {
     return skip(this, context);
   }
-  /* DEBUG */ Log.addMessage('not rendering body or skip for exists check', 'DEBUG'); /* ENDDEBUG */
   return this;
 };
 
@@ -625,7 +509,6 @@ Chunk.prototype.notexists = function(elem, context, bodies) {
   } else if (skip) {
     return skip(this, context);
   }
-  /* DEBUG */ Log.addMessage('not rendering body or skip for not exists check', 'DEBUG'); /* ENDDEBUG */
   return this;
 };
 
@@ -683,7 +566,6 @@ Chunk.prototype.helper = function(name, context, bodies, params) {
   if( dust.helpers[name]){
    return dust.helpers[name](this, context, bodies, params);
   } else {
-    /* DEBUG */ Log.addMessage('invalid helper [' + name + ']', 'ERROR'); /* ENDDEBUG */
     return this;
   }
 };
@@ -701,13 +583,6 @@ Chunk.prototype.capture = function(body, context, callback) {
   });
 };
 
-/* DEBUG */
-Chunk.prototype.setLog = function(logQueue) {
-  this.log = logQueue;
-  return this;
-};
-
-/* ENDDEBUG */
 Chunk.prototype.setError = function(err) {
   this.error = err;
   this.root.flush();
