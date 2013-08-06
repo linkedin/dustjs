@@ -1,5 +1,5 @@
 //
-// Dust - Asynchronous Templating v2.0.0
+// Dust - Asynchronous Templating v2.1.0
 // http://akdubya.github.com/dustjs
 //
 // Copyright (c) 2010, Aleksander Williams
@@ -15,51 +15,24 @@ function getGlobal(){
 }
 
 (function(dust) {
-/* DEBUG */
 
-var Log = {};
-
-Log.queue = [];
-
-Log.readQueue = function() { return Log.queue; }
-
-Log.clearQueue = function() { Log.queue = []; }
-
-Log.addMessage = function(message, type) {
-  type = type || 'INFO';
-  Log.queue.push({message: message, type: type});
-};
-
-if(!dust) {
-  Log.addMessage('dust is not defined', 'ERROR');
-  return;
-}
-
-/* ENDDEBUG */
 dust.helpers = {};
 
 dust.cache = {};
 
 dust.register = function(name, tmpl) {
   if (!name) {
-    /* DEBUG */ Log.addMessage('template name is undefined', 'WARN'); /* ENDDEBUG */
+    
     return;
   }
-  /* DEBUG */
-  if(typeof tmpl !== 'function') {
-    Log.addMessage('template [' + name + '] cannot be resolved to a Dust function', 'WARN'); 
-  }/* ENDDEBUG */
+  
   dust.cache[name] = tmpl;
 };
 
 dust.render = function(name, context, callback) {
   var chunk = new Stub(callback).head,
       loadedChunk = dust.load(name, chunk, Context.wrap(context, name));
-  /* DEBUG */ 
-  // catch errors from dust.load
-  if(loadedChunk.error && loadedChunk.error.message) {
-    Log.addMessage(loadedChunk.error.message, 'WARN'); 
-  }/* ENDDEBUG */
+  
   loadedChunk.end();
 };
 
@@ -67,11 +40,7 @@ dust.stream = function(name, context) {
   var stream = new Stream();
   dust.nextTick(function() {
     var loadedChunk = dust.load(name, stream.head, Context.wrap(context, name));
-    /* DEBUG */
-    // catch errors from dust.load
-    if(loadedChunk.error && loadedChunk.error.message) {
-      Log.addMessage(loadedChunk.error.message, 'WARN'); 
-    }/* ENDDEBUG */
+    
     loadedChunk.end();
   });
   return stream;
@@ -88,10 +57,7 @@ dust.compileFn = function(source, name) {
     dust.nextTick(function() {
       if(typeof tmpl === 'function') {
         tmpl(master.head, Context.wrap(context, name)).end();
-      }/* DEBUG */ 
-      else {
-        Log.addMessage('template [' + name + '] cannot be resolved to a dust function', 'WARN'); 
-      }/* ENDDEBUG */
+      }
     });
     return master;
   };
@@ -150,14 +116,11 @@ dust.filter = function(string, auto, filters) {
       var name = filters[i];
       if (name === "s") {
         auto = null;
-        /* DEBUG */ Log.addMessage('using unescape filter on [' + string + ']', 'DEBUG'); /* ENDDEBUG */
+        
       }
       else if (typeof dust.filters[name] === 'function') {
         string = dust.filters[name](string);
-      }/* DEBUG */ 
-      else {
-        Log.addMessage('invalid filter [' + name + ']', 'WARN');
-      }/* ENDDEBUG */
+      }
     }
   }
   // by default always apply the h filter, unless asked to unescape with |s
@@ -172,8 +135,8 @@ dust.filters = {
   j: function(value) { return dust.escapeJs(value); },
   u: encodeURI,
   uc: encodeURIComponent,
-  js: function(value) { if (!JSON) {/* DEBUG */ Log.addMessage('JSON is undefined.  JSON stringify has not been used on [' + value + ']', 'WARN'); /* ENDDEBUG */return value; } return JSON.stringify(value); },
-  jp: function(value) { if (!JSON) {/* DEBUG */ Log.addMessage('JSON is undefined.  JSON parse has not been used on [' + value + ']', 'WARN'); /* ENDDEBUG */return value; } return JSON.parse(value); }
+  js: function(value) { if (!JSON) {return value; } return JSON.stringify(value); },
+  jp: function(value) { if (!JSON) {return value; } return JSON.parse(value); }
 };
 
 function Context(stack, global, blocks) {
@@ -203,21 +166,14 @@ Context.prototype.get = function(key) {
     if (ctx.isObject) {
       if(ctx.head) {
         value = ctx.head[key];
-      }/* DEBUG */ 
-      else {
-        Log.addMessage('context head is undefined for[' + key + ']', 'WARN');
-      }/* ENDDEBUG */
+      }
       if (!(value === undefined)) {
         return value;
       }
-    }/* DEBUG */ 
-    else {
-      Log.addMessage('current context is not an object.  Cannot find value for [{' + key + '}]', 'DEBUG');
     }
-    Log.addMessage('Looking for [{' + key + '}] up the context stack', 'DEBUG'); /* ENDDEBUG */
     ctx = ctx.tail;
   }
-  /* DEBUG */ Log.addMessage('Looking for [{' + key + '}] in the globals', 'DEBUG'); /* ENDDEBUG */
+  
   return this.global ? this.global[key] : undefined;
 };
 
@@ -226,13 +182,7 @@ Context.prototype.getPath = function(cur, down) {
   var ctx = this.stack, ctxThis,
       len = down ? down.length : 0,      
       tail = cur ? undefined : this.stack.tail;
-  /* DEBUG */ 
-  if(!down) {
-    Log.addMessage('array parameter in getPath is not defined', 'INFO');
-  }
-  if(!dust.isArray(down)) {
-    Log.addMessage('array parameter in getPath is not an array', 'INFO');
-  }/* ENDDEBUG */
+  
 
   if (cur && len === 0) return ctx.head;
   ctx = ctx.head;
@@ -242,8 +192,11 @@ Context.prototype.getPath = function(cur, down) {
     ctx = ctx[down[i]];
     i++;
     while (!ctx && !cur){
-        //if there was a partial match, don't search further
-    	if (i > 1) return undefined;
+	// i is the count of number of path elements matched. If > 1 then we have a partial match
+	// and do not continue to search for the rest of the path.
+	// Note: a falsey value at the end of a matched path also comes here.
+	// This returns the value or undefined if we just have a partial match.
+    	if (i > 1) return ctx;
     	if (tail){
     	  ctx = tail.head;
     	  tail = tail.tail;
@@ -273,7 +226,7 @@ Context.prototype.push = function(head, idx, len) {
     return context;
   }
   else {
-    /* DEBUG */ Log.addMessage('Head [' + head + '] could not be resolved to a context for the template [' + this.global.__template_name__ + ']', 'WARN'); /* ENDDEBUG */
+    
     return Context.wrap(context);
   }
 };
@@ -284,7 +237,7 @@ Context.prototype.rebase = function(head) {
     return context;
   }
   else {
-    /* DEBUG */ Log.addMessage('Head [' + head + '] could not be resolved to a context for the template [' + this.global.__template_name__ + ']', 'WARN'); /* ENDDEBUG */
+    
     return Context.wrap(context);
   }
 };
@@ -302,7 +255,7 @@ Context.prototype.getBlock = function(key, chk, ctx) {
   var blocks = this.blocks;
 
   if (!blocks) {
-    /* DEBUG */ Log.addMessage('no blocks defined for function getBlock', 'DEBUG'); /* ENDDEBUG */
+    
     return;
   }
   var len = blocks.length, fn;
@@ -334,7 +287,7 @@ function Stack(head, tail, idx, len) {
     this.head = head;
   }
   else {
-    /* DEBUG */ Log.addMessage('head was undefined. Defaulting to {}', 'DEBUG'); /* ENDDEBUG */
+    
     this.head = {};
   }
   this.index = idx;
@@ -348,20 +301,15 @@ function Stub(callback) {
 }
 
 Stub.prototype.flush = function() {
-  var chunk = this.head/* DEBUG */,
-      messages = []/* ENDDEBUG */;
+  var chunk = this.head;
 
   while (chunk) {
-    /* DEBUG */
-    chunk.setLog(Log.readQueue());
-    Log.clearQueue();
-    messages = messages.concat(chunk.log);
-    /* ENDDEBUG */
+    
     if (chunk.flushable) {
       this.out += chunk.data.join(""); //ie7 perf
     } else if (chunk.error) {
-      this.callback(chunk.error/* DEBUG */, null, log/* ENDDEBUG */);
-      /* DEBUG */ Log.addMessage('chunk error [' + chunk.error + '] thrown. Ceasing to render this template.', 'WARN'); /* ENDDEBUG */
+      this.callback(chunk.error);
+      
       this.flush = function() {};
       return;
     } else {
@@ -370,7 +318,7 @@ Stub.prototype.flush = function() {
     chunk = chunk.next;
     this.head = chunk;
   }
-  this.callback(null, this.out/* DEBUG */, messages/* ENDDEBUG */);
+  this.callback(null, this.out);
 };
 
 function Stream() {
@@ -378,26 +326,16 @@ function Stream() {
 }
 
 Stream.prototype.flush = function() {
-  var chunk = this.head/* DEBUG */,
-      messages = []/* ENDDEBUG */;
+  var chunk = this.head;
 
   while(chunk) {
-    /* DEBUG */
-    chunk.setLog(Log.readQueue());
-    Log.clearQueue();
-    messages = messages.concat(chunk.log);
-    /* ENDDEBUG */
+    
     if (chunk.flushable) {
       this.emit('data', chunk.data.join("")); //ie7 perf
-      /* DEBUG */
-      this.emit('log', messages);
-      /* ENDDEBUG */
+      
     } else if (chunk.error) {
       this.emit('error', chunk.error);
-      /* DEBUG */
-      Log.addMessage('chunk error [' + chunk.error + '] thrown. Ceasing to render this template.', 'WARN');
-      this.emit('log', messages);
-      /* ENDDEBUG */
+      
       this.flush = function() {};
       return;
     } else {
@@ -411,12 +349,12 @@ Stream.prototype.flush = function() {
 
 Stream.prototype.emit = function(type, data) {
   if (!this.events) { 
-    /* DEBUG */ Log.addMessage('no events to emit', 'INFO'); /* ENDDEBUG */
+    
     return false;
   }
   var handler = this.events[type];
   if (!handler) {
-    /* DEBUG */ Log.addMessage('Event type [' + type + '] does not exist', 'WARN'); /* ENDDEBUG */
+    
     return false;
   }
   if (typeof handler == 'function') {
@@ -426,10 +364,7 @@ Stream.prototype.emit = function(type, data) {
     for (var i = 0, l = listeners.length; i < l; i++) {
       listeners[i](data);
     }
-  }/* DEBUG */
-  else {
-    Log.addMessage('handler [' + handler + '] is not of a type that is handled by emit', 'DEBUG');
-  } /* ENDDEBUG */
+  }
 };
 
 Stream.prototype.on = function(type, callback) {
@@ -437,12 +372,10 @@ Stream.prototype.on = function(type, callback) {
     this.events = {};
   }
   if (!this.events[type]) {
-    /* DEBUG */ Log.addMessage('event type [' + type + '] does not exist. using just the specified callback.', 'WARN'); /* ENDDEBUG */
+    
     if(callback) {
       this.events[type] = callback;
-    } /* DEBUG */ else {
-      Log.addMessage('callback for type [' + type + '] does not exist. listener not registered.', 'WARN'); 
-    } /* ENDDEBUG */
+    } 
   } else if(typeof this.events[type] === 'function') {
     this.events[type] = [this.events[type], callback];
   } else {
@@ -458,9 +391,7 @@ Stream.prototype.pipe = function(stream) {
     stream.end();
   }).on("error", function(err) {
     stream.error(err);
-  })/* DEBUG */.on("log", function(logs) {
-    stream.log(logs);
-  })/* ENDDEBUG */;
+  });
   return this;
 };
 
@@ -534,7 +465,7 @@ Chunk.prototype.reference = function(elem, context, auto, filters) {
   if (!dust.isEmpty(elem)) {
     return this.write(dust.filter(elem, auto, filters));
   } else {
-    /* DEBUG */ Log.addMessage('reference for element was not found.', 'INFO'); /* ENDDEBUG */
+    
     return this;
   }
 };
@@ -604,7 +535,7 @@ Chunk.prototype.section = function(elem, context, bodies, params) {
   } else if (skip) {
      return skip(this, context);
   }
-  /* DEBUG */ Log.addMessage('can not handle the element given for the section tag', 'WARN'); /* ENDDEBUG */  
+    
   return this;
 };
 
@@ -617,7 +548,7 @@ Chunk.prototype.exists = function(elem, context, bodies) {
   } else if (skip) {
     return skip(this, context);
   }
-  /* DEBUG */ Log.addMessage('not rendering body or skip for exists check', 'DEBUG'); /* ENDDEBUG */
+  
   return this;
 };
 
@@ -630,7 +561,7 @@ Chunk.prototype.notexists = function(elem, context, bodies) {
   } else if (skip) {
     return skip(this, context);
   }
-  /* DEBUG */ Log.addMessage('not rendering body or skip for not exists check', 'DEBUG'); /* ENDDEBUG */
+  
   return this;
 };
 
@@ -688,7 +619,7 @@ Chunk.prototype.helper = function(name, context, bodies, params) {
   if( dust.helpers[name]){
    return dust.helpers[name](this, context, bodies, params);
   } else {
-    /* DEBUG */ Log.addMessage('invalid helper [' + name + ']', 'ERROR'); /* ENDDEBUG */
+    
     return this;
   }
 };
@@ -706,13 +637,7 @@ Chunk.prototype.capture = function(body, context, callback) {
   });
 };
 
-/* DEBUG */
-Chunk.prototype.setLog = function(logQueue) {
-  this.log = logQueue;
-  return this;
-};
 
-/* ENDDEBUG */
 Chunk.prototype.setError = function(err) {
   this.error = err;
   this.root.flush();
@@ -836,7 +761,9 @@ dust.optimizers = {
   key:       noop,
   path:      noop,
   literal:   noop,
-  comment:   nullify
+  comment:   nullify,
+  line: nullify,
+  col: nullify
 };
 
 dust.pragmas = {
@@ -1192,7 +1119,7 @@ var parser = (function(){
         "special": parse_special,
         "identifier": parse_identifier,
         "number": parse_number,
-        "frac": parse_frac,
+        "float": parse_float,
         "integer": parse_integer,
         "path": parse_path,
         "key": parse_key,
@@ -1308,7 +1235,7 @@ var parser = (function(){
           result1 = parse_part();
         }
         if (result0 !== null) {
-          result0 = (function(offset, line, column, p) { return ["body"].concat(p) })(pos0.offset, pos0.line, pos0.column, result0);
+          result0 = (function(offset, line, column, p) { return ["body"].concat(p).concat([['line', line], ['col', column]]) })(pos0.offset, pos0.line, pos0.column, result0);
         }
         if (result0 === null) {
           pos = clone(pos0);
@@ -1395,7 +1322,7 @@ var parser = (function(){
           pos = clone(pos1);
         }
         if (result0 !== null) {
-          result0 = (function(offset, line, column, t, b, e, n) { e.push(["param", ["literal", "block"], b]); t.push(e); return t })(pos0.offset, pos0.line, pos0.column, result0[0], result0[3], result0[4], result0[5]);
+          result0 = (function(offset, line, column, t, b, e, n) { e.push(["param", ["literal", "block"], b]); t.push(e); return t.concat([['line', line], ['col', column]]) })(pos0.offset, pos0.line, pos0.column, result0[0], result0[3], result0[4], result0[5]);
         }
         if (result0 === null) {
           pos = clone(pos0);
@@ -1442,7 +1369,7 @@ var parser = (function(){
             pos = clone(pos1);
           }
           if (result0 !== null) {
-            result0 = (function(offset, line, column, t) { t.push(["bodies"]); return t })(pos0.offset, pos0.line, pos0.column, result0[0]);
+            result0 = (function(offset, line, column, t) { t.push(["bodies"]); return t.concat([['line', line], ['col', column]]) })(pos0.offset, pos0.line, pos0.column, result0[0]);
           }
           if (result0 === null) {
             pos = clone(pos0);
@@ -1924,7 +1851,7 @@ var parser = (function(){
           pos = clone(pos1);
         }
         if (result0 !== null) {
-          result0 = (function(offset, line, column, n, f) { return ["reference", n, f] })(pos0.offset, pos0.line, pos0.column, result0[1], result0[2]);
+          result0 = (function(offset, line, column, n, f) { return ["reference", n, f].concat([['line', line], ['col', column]]) })(pos0.offset, pos0.line, pos0.column, result0[1], result0[2]);
         }
         if (result0 === null) {
           pos = clone(pos0);
@@ -2046,7 +1973,7 @@ var parser = (function(){
           pos = clone(pos1);
         }
         if (result0 !== null) {
-          result0 = (function(offset, line, column, s, n, c, p) { var key = (s ===">")? "partial" : s; return [key, n, c, p] })(pos0.offset, pos0.line, pos0.column, result0[1], result0[3], result0[4], result0[5]);
+          result0 = (function(offset, line, column, s, n, c, p) { var key = (s ===">")? "partial" : s; return [key, n, c, p].concat([['line', line], ['col', column]]) })(pos0.offset, pos0.line, pos0.column, result0[1], result0[3], result0[4], result0[5]);
         }
         if (result0 === null) {
           pos = clone(pos0);
@@ -2180,7 +2107,7 @@ var parser = (function(){
           pos = clone(pos1);
         }
         if (result0 !== null) {
-          result0 = (function(offset, line, column, k) { return ["special", k] })(pos0.offset, pos0.line, pos0.column, result0[2]);
+          result0 = (function(offset, line, column, k) { return ["special", k].concat([['line', line], ['col', column]]) })(pos0.offset, pos0.line, pos0.column, result0[2]);
         }
         if (result0 === null) {
           pos = clone(pos0);
@@ -2228,7 +2155,7 @@ var parser = (function(){
         
         reportFailures++;
         pos0 = clone(pos);
-        result0 = parse_frac();
+        result0 = parse_float();
         if (result0 === null) {
           result0 = parse_integer();
         }
@@ -2245,7 +2172,7 @@ var parser = (function(){
         return result0;
       }
       
-      function parse_frac() {
+      function parse_float() {
         var result0, result1, result2, result3;
         var pos0, pos1;
         
@@ -2296,7 +2223,7 @@ var parser = (function(){
         }
         reportFailures--;
         if (reportFailures === 0 && result0 === null) {
-          matchFailed("frac");
+          matchFailed("float");
         }
         return result0;
       }
@@ -2384,12 +2311,12 @@ var parser = (function(){
         }
         if (result0 !== null) {
           result0 = (function(offset, line, column, k, d) {
-            d = d[0]; 
+            d = d[0];
             if (k && d) {
               d.unshift(k);
-              return [false, d];
+              return [false, d].concat([['line', line], ['col', column]]);
             }
-            return [true, d];
+            return [true, d].concat([['line', line], ['col', column]]);
           })(pos0.offset, pos0.line, pos0.column, result0[0], result0[1]);
         }
         if (result0 === null) {
@@ -2433,9 +2360,9 @@ var parser = (function(){
           if (result0 !== null) {
             result0 = (function(offset, line, column, d) {
               if (d.length > 0) {
-                return [true, d[0]];
+                return [true, d[0]].concat([['line', line], ['col', column]]);
               }
-              return [true, []] 
+              return [true, []].concat([['line', line], ['col', column]]);
             })(pos0.offset, pos0.line, pos0.column, result0[1]);
           }
           if (result0 === null) {
@@ -2742,7 +2669,7 @@ var parser = (function(){
           pos = clone(pos1);
         }
         if (result0 !== null) {
-          result0 = (function(offset, line, column) { return ["literal", ""] })(pos0.offset, pos0.line, pos0.column);
+          result0 = (function(offset, line, column) { return ["literal", ""].concat([['line', line], ['col', column]]) })(pos0.offset, pos0.line, pos0.column);
         }
         if (result0 === null) {
           pos = clone(pos0);
@@ -2786,7 +2713,7 @@ var parser = (function(){
             pos = clone(pos1);
           }
           if (result0 !== null) {
-            result0 = (function(offset, line, column, l) { return ["literal", l] })(pos0.offset, pos0.line, pos0.column, result0[1]);
+            result0 = (function(offset, line, column, l) { return ["literal", l].concat([['line', line], ['col', column]]) })(pos0.offset, pos0.line, pos0.column, result0[1]);
           }
           if (result0 === null) {
             pos = clone(pos0);
@@ -2839,7 +2766,7 @@ var parser = (function(){
               pos = clone(pos1);
             }
             if (result0 !== null) {
-              result0 = (function(offset, line, column, p) { return ["body"].concat(p) })(pos0.offset, pos0.line, pos0.column, result0[1]);
+              result0 = (function(offset, line, column, p) { return ["body"].concat(p).concat([['line', line], ['col', column]]) })(pos0.offset, pos0.line, pos0.column, result0[1]);
             }
             if (result0 === null) {
               pos = clone(pos0);
@@ -2900,7 +2827,7 @@ var parser = (function(){
           pos = clone(pos1);
         }
         if (result0 !== null) {
-          result0 = (function(offset, line, column, e, w) { return ["format", e, w.join('')] })(pos0.offset, pos0.line, pos0.column, result0[0], result0[1]);
+          result0 = (function(offset, line, column, e, w) { return ["format", e, w.join('')].concat([['line', line], ['col', column]]) })(pos0.offset, pos0.line, pos0.column, result0[0], result0[1]);
         }
         if (result0 === null) {
           pos = clone(pos0);
@@ -3052,7 +2979,7 @@ var parser = (function(){
             result0 = null;
           }
           if (result0 !== null) {
-            result0 = (function(offset, line, column, b) { return ["buffer", b.join('')] })(pos0.offset, pos0.line, pos0.column, result0);
+            result0 = (function(offset, line, column, b) { return ["buffer", b.join('')].concat([['line', line], ['col', column]]) })(pos0.offset, pos0.line, pos0.column, result0);
           }
           if (result0 === null) {
             pos = clone(pos0);
@@ -3335,7 +3262,7 @@ var parser = (function(){
           pos = clone(pos1);
         }
         if (result0 !== null) {
-          result0 = (function(offset, line, column, c) { return ["comment", c.join('')] })(pos0.offset, pos0.line, pos0.column, result0[1]);
+          result0 = (function(offset, line, column, c) { return ["comment", c.join('')].concat([['line', line], ['col', column]]) })(pos0.offset, pos0.line, pos0.column, result0[1]);
         }
         if (result0 === null) {
           pos = clone(pos0);
