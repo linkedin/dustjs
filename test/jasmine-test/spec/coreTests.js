@@ -190,6 +190,23 @@ var coreTests = [
         message: "should test child template"
       },
       {
+        name:     "issue322",
+        source:   'hi{+"{name}"/}',
+        context:  {},
+        expected: "hi", 
+        message: "should setup base template for next test. hi should not be part of base block name"
+
+      },
+      {
+        name:     "issue322 use base template picks up prefix chunk data",
+        source:   '{>issue322 name="abc"/}' +
+		   "{<abc}ABC{/abc}",
+        context:  {},
+        expected: "hiABC",
+        message: "should use base template and honor name passed in"
+
+      },
+      {
         name:     "recursion",
         source:   "{name}{~n}{#kids}{>recursion:./}{/kids}",
         context:  {
