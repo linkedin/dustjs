@@ -15,27 +15,7 @@ function getGlobal(){
 }
 
 (function(dust) {
-/* DEBUG */
 
-var Log = {};
-
-Log.queue = [];
-
-Log.readQueue = function() { return Log.queue; }
-
-Log.clearQueue = function() { Log.queue = []; }
-
-Log.addMessage = function(message, type) {
-  type = type || 'INFO';
-  Log.queue.push({message: message, type: type});
-};
-
-if(!dust) {
-  Log.addMessage('dust is not defined', 'ERROR');
-  return;
-}
-
-/* ENDDEBUG */
 dust.helpers = {};
 
 dust.cache = {};
@@ -45,21 +25,14 @@ dust.register = function(name, tmpl) {
     
     return;
   }
-  /* DEBUG */
-  if(typeof tmpl !== 'function') {
-    Log.addMessage('template [' + name + '] cannot be resolved to a Dust function', 'WARN'); 
-  }/* ENDDEBUG */
+  
   dust.cache[name] = tmpl;
 };
 
 dust.render = function(name, context, callback) {
   var chunk = new Stub(callback).head,
       loadedChunk = dust.load(name, chunk, Context.wrap(context, name));
-  /* DEBUG */ 
-  // Also include dust errors in the logs
-  if(loadedChunk.error && loadedChunk.error.message) {
-    Log.addMessage(loadedChunk.error.message, 'ERROR'); 
-  }/* ENDDEBUG */
+  
   loadedChunk.end();
 };
 
@@ -67,11 +40,7 @@ dust.stream = function(name, context) {
   var stream = new Stream();
   dust.nextTick(function() {
     var loadedChunk = dust.load(name, stream.head, Context.wrap(context, name));
-    /* DEBUG */
-    // Also include dust errors in the logs
-    if(loadedChunk.error && loadedChunk.error.message) {
-      Log.addMessage(loadedChunk.error.message, 'ERROR'); 
-    }/* ENDDEBUG */
+    
     loadedChunk.end();
   });
   return stream;
@@ -88,10 +57,7 @@ dust.compileFn = function(source, name) {
     dust.nextTick(function() {
       if(typeof tmpl === 'function') {
         tmpl(master.head, Context.wrap(context, name)).end();
-      }/* DEBUG */ 
-      else {
-        Log.addMessage('template [' + name + '] cannot be resolved to a dust function', 'WARN'); 
-      }/* ENDDEBUG */
+      }
     });
     return master;
   };
@@ -154,10 +120,7 @@ dust.filter = function(string, auto, filters) {
       }
       else if (typeof dust.filters[name] === 'function') {
         string = dust.filters[name](string);
-      }/* DEBUG */ 
-      else {
-        Log.addMessage('invalid filter [' + name + ']', 'WARN');
-      }/* ENDDEBUG */
+      }
     }
   }
   // by default always apply the h filter, unless asked to unescape with |s
@@ -203,18 +166,11 @@ Context.prototype.get = function(key) {
     if (ctx.isObject) {
       if(ctx.head) {
         value = ctx.head[key];
-      }/* DEBUG */ 
-      else {
-        Log.addMessage('context head is undefined for[' + key + ']', 'WARN');
-      }/* ENDDEBUG */
+      }
       if (!(value === undefined)) {
         return value;
       }
-    }/* DEBUG */ 
-    else {
-      Log.addMessage('current context is not an object.  Cannot find value for [{' + key + '}]', 'DEBUG');
     }
-    Log.addMessage('Looking for [{' + key + '}] up the context stack', 'DEBUG'); /* ENDDEBUG */
     ctx = ctx.tail;
   }
   
@@ -226,13 +182,7 @@ Context.prototype.getPath = function(cur, down) {
   var ctx = this.stack, ctxThis,
       len = down ? down.length : 0,      
       tail = cur ? undefined : this.stack.tail;
-  /* DEBUG */ 
-  if(!down) {
-    Log.addMessage('array parameter in getPath is not defined', 'INFO');
-  }
-  if(!dust.isArray(down)) {
-    Log.addMessage('array parameter in getPath is not an array', 'INFO');
-  }/* ENDDEBUG */
+  
 
   if (cur && len === 0) return ctx.head;
   ctx = ctx.head;
@@ -351,15 +301,10 @@ function Stub(callback) {
 }
 
 Stub.prototype.flush = function() {
-  var chunk = this.head/* DEBUG */,
-      messages = []/* ENDDEBUG */;
+  var chunk = this.head;
 
   while (chunk) {
-    /* DEBUG */
-    chunk.setLog(Log.readQueue());
-    Log.clearQueue();
-    messages = messages.concat(chunk.log);
-    /* ENDDEBUG */
+    
     if (chunk.flushable) {
       this.out += chunk.data.join(""); //ie7 perf
     } else if (chunk.error) {
@@ -381,26 +326,16 @@ function Stream() {
 }
 
 Stream.prototype.flush = function() {
-  var chunk = this.head/* DEBUG */,
-      messages = []/* ENDDEBUG */;
+  var chunk = this.head;
 
   while(chunk) {
-    /* DEBUG */
-    chunk.setLog(Log.readQueue());
-    Log.clearQueue();
-    messages = messages.concat(chunk.log);
-    /* ENDDEBUG */
+    
     if (chunk.flushable) {
       this.emit('data', chunk.data.join("")); //ie7 perf
-      /* DEBUG */
-      this.emit('log', messages);
-      /* ENDDEBUG */
+      
     } else if (chunk.error) {
       this.emit('error', chunk.error);
-      /* DEBUG */
-      Log.addMessage('chunk error [' + chunk.error + '] thrown. Ceasing to render this template.', 'WARN');
-      this.emit('log', messages);
-      /* ENDDEBUG */
+      
       this.flush = function() {};
       return;
     } else {
@@ -429,10 +364,7 @@ Stream.prototype.emit = function(type, data) {
     for (var i = 0, l = listeners.length; i < l; i++) {
       listeners[i](data);
     }
-  }/* DEBUG */
-  else {
-    Log.addMessage('handler [' + handler + '] is not of a type that is handled by emit', 'DEBUG');
-  } /* ENDDEBUG */
+  }
 };
 
 Stream.prototype.on = function(type, callback) {
@@ -443,9 +375,7 @@ Stream.prototype.on = function(type, callback) {
     
     if(callback) {
       this.events[type] = callback;
-    } /* DEBUG */ else {
-      Log.addMessage('callback for type [' + type + '] does not exist. listener not registered.', 'WARN'); 
-    } /* ENDDEBUG */
+    } 
   } else if(typeof this.events[type] === 'function') {
     this.events[type] = [this.events[type], callback];
   } else {
@@ -461,9 +391,7 @@ Stream.prototype.pipe = function(stream) {
     stream.end();
   }).on("error", function(err) {
     stream.error(err);
-  })/* DEBUG */.on("log", function(logs) {
-    stream.log(logs);
-  })/* ENDDEBUG */;
+  });
   return this;
 };
 
@@ -709,13 +637,7 @@ Chunk.prototype.capture = function(body, context, callback) {
   });
 };
 
-/* DEBUG */
-Chunk.prototype.setLog = function(logQueue) {
-  this.log = logQueue;
-  return this;
-};
 
-/* ENDDEBUG */
 Chunk.prototype.setError = function(err) {
   this.error = err;
   this.root.flush();
