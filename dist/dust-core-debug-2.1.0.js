@@ -56,9 +56,9 @@ dust.render = function(name, context, callback) {
   var chunk = new Stub(callback).head,
       loadedChunk = dust.load(name, chunk, Context.wrap(context, name));
   /* DEBUG */ 
-  // catch errors from dust.load
+  // Also include dust errors in the logs
   if(loadedChunk.error && loadedChunk.error.message) {
-    Log.addMessage(loadedChunk.error.message, 'WARN'); 
+    Log.addMessage(loadedChunk.error.message, 'ERROR'); 
   }/* ENDDEBUG */
   loadedChunk.end();
 };
@@ -68,9 +68,9 @@ dust.stream = function(name, context) {
   dust.nextTick(function() {
     var loadedChunk = dust.load(name, stream.head, Context.wrap(context, name));
     /* DEBUG */
-    // catch errors from dust.load
+    // Also include dust errors in the logs
     if(loadedChunk.error && loadedChunk.error.message) {
-      Log.addMessage(loadedChunk.error.message, 'WARN'); 
+      Log.addMessage(loadedChunk.error.message, 'ERROR'); 
     }/* ENDDEBUG */
     loadedChunk.end();
   });
