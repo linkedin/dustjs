@@ -42,6 +42,9 @@
     "uglify-js"       :  "1.3.3",
     "pegjs"           :  "0.7.0"
   },
+  "browser": {
+    "./lib/server.js": "./lib/browser.js"
+  },
   "license": "MIT",
   "engine": {
     "node": ">=0.5"
