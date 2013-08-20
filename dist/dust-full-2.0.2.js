@@ -146,6 +146,7 @@ Context.wrap = function(context, name) {
   var global= {};
   global.__templates__ = [];
   global.__templates__.push(name);
+  global.__template_name__ = name;
   return new Context(new Stack(context), global);
 };
 
@@ -178,8 +179,11 @@ Context.prototype.getPath = function(cur, down) {
     ctx = ctx[down[i]];
     i++;
     while (!ctx && !cur){
-        //if there was a partial match, don't search further
-    	if (i > 1) return undefined;
+	// i is the count of number of path elements matched. If > 1 then we have a partial match
+	// and do not continue to search for the rest of the path.
+	// Note: a falsey value at the end of a matched path also comes here.
+	// This returns the value or undefined if we just have a partial match.
+    	if (i > 1) return ctx;
     	if (tail){
     	  ctx = tail.head;
     	  tail = tail.tail;
@@ -526,6 +530,7 @@ Chunk.prototype.partial = function(elem, context, params) {
   var partialContext;
   if(context.global && context.global.__templates__){
    context.global.__templates__.push(elem);
+   context.global.__template_name__ = elem;
   } 
   if (params){
     //put the params context second to match what section does. {.} matches the current context without parameters
@@ -554,6 +559,7 @@ Chunk.prototype.partial = function(elem, context, params) {
    }
    if(context.global && context.global.__templates__) {
     context.global.__templates__.pop();
+    context.global.__template_name__ = context.global.__templates__.length > 0 ? context.global.__templates__[context.global.__templates__.length-1] : null;
    }
    return partialChunk;
 };
