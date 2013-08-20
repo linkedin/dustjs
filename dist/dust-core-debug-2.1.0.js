@@ -48,7 +48,8 @@ dust.register = function(name, tmpl) {
   /* DEBUG */
   if(typeof tmpl !== 'function') {
     Log.addMessage('template [' + name + '] cannot be resolved to a Dust function', 'WARN'); 
-  }/* ENDDEBUG */
+  }
+  /* ENDDEBUG */
   dust.cache[name] = tmpl;
 };
 
@@ -59,7 +60,8 @@ dust.render = function(name, context, callback) {
   // Also include dust errors in the logs
   if(loadedChunk.error && loadedChunk.error.message) {
     Log.addMessage(loadedChunk.error.message, 'ERROR'); 
-  }/* ENDDEBUG */
+  }
+  /* ENDDEBUG */
   loadedChunk.end();
 };
 
@@ -71,7 +73,8 @@ dust.stream = function(name, context) {
     // Also include dust errors in the logs
     if(loadedChunk.error && loadedChunk.error.message) {
       Log.addMessage(loadedChunk.error.message, 'ERROR'); 
-    }/* ENDDEBUG */
+    }
+    /* ENDDEBUG */
     loadedChunk.end();
   });
   return stream;
@@ -88,10 +91,12 @@ dust.compileFn = function(source, name) {
     dust.nextTick(function() {
       if(typeof tmpl === 'function') {
         tmpl(master.head, Context.wrap(context, name)).end();
-      }/* DEBUG */ 
+      }
+      /* DEBUG */ 
       else {
         Log.addMessage('template [' + name + '] cannot be resolved to a dust function', 'WARN'); 
-      }/* ENDDEBUG */
+      }
+      /* ENDDEBUG */
     });
     return master;
   };
@@ -154,10 +159,12 @@ dust.filter = function(string, auto, filters) {
       }
       else if (typeof dust.filters[name] === 'function') {
         string = dust.filters[name](string);
-      }/* DEBUG */ 
+      }
+      /* DEBUG */ 
       else {
         Log.addMessage('invalid filter [' + name + ']', 'WARN');
-      }/* ENDDEBUG */
+      }
+      /* ENDDEBUG */
     }
   }
   // by default always apply the h filter, unless asked to unescape with |s
@@ -203,18 +210,22 @@ Context.prototype.get = function(key) {
     if (ctx.isObject) {
       if(ctx.head) {
         value = ctx.head[key];
-      }/* DEBUG */ 
+      }
+      /* DEBUG */ 
       else {
         Log.addMessage('context head is undefined for[' + key + ']', 'WARN');
-      }/* ENDDEBUG */
+      }
+      /* ENDDEBUG */
       if (!(value === undefined)) {
         return value;
       }
-    }/* DEBUG */ 
+    }
+    /* DEBUG */ 
     else {
       Log.addMessage('current context is not an object.  Cannot find value for [{' + key + '}]', 'DEBUG');
     }
-    Log.addMessage('Looking for [{' + key + '}] up the context stack', 'DEBUG'); /* ENDDEBUG */
+    Log.addMessage('Looking for [{' + key + '}] up the context stack', 'DEBUG');
+    /* ENDDEBUG */
     ctx = ctx.tail;
   }
   /* DEBUG */ Log.addMessage('Looking for [{' + key + '}] in the globals', 'DEBUG'); /* ENDDEBUG */
@@ -232,8 +243,8 @@ Context.prototype.getPath = function(cur, down) {
   }
   if(!dust.isArray(down)) {
     Log.addMessage('array parameter in getPath is not an array', 'INFO');
-  }/* ENDDEBUG */
-
+  }
+  /* ENDDEBUG */
   if (cur && len === 0) return ctx.head;
   ctx = ctx.head;
   var i = 0;
@@ -429,10 +440,12 @@ Stream.prototype.emit = function(type, data) {
     for (var i = 0, l = listeners.length; i < l; i++) {
       listeners[i](data);
     }
-  }/* DEBUG */
+  }
+  /* DEBUG */
   else {
     Log.addMessage('handler [' + handler + '] is not of a type that is handled by emit', 'DEBUG');
-  } /* ENDDEBUG */
+  }
+  /* ENDDEBUG */
 };
 
 Stream.prototype.on = function(type, callback) {
@@ -443,9 +456,12 @@ Stream.prototype.on = function(type, callback) {
     /* DEBUG */ Log.addMessage('event type [' + type + '] does not exist. using just the specified callback.', 'WARN'); /* ENDDEBUG */
     if(callback) {
       this.events[type] = callback;
-    } /* DEBUG */ else {
+    } 
+    /* DEBUG */ 
+    else {
       Log.addMessage('callback for type [' + type + '] does not exist. listener not registered.', 'WARN'); 
-    } /* ENDDEBUG */
+    } 
+    /* ENDDEBUG */
   } else if(typeof this.events[type] === 'function') {
     this.events[type] = [this.events[type], callback];
   } else {
@@ -714,7 +730,6 @@ Chunk.prototype.setLog = function(logQueue) {
   this.log = logQueue;
   return this;
 };
-
 /* ENDDEBUG */
 Chunk.prototype.setError = function(err) {
   this.error = err;

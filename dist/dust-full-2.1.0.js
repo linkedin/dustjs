@@ -58,6 +58,7 @@ dust.compileFn = function(source, name) {
       if(typeof tmpl === 'function') {
         tmpl(master.head, Context.wrap(context, name)).end();
       }
+      
     });
     return master;
   };
@@ -121,6 +122,7 @@ dust.filter = function(string, auto, filters) {
       else if (typeof dust.filters[name] === 'function') {
         string = dust.filters[name](string);
       }
+      
     }
   }
   // by default always apply the h filter, unless asked to unescape with |s
@@ -167,10 +169,12 @@ Context.prototype.get = function(key) {
       if(ctx.head) {
         value = ctx.head[key];
       }
+      
       if (!(value === undefined)) {
         return value;
       }
     }
+    
     ctx = ctx.tail;
   }
   
@@ -183,7 +187,6 @@ Context.prototype.getPath = function(cur, down) {
       len = down ? down.length : 0,      
       tail = cur ? undefined : this.stack.tail;
   
-
   if (cur && len === 0) return ctx.head;
   ctx = ctx.head;
   var i = 0;
@@ -365,6 +368,7 @@ Stream.prototype.emit = function(type, data) {
       listeners[i](data);
     }
   }
+  
 };
 
 Stream.prototype.on = function(type, callback) {
@@ -376,6 +380,7 @@ Stream.prototype.on = function(type, callback) {
     if(callback) {
       this.events[type] = callback;
     } 
+    
   } else if(typeof this.events[type] === 'function') {
     this.events[type] = [this.events[type], callback];
   } else {
