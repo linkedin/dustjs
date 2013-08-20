@@ -21,27 +21,19 @@ dust.helpers = {};
 dust.cache = {};
 
 dust.register = function(name, tmpl) {
-  if (!name) {
-    
-    return;
-  }
-  
+  if (!name) return;
   dust.cache[name] = tmpl;
 };
 
 dust.render = function(name, context, callback) {
-  var chunk = new Stub(callback).head,
-      loadedChunk = dust.load(name, chunk, Context.wrap(context, name));
-  
-  loadedChunk.end();
+  var chunk = new Stub(callback).head;
+  dust.load(name, chunk, Context.wrap(context, name)).end();
 };
 
 dust.stream = function(name, context) {
   var stream = new Stream();
   dust.nextTick(function() {
-    var loadedChunk = dust.load(name, stream.head, Context.wrap(context, name));
-    
-    loadedChunk.end();
+    dust.load(name, stream.head, Context.wrap(context, name)).end();
   });
   return stream;
 };
@@ -55,9 +47,7 @@ dust.compileFn = function(source, name) {
   return function(context, callback) {
     var master = callback ? new Stub(callback) : new Stream();
     dust.nextTick(function() {
-      if(typeof tmpl === 'function') {
-        tmpl(master.head, Context.wrap(context, name)).end();
-      }
+      tmpl(master.head, Context.wrap(context, name)).end();
     });
     return master;
   };
@@ -89,7 +79,7 @@ if (Array.isArray) {
   dust.isArray = Array.isArray;
 } else {
   dust.isArray = function(arr) {
-    return Object.prototype.toString.call(arr) === "[object Array]";
+    return Object.prototype.toString.call(arr) == "[object Array]";
   };
 }
 
@@ -116,8 +106,8 @@ dust.filter = function(string, auto, filters) {
       var name = filters[i];
       if (name === "s") {
         auto = null;
-        
       }
+      // fail silently for invalid filters
       else if (typeof dust.filters[name] === 'function') {
         string = dust.filters[name](string);
       }
@@ -135,8 +125,8 @@ dust.filters = {
   j: function(value) { return dust.escapeJs(value); },
   u: encodeURI,
   uc: encodeURIComponent,
-  js: function(value) { if (!JSON) {return value; } return JSON.stringify(value); },
-  jp: function(value) { if (!JSON) {return value; } return JSON.parse(value); }
+  js: function(value) { if (!JSON) { return value; } return JSON.stringify(value); },
+  jp: function(value) { if (!JSON) { return value; } return JSON.parse(value); }
 };
 
 function Context(stack, global, blocks) {
@@ -163,23 +153,19 @@ Context.prototype.get = function(key) {
 
   while(ctx) {
     if (ctx.isObject) {
-      if(ctx.head) {
-        value = ctx.head[key];
-      }
+      value = ctx.head[key];
       if (!(value === undefined)) {
         return value;
       }
     }
     ctx = ctx.tail;
   }
-  
   return this.global ? this.global[key] : undefined;
 };
 
 Context.prototype.getPath = function(cur, down) {
   var ctx = this.stack,
-      len = down ? down.length : 0;
-  
+      len = down.length;
 
   if (cur && len === 0) return ctx.head;
   ctx = ctx.head;
@@ -192,25 +178,11 @@ Context.prototype.getPath = function(cur, down) {
 };
 
 Context.prototype.push = function(head, idx, len) {
-  var context = new Context(new Stack(head, this.stack, idx, len), this.global, this.blocks);
-  if(context) {
-    return context;
-  }
-  else {
-    
-    return Context.wrap(context);
-  }
+  return new Context(new Stack(head, this.stack, idx, len), this.global, this.blocks);
 };
 
 Context.prototype.rebase = function(head) {
-  var context = new Context(new Stack(head), this.global, this.blocks);
-  if(context) {
-    return context;
-  }
-  else {
-    
-    return Context.wrap(context);
-  }
+  return new Context(new Stack(head), this.global, this.blocks);
 };
 
 Context.prototype.current = function() {
@@ -225,10 +197,7 @@ Context.prototype.getBlock = function(key, chk, ctx) {
 
   var blocks = this.blocks;
 
-  if (!blocks) {
-    
-    return;
-  }
+  if (!blocks) return;
   var len = blocks.length, fn;
   while (len--) {
     fn = blocks[len][key];
@@ -254,13 +223,7 @@ Context.prototype.shiftBlocks = function(locals) {
 function Stack(head, tail, idx, len) {
   this.tail = tail;
   this.isObject = !dust.isArray(head) && head && typeof head === "object";
-  if(head != null) {
-    this.head = head;
-  }
-  else {
-    
-    this.head = {};
-  }
+  this.head = head;
   this.index = idx;
   this.of = len;
 }
@@ -275,12 +238,10 @@ Stub.prototype.flush = function() {
   var chunk = this.head;
 
   while (chunk) {
-    
     if (chunk.flushable) {
       this.out += chunk.data.join(""); //ie7 perf
     } else if (chunk.error) {
       this.callback(chunk.error);
-      
       this.flush = function() {};
       return;
     } else {
@@ -300,14 +261,10 @@ Stream.prototype.flush = function() {
   var chunk = this.head;
 
   while(chunk) {
-    
     if (chunk.flushable) {
       this.emit('data', chunk.data.join("")); //ie7 perf
-      
     } else if (chunk.error) {
       this.emit('error', chunk.error);
-      
-      
       this.flush = function() {};
       return;
     } else {
@@ -320,18 +277,12 @@ Stream.prototype.flush = function() {
 };
 
 Stream.prototype.emit = function(type, data) {
-  if (!this.events) { 
-    
-    return false;
-  }
+  if (!this.events) return false;
   var handler = this.events[type];
-  if (!handler) {
-    
-    return false;
-  }
+  if (!handler) return false;
   if (typeof handler == 'function') {
     handler(data);
-  } else if (dust.isArray(handler)) {
+  } else {
     var listeners = handler.slice(0);
     for (var i = 0, l = listeners.length; i < l; i++) {
       listeners[i](data);
@@ -344,10 +295,7 @@ Stream.prototype.on = function(type, callback) {
     this.events = {};
   }
   if (!this.events[type]) {
-    
-    if(callback) {
-      this.events[type] = callback;
-    } 
+    this.events[type] = callback;
   } else if(typeof this.events[type] === 'function') {
     this.events[type] = [this.events[type], callback];
   } else {
@@ -437,7 +385,6 @@ Chunk.prototype.reference = function(elem, context, auto, filters) {
   if (!dust.isEmpty(elem)) {
     return this.write(dust.filter(elem, auto, filters));
   } else {
-    
     return this;
   }
 };
@@ -472,7 +419,9 @@ Chunk.prototype.section = function(elem, context, bodies, params) {
       if (len > 0) {
         // any custom helper can blow up the stack 
         // and store a flattened context, guard defensively
-        context.stack.head['$len'] = len;
+        if(context.stack.head) {
+         context.stack.head['$len'] = len;
+        }
         for (var i=0; i<len; i++) {
           if(context.stack.head) {
            context.stack.head['$idx'] = i;
@@ -506,8 +455,7 @@ Chunk.prototype.section = function(elem, context, bodies, params) {
    // undefined are all falsy
   } else if (skip) {
      return skip(this, context);
-  }
-    
+   }  
   return this;
 };
 
@@ -520,7 +468,6 @@ Chunk.prototype.exists = function(elem, context, bodies) {
   } else if (skip) {
     return skip(this, context);
   }
-  
   return this;
 };
 
@@ -533,7 +480,6 @@ Chunk.prototype.notexists = function(elem, context, bodies) {
   } else if (skip) {
     return skip(this, context);
   }
-  
   return this;
 };
 
@@ -581,7 +527,6 @@ Chunk.prototype.helper = function(name, context, bodies, params) {
   if( dust.helpers[name]){
    return dust.helpers[name](this, context, bodies, params);
   } else {
-    
     return this;
   }
 };
@@ -598,7 +543,6 @@ Chunk.prototype.capture = function(body, context, callback) {
     body(stub.head, context).end();
   });
 };
-
 
 Chunk.prototype.setError = function(err) {
   this.error = err;
