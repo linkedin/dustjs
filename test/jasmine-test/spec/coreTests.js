@@ -35,9 +35,7 @@ var coreTests = [
         source:   '{#helper foo="bar" boo="boo"} {/helper}',
         context:  { "helper": function(chunk, context, bodies, params) 
                      {
-                      var len = Object.keys(context.global.__templates__).length;
-                      // top of the current stack
-                      currentTemplateName = context.global.__templates__[len - 1];
+                      currentTemplateName = context.templateName;
                       return chunk.write(currentTemplateName);
                      }
                   },
@@ -45,25 +43,12 @@ var coreTests = [
         message: "should render the template name"
        },
        {
-        name:     "global_template",
-        source:   '{#helper foo="bar" boo="boo"} {/helper}',
-        context:  { "helper": function(chunk, context, bodies, params) 
-                     {
-                      currentTemplateName = context.global.__template_name__;
-                      return chunk.write(currentTemplateName);
-                     }
-                  },
-        expected: "global_template",
-        message: "should render the template name using __template_name__"
-       },
-       {
          name:     "apps/test/foo.tl&v=0.1",
          source:   '{#helper foo="bar" boo="boo" template="tl/apps/test"} {/helper}',
          context:  { "helper": function(chunk, context, bodies, params)
                     {
-                      var len = Object.keys(context.global.__templates__).length;
                       // top of the current stack
-                      currentTemplateName = context.global.__templates__[len - 1];
+                      currentTemplateName = context.templateName;
                       return chunk.write(currentTemplateName);
                     } 
                    },
@@ -1049,38 +1034,10 @@ var coreTests = [
         source:   '{>partial_print_name/}',
         context:  { "helper": function(chunk, context, bodies, params) 
                       {
-                       var len = Object.keys(context.global.__templates__).length;
-                        // top of the current stack
-                        currentTemplateName = context.global.__templates__[len - 1];
+                        currentTemplateName = context.templateName;
                         return chunk.write(currentTemplateName);
                       }
                   },
-        expected: "partial_print_name",
-        message: "should print the current template name"
-      },
-      {
-        name:     "partial prints the current template name",
-        source:   '{>partial_print_name/}',
-        context:  { "helper": function(chunk, context, bodies, params) 
-                      {
-                        currentTemplateName = context.global.__template_name__;
-                        return chunk.write(currentTemplateName);
-                      }
-                  },
-        expected: "partial_print_name",
-        message: "should print the current template name using __template_name__"
-      },
-      {
-        name:     "nested partial prints the current template name",
-        source:   '{>nested_partial_print_name/}',
-        context:  { "helper": function(chunk, context, bodies, params) 
-                        {
-                         var len = Object.keys(context.global.__templates__).length;
-                          // top of the current stack
-                        currentTemplateName = context.global.__templates__[len - 1];
-                          return chunk.write(currentTemplateName);
-                        }
-                    },
         expected: "partial_print_name",
         message: "should print the current template name"
       },
@@ -1089,12 +1046,12 @@ var coreTests = [
         source:   '{>nested_partial_print_name/}',
         context:  { "helper": function(chunk, context, bodies, params) 
                         {
-                        currentTemplateName = context.global.__template_name__;
+                        currentTemplateName = context.templateName;
                           return chunk.write(currentTemplateName);
                         }
                     },
         expected: "partial_print_name",
-        message: "should print the current template name using __template_name__"
+        message: "should print the current template name"
       },
       {
         name:     "partial with makeBase_missing_global",
