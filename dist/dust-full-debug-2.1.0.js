@@ -21,9 +21,9 @@ var Log = {};
 
 Log.queue = [];
 
-Log.readQueue = function() { return Log.queue; }
+Log.readQueue = function() { return Log.queue; };
 
-Log.clearQueue = function() { Log.queue = []; }
+Log.clearQueue = function() { Log.queue = []; };
 
 Log.addMessage = function(message, type) {
   type = type || 'INFO';
@@ -362,8 +362,8 @@ function Stub(callback) {
 }
 
 Stub.prototype.flush = function() {
-  var chunk = this.head/* DEBUG */,
-      messages = []/* ENDDEBUG */;
+  var chunk = this.head;
+  /* DEBUG */var messages = [];/* ENDDEBUG */
 
   while (chunk) {
     /* DEBUG */
@@ -392,8 +392,8 @@ function Stream() {
 }
 
 Stream.prototype.flush = function() {
-  var chunk = this.head/* DEBUG */,
-      messages = []/* ENDDEBUG */;
+  var chunk = this.head;
+  /* DEBUG */var messages = []/* ENDDEBUG */
 
   while(chunk) {
     /* DEBUG */

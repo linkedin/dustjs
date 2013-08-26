@@ -15,24 +15,20 @@ function getGlobal(){
 }
 
 (function(dust) {
-
 dust.helpers = {};
 
 dust.cache = {};
 
 dust.register = function(name, tmpl) {
   if (!name) {
-    
     return;
   }
-  
   dust.cache[name] = tmpl;
 };
 
 dust.render = function(name, context, callback) {
   var chunk = new Stub(callback).head,
       loadedChunk = dust.load(name, chunk, Context.wrap(context, name));
-  
   loadedChunk.end();
 };
 
@@ -40,7 +36,6 @@ dust.stream = function(name, context) {
   var stream = new Stream();
   dust.nextTick(function() {
     var loadedChunk = dust.load(name, stream.head, Context.wrap(context, name));
-    
     loadedChunk.end();
   });
   return stream;
@@ -58,7 +53,6 @@ dust.compileFn = function(source, name) {
       if(typeof tmpl === 'function') {
         tmpl(master.head, Context.wrap(context, name)).end();
       }
-      
     });
     return master;
   };
@@ -117,12 +111,10 @@ dust.filter = function(string, auto, filters) {
       var name = filters[i];
       if (name === "s") {
         auto = null;
-        
       }
       else if (typeof dust.filters[name] === 'function') {
         string = dust.filters[name](string);
       }
-      
     }
   }
   // by default always apply the h filter, unless asked to unescape with |s
@@ -169,15 +161,12 @@ Context.prototype.get = function(key) {
       if(ctx.head) {
         value = ctx.head[key];
       }
-      
       if (!(value === undefined)) {
         return value;
       }
     }
-    
     ctx = ctx.tail;
   }
-  
   return this.global ? this.global[key] : undefined;
 };
 
@@ -186,7 +175,6 @@ Context.prototype.getPath = function(cur, down) {
   var ctx = this.stack, ctxThis,
       len = down ? down.length : 0,      
       tail = cur ? undefined : this.stack.tail;
-  
   if (cur && len === 0) return ctx.head;
   ctx = ctx.head;
   var i = 0;
@@ -229,7 +217,6 @@ Context.prototype.push = function(head, idx, len) {
     return context;
   }
   else {
-    
     return Context.wrap(context);
   }
 };
@@ -240,7 +227,6 @@ Context.prototype.rebase = function(head) {
     return context;
   }
   else {
-    
     return Context.wrap(context);
   }
 };
@@ -258,7 +244,6 @@ Context.prototype.getBlock = function(key, chk, ctx) {
   var blocks = this.blocks;
 
   if (!blocks) {
-    
     return;
   }
   var len = blocks.length, fn;
@@ -290,7 +275,6 @@ function Stack(head, tail, idx, len) {
     this.head = head;
   }
   else {
-    
     this.head = {};
   }
   this.index = idx;
@@ -307,12 +291,10 @@ Stub.prototype.flush = function() {
   var chunk = this.head;
 
   while (chunk) {
-    
     if (chunk.flushable) {
       this.out += chunk.data.join(""); //ie7 perf
     } else if (chunk.error) {
       this.callback(chunk.error);
-      
       this.flush = function() {};
       return;
     } else {
@@ -332,13 +314,10 @@ Stream.prototype.flush = function() {
   var chunk = this.head;
 
   while(chunk) {
-    
     if (chunk.flushable) {
       this.emit('data', chunk.data.join("")); //ie7 perf
-      
     } else if (chunk.error) {
       this.emit('error', chunk.error);
-      
       this.flush = function() {};
       return;
     } else {
@@ -352,12 +331,10 @@ Stream.prototype.flush = function() {
 
 Stream.prototype.emit = function(type, data) {
   if (!this.events) { 
-    
     return false;
   }
   var handler = this.events[type];
   if (!handler) {
-    
     return false;
   }
   if (typeof handler == 'function') {
@@ -368,7 +345,6 @@ Stream.prototype.emit = function(type, data) {
       listeners[i](data);
     }
   }
-  
 };
 
 Stream.prototype.on = function(type, callback) {
@@ -376,11 +352,9 @@ Stream.prototype.on = function(type, callback) {
     this.events = {};
   }
   if (!this.events[type]) {
-    
     if(callback) {
       this.events[type] = callback;
     } 
-    
   } else if(typeof this.events[type] === 'function') {
     this.events[type] = [this.events[type], callback];
   } else {
@@ -470,7 +444,6 @@ Chunk.prototype.reference = function(elem, context, auto, filters) {
   if (!dust.isEmpty(elem)) {
     return this.write(dust.filter(elem, auto, filters));
   } else {
-    
     return this;
   }
 };
@@ -540,7 +513,6 @@ Chunk.prototype.section = function(elem, context, bodies, params) {
   } else if (skip) {
      return skip(this, context);
   }
-    
   return this;
 };
 
@@ -553,7 +525,6 @@ Chunk.prototype.exists = function(elem, context, bodies) {
   } else if (skip) {
     return skip(this, context);
   }
-  
   return this;
 };
 
@@ -566,7 +537,6 @@ Chunk.prototype.notexists = function(elem, context, bodies) {
   } else if (skip) {
     return skip(this, context);
   }
-  
   return this;
 };
 
@@ -624,7 +594,6 @@ Chunk.prototype.helper = function(name, context, bodies, params) {
   if( dust.helpers[name]){
    return dust.helpers[name](this, context, bodies, params);
   } else {
-    
     return this;
   }
 };
@@ -641,7 +610,6 @@ Chunk.prototype.capture = function(body, context, callback) {
     body(stub.head, context).end();
   });
 };
-
 
 Chunk.prototype.setError = function(err) {
   this.error = err;

@@ -4,6 +4,6 @@ var fs   = require('fs'),
 
 var orig_code = fs.readFileSync(path.join(root, process.argv[2]), 'utf8');
 
-var final_code = orig_code.replace(/\/\* DEBUG \*\/[\s\S]*?[\s\S]\/\*\ ENDDEBUG \*\//g, '');
+var final_code = orig_code.replace(/[ \t]*\/\* DEBUG \*\/[\s\S]*?\/\*\ ENDDEBUG \*\/ *[\r\n]?/g, '');
     
 fs.writeFileSync(path.join(root, process.argv[3]),final_code);
