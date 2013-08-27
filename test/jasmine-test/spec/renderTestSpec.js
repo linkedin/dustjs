@@ -3,7 +3,7 @@ describe ("Test the basic functionality of dust", function() {
     for (var i = 0; i < coreTests[index].tests.length; i++) {
       var test = coreTests[index].tests[i];
       it ("RENDER: " + test.message, render(test));
-      it ("RENDERSOURCE: " + test.message, render(test));
+      it ("RENDERSOURCE: " + test.message, renderSource(test));
       it ("STREAM: " + test.message, stream(test));
       it ("PIPE: " + test.message, pipe(test));
     }
@@ -16,8 +16,8 @@ function render(test) {
     try {
       dust.loadSource(dust.compile(test.source, test.name, test.strip));
       context = test.context;
-      if (test.base){
-         context = dust.makeBase(test.base).push(context);
+      if (test.base) {
+        context = dust.makeBase(test.base).push(context);
       }
       dust.render(test.name, context, function(err, output) {
         expect(err).toBeNull();
@@ -32,11 +32,16 @@ function render(test) {
 
 function renderSource(test) {
   return function() {
+    var context;
     try {
-      dust.renderSource(test.source, test.context,  function(err, output) {
+      context = test.context;
+      if (test.base) {
+        context = dust.makeBase(test.base).push(context);
+      }
+      dust.renderSource(test.source, context, function(err, output) {
         expect(err).toBeNull();
         expect(test.expected).toEqual(output);
-      });
+      }, test.name);
     }
     catch (error) {
       expect(test.error || {} ).toEqual(error.message);
