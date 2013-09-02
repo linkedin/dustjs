@@ -1,5 +1,8 @@
 var coreTests = [
-  { 
+/**
+ * CORE TESTS
+ */
+  {
     name: "core tests",
     tests: [
       {
@@ -271,6 +274,9 @@ var coreTests = [
       }
     ]
   },
+/**
+ * TRUTH/FALSY TESTS
+ */
   {
     name: "truth/falsy tests",
     tests: [
@@ -360,6 +366,9 @@ var coreTests = [
        }
     ]
   },
+/**
+ * SCALAR DATA TESTS
+ */
   {
     name: "scalar data tests",
     tests: [
@@ -437,6 +446,9 @@ var coreTests = [
       }
     ]
   },
+/**
+ * EMPTY DATA TESTS
+ */
   {
     name: "empty data tests",
     tests: [
@@ -498,6 +510,9 @@ var coreTests = [
       }
     ]
   },
+/**
+ * ARRAY/INDEX ACCESS TESTS
+ */
   {
     name: "array/index-access tests",
     tests: [
@@ -644,6 +659,9 @@ var coreTests = [
       }
     ]
   },
+/**
+ * OBJECT TESTS
+ */
   {
     name: "object tests",
     tests: [
@@ -663,6 +681,9 @@ var coreTests = [
       }
     ]
   },
+/**
+ * CONDITINOAL TESTS
+ */
   {
     name: "conditional tests",
     tests: [
@@ -706,6 +727,9 @@ var coreTests = [
       }
     ]
   },
+/**
+ * NESTED PATH TESTS
+ */
   {
     name: "nested path tests",
     tests: [
@@ -846,6 +870,9 @@ var coreTests = [
       }
     ]
   },
+/**
+ * FILTER TESTS
+ */
   {
     name: "filter tests",
     tests: [
@@ -901,6 +928,9 @@ var coreTests = [
       }
     ]
   },
+/**
+ * PARTIAL DEFINITIONS TESTS
+ */
   { 
     name: "partial definitions",
     tests: [
@@ -948,6 +978,9 @@ var coreTests = [
       }
     ]
   },
+/**
+ * PARTIAL/PARAMS TESTS
+ */
   {
     name: "partial/params tests",
     tests : [
@@ -1091,6 +1124,9 @@ var coreTests = [
       },
     ]
   },
+/**
+ * INLINE PARAMS TESTS
+ */
   {
     name: "inline params tests",
     tests: [
@@ -1121,6 +1157,9 @@ var coreTests = [
       }
     ]
   },
+/**
+ * INLINE PARTIAL/BLOCK TESTS
+ */
   {
     name: "inline partial/block tests",
     tests: [
@@ -1178,6 +1217,9 @@ var coreTests = [
       }
     ]
   },
+/**
+ * LAMBDA TESTS
+ */
   {
     name: "lambda tests",
     tests: [
@@ -1247,6 +1289,9 @@ var coreTests = [
         }
     ]
   },
+/**
+ * CORE GRAMMER TESTS
+ */
   {
     name: "core-grammar tests",
     tests: [
@@ -1261,7 +1306,7 @@ var coreTests = [
         name:     "error: whitespaces between the opening brace and any of (#,?,@,^,+,%) is not allowed",
         source:   '{ # helper foo="bar" boo="boo" } {/helper}',
         context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
-        error: 'Expected buffer, comment, partial, reference, section or special but "{" found. At line : 1, column : 1',
+        error: 'Expected buffer, comment, partial, raw, reference, section or special but "{" found. At line : 1, column : 1',
         message: "should show an error for whitespces between the opening brace and any of (#,?,@,^,+,%)"
       },
       {
@@ -1289,7 +1334,7 @@ var coreTests = [
         name:     "error: whitespaces between the forward slash and the closing brace in self closing tags",
         source:   '{#helper foo="bar" boo="boo" / }',
         context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
-        error: 'Expected buffer, comment, partial, reference, section or special but "{" found. At line : 1, column : 1',
+        error: 'Expected buffer, comment, partial, raw, reference, section or special but "{" found. At line : 1, column : 1',
         message: "should show an error for whitespaces  etween the forward slash and the closing brace in self closing tags"
       },
       {
@@ -1303,7 +1348,7 @@ var coreTests = [
         name: "error : whitespaces between the '{' plus '>' and partial identifier is not supported",
         source: '{ > partial/} {> "hello_world"/} {> "{ref}"/}',
         context: { "name": "Jim", "count": 42, "ref": "hello_world" },
-        error: 'Expected buffer, comment, partial, reference, section or special but "{" found. At line : 1, column : 1',
+        error: 'Expected buffer, comment, partial, raw, reference, section or special but "{" found. At line : 1, column : 1',
         message: "should show an error for whitespaces between the '{' plus '>' and partial identifier"
       },
       {
@@ -1393,6 +1438,9 @@ var coreTests = [
       }
     ]
   },
+/**
+ * SYNTAX ERROR TESTS
+ */
   {
     name: "syntax error tests",
     tests: [
@@ -1400,7 +1448,7 @@ var coreTests = [
         name: "Dust syntax error",
         source: "RRR {##}",
         context: { name: "Mick", count: 30 },
-        error: 'Expected buffer, comment, partial, reference, section or special but "{" found. At line : 1, column : 5',
+        error: 'Expected buffer, comment, partial, raw, reference, section or special but "{" found. At line : 1, column : 5',
         message: "should test that the error message shows line and column."
       },
       {
@@ -1530,6 +1578,9 @@ var coreTests = [
       }
     ]
   },
+/**
+ * BUFFER TESTS
+ */
   {
     name: "buffer test",
     tests: [
@@ -1542,6 +1593,113 @@ var coreTests = [
       }
     ]
   },
+/**
+ * COMMENT TESTS
+ */
+  {
+    name: "comment test",
+    tests: [
+      {
+        name: "comment",
+        source: ["before {!  this is a comment { and } and all sorts of stuff including",
+                 "newlines and tabs \t are valid and is simply ignored !}after"].join('\n'),
+        context: {},
+        expected: "before after",
+        message: "comments should be ignored"
+      }
+    ]
+  },
+/**
+ * RAW TEXT TESTS
+ */
+  {
+    name: "raw text test",
+    tests: [
+      {
+        name: "simple raw text",
+        source: ["{`<pre>",
+                 'A: "hello"',
+                 "              B: 'hello'?",
+                 "A: a walrus (:{=",
+                 "              B: Lols!",
+"               __ ___                              ",
+"            .'. -- . '.                            ",
+"           /U)  __   (O|                           ",
+"          /.'  ()()   '.\._                        ",
+"        .',/;,_.--._.;;) . '--..__                 ",
+"       /  ,///|.__.|.\\\  \ '.  '.''---..___       ",
+"      /'._ '' ||  ||  '' _'\  :   \   '   . '.     ",
+"     /        ||  ||        '.,    )   )   :  \    ",
+"    :'-.__ _  ||  ||   _ __.' _\_ .'  '   '   ,)   ",
+"    (          '  |'        ( __= ___..-._ ( (.\\  ",
+"   ('\      .___ ___.      /'.___=          \.\.\  ",
+"    \\\-..____________..-''                        ",
+                 "</pre>`}"].join('\n'),
+        context: {},
+        expected: ["<pre>",
+                 'A: "hello"',
+                 "              B: 'hello'?",
+                 "A: a walrus (:{=",
+                 "              B: Lols!",
+"               __ ___                              ",
+"            .'. -- . '.                            ",
+"           /U)  __   (O|                           ",
+"          /.'  ()()   '.\._                        ",
+"        .',/;,_.--._.;;) . '--..__                 ",
+"       /  ,///|.__.|.\\\  \ '.  '.''---..___       ",
+"      /'._ '' ||  ||  '' _'\  :   \   '   . '.     ",
+"     /        ||  ||        '.,    )   )   :  \    ",
+"    :'-.__ _  ||  ||   _ __.' _\_ .'  '   '   ,)   ",
+"    (          '  |'        ( __= ___..-._ ( (.\\  ",
+"   ('\      .___ ___.      /'.___=          \.\.\  ",
+"    \\\-..____________..-''                        ",
+                 "</pre>"].join('\n'),
+        message: "raw text should keep all whitespace"
+      },
+      {
+        name: "raw text more likely example",
+        source: ["{#A}",
+                 "buffer text",
+                 "         !spaces and new lines are nullified (by default). Booo",
+                 "{~n}   Starting with newline make it not so bad",
+                 "{`<pre>",
+                 "but",
+                 "  what{",
+                 "  \twe",
+                 "      want is this",
+                 "helpful for:",
+                 " * talking about Dust syntax which looks like `{ref}` `{@helpers}`",
+                 " * interpolations like 'My name is:`} {#name}{first} {last}{/name}{`",
+                 "</pre>`}",
+                 "after",
+                 "!newline",
+                 "{/A}"].join('\n'),
+        context: {A:{ name: {first: 'Paul', last: 'Walrus'}}},
+        expected: ["buffer text!spaces and new lines are nullified (by default). Booo",
+                 "   Starting with newline make it not so bad<pre>",
+                 "but",
+                 "  what{",
+                 "  \twe",
+                 "      want is this",
+                 "helpful for:",
+                 " * talking about Dust syntax which looks like `{ref}` `{@helpers}`",
+                 " * interpolations like 'My name is: Paul Walrus",
+                 "</pre>after!newline"].join('\n'),
+        message: "raw text is not matching"
+      },
+      {
+        name: "using raw to allow {",
+        source: ["<div data-fancy-json={`\"{rawJsonKey: 'value'}\"`}>",
+                 "</div>"].join('\n'),
+        context: {},
+        expected: "<div data-fancy-json=\"{rawJsonKey: 'value'}\"></div>",
+        message: "raw text should allow {"
+      }
+    ]
+  },
+/**
+ * INVALID HELPER TESTS
+ */
   {
     name:"invalid helper test",
     tests: [
