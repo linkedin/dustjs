@@ -1,5 +1,5 @@
 //
-// Dust - Asynchronous Templating v2.0.2
+// Dust - Asynchronous Templating v2.0.3
 // http://akdubya.github.com/dustjs
 //
 // Copyright (c) 2010, Aleksander Williams
@@ -129,10 +129,11 @@ dust.filters = {
   jp: function(value) { if (!JSON) { return value; } return JSON.parse(value); }
 };
 
-function Context(stack, global, blocks) {
+function Context(stack, global, blocks, templateName) {
   this.stack  = stack;
   this.global = global;
   this.blocks = blocks;
+  this.templateName = templateName;
 }
 
 dust.makeBase = function(global) {
@@ -143,10 +144,7 @@ Context.wrap = function(context, name) {
   if (context instanceof Context) {
     return context;
   }
-  var global= {};
-  global.__templates__ = [];
-  global.__templates__.push(name);
-  return new Context(new Stack(context), global);
+  return new Context(new Stack(context), {}, null, name);
 };
 
 Context.prototype.get = function(key) {
@@ -178,8 +176,11 @@ Context.prototype.getPath = function(cur, down) {
     ctx = ctx[down[i]];
     i++;
     while (!ctx && !cur){
-        //if there was a partial match, don't search further
-    	if (i > 1) return undefined;
+	// i is the count of number of path elements matched. If > 1 then we have a partial match
+	// and do not continue to search for the rest of the path.
+	// Note: a falsey value at the end of a matched path also comes here.
+	// This returns the value or undefined if we just have a partial match.
+    	if (i > 1) return ctx;
     	if (tail){
     	  ctx = tail.head;
     	  tail = tail.tail;
@@ -204,11 +205,11 @@ Context.prototype.getPath = function(cur, down) {
 };
 
 Context.prototype.push = function(head, idx, len) {
-  return new Context(new Stack(head, this.stack, idx, len), this.global, this.blocks);
+  return new Context(new Stack(head, this.stack, idx, len), this.global, this.blocks, this.templateName);
 };
 
 Context.prototype.rebase = function(head) {
-  return new Context(new Stack(head), this.global, this.blocks);
+  return new Context(new Stack(head), this.global, this.blocks, this.templateName);
 };
 
 Context.prototype.current = function() {
@@ -241,7 +242,7 @@ Context.prototype.shiftBlocks = function(locals) {
     } else {
       newBlocks = blocks.concat([locals]);
     }
-    return new Context(this.stack, this.global, newBlocks);
+    return new Context(this.stack, this.global, newBlocks, this.templateName);
   }
   return this;
 };
@@ -524,25 +525,26 @@ Chunk.prototype.block = function(elem, context, bodies) {
 
 Chunk.prototype.partial = function(elem, context, params) {
   var partialContext;
-  if(context.global && context.global.__templates__){
-   context.global.__templates__.push(elem);
-  } 
+  //put the params context second to match what section does. {.} matches the current context without parameters
+  // start with an empty context
+  partialContext = dust.makeBase(context.global);
+  partialContext.blocks = context.blocks;
+  if (context.stack && context.stack.tail){
+    // grab the stack(tail) off of the previous context if we have it
+    partialContext.stack = context.stack.tail;
+  }
   if (params){
-    //put the params context second to match what section does. {.} matches the current context without parameters
-    // start with an empty context
-    partialContext = dust.makeBase(context.global);
-    partialContext.blocks = context.blocks;
-    if (context.stack && context.stack.tail){
-      // grab the stack(tail) off of the previous context if we have it
-      partialContext.stack = context.stack.tail;
-    }
     //put params on
     partialContext = partialContext.push(params);
-    //reattach the head
-    partialContext = partialContext.push(context.stack.head);
-  } else {
-    partialContext = context;
   }
+
+  if(typeof elem === "string") {
+    partialContext.templateName = elem;
+  }
+
+  //reattach the head
+  partialContext = partialContext.push(context.stack.head);
+
   var partialChunk;
    if (typeof elem === "function") {
      partialChunk = this.capture(elem, partialContext, function(name, chunk) {
@@ -551,9 +553,6 @@ Chunk.prototype.partial = function(elem, context, params) {
    }
    else {
      partialChunk = dust.load(elem, this, partialContext);
-   }
-   if(context.global && context.global.__templates__) {
-    context.global.__templates__.pop();
    }
    return partialChunk;
 };
