@@ -1,6 +1,6 @@
 {
   "name": "dustjs-linkedin",
-  "version": "1.2.5",
+  "version": "2.0.3",
   "author": "Aleksander Williams",
   "description": "Asynchronous templates for the browser and node.js ( LinkedIn fork )",
   "contributors": [
@@ -19,6 +19,10 @@
     {
       "name": "Richard Ragan",
       "email": "rragan@ebay.com"
+    },
+    {
+      "name": "Steven Foote",
+      "email": "sfoote@linkedin.com"
     }
   ],
   "scripts": {
@@ -32,10 +36,11 @@
     "url": "https://github.com/linkedin/dustjs.git"
   },
   "keywords": ["templates", "views"],
-    "devDependencies": {
-    "jasmine-node"   :  "1.0.x",
-    "cover"          :  "0.2.x",
-    "uglify-js"      :  "1.3.3"
+  "devDependencies": {
+    "jasmine-node"    :  "1.9.x",
+    "cover"           :  "0.2.x",
+    "uglify-js"       :  "1.3.3",
+    "pegjs"           :  "0.7.0"
   },
   "license": "MIT",
   "engine": {

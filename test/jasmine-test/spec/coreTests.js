@@ -30,19 +30,42 @@ var coreTests = [
         expected: "Hello World!",
         message: "should test basic text rendering"
       },
-            {
+      {
         name:     "global_template",
         source:   '{#helper foo="bar" boo="boo"} {/helper}',
-        context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(context.global.__template_name__); } },
+        context:  { "helper": function(chunk, context, bodies, params) 
+                     {
+                      currentTemplateName = context.templateName;
+                      return chunk.write(currentTemplateName);
+                     }
+                  },
         expected: "global_template",
         message: "should render the template name"
-      },
-      {
-        name:     "apps/test/foo.tl&v=0.1",
-        source:   '{#helper foo="bar" boo="boo" template="tl/apps/test"} {/helper}',
-        context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(context.global.__template_name__); } },
+       },
+       {
+         name:     "apps/test/foo.tl&v=0.1",
+         source:   '{#helper foo="bar" boo="boo" template="tl/apps/test"} {/helper}',
+         context:  { "helper": function(chunk, context, bodies, params)
+                    {
+                      // top of the current stack
+                      currentTemplateName = context.templateName;
+                      return chunk.write(currentTemplateName);
+                    } 
+                   },
         expected: "apps/test/foo.tl&v=0.1",
         message: "should render the template name with paths"
+      },
+      {
+         name:     "makeBase_missing_global",
+         source:   '{#helper}{/helper}',
+         context:  { "helper": function(chunk, context, bodies, params)
+                    {
+                      var newContext = {};
+                      return bodies.block(chunk, dust.makeBase(newContext));
+                    } 
+                   },
+        expected: "",
+        message: "should render the helper with missing global context"
       },
       {
         name:     "reference",
@@ -162,6 +185,23 @@ var coreTests = [
         context:  {xhr: false},
         expected: "Start\nChild Title\nChild Content\nEnd",
         message: "should test child template"
+      },
+      {
+        name:     "issue322",
+        source:   'hi{+"{name}"/}',
+        context:  {},
+        expected: "hi", 
+        message: "should setup base template for next test. hi should not be part of base block name"
+
+      },
+      {
+        name:     "issue322 use base template picks up prefix chunk data",
+        source:   '{>issue322 name="abc"/}' +
+		   "{<abc}ABC{/abc}",
+        context:  {},
+        expected: "hiABC",
+        message: "should use base template and honor name passed in"
+
       },
       {
         name:     "recursion",
@@ -664,6 +704,146 @@ var coreTests = [
     ]
   },
   {
+    name: "nested path tests",
+    tests: [
+       { 
+        name: "Verify local mode leading dot path in local mode",
+        source: "{#people}{.name} is {?.age}{.age} years old.{:else}not telling us their age.{/age}{/people}",
+        context:  {
+             "name": "List of people",
+             "age": "8 hours",
+             "people": [
+               { "name": "Alice" },
+               { "name": "Bob", "age": 42 },
+              ]
+           },
+        expected: "Alice is not telling us their age.Bob is 42 years old.",
+        message: "should test the leading dot behavior in local mode"
+      },
+      {
+        name: "check nested ref in global does not work in local mode",
+        source: "{glob.globChild}",
+        context: { },
+        expected: "",
+        message: "Should not find glob.globChild which is in context.global"
+      },
+      {
+        name:     "Verify leading dot path not affected in global mode",
+        source:   "{#people}{.name} is {?.age}{.age} years old.{:else}not telling us their age.{/age}{/people}",
+        options: {pathScope: "global"},
+        context:  {
+             "name": "List of people",
+             "age": "8 hours",
+             "people": [
+               { "name": "Alice" },
+               { "name": "Bob", "age": 42 },
+              ]
+        },
+        expected: "Alice is not telling us their age.Bob is 42 years old.",
+        message: "should test the leading dot behavior preserved"
+     },
+     {
+        name: "Standard dotted path with falsey value. Issue 317",
+        source: "{foo.bar}",
+        options: {pathScope: "global"},
+        context: { foo: {bar: 0} },
+        expected: "0",
+        message: "should work when value at end of path is falsey"
+     },
+     {
+        name: "dotted path resolution up context",
+        source: "{#data.A.list}Aname{data.A.name}{/data.A.list}",
+        options: {pathScope: "global"},
+        context: { "data":{"A":{"name":"Al","list":[{"name": "Joe"},{"name": "Mary"}],"B":{"name":"Bob","Blist":["BB1","BB2"]}}} },
+        expected: "AnameAlAnameAl",
+        message: "should test usage of dotted path resolution up context"
+     },
+     {
+        name: "dotted path resolution up context 2",
+        source: "{#data.A.B.Blist}Aname{data.A.name}{/data.A.B.Blist}",
+        options: {pathScope: "global"},
+        context: { "data":{"A":{"name":"Al","list":[{"name": "Joe"},{"name": "Mary"}],"B":{"name":"Bob","Blist":["BB1","BB2"]}}} },
+        expected: "AnameAlAnameAl",
+        message: "should test usage of dotted path resolution up context"
+      },
+      {
+        name: "dotted path resolution without explicit context",
+        source: "{#data.A}Aname{name}{data.C.name}{/data.A}",
+        options: {pathScope: "global"},
+        context: { "data":{"A":{"name":"Al","list":[{"name": "Joe"},{"name": "Mary"}],"B":{"name":"Bob","Blist":["BB1","BB2"]}},C:{name:"cname"}} },
+        expected: "AnameAlcname",
+        message: "should test usage of dotted path resolution up context"
+      },
+      {
+        name: "same as previous test but with explicit context",
+        source: "{#data.A:B}Aname{name}{data.C.name}{/data.A}",
+        options: {pathScope: "global"},
+        context: { "data":{"A":{"name":"Al","list":[{"name": "Joe"},{"name": "Mary"}],"B":{"name":"Bob","Blist":["BB1","BB2"]}},C:{name:"cname"}} },
+        expected: "AnameAl",
+        message: "should test explicit context blocks looking further up stack"
+      },
+      {
+        name: "explicit context but gets value from global",
+        source: "{#data.A:B}Aname{name}{glob.globChild}{/data.A}",
+        options: {pathScope: "global"},
+        base: { glob: { globChild: "testGlobal"} },
+        context: { "data":{"A":{"name":"Al","list":[{"name": "Joe"},{"name": "Mary"}],"B":{"name":"Bob","Blist":["BB1","BB2"]}},C:{name:"cname"}} },
+        expected: "AnameAltestGlobal",
+        message: "should test access global despite explicit context"
+      },
+      {
+        name: "nested dotted path resolution",
+        source: "{#data.A.list}{#data.A.B.Blist}{.}Aname{data.A.name}{/data.A.B.Blist}{/data.A.list}",
+        options: {pathScope: "global"},
+        context: { "data":{"A":{"name":"Al","list":[{"name": "Joe"},{"name": "Mary"}],"B":{"name":"Bob","Blist":["BB1"]}}} },
+        expected: "BB1AnameAlBB1AnameAl",
+        message: "should test nested usage of dotted path resolution"
+      },
+      {
+        name: "check nested ref in global works in global mode",
+        source: "{glob.globChild}",
+        options: {pathScope: "global"},
+        base: { glob: { globChild: "testGlobal"} },
+        context: { },
+        expected: "testGlobal",
+        message: "Should find glob.globChild which is in context.global"
+      },
+      {
+          name: "dotted path resolution up context with partial match in current context",
+          source: "{#data}{#A}{C.name}{/A}{/data}",
+          options: {pathScope: "global"},
+          context: { "data":{ "A":{ "name":"Al", "B": "Ben", "C": { namex: "Charlie"} }, C: {name: "Charlie Sr."} } },
+          expected: "",
+          message: "should test usage of dotted path resolution up context"
+       },
+       {
+        name: "check nested ref not found in global if partial match",
+        source: "{#data}{#A}{C.name}{/A}{/data}",
+        options: {pathScope: "global"},
+        base: { C: {name: "Big Charlie"} },
+        context: { "data":{ "A":{ "name":"Al", "B": "Ben", "C": { namex: "Charlie"} }, C: {namey: "Charlie Sr."} } },
+        expected: "",
+        message: "Should find glob.globChild which is in context.global"
+      },
+      {
+        name:     "method invocation",
+        source:   "Hello {person.fullName}",
+        options: {pathScope: "global"},
+        context:  {
+          person: {
+            firstName: "Peter",
+            lastName:  "Jones",
+            fullName: function() { 
+                return this.firstName + ' ' + this.lastName; 
+            }
+          }
+        },
+        expected: "Hello Peter Jones",
+        message:  "should test resolve correct 'this' when invoking method"
+      }
+    ]
+  },
+  {
     name: "filter tests",
     tests: [
       {
@@ -741,6 +921,27 @@ var coreTests = [
         context:  { name: "Mick", count: 30 },
         expected: "Hello Mick! You have 30 new messages.",
         message: "should test a blocks with no defaults"
+      },
+      {
+        name:     "partial_print_name",
+        source:   "{#helper}{/helper}",
+        context:  {},
+        expected: "",
+        message: "should test a template with missing helper"
+      },
+      {
+        name:     "nested_partial_print_name",
+        source:   "{>partial_print_name/}",
+        context:  {},
+        expected: "",
+        message: "should test a template with missing helper"
+      },
+      {
+        name:     "nested_nested_partial_print_name",
+        source:   "{>nested_partial_print_name/}",
+        context:  {},
+        expected: "",
+        message: "should test nested partial"
       }
     ]
   },
@@ -844,7 +1045,43 @@ var coreTests = [
         context:  { n: "Mick", c: 30 },
         expected: "Hello Mick! You have 30 new messages.",
         message: "should test partial with no blocks, ignore the override inline partials"
-      }
+      },
+      {
+        name:     "partial prints the current template name",
+        source:   '{>partial_print_name/}',
+        context:  { "helper": function(chunk, context, bodies, params) 
+                      {
+                        currentTemplateName = context.templateName;
+                        return chunk.write(currentTemplateName);
+                      }
+                  },
+        expected: "partial_print_name",
+        message: "should print the current template name"
+      },
+      {
+        name:     "nested partial prints the current template name",
+        source:   '{>nested_partial_print_name/}',
+        context:  { "helper": function(chunk, context, bodies, params) 
+                        {
+                          currentTemplateName = context.templateName;
+                          return chunk.write(currentTemplateName);
+                        }
+                    },
+        expected: "partial_print_name",
+        message: "should print the current template name"
+      },
+      {
+        name:     "partial with makeBase_missing_global",
+        source:   '{#helper template="partial"}{/helper}',
+        context:  { "helper": function(chunk, context, bodies, params)
+                    {
+                      var newContext = {};
+                      return chunk.partial(params.template, dust.makeBase(newContext));
+                    } 
+                  },
+        expected: "Hello ! You have  new messages.",
+        message: "should render the helper with missing global context"
+      },
     ]
   },
   {
@@ -986,7 +1223,21 @@ var coreTests = [
                   },
         expected: "Hello Foo Bar World!",
         message: "should test scope of context function"
-      }
+      },
+      {
+          name:     "test that function returning object is resolved",
+          source:   "Hello {#foo}{bar}{/foo} World!",
+          context:  {
+                      foo: {
+                        foobar: 'Foo Bar',
+                        bar: function () {
+                          return this.foobar;
+                        }
+                      }
+                    },
+          expected: "Hello Foo Bar World!",
+          message: "should test scope of context function"
+        }
     ]
   },
   {

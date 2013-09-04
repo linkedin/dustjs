@@ -1,3 +1,11 @@
+//
+// Dust - Asynchronous Templating v2.0.1
+// http://akdubya.github.com/dustjs
+//
+// Copyright (c) 2010, Aleksander Williams
+// Released under the MIT License.
+//
+
 var dust = {};
 
 function getGlobal(){
@@ -121,11 +129,10 @@ dust.filters = {
   jp: function(value) { if (!JSON) { return value; } return JSON.parse(value); }
 };
 
-function Context(stack, global, blocks, templateName) {
+function Context(stack, global, blocks) {
   this.stack  = stack;
   this.global = global;
   this.blocks = blocks;
-  this.templateName = templateName;
 }
 
 dust.makeBase = function(global) {
@@ -136,7 +143,10 @@ Context.wrap = function(context, name) {
   if (context instanceof Context) {
     return context;
   }
-  return new Context(new Stack(context), {}, null, name);
+  var global= {};
+  global.__templates__ = [];
+  global.__templates__.push(name);
+  return new Context(new Stack(context), global);
 };
 
 Context.prototype.get = function(key) {
@@ -197,11 +207,11 @@ Context.prototype.getPath = function(cur, down) {
 };
 
 Context.prototype.push = function(head, idx, len) {
-  return new Context(new Stack(head, this.stack, idx, len), this.global, this.blocks, this.templateName);
+  return new Context(new Stack(head, this.stack, idx, len), this.global, this.blocks);
 };
 
 Context.prototype.rebase = function(head) {
-  return new Context(new Stack(head), this.global, this.blocks, this.templateName);
+  return new Context(new Stack(head), this.global, this.blocks);
 };
 
 Context.prototype.current = function() {
@@ -210,8 +220,8 @@ Context.prototype.current = function() {
 
 Context.prototype.getBlock = function(key, chk, ctx) {
   if (typeof key === "function") {
-    var tempChk = new Chunk();
-    key = key(tempChk, this).data.join("");
+    key = key(chk, ctx).data.join("");
+    chk.data = []; //ie7 perf
   }
 
   var blocks = this.blocks;
@@ -234,7 +244,7 @@ Context.prototype.shiftBlocks = function(locals) {
     } else {
       newBlocks = blocks.concat([locals]);
     }
-    return new Context(this.stack, this.global, newBlocks, this.templateName);
+    return new Context(this.stack, this.global, newBlocks);
   }
   return this;
 };
@@ -517,26 +527,25 @@ Chunk.prototype.block = function(elem, context, bodies) {
 
 Chunk.prototype.partial = function(elem, context, params) {
   var partialContext;
-  //put the params context second to match what section does. {.} matches the current context without parameters
-  // start with an empty context
-  partialContext = dust.makeBase(context.global);
-  partialContext.blocks = context.blocks;
-  if (context.stack && context.stack.tail){
-    // grab the stack(tail) off of the previous context if we have it
-    partialContext.stack = context.stack.tail;
-  }
+  if(context.global && context.global.__templates__){
+   context.global.__templates__.push(elem);
+  } 
   if (params){
+    //put the params context second to match what section does. {.} matches the current context without parameters
+    // start with an empty context
+    partialContext = dust.makeBase(context.global);
+    partialContext.blocks = context.blocks;
+    if (context.stack && context.stack.tail){
+      // grab the stack(tail) off of the previous context if we have it
+      partialContext.stack = context.stack.tail;
+    }
     //put params on
     partialContext = partialContext.push(params);
+    //reattach the head
+    partialContext = partialContext.push(context.stack.head);
+  } else {
+    partialContext = context;
   }
-
-  if(typeof elem === "string") {
-    partialContext.templateName = elem;
-  }
-
-  //reattach the head
-  partialContext = partialContext.push(context.stack.head);
-
   var partialChunk;
    if (typeof elem === "function") {
      partialChunk = this.capture(elem, partialContext, function(name, chunk) {
@@ -545,6 +554,9 @@ Chunk.prototype.partial = function(elem, context, params) {
    }
    else {
      partialChunk = dust.load(elem, this, partialContext);
+   }
+   if(context.global && context.global.__templates__) {
+    context.global.__templates__.pop();
    }
    return partialChunk;
 };
