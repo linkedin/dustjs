@@ -218,8 +218,8 @@ Context.prototype.current = function() {
 
 Context.prototype.getBlock = function(key, chk, ctx) {
   if (typeof key === "function") {
-    key = key(chk, ctx).data.join("");
-    chk.data = []; //ie7 perf
+    var tempChk = new Chunk();
+    key = key(tempChk, this).data.join("");
   }
 
   var blocks = this.blocks;
