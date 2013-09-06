@@ -38,9 +38,7 @@ var coreTests = [
         source:   '{#helper foo="bar" boo="boo"} {/helper}',
         context:  { "helper": function(chunk, context, bodies, params) 
                      {
-                      var len = Object.keys(context.global.__templates__).length;
-                      // top of the current stack
-                      currentTemplateName = context.global.__templates__[len - 1];
+                      currentTemplateName = context.templateName;
                       return chunk.write(currentTemplateName);
                      }
                   },
@@ -52,9 +50,8 @@ var coreTests = [
          source:   '{#helper foo="bar" boo="boo" template="tl/apps/test"} {/helper}',
          context:  { "helper": function(chunk, context, bodies, params)
                     {
-                      var len = Object.keys(context.global.__templates__).length;
                       // top of the current stack
-                      currentTemplateName = context.global.__templates__[len - 1];
+                      currentTemplateName = context.templateName;
                       return chunk.write(currentTemplateName);
                     } 
                    },
@@ -1087,9 +1084,7 @@ var coreTests = [
         source:   '{>partial_print_name/}',
         context:  { "helper": function(chunk, context, bodies, params) 
                       {
-                       var len = Object.keys(context.global.__templates__).length;
-                        // top of the current stack
-                      currentTemplateName = context.global.__templates__[len - 1];
+                        currentTemplateName = context.templateName;
                         return chunk.write(currentTemplateName);
                       }
                   },
@@ -1101,9 +1096,7 @@ var coreTests = [
         source:   '{>nested_partial_print_name/}',
         context:  { "helper": function(chunk, context, bodies, params) 
                         {
-                         var len = Object.keys(context.global.__templates__).length;
-                          // top of the current stack
-                        currentTemplateName = context.global.__templates__[len - 1];
+                          currentTemplateName = context.templateName;
                           return chunk.write(currentTemplateName);
                         }
                     },
@@ -1114,10 +1107,10 @@ var coreTests = [
         name:     "partial with makeBase_missing_global",
         source:   '{#helper template="partial"}{/helper}',
         context:  { "helper": function(chunk, context, bodies, params)
-                     {
+                    {
                       var newContext = {};
                       return chunk.partial(params.template, dust.makeBase(newContext));
-                      } 
+                    } 
                   },
         expected: "Hello ! You have  new messages.",
         message: "should render the helper with missing global context"

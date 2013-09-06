@@ -15,8 +15,8 @@ function render(test) {
     try {
       dust.loadSource(dust.compile(test.source, test.name, test.strip));
       context = test.context;
-      if (test.base){
-         context = dust.makeBase(test.base).push(context);
+      if (test.base) {
+        context = dust.makeBase(test.base).push(context);
       }
       dust.render(test.name, context, function(err, output) {
         expect(err).toBeNull();
