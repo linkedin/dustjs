@@ -35,9 +35,7 @@ var coreTests = [
         source:   '{#helper foo="bar" boo="boo"} {/helper}',
         context:  { "helper": function(chunk, context, bodies, params) 
                      {
-                      var len = Object.keys(context.global.__templates__).length;
-                      // top of the current stack
-                      currentTemplateName = context.global.__templates__[len - 1];
+                      currentTemplateName = context.templateName;
                       return chunk.write(currentTemplateName);
                      }
                   },
@@ -49,9 +47,8 @@ var coreTests = [
          source:   '{#helper foo="bar" boo="boo" template="tl/apps/test"} {/helper}',
          context:  { "helper": function(chunk, context, bodies, params)
                     {
-                      var len = Object.keys(context.global.__templates__).length;
                       // top of the current stack
-                      currentTemplateName = context.global.__templates__[len - 1];
+                      currentTemplateName = context.templateName;
                       return chunk.write(currentTemplateName);
                     } 
                    },
@@ -188,6 +185,23 @@ var coreTests = [
         context:  {xhr: false},
         expected: "Start\nChild Title\nChild Content\nEnd",
         message: "should test child template"
+      },
+      {
+        name:     "issue322",
+        source:   'hi{+"{name}"/}',
+        context:  {},
+        expected: "hi", 
+        message: "should setup base template for next test. hi should not be part of base block name"
+
+      },
+      {
+        name:     "issue322 use base template picks up prefix chunk data",
+        source:   '{>issue322 name="abc"/}' +
+		   "{<abc}ABC{/abc}",
+        context:  {},
+        expected: "hiABC",
+        message: "should use base template and honor name passed in"
+
       },
       {
         name:     "recursion",
@@ -1037,9 +1051,7 @@ var coreTests = [
         source:   '{>partial_print_name/}',
         context:  { "helper": function(chunk, context, bodies, params) 
                       {
-                       var len = Object.keys(context.global.__templates__).length;
-                        // top of the current stack
-                      currentTemplateName = context.global.__templates__[len - 1];
+                        currentTemplateName = context.templateName;
                         return chunk.write(currentTemplateName);
                       }
                   },
@@ -1051,9 +1063,7 @@ var coreTests = [
         source:   '{>nested_partial_print_name/}',
         context:  { "helper": function(chunk, context, bodies, params) 
                         {
-                         var len = Object.keys(context.global.__templates__).length;
-                          // top of the current stack
-                        currentTemplateName = context.global.__templates__[len - 1];
+                          currentTemplateName = context.templateName;
                           return chunk.write(currentTemplateName);
                         }
                     },
@@ -1064,10 +1074,10 @@ var coreTests = [
         name:     "partial with makeBase_missing_global",
         source:   '{#helper template="partial"}{/helper}',
         context:  { "helper": function(chunk, context, bodies, params)
-                     {
+                    {
                       var newContext = {};
                       return chunk.partial(params.template, dust.makeBase(newContext));
-                      } 
+                    } 
                   },
         expected: "Hello ! You have  new messages.",
         message: "should render the helper with missing global context"
