@@ -40,13 +40,9 @@ parser:
 SRC = lib
 VERSION = ${shell cat package.json | grep version | grep -o '[0-9]\.[0-9]\.[0-9]\+'}
 CORE = dist/dust-core-${VERSION}.js
-CORE_DEBUG = dist/dust-core-debug-${VERSION}.js
 CORE_MIN = dist/dust-core-${VERSION}.min.js
-CORE_DEBUG_MIN = dist/dust-core-debug-${VERSION}.min.js
 FULL = dist/dust-full-${VERSION}.js
-FULL_DEBUG = dist/dust-full-debug-${VERSION}.js
 FULL_MIN = dist/dust-full-${VERSION}.min.js
-FULL_DEBUG_MIN = dist/dust-full-debug-${VERSION}.min.js
 
 define HEADER
 //
@@ -64,34 +60,24 @@ export HEADER
 #TODO: REMOVE THE HELPERS IN THE NEXT RELEASE
 dust:
 	@@mkdir -p dist
-	@@touch ${CORE_DEBUG}
-	@@echo "$$HEADER" > ${CORE_DEBUG}
-	@@cat ${SRC}/dust.js >> ${CORE_DEBUG}
-	@@echo ${CORE_DEBUG} built
-
-	node utils/debug_strip ${CORE_DEBUG} ${CORE} 
+	@@touch ${CORE}
+	@@echo "$$HEADER" > ${CORE}
+	@@cat ${SRC}/dust.js >> ${CORE}
 	@@echo ${CORE} built
 
-	@@touch ${FULL_DEBUG}
-	@@echo "$$HEADER" > ${FULL_DEBUG}
+	@@touch ${FULL}
+	@@echo "$$HEADER" > ${FULL}
 	@@cat ${SRC}/dust.js\
 	      ${SRC}/compiler.js\
-	      ${SRC}/parser.js >> ${FULL_DEBUG}
-	@@echo ${FULL_DEBUG} built
-
-	node utils/debug_strip ${FULL_DEBUG} ${FULL} 
+	      ${SRC}/parser.js >> ${FULL}
 	@@echo ${FULL} built
 
 min: dust
 	@@echo minifying...
 	@@echo "$$HEADER" > ${CORE_MIN}
-	@@echo "$$HEADER" > ${CORE_DEBUG_MIN}
 	@@echo "$$HEADER" > ${FULL_MIN}
-	@@echo "$$HEADER" > ${FULL_DEBUG_MIN}
 	node utils/minifier ${CORE} ${CORE_MIN} 
-	node utils/minifier ${CORE_DEBUG} ${CORE_DEBUG_MIN} 
 	node utils/minifier ${FULL} ${FULL_MIN} 
-	node utils/minifier ${FULL_DEBUG} ${FULL_DEBUG_MIN} 
 
 clean:
 	git rm dist/*
