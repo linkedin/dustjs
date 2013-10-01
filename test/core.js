@@ -3,7 +3,7 @@
 exports.coreSetup = function(suite, auto) {
   auto.forEach(function(test) {
     suite.test(test.name, function(){
-      testRender(this, test.source, test.context, test.expected, test.options, test.base, test.error || {}, test.log);
+      testRender(this, test.source, test.context, test.expected, test.options, test.base, test.error || {});
     });
   });
 
@@ -77,9 +77,6 @@ exports.coreSetup = function(suite, auto) {
       },
       end: function () {
         unit.pass();
-      },
-      log: function() {
-        unit.pass();
       }
     })
   });
@@ -108,27 +105,16 @@ exports.coreSetup = function(suite, auto) {
   });
 }
 
-function testRender(unit, source, context, expected, options, baseContext, error, logMessage) {
-  var name = unit.id,
-      messageInLog = '';
+function testRender(unit, source, context, expected, options, baseContext, error) {
+  var name = unit.id;
    try {
      dust.loadSource(dust.compile(source, name));
      if (baseContext){
         context = dust.makeBase(baseContext).push(context);
      }
-     dust.render(name, context, function(err, output, log) {
+     dust.render(name, context, function(err, output) {
        unit.ifError(err);
-       if(logMessage) {
-        for(var i=0; i<log.length; i++) {
-          if(log[i].message === logMessage) {
-            messageInLog = true;
-            break;
-          }
-        }
-        unit.equals(messageInLog, true);
-       } else {
-        unit.equals(output, expected);
-       }
+       unit.equals(output, expected);
      });
     } catch(err) {
       unit.equals(err.message, error);
