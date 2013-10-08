@@ -865,8 +865,8 @@ var coreTests = [
         name:     "invalid filter",
         source:   "{obj|nullcheck|invalid}",
         context:  { obj: "test" },
-        expected: "test",
-        message: "should fail gracefully for invalid filter"
+        error:    "Invalid filter [nullcheck]",
+        message: "should fail hard for invalid filter"
       },
       {
         name:     "escapeJs filter without DQ",
@@ -1542,8 +1542,68 @@ var coreTests = [
         name:     "non-existing helper",
         source:   "some text {@notfound}foo{/notfound} some text",
         context:  {},
-        expected: "some text  some text",
-        message: "Should not crash the application if an helper is not found"
+        error: "Invalid helper [notfound]",
+        message: "Should crash the application if a helper is not found"
+      }
+    ]
+  },
+  {
+    name: "debugger tests",
+    tests: [
+      {
+        name: "Using unescape filter",
+        source:"{test|s}",
+        context: {"test": "example text"},
+        log: "Using unescape filter on [example text]",
+        message: "test the log messages for an unescape filter."
+      },
+      {
+        name: "Reference not found",
+        source:"{wrongTest}",
+        context: {"test": "example text"},
+        log: "Cannot find the value for reference [{wrongTest}] in template [Reference not found]",
+        message: "test the log messages for a reference not found."
+      },
+      {
+        name: "Unhandled section tag",
+        source:"{#strangeSection}{/strangeSection}",
+        context: {"test": "example text"},
+        log: "Cannot render a section tag in template [Unhandled section tag]",
+        message: "test the log messages for an unhandled section."
+      },
+      {
+        name: "No render for exists",
+        source:"{?doesNotExist}{/doesNotExist}",
+        context: {},
+        log: "Not rendering body or else block for exists check",
+        message: "test the log messages for a non existing exists check."
+      },
+      {
+        name: "No render for not exists",
+        source:"{^exists}{/exists}",
+        context: {"exists": "example text"},
+        log: "Not rendering body or else block for not exists check",
+        message: "test the log messages for an existing not exists check."
+      },
+      {
+        name: "Context search context not an object",
+        source:"{baz}",
+        context:  null,
+        log: "Current context is not an object.  Cannot find value for [{baz}] in template [Context search context not an object]",
+        message: "test the log messages for context not an object."
+      },
+      {
+        name: "Context search check global",
+        source:"{tryGlobal}",
+        context:  {
+                    baz: null,
+                    foo: {
+                      foobar: 'Foo Bar',
+                      bar: 'bar'
+                    }
+                  },
+        log: "Looking for [{tryGlobal}] in the globals in template [Context search check global]",
+        message: "test the log messages for searching for key in globals."
       }
     ]
   }
