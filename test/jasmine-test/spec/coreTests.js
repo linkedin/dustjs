@@ -1283,7 +1283,7 @@ var coreTests = [
     ]
   },
 /**
- * CORE GRAMMER TESTS
+ * CORE GRAMMAR TESTS
  */
   {
     name: "core-grammar tests",
