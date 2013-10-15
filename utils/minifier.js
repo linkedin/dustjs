@@ -9,7 +9,7 @@ var orig_code = fs.readFileSync(path.join(root, process.argv[2]), 'utf8');
 var ast=parser.parse(orig_code);
 
 ast = uglifier.ast_mangle(ast, {
-    except: ["require", "define"]
+    except: ["require", "define", "window"]
   }); 
 ast = uglifier.ast_squeeze(ast);
 
