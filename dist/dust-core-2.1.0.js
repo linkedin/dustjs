@@ -75,13 +75,7 @@ dust.helpers = {};
 dust.cache = {};
 
 dust.register = function(name, tmpl) {
-  if (!name) {
-    dust.log('Template name is undefined', 'WARN');
-    return;
-  }
-  if(typeof tmpl !== 'function') {
-    dust.onError(new Error('Template [' + name + '] cannot be resolved to a Dust function')); 
-  }
+  if (!name) return;
   dust.cache[name] = tmpl;
 };
 
@@ -238,24 +232,16 @@ Context.wrap = function(context, name) {
 
 Context.prototype.get = function(key) {
   var ctx = this.stack, value, globalValue;
-
+  dust.log('Searching for reference [{' + key + '}] in template [' + this.templateName + ']', DEBUG);
   while(ctx) {
     if (ctx.isObject) {
-      if(ctx.head) {
-        value = ctx.head[key];
-      } else {
-        dust.log('Context head is undefined for [{' + key + '}] in template [' + this.templateName + ']', WARN);
-      }
+      value = ctx.head[key];
       if (!(value === undefined)) {
         return value;
       }
     }
-    else {
-      dust.log('Current context is not an object.  Cannot find value for [{' + key + '}] in template [' + this.templateName + ']', DEBUG);
-    }
     ctx = ctx.tail;
   }
-  dust.log('Looking for [{' + key + '}] in the globals in template [' + this.templateName + ']', DEBUG);
   globalValue = this.global ? this.global[key] : undefined;
   if (typeof globalValue === 'undefined') {
     dust.log('Cannot find the value for reference [{' + key + '}] in template [' + this.templateName + ']', DEBUG);
@@ -306,25 +292,11 @@ Context.prototype.getPath = function(cur, down) {
 };
 
 Context.prototype.push = function(head, idx, len) {
-  var context = new Context(new Stack(head, this.stack, idx, len), this.global, this.blocks, this.templateName);
-  if(context) {
-    return context;
-  }
-  else {
-    dust.log('Head [' + head + '] could not be resolved to a context for the template [' + this.templateName + ']', WARN);
-    return Context.wrap(context);
-  }
+  return new Context(new Stack(head, this.stack, idx, len), this.global, this.blocks, this.templateName);
 };
 
 Context.prototype.rebase = function(head) {
-  var context = new Context(new Stack(head), this.global, this.blocks, this.templateName);
-  if(context) {
-    return context;
-  }
-  else {
-    dust.log('Head [' + head + '] could not be resolved to a context for the template [' + this.templateName + ']', WARN);
-    return Context.wrap(context);
-  }
+  return new Context(new Stack(head), this.global, this.blocks, this.templateName);
 };
 
 Context.prototype.current = function() {
@@ -368,13 +340,7 @@ Context.prototype.shiftBlocks = function(locals) {
 function Stack(head, tail, idx, len) {
   this.tail = tail;
   this.isObject = !dust.isArray(head) && head && typeof head === "object";
-  if(head != null) {
-    this.head = head;
-  }
-  else {
-    dust.log('Head was undefined. Defaulting to {}', DEBUG);
-    this.head = {};
-  }
+  this.head = head;
   this.index = idx;
   this.of = len;
 }
@@ -593,7 +559,9 @@ Chunk.prototype.section = function(elem, context, bodies, params) {
       if (len > 0) {
         // any custom helper can blow up the stack 
         // and store a flattened context, guard defensively
-        context.stack.head['$len'] = len;
+        if(context.stack.head) {
+          context.stack.head['$len'] = len;
+        }
         for (var i=0; i<len; i++) {
           if(context.stack.head) {
            context.stack.head['$idx'] = i;
@@ -628,7 +596,7 @@ Chunk.prototype.section = function(elem, context, bodies, params) {
   } else if (skip) {
      return skip(this, context);
   }
-  dust.log('Cannot render a section tag in template [' + context.templateName + ']', WARN);
+  dust.log('Cannot render a section (#) tag in template [' + context.templateName + '], because above key was not found', DEBUG);
   return this;
 };
 
@@ -641,7 +609,7 @@ Chunk.prototype.exists = function(elem, context, bodies) {
   } else if (skip) {
     return skip(this, context);
   }
-  dust.log('Not rendering body or else block for exists check', DEBUG);
+  dust.log('Not rendering exists (?) block in template [' + context.templateName + '], because above key was not found', DEBUG);
   return this;
 };
 
@@ -654,7 +622,7 @@ Chunk.prototype.notexists = function(elem, context, bodies) {
   } else if (skip) {
     return skip(this, context);
   }
-  dust.log('Not rendering body or else block for not exists check', DEBUG);
+  dust.log('Not rendering not exists (^) block check in template [' + context.templateName + '], because above key was found', DEBUG);
   return this;
 };
 

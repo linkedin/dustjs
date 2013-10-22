@@ -1558,6 +1558,13 @@ var coreTests = [
         message: "test the log messages for an unescape filter."
       },
       {
+        name: "Reference lookup",
+        source:"{test}",
+        context: {"test": "example text"},
+        log: "Searching for reference [{test}] in template [Reference lookup]",
+        message: "test the log messages for a reference lookup."
+      },
+      {
         name: "Reference not found",
         source:"{wrongTest}",
         context: {"test": "example text"},
@@ -1568,42 +1575,22 @@ var coreTests = [
         name: "Unhandled section tag",
         source:"{#strangeSection}{/strangeSection}",
         context: {"test": "example text"},
-        log: "Cannot render a section tag in template [Unhandled section tag]",
+        log: "Cannot render a section (#) tag in template [Unhandled section tag], because above key was not found",
         message: "test the log messages for an unhandled section."
       },
       {
         name: "No render for exists",
         source:"{?doesNotExist}{/doesNotExist}",
         context: {},
-        log: "Not rendering body or else block for exists check",
+        log: "Not rendering exists (?) block in template [No render for exists], because above key was not found",
         message: "test the log messages for a non existing exists check."
       },
       {
         name: "No render for not exists",
         source:"{^exists}{/exists}",
         context: {"exists": "example text"},
-        log: "Not rendering body or else block for not exists check",
+        log: "Not rendering not exists (^) block check in template [No render for not exists], because above key was found",
         message: "test the log messages for an existing not exists check."
-      },
-      {
-        name: "Context search context not an object",
-        source:"{baz}",
-        context:  null,
-        log: "Current context is not an object.  Cannot find value for [{baz}] in template [Context search context not an object]",
-        message: "test the log messages for context not an object."
-      },
-      {
-        name: "Context search check global",
-        source:"{tryGlobal}",
-        context:  {
-                    baz: null,
-                    foo: {
-                      foobar: 'Foo Bar',
-                      bar: 'bar'
-                    }
-                  },
-        log: "Looking for [{tryGlobal}] in the globals in template [Context search check global]",
-        message: "test the log messages for searching for key in globals."
       }
     ]
   }
