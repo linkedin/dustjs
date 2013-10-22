@@ -1565,6 +1565,13 @@ var coreTests = [
         message: "test the log messages for a reference lookup."
       },
       {
+        name: "Reference lookup with dots",
+        source:"{test.anotherTest}",
+        context: {"test": "example text"},
+        log: "Searching for reference [{test.anotherTest}] in template [Reference lookup with dots]",
+        message: "test the log messages for a reference lookup."
+      },
+      {
         name: "Reference not found",
         source:"{wrongTest}",
         context: {"test": "example text"},
@@ -1575,7 +1582,7 @@ var coreTests = [
         name: "Unhandled section tag",
         source:"{#strangeSection}{/strangeSection}",
         context: {"test": "example text"},
-        log: "Cannot render a section (#) tag in template [Unhandled section tag], because above key was not found",
+        log: "Not rendering section (#) block in template [Unhandled section tag], because above key was not found",
         message: "test the log messages for an unhandled section."
       },
       {

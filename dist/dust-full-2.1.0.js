@@ -243,8 +243,8 @@ Context.prototype.get = function(key) {
     ctx = ctx.tail;
   }
   globalValue = this.global ? this.global[key] : undefined;
-  if (typeof globalValue === 'undefined') {
-    dust.log('Cannot find the value for reference [{' + key + '}] in template [' + this.templateName + ']', DEBUG);
+  if(typeof globalValue === 'undefined') {
+    dust.log('Cannot find the value for reference [{' + key + '}] in template [' + this.templateName + ']');
   }
   return globalValue;
 };
@@ -255,6 +255,7 @@ Context.prototype.getPath = function(cur, down) {
       len = down.length,      
       tail = cur ? undefined : this.stack.tail;
 
+  dust.log('Searching for reference [{' + down.join('.') + '}] in template [' + this.templateName + ']', DEBUG);
   if (cur && len === 0) return ctx.head;
   ctx = ctx.head;
   var i = 0;
@@ -596,7 +597,7 @@ Chunk.prototype.section = function(elem, context, bodies, params) {
   } else if (skip) {
      return skip(this, context);
   }
-  dust.log('Cannot render a section (#) tag in template [' + context.templateName + '], because above key was not found', DEBUG);
+  dust.log('Not rendering section (#) block in template [' + context.templateName + '], because above key was not found', DEBUG);
   return this;
 };
 
