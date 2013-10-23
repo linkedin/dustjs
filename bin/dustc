@@ -51,7 +51,7 @@ args = args.filter(function (arg) {
             {
                 context = JSON.parse(match[2]);
             } catch (e) {
-                context = require(match[2]);
+                context = require(path.resolve(process.cwd(), match[2]));
             }
             break;
         case 'r':
