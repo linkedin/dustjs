@@ -1111,6 +1111,13 @@ var coreTests = [
         context:  { helper: function(chunk, context, bodies, params) { return chunk.write(params.foo); } },
         expected: "3.14159",
         message: "Block handlers syntax should support decimal number parameters"
+      },
+      {
+        name:     "inline params with dashes",
+        source:   "{#helper data-foo=\"dashes\" /}",
+        context:  { helper: function(chunk, context, bodies, params) { return chunk.write(params['data-foo']); } },
+        expected: "dashes",
+        message: "should test parameters with dashes"
       }
     ]
   },
