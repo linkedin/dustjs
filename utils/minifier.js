@@ -15,4 +15,4 @@ ast = uglifier.ast_squeeze(ast);
 
 var final_code = uglifier.gen_code(ast);
     
-fs.writeFileSync(path.join(root, process.argv[3]),final_code);
+fs.appendFileSync(path.join(root, process.argv[3]),final_code);
