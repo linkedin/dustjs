@@ -1,5 +1,5 @@
 var coreTests = [
-  { 
+  {
     name: "core tests",
     tests: [
       {
@@ -33,7 +33,7 @@ var coreTests = [
       {
         name:     "global_template",
         source:   '{#helper foo="bar" boo="boo"} {/helper}',
-        context:  { "helper": function(chunk, context, bodies, params) 
+        context:  { "helper": function(chunk, context, bodies, params)
                      {
                       currentTemplateName = context.templateName;
                       return chunk.write(currentTemplateName);
@@ -50,7 +50,7 @@ var coreTests = [
                       // top of the current stack
                       currentTemplateName = context.templateName;
                       return chunk.write(currentTemplateName);
-                    } 
+                    }
                    },
         expected: "apps/test/foo.tl&v=0.1",
         message: "should render the template name with paths"
@@ -62,7 +62,7 @@ var coreTests = [
                     {
                       var newContext = {};
                       return bodies.block(chunk, dust.makeBase(newContext));
-                    } 
+                    }
                    },
         expected: "",
         message: "should render the helper with missing global context"
@@ -190,7 +190,7 @@ var coreTests = [
         name:     "issue322",
         source:   'hi{+"{name}"/}',
         context:  {},
-        expected: "hi", 
+        expected: "hi",
         message: "should setup base template for next test. hi should not be part of base block name"
 
       },
@@ -627,7 +627,7 @@ var coreTests = [
       {
         name: "using len in array reference Accessing",
         source: "{#list3}{.[$len].idx}{/list3}",
-        context: { "list3": [ 
+        context: { "list3": [
                     [{"idx": "0"},
                      {"idx": "1"},
                      {"idx": "2"}],
@@ -706,7 +706,7 @@ var coreTests = [
   {
     name: "nested path tests",
     tests: [
-       { 
+       {
         name: "Verify local mode leading dot path in local mode",
         source: "{#people}{.name} is {?.age}{.age} years old.{:else}not telling us their age.{/age}{/people}",
         context:  {
@@ -833,8 +833,8 @@ var coreTests = [
           person: {
             firstName: "Peter",
             lastName:  "Jones",
-            fullName: function() { 
-                return this.firstName + ' ' + this.lastName; 
+            fullName: function() {
+                return this.firstName + ' ' + this.lastName;
             }
           }
         },
@@ -865,8 +865,8 @@ var coreTests = [
         name:     "invalid filter",
         source:   "{obj|nullcheck|invalid}",
         context:  { obj: "test" },
-        expected: "test",
-        message: "should fail gracefully for invalid filter"
+        error:    "Invalid filter [nullcheck]",
+        message: "should fail hard for invalid filter"
       },
       {
         name:     "escapeJs filter without DQ",
@@ -898,7 +898,7 @@ var coreTests = [
       }
     ]
   },
-  { 
+  {
     name: "partial definitions",
     tests: [
       {
@@ -1049,7 +1049,7 @@ var coreTests = [
       {
         name:     "partial prints the current template name",
         source:   '{>partial_print_name/}',
-        context:  { "helper": function(chunk, context, bodies, params) 
+        context:  { "helper": function(chunk, context, bodies, params)
                       {
                         currentTemplateName = context.templateName;
                         return chunk.write(currentTemplateName);
@@ -1059,9 +1059,22 @@ var coreTests = [
         message: "should print the current template name"
       },
       {
+        name:     "partial prints the current dynamic template name",
+        source:   '{>"{partial_print_name}"/}',
+        context:  { "helper": function(chunk, context, bodies, params)
+                      {
+                        currentTemplateName = context.templateName;
+                        return chunk.write(currentTemplateName);
+                      },
+                    "partial_print_name" : "partial prints the current template name"
+                  },
+        expected: "partial_print_name",
+        message: "should print the current dynamic template name"
+      },
+      {
         name:     "nested partial prints the current template name",
         source:   '{>nested_partial_print_name/}',
-        context:  { "helper": function(chunk, context, bodies, params) 
+        context:  { "helper": function(chunk, context, bodies, params)
                         {
                           currentTemplateName = context.templateName;
                           return chunk.write(currentTemplateName);
@@ -1077,7 +1090,7 @@ var coreTests = [
                     {
                       var newContext = {};
                       return chunk.partial(params.template, dust.makeBase(newContext));
-                    } 
+                    }
                   },
         expected: "Hello ! You have  new messages.",
         message: "should render the helper with missing global context"
@@ -1111,13 +1124,20 @@ var coreTests = [
         context:  { helper: function(chunk, context, bodies, params) { return chunk.write(params.foo); } },
         expected: "3.14159",
         message: "Block handlers syntax should support decimal number parameters"
+      },
+      {
+        name:     "inline params with dashes",
+        source:   "{#helper data-foo=\"dashes\" /}",
+        context:  { helper: function(chunk, context, bodies, params) { return chunk.write(params['data-foo']); } },
+        expected: "dashes",
+        message: "should test parameters with dashes"
       }
     ]
   },
   {
     name: "inline partial/block tests",
     tests: [
-      {  
+      {
         name: "blocks with dynamic keys",
         source: ['{<title_A}',
                     'AAA',
@@ -1480,7 +1500,7 @@ var coreTests = [
         name: "Dust syntax error. Error in Conditional",
         source:["{?tags}",
                   "<ul>{~n}",
-                    "{#tags}{~s}", 
+                    "{#tags}{~s}",
                       "<li>{#@$}</li>{~n}",
                     "{/tags}",
                   "</ul>",
@@ -1495,7 +1515,7 @@ var coreTests = [
         name: "Dust syntax error. Error in Conditional's else",
         source:["{?tags}",
                   "<ul>{~n}",
-                    "{#tags}{~s}", 
+                    "{#tags}{~s}",
                       "<li>{.}</li>{~n}",
                     "{/tags}",
                   "</ul>",
@@ -1511,7 +1531,7 @@ var coreTests = [
         name: "Dust syntax error. Error in Conditional without end tag",
         source:["{?tags}",
                   "<ul>{~n}",
-                    "{#tags}{~s}", 
+                    "{#tags}{~s}",
                       "<li>{.}</li>{~n}",
                     "{/tags}",
                   "</ul>",
@@ -1542,8 +1562,62 @@ var coreTests = [
         name:     "non-existing helper",
         source:   "some text {@notfound}foo{/notfound} some text",
         context:  {},
-        expected: "some text  some text",
-        message: "Should not crash the application if an helper is not found"
+        error: "Invalid helper [notfound]",
+        message: "Should crash the application if a helper is not found"
+      }
+    ]
+  },
+  {
+    name: "debugger tests",
+    tests: [
+      {
+        name: "Using unescape filter",
+        source:"{test|s}",
+        context: {"test": "example text"},
+        log: "Using unescape filter on [example text]",
+        message: "test the log messages for an unescape filter."
+      },
+      {
+        name: "Reference lookup",
+        source:"{test}",
+        context: {"test": "example text"},
+        log: "Searching for reference [{test}] in template [Reference lookup]",
+        message: "test the log messages for a reference lookup."
+      },
+      {
+        name: "Reference lookup with dots",
+        source:"{test.anotherTest}",
+        context: {"test": "example text"},
+        log: "Searching for reference [{test.anotherTest}] in template [Reference lookup with dots]",
+        message: "test the log messages for a reference lookup."
+      },
+      {
+        name: "Reference not found",
+        source:"{wrongTest}",
+        context: {"test": "example text"},
+        log: "Cannot find the value for reference [{wrongTest}] in template [Reference not found]",
+        message: "test the log messages for a reference not found."
+      },
+      {
+        name: "Unhandled section tag",
+        source:"{#strangeSection}{/strangeSection}",
+        context: {"test": "example text"},
+        log: "Not rendering section (#) block in template [Unhandled section tag], because above key was not found",
+        message: "test the log messages for an unhandled section."
+      },
+      {
+        name: "No render for exists",
+        source:"{?doesNotExist}{/doesNotExist}",
+        context: {},
+        log: "Not rendering exists (?) block in template [No render for exists], because above key was not found",
+        message: "test the log messages for a non existing exists check."
+      },
+      {
+        name: "No render for not exists",
+        source:"{^exists}{/exists}",
+        context: {"exists": "example text"},
+        log: "Not rendering not exists (^) block check in template [No render for not exists], because above key was found",
+        message: "test the log messages for an existing not exists check."
       }
     ]
   }
