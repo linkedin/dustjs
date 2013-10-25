@@ -107,7 +107,7 @@ if (output) {
 var writeOutput = function(error, rendered) {
     fatal(error);
     if (output) {
-        fs.writeSync(fd, rendered, 0, "utf8");
+        fs.writeSync(fd, rendered, null, "utf8");
     } else {
         sys.print(rendered);
     }
