@@ -113,7 +113,7 @@ dust.compileFn = function(source, name) {
         tmpl(master.head, Context.wrap(context, name)).end();
       }
       else {
-        dust.onError(new Error('Template [' + name + '] cannot be resolved to a Dust function')); 
+        dust.onError(new Error('Template [' + name + '] cannot be resolved to a Dust function'));
       }
     });
     return master;
@@ -195,20 +195,20 @@ dust.filters = {
   j: function(value) { return dust.escapeJs(value); },
   u: encodeURI,
   uc: encodeURIComponent,
-  js: function(value) { 
+  js: function(value) {
     if (!JSON) {
-      dust.log('JSON is undefined.  JSON stringify has not been used on [' + value + ']', WARN); 
-      return value; 
+      dust.log('JSON is undefined.  JSON stringify has not been used on [' + value + ']', WARN);
+      return value;
     } else {
       return JSON.stringify(value);
     }
   },
-  jp: function(value) { 
+  jp: function(value) {
     if (!JSON) {dust.log('JSON is undefined.  JSON parse has not been used on [' + value + ']', WARN);
-      return value; 
+      return value;
     } else {
       return JSON.parse(value);
-    } 
+    }
   }
 };
 
@@ -252,7 +252,7 @@ Context.prototype.get = function(key) {
 //supports dot path resolution, function wrapped apply, and searching global paths
 Context.prototype.getPath = function(cur, down) {
   var ctx = this.stack, ctxThis,
-      len = down.length,      
+      len = down.length,
       tail = cur ? undefined : this.stack.tail;
 
   dust.log('Searching for reference [{' + down.join('.') + '}] in template [' + this.templateName + ']', DEBUG);
@@ -279,12 +279,12 @@ Context.prototype.getPath = function(cur, down) {
       	  cur = true;
     	  i=0;
     	}
-    }   
+    }
   }
   if (typeof ctx == 'function'){
   	//wrap to preserve context 'this' see #174
-  	return function(){ 
-  	  return ctx.apply(ctxThis,arguments); 
+  	return function(){
+  	  return ctx.apply(ctxThis,arguments);
   	};
   }
   else {
@@ -397,7 +397,7 @@ Stream.prototype.flush = function() {
 };
 
 Stream.prototype.emit = function(type, data) {
-  if (!this.events) { 
+  if (!this.events) {
     dust.log('No events to emit', INFO);
     return false;
   }
@@ -427,8 +427,8 @@ Stream.prototype.on = function(type, callback) {
     if(callback) {
       this.events[type] = callback;
     } else {
-      dust.log('Callback for type [' + type + '] does not exist. Listener not registered.', WARN); 
-    } 
+      dust.log('Callback for type [' + type + '] does not exist. Listener not registered.', WARN);
+    }
   } else if(typeof this.events[type] === 'function') {
     this.events[type] = [this.events[type], callback];
   } else {
@@ -516,7 +516,7 @@ Chunk.prototype.render = function(body, context) {
 Chunk.prototype.reference = function(elem, context, auto, filters) {
   if (typeof elem === "function") {
     elem.isFunction = true;
-    // Changed the function calling to use apply with the current context to make sure 
+    // Changed the function calling to use apply with the current context to make sure
     // that "this" is wat we expect it to be inside the function
     elem = elem.apply(context.current(), [this, context, null, {auto: auto, filters: filters}]);
     if (elem instanceof Chunk) {
@@ -550,7 +550,7 @@ Chunk.prototype.section = function(elem, context, bodies, params) {
 
   /*
   Dust's default behavior is to enumerate over the array elem, passing each object in the array to the block.
-  When elem resolves to a value or object instead of an array, Dust sets the current context to the value 
+  When elem resolves to a value or object instead of an array, Dust sets the current context to the value
   and renders the block one time.
   */
   //non empty array is truthy, empty array is falsy
@@ -558,7 +558,7 @@ Chunk.prototype.section = function(elem, context, bodies, params) {
      if (body) {
       var len = elem.length, chunk = this;
       if (len > 0) {
-        // any custom helper can blow up the stack 
+        // any custom helper can blow up the stack
         // and store a flattened context, guard defensively
         if(context.stack.head) {
           context.stack.head['$len'] = len;
@@ -574,7 +574,7 @@ Chunk.prototype.section = function(elem, context, bodies, params) {
          context.stack.head['$len'] = undefined;
         }
         return chunk;
-      } 
+      }
       else if (skip) {
          return skip(this, context);
       }
@@ -582,7 +582,7 @@ Chunk.prototype.section = function(elem, context, bodies, params) {
    }
    // true is truthy but does not change context
    else if (elem  === true) {
-     if (body) { 
+     if (body) {
         return body(this, context);
      }
    }
@@ -654,8 +654,10 @@ Chunk.prototype.partial = function(elem, context, params) {
     //put params on
     partialContext = partialContext.push(params);
   }
-
-  if(typeof elem === "string") {
+  // templateName can be static (string) or dynamic (function)
+  // e.g. {>"static_template"/}
+  //      {>"{dynamic_template}"/}
+  if (elem) {
     partialContext.templateName = elem;
   }
 
