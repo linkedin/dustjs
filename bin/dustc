@@ -25,7 +25,7 @@ args = args.filter(function (arg) {
         return;
     } else if (dashdash) {
         return arg;
-    } else if (match = arg.match(/^--?([a-z][0-9a-z-]*)(?:=([^\s]+))?$/i)) {
+    } else if ((match = arg.match(/^--?([a-z][0-9a-z-]*)(?:=([^\s]+))?$/i))) {
         arg = match[1];
     } else {
         return arg;
@@ -38,9 +38,10 @@ args = args.filter(function (arg) {
             sys.puts("             [{-n|--name}=<template_name>]");
             sys.puts("             [ [{-r|--render}[=<sourcefile>]");
             sys.puts("               [{-c|--context}=<json_or_filename>] ]");
-            sys.puts("             [{-f|--find-partials}]")
+            sys.puts("             [{-w|--with-partials}]");
             sys.puts("             {sourcefilename|-}+ [destination]");
             process.exit(0);
+            break;
         case 'n':
         case 'name':
             name = match[2];
@@ -62,8 +63,8 @@ args = args.filter(function (arg) {
         case 'verbose':
             verbose = true;
             break;
-        case 'f':
-        case 'find-partials':
+        case 'w':
+        case 'with-partials':
             dust.onLoad = function(name, callback) {
                 var resolved = path.resolve(process.cwd(), name);
                 progress('resolved dependency ' + name + ' as ' + resolved);
@@ -94,7 +95,7 @@ var fatal = function(error) {
         progress(error.message || error);
         process.exit(1);
     }
-}
+};
 
 if ((!render || render === true) && !args.length) fatal('no input files');
 if (args.length > 1 && name) fatal('cannot --name multiple templates');
@@ -120,7 +121,7 @@ var stdin = null;
 var loadFiles = function (error, read) {
     var input;
     fatal(error);
-    if (typeof(read) == 'string') {
+    if (typeof read == 'string') {
         input = args.shift();
         var templateName = name || (input == '-' ? 'STDIN' : input);
         var as = templateName != input ? ' as ' + templateName : '';
@@ -130,7 +131,8 @@ var loadFiles = function (error, read) {
             dust.loadSource(template);
             if (!args.length) {
                 progress('render ' + templateName);
-                return dust.render(templateName, context || {}, writeOutput);
+                dust.render(templateName, context || {}, writeOutput);
+                return;
             }
         } else {
             writeOutput(null, template);
