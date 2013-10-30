@@ -1188,6 +1188,45 @@ var coreTests = [
         context: { "val1" : "title", "val2" : "A", "obj" : { "name" : ["A", "B"] } },
         expected: "AAA",
         message: "should test blocks with dynamic key values as arrays"
+      },
+      {
+        name: "blocks with inline parameters",
+        source: [ '{<form}',
+                  '  <form action="{url}">',
+                  '    {+formBody/}',
+                  '  </form>',
+                  '{/form}',
+                  '',
+                  '{+form url=dynamically_generated_url/}'].join("\n"),
+        context: { dynamically_generated_url: 'http://google.com/search'},
+        expected: '<form action="http://google.com/search"></form>',
+        message: "should test blocks with inline parameters"
+      },
+      {
+        name: "blocks with inline parameters that reference objects",
+        source: [ '{<formAction}',
+                  '  <form action="{url.value}">',
+                  '    {+formBody/}',
+                  '  </form>',
+                  '{/formAction}',
+                  '',
+                  '{+formAction url=dynamically_generated_url/}'].join("\n"),
+        context: { "dynamically_generated_url": { "value": "http://google.com/search" } },
+        expected: '<form action="http://google.com/search"></form>',
+        message: "should test blocks with inline parameters"
+      },
+      {
+        name: "blocks with missing inline parameters",
+        source: [ '{<formAction}',
+                  '  <form action="{url}">',
+                  '    {+formBody/}',
+                  '  </form>',
+                  '{/formAction}',
+                  '',
+                  '{+formAction url=refDoesntExist/}'].join("\n"),
+        context: {},
+        expected: '<form action=""></form>',
+        message: "should test blocks with inline parameters"
       }
     ]
   },
