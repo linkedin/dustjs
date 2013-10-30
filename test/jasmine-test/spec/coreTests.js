@@ -840,7 +840,31 @@ var coreTests = [
         },
         expected: "Hello Peter Jones",
         message:  "should test resolve correct 'this' when invoking method"
-      }
+      },
+      {
+        name: "check null values in section iteration don't break path resolution",
+        source: "{#nulls}{names[0].name}{/nulls}",
+        options: {pathScope: "global"},
+        context: { "nulls": [1, null, null, 2],"names": [{"name": "Moe"}, {"name": "Curly"}] },
+        expected: "MoeMoeMoeMoe",
+        message: "Should resolve path correctly"
+      },
+      {
+        name: "check falsey value in section iteration don't break path resolution",
+        source: "{#list}{a.b}{/list}",
+        options: {pathScope: "global"},
+        context: { "list": ['', 2, ''],"a": {"b": "B"} },
+        expected: "BBB",
+        message: "Should resolve path correctly"
+      },
+      {
+        name: "check true value in section iteration are also OK",
+        source: "{#list}{a.b}{/list}",
+        options: {pathScope: "global"},
+        context: { "list": [true, 2, true],"a": {"b": "B"} },
+        expected: "BBB",
+        message: "Should resolve path correctly"
+      },
     ]
   },
   {
