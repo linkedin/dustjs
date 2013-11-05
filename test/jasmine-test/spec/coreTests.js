@@ -1,5 +1,5 @@
 var coreTests = [
-  { 
+  {
     name: "core tests",
     tests: [
       {
@@ -898,7 +898,7 @@ var coreTests = [
       }
     ]
   },
-  { 
+  {
     name: "partial definitions",
     tests: [
       {

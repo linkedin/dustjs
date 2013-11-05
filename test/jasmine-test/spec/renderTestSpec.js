@@ -1,10 +1,10 @@
-describe ("Test the basic functionality of dust", function() {
+describe ('Test the basic functionality of dust', function() {
   for (var index = 0; index < coreTests.length; index++) {
     for (var i = 0; i < coreTests[index].tests.length; i++) {
       var test = coreTests[index].tests[i];
-      it ("RENDER: " + test.message, render(test));
-      it ("STREAM: " + test.message, stream(test));
-      it ("PIPE: " + test.message, pipe(test));
+      it ('RENDER: ' + test.message, render(test));
+      it ('STREAM: ' + test.message, stream(test));
+      it ('PIPE: ' + test.message, pipe(test));
     }
   };
 });
@@ -46,14 +46,14 @@ function render(test) {
 
 function stream(test) {
   return function() {
-    var output = "",
+    var output = '',
         messageInLog = false,
         log,
         flag,
         context;
     runs(function(){
       flag = false;
-      output = "";
+      output = '';
       log = [];
       try {
         dust.isDebug = !!(test.error || test.log);
@@ -65,7 +65,7 @@ function stream(test) {
         }
         // redefine dust.nextTick try catches within async functions to test the error message
         dust.nextTick = (function() {
-          if (typeof process !== "undefined") {
+          if (typeof process !== 'undefined') {
             return function(callback) {
               process.nextTick(function() {
                 try {
@@ -78,20 +78,27 @@ function stream(test) {
             };
           } else {
             return function(callback) {
-              setTimeout(callback,0);
+              setTimeout(function() {
+                try {
+                  callback();
+                } catch(error) {
+                  output = error.message;
+                  flag = true;
+                }
+              },0);
             };
           }
         } )();
         dust.stream(test.name, context)
-        .on("data", function(data) {
+        .on('data', function(data) {
           output += data;
           log = dust.logQueue;
         })
-        .on("end", function() {
+        .on('end', function() {
           flag = true;
           log = dust.logQueue;
         })
-        .on("error", function(err) {
+        .on('error', function(err) {
           output = err.message;
           log = dust.logQueue;
         })
@@ -100,11 +107,11 @@ function stream(test) {
         flag= true;
       }
     });
-    
+
     waitsFor(function(){
       return flag;
-    }, "the output", 500);
-    
+    }, 'the output', 500);
+
     runs(function(){
       if (test.error) {
         expect(test.error || {} ).toEqual(output);
@@ -130,8 +137,8 @@ function pipe(test) {
     runs(function() {
       flag = false;
       flagTwo = false;
-      output = "";
-      outputTwo = "";
+      output = '';
+      outputTwo = '';
       log = [];
       logTwo = [];
       messageInLog = false;
@@ -146,7 +153,7 @@ function pipe(test) {
         }
         // redefine dust.nextTick try catches within async functions to test the error message
         dust.nextTick = (function() {
-          if (typeof process !== "undefined") {
+          if (typeof process !== 'undefined') {
             return function(callback) {
               process.nextTick(function() {
                 try {
@@ -161,7 +168,16 @@ function pipe(test) {
             };
           } else {
             return function(callback) {
-              setTimeout(callback,0);
+              setTimeout(function() {
+                try {
+                  callback();
+                } catch(error) {
+                  output = error.message;
+                  outputTwo = error.message;
+                  flag = true;
+                  flagTwo = true;
+                }
+              }, 0);
             };
           }
         } )();
@@ -204,16 +220,16 @@ function pipe(test) {
         flagTwo= true;
       }
     });
-    
+
     waitsFor(function(){
       return flag && flagTwo;
-    }, "the output", 500);
-    
+    }, 'the output', 500);
+
     runs(function(){
       if (test.error) {
         expect(test.error || {} ).toEqual(output);
         expect(test.error || {} ).toEqual(outputTwo);
-      } else if (test.log) { 
+      } else if (test.log) {
         for(var i=0; i<log.length; i++) {
           if(log[i].message === test.log) {
             messageInLog = true;
