@@ -923,6 +923,13 @@ var coreTests = [
         message: "should test a blocks with no defaults"
       },
       {
+        name:     "partial_with_blocks_and_overridable_params",
+        source:   "{+header name=\"Test\" count=\"100\"}Hello {name}! You have {count} new messages.{/header}",
+        context:  { },
+        expected: "Hello Test! You have 100 new messages.",
+        message: "should test defining a block in a partial."
+      },
+      {
         name:     "partial_print_name",
         source:   "{#helper}{/helper}",
         context:  {},
@@ -1227,6 +1234,28 @@ var coreTests = [
         context: {},
         expected: '<form action=""></form>',
         message: "should test blocks with inline parameters"
+      },
+      {
+        name: "blocks with a static string as an inline parameter",
+        source: [ '{<formAction}',
+                  '  <form action="{url}">',
+                  '    {+formBody/}',
+                  '  </form>',
+                  '{/formAction}',
+                  '',
+                  '{+formAction url="http://google.com/search"/}'].join("\n"),
+        context: {},
+        expected: '<form action="http://google.com/search"></form>',
+        message: "should test blocks with inline parameters that are static strings"
+      },
+      {
+        name: "blocks defined in another partial with inline parameters",
+        source: [ '{>"partial_with_blocks_and_overridable_params"/}',
+                  '',
+                  '{<header}Hello {name}. You have {count} unread messages.{/header}'].join("\n"),
+        context: {},
+        expected: 'Hello Test. You have 100 unread messages.',
+        message: "should test passing inline parameters to blocks defined in a different partial"
       }
     ]
   },
