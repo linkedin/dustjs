@@ -242,14 +242,39 @@ function getGlobal(){
   };
 
   /**
-   * Get a value from the context
+   * Public API for getting a value from the context.
    * @method get
+   * @param {string|array} path The path to the value. Supported formats are:
+   * 'key'
+   * 'path.to.key'
+   * '.path.to.key'
+   * ['path', 'to', 'key']
+   * ['key']
+   * @param {boolean} [cur=false] Boolean which determines if the search should be limited to the
+   * current context (true), or if get should search in parent contexts as well (false).
+   * @public
+   * @returns {string|object}
+   */
+  Context.prototype.get = function(path, cur) {
+    if (typeof path === 'string') {
+      if (path[0] === '.') {
+        cur = true;
+        path = path.substr(1);
+      }
+      path = path.split('.');
+    }
+    return this._get(cur, path);
+  };
+
+  /**
+   * Get a value from the context
+   * @method _get
    * @param {boolean} cur Get only from the current context
    * @param {array} down An array of each step in the path
-   * @public
+   * @private
    * @return {string | object}
    */
-  Context.prototype.get = function(cur, down) {
+  Context.prototype._get = function(cur, down) {
     var ctx = this.stack,
         i = 1,
         value, first, len, ctxThis;
@@ -313,7 +338,7 @@ function getGlobal(){
   };
 
   Context.prototype.getPath = function(cur, down) {
-    return this.get(cur, down);
+    return this._get(cur, down);
   };
 
   Context.prototype.push = function(head, idx, len) {
