@@ -638,6 +638,13 @@ var coreTests = [
         },
         expected: "22",
         message: "should test the array reference access with len and current context"
+      },
+      {
+        name: "using idx in double nested array",
+        source: "{#test}{#.}{.}i:{$idx}l:{$len},{/.}{/test}",
+        context: { "test": [[ 1,2,3 ]]},
+        expected: "1i:0l:3,2i:1l:3,3i:2l:3,",
+        message: "should test double nested array and . reference: issue #340"
       }
     ]
   },
