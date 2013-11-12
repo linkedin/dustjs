@@ -1,0 +1,19 @@
+{
+  "name": "dustjs-linkedin",
+  "version": "2.2.0",
+  "homepage": "http://linkedin.github.io/dustjs",
+  "authors": [
+    "Aleksander Williams"
+  ],
+  "description": "Asynchronous templates for the browser and node.js ( LinkedIn fork )",
+  "main": "./lib/dust.js",
+  "keywords": [
+    "templates",
+    "views"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "node_modules"
+    "test"
+  ]
+}
