@@ -35,7 +35,7 @@ var coreTests = [
         source:   '{#helper foo="bar" boo="boo"} {/helper}',
         context:  { "helper": function(chunk, context, bodies, params)
                      {
-                      currentTemplateName = context.templateName;
+                      currentTemplateName = context.__templateName;
                       return chunk.write(currentTemplateName);
                      }
                   },
@@ -48,7 +48,7 @@ var coreTests = [
          context:  { "helper": function(chunk, context, bodies, params)
                     {
                       // top of the current stack
-                      currentTemplateName = context.templateName;
+                      currentTemplateName = context.__templateName;
                       return chunk.write(currentTemplateName);
                     }
                    },
@@ -1075,7 +1075,7 @@ var coreTests = [
         source:   '{>partial_print_name/}',
         context:  { "helper": function(chunk, context, bodies, params)
                       {
-                        currentTemplateName = context.templateName;
+                        currentTemplateName = context.__templateName;
                         return chunk.write(currentTemplateName);
                       }
                   },
@@ -1087,7 +1087,7 @@ var coreTests = [
         source:   '{>"{partial_print_name}"/}',
         context:  { "helper": function(chunk, context, bodies, params)
                       {
-                        currentTemplateName = context.templateName;
+                        currentTemplateName = context.__templateName;
                         return chunk.write(currentTemplateName);
                       },
                     "partial_print_name" : "partial prints the current template name"
@@ -1100,7 +1100,7 @@ var coreTests = [
         source:   '{>nested_partial_print_name/}',
         context:  { "helper": function(chunk, context, bodies, params)
                         {
-                          currentTemplateName = context.templateName;
+                          currentTemplateName = context.__templateName;
                           return chunk.write(currentTemplateName);
                         }
                     },
