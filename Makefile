@@ -40,9 +40,9 @@ parser:
 SRC = lib
 VERSION = ${shell cat package.json | grep version | grep -o '[0-9]\.[0-9]\.[0-9]\+'}
 CORE = dist/dust-core-${VERSION}.js
-CORE_MIN = dist/dust-core-${VERSION}.min.js
+CORE_MIN = dist/dust-core.min.js
 FULL = dist/dust-full-${VERSION}.js
-FULL_MIN = dist/dust-full-${VERSION}.min.js
+FULL_MIN = dist/dust-full.min.js
 
 define HEADER
 //
