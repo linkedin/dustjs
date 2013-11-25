@@ -1,3 +1,11 @@
+//
+// Dust - Asynchronous Templating v2.3.0
+// http://akdubya.github.com/dustjs
+//
+// Copyright (c) 2010, Aleksander Williams
+// Released under the MIT License.
+//
+
 /*global console */
 var dust = {};
 
