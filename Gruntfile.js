@@ -12,8 +12,49 @@ module.exports = function(grunt) {
       ' Released under the <%= pkg.license %> License */\n',
     // Task configuration.
     shell: {
+      oldTests: {
+        command: 'node test/server.js',
+        options: {
+          stdout: true,
+          failOnError: true
+        }
+      },
+      // these are old and need to be rewritten to take advantage of grunt and the current build process
       buildParser: {
-        command: 'node src/build.js'
+        command: 'node src/build.js',
+        options: {
+          stdout: true
+        }
+      },
+      bench: {
+        command: 'node benchmark/server.js',
+        options: {
+          stdout: true
+        }
+      },
+      doc: {
+        command: 'node docs/build.js',
+        options: {
+          stdout: true
+        }
+      },
+      clean: {
+        command: 'rm dist/*',
+        options: {
+          stdout: true
+        }
+      },
+      release: {
+        command: 'echo "TBD: convert to using grunt-release"',
+        options: {
+          stdout: true
+        }
+      },
+      coverage: {
+        command: 'echo "TBD: convert to using jasmine istanbul"',
+        options: {
+          stdout: true
+        }
       }
     },
     concat: {
@@ -111,7 +152,7 @@ module.exports = function(grunt) {
 
   // Default task.
   grunt.registerTask('default', ['build']);
-  grunt.registerTask('build', ['jshint', 'shell:buildParser','concat', 'uglify', 'jasmine']);
-  grunt.registerTask('test', ['connect:testServer', 'jasmine']);
+  grunt.registerTask('build', ['jshint', 'shell:buildParser','concat', 'uglify', 'test']);
+  grunt.registerTask('test', ['jasmine', 'shell:oldTests']);
 
 };
