@@ -1,12 +1,7 @@
-//
-// Dust - Asynchronous Templating v2.2.2
-// http://akdubya.github.com/dustjs
-//
-// Copyright (c) 2010, Aleksander Williams
-// Released under the MIT License.
-//
-
-/*global console */
+/*! Dust - Asynchronous Templating - v2.2.2 - 2013-12-02
+* http://linkedin.github.io/dustjs/
+* Copyright (c) 2013 Aleksander Williams; Released under the MIT License */
+/*jshint evil:true*/
 var dust = {};
 
 function getGlobal(){
@@ -25,7 +20,8 @@ function getGlobal(){
       INFO = 'INFO',
       DEBUG = 'DEBUG',
       levels = [DEBUG, INFO, WARN, ERROR],
-      logger = function() {};
+      EMPTY_FUNC = function() {},
+      logger = EMPTY_FUNC;
 
   dust.isDebug = false;
   dust.debugLevel = INFO;
@@ -45,7 +41,7 @@ function getGlobal(){
    * @public
    */
   dust.log = function(message, type) {
-    var type = type || INFO;
+    type = type || INFO;
     if(dust.isDebug && levels.indexOf(type) >= levels.indexOf(dust.debugLevel)) {
       if(!dust.logQueue) {
         dust.logQueue = [];
@@ -385,11 +381,11 @@ function getGlobal(){
 
   Context.prototype.getTemplateName = function() {
     return this.templateName;
-  }
+  };
 
   function Stack(head, tail, idx, len) {
     this.tail = tail;
-    this.isObject = !dust.isArray(head) && head && typeof head === 'object';
+    this.isObject = head && typeof head === 'object';
     this.head = head;
     this.index = idx;
     this.of = len;
@@ -410,7 +406,7 @@ function getGlobal(){
       } else if (chunk.error) {
         this.callback(chunk.error);
         dust.onError(new Error('Chunk error [' + chunk.error + '] thrown. Ceasing to render this template.'));
-        this.flush = function() {};
+        this.flush = EMPTY_FUNC;
         return;
       } else {
         return;
@@ -434,7 +430,7 @@ function getGlobal(){
       } else if (chunk.error) {
         this.emit('error', chunk.error);
         dust.onError(new Error('Chunk error [' + chunk.error + '] thrown. Ceasing to render this template.'));
-        this.flush = function() {};
+        this.flush = EMPTY_FUNC;
         return;
       } else {
         return;
