@@ -38,7 +38,7 @@ var coreTests = [
         source:   '{#helper foo="bar" boo="boo"} {/helper}',
         context:  { "helper": function(chunk, context, bodies, params)
                      {
-                      currentTemplateName = context.templateName;
+                      currentTemplateName = context.getTemplateName();
                       return chunk.write(currentTemplateName);
                      }
                   },
@@ -51,7 +51,7 @@ var coreTests = [
          context:  { "helper": function(chunk, context, bodies, params)
                     {
                       // top of the current stack
-                      currentTemplateName = context.templateName;
+                      currentTemplateName = context.getTemplateName();
                       return chunk.write(currentTemplateName);
                     }
                    },
@@ -653,6 +653,13 @@ var coreTests = [
         },
         expected: "22",
         message: "should test the array reference access with len and current context"
+      },
+      {
+        name: "using idx in double nested array",
+        source: "{#test}{#.}{.}i:{$idx}l:{$len},{/.}{/test}",
+        context: { "test": [[ 1,2,3 ]]},
+        expected: "1i:0l:3,2i:1l:3,3i:2l:3,",
+        message: "should test double nested array and . reference: issue #340"
       }
     ]
   },
@@ -864,6 +871,30 @@ var coreTests = [
         },
         expected: "Hello Peter Jones",
         message:  "should test resolve correct 'this' when invoking method"
+      },
+      {
+        name: "check null values in section iteration don't break path resolution",
+        source: "{#nulls}{names[0].name}{/nulls}",
+        options: {pathScope: "global"},
+        context: { "nulls": [1, null, null, 2],"names": [{"name": "Moe"}, {"name": "Curly"}] },
+        expected: "MoeMoeMoeMoe",
+        message: "Should resolve path correctly"
+      },
+      {
+        name: "check falsey value in section iteration don't break path resolution",
+        source: "{#list}{a.b}{/list}",
+        options: {pathScope: "global"},
+        context: { "list": ['', 2, ''],"a": {"b": "B"} },
+        expected: "BBB",
+        message: "Should resolve path correctly"
+      },
+      {
+        name: "check true value in section iteration are also OK",
+        source: "{#list}{a.b}{/list}",
+        options: {pathScope: "global"},
+        context: { "list": [true, 2, true],"a": {"b": "B"} },
+        expected: "BBB",
+        message: "Should resolve path correctly"
       }
     ]
   },
@@ -1084,7 +1115,7 @@ var coreTests = [
         source:   '{>partial_print_name/}',
         context:  { "helper": function(chunk, context, bodies, params)
                       {
-                        currentTemplateName = context.templateName;
+                        currentTemplateName = context.getTemplateName();
                         return chunk.write(currentTemplateName);
                       }
                   },
@@ -1096,7 +1127,7 @@ var coreTests = [
         source:   '{>"{partial_print_name}"/}',
         context:  { "helper": function(chunk, context, bodies, params)
                       {
-                        currentTemplateName = context.templateName;
+                        currentTemplateName = context.getTemplateName();
                         return chunk.write(currentTemplateName);
                       },
                     "partial_print_name" : "partial prints the current template name"
@@ -1109,12 +1140,37 @@ var coreTests = [
         source:   '{>nested_partial_print_name/}',
         context:  { "helper": function(chunk, context, bodies, params)
                         {
-                          currentTemplateName = context.templateName;
+                          currentTemplateName = context.getTemplateName();
                           return chunk.write(currentTemplateName);
                         }
                     },
         expected: "partial_print_name",
         message: "should print the current template name"
+      },
+      {
+        name:     "nested partial 2 levels deep from loadSource prints the current template name",
+        source:   ['{#loadTemplate name="{contentTemplate}" source="{contentSource|s}"}{/loadTemplate}',
+                   '{#loadTemplate name="{parentTemplate}" source="{parentSource|s}"}{/loadTemplate}',
+                   '{>"{parentTemplate}"/} | additional parent output'].join("\n"),
+        context:  { "loadTemplate": function(chunk, context, bodies, params)
+                    {
+                      var source = dust.testHelpers.tap(params.source, chunk, context),
+                          name = dust.testHelpers.tap(params.name, chunk, context);
+                      dust.loadSource(dust.compile(source, name));
+                      return chunk.write('');
+                    },
+                    "printTemplateName": function(chunk, context, bodies, params)
+                    {
+                      return chunk.write(context.getTemplateName());
+                    },
+                    "parentTemplate": "parent",
+                    "parentSource": "{?undefinedVar}{:else}{>\"content\"/}{/undefinedVar}",
+                    "contentTemplate": "content",
+                    "contentSource": "templateName: {#printTemplateName}{/printTemplateName} output: additional output"
+
+                  },
+        expected: "templateName: content output: additional output | additional parent output",
+        message: "should print the current template name with some additional output"
       },
       {
         name:     "partial with makeBase_missing_global",

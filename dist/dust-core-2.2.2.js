@@ -1,5 +1,5 @@
 //
-// Dust - Asynchronous Templating v2.2.0
+// Dust - Asynchronous Templating v2.2.2
 // http://akdubya.github.com/dustjs
 //
 // Copyright (c) 2010, Aleksander Williams
@@ -278,7 +278,7 @@ function getGlobal(){
     var ctx = this.stack,
         i = 1,
         value, first, len, ctxThis;
-    dust.log('Searching for reference [{' + down.join('.') + '}] in template [' + this.templateName + ']', DEBUG);
+    dust.log('Searching for reference [{' + down.join('.') + '}] in template [' + this.getTemplateName() + ']', DEBUG);
     first = down[0];
     len = down.length;
 
@@ -325,7 +325,7 @@ function getGlobal(){
       return fn;
     } else {
       if (ctx === undefined) {
-        dust.log('Cannot find the value for reference [{' + down.join('.') + '}] in template [' + this.templateName + ']');
+        dust.log('Cannot find the value for reference [{' + down.join('.') + '}] in template [' + this.getTemplateName() + ']');
       }
       return ctx;
     }
@@ -336,11 +336,11 @@ function getGlobal(){
   };
 
   Context.prototype.push = function(head, idx, len) {
-    return new Context(new Stack(head, this.stack, idx, len), this.global, this.blocks, this.templateName);
+    return new Context(new Stack(head, this.stack, idx, len), this.global, this.blocks, this.getTemplateName());
   };
 
   Context.prototype.rebase = function(head) {
-    return new Context(new Stack(head), this.global, this.blocks, this.templateName);
+    return new Context(new Stack(head), this.global, this.blocks, this.getTemplateName());
   };
 
   Context.prototype.current = function() {
@@ -356,7 +356,7 @@ function getGlobal(){
     var blocks = this.blocks;
 
     if (!blocks) {
-      dust.log('No blocks for context[{' + key + '}] in template [' + this.templateName + ']', DEBUG);
+      dust.log('No blocks for context[{' + key + '}] in template [' + this.getTemplateName() + ']', DEBUG);
       return;
     }
     var len = blocks.length, fn;
@@ -378,10 +378,14 @@ function getGlobal(){
       } else {
         newBlocks = blocks.concat([locals]);
       }
-      return new Context(this.stack, this.global, newBlocks, this.templateName);
+      return new Context(this.stack, this.global, newBlocks, this.getTemplateName());
     }
     return this;
   };
+
+  Context.prototype.getTemplateName = function() {
+    return this.templateName;
+  }
 
   function Stack(head, tail, idx, len) {
     this.tail = tail;
@@ -641,7 +645,7 @@ function getGlobal(){
     } else if (skip) {
       return skip(this, context);
     }
-    dust.log('Not rendering section (#) block in template [' + context.templateName + '], because above key was not found', DEBUG);
+    dust.log('Not rendering section (#) block in template [' + context.getTemplateName() + '], because above key was not found', DEBUG);
     return this;
   };
 
@@ -656,7 +660,7 @@ function getGlobal(){
     } else if (skip) {
       return skip(this, context);
     }
-    dust.log('Not rendering exists (?) block in template [' + context.templateName + '], because above key was not found', DEBUG);
+    dust.log('Not rendering exists (?) block in template [' + context.getTemplateName() + '], because above key was not found', DEBUG);
     return this;
   };
 
@@ -671,7 +675,7 @@ function getGlobal(){
     } else if (skip) {
       return skip(this, context);
     }
-    dust.log('Not rendering not exists (^) block check in template [' + context.templateName + '], because above key was found', DEBUG);
+    dust.log('Not rendering not exists (^) block check in template [' + context.getTemplateName() + '], because above key was found', DEBUG);
     return this;
   };
 
@@ -713,6 +717,7 @@ function getGlobal(){
     var partialChunk;
     if (typeof elem === 'function') {
       partialChunk = this.capture(elem, partialContext, function(name, chunk) {
+        partialContext.templateName = partialContext.templateName || name;
         dust.load(name, chunk, partialContext).end();
       });
     } else {
