@@ -125,7 +125,12 @@ module.exports = function(grunt) {
       allTests: {
         src: 'dist/dust-full.min.js',
         options: {
-          specs: ['test/jasmine-test/spec/**/*.js']
+          specs: ['test/jasmine-test/spec/**/*.js'],
+          template: require('grunt-template-jasmine-istanbul'),
+          templateOptions: {
+            coverage: 'tmp/coverage/coverage.json',
+            report: 'tmp/coverage'
+          }
         }
       }
     },
