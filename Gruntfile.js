@@ -19,7 +19,7 @@ module.exports = function(grunt) {
           failOnError: true
         }
       },
-      // these are old and need to be rewritten to take advantage of grunt and the current build process
+      // these are old that should eventually be rewritten to take advantage of grunt and the current build process
       buildParser: {
         command: 'node src/build.js',
         options: {
@@ -34,18 +34,6 @@ module.exports = function(grunt) {
       },
       doc: {
         command: 'node docs/build.js',
-        options: {
-          stdout: true
-        }
-      },
-      release: {
-        command: 'echo "TBD: convert to using grunt-release"',
-        options: {
-          stdout: true
-        }
-      },
-      coverage: {
-        command: 'echo "Run grunt jasmine and look in tmp/coverage"',
         options: {
           stdout: true
         }
@@ -65,6 +53,28 @@ module.exports = function(grunt) {
         dest: 'tmp/dust-full.js'
       }
     },
+    copy: {
+      core: {
+        src: 'tmp/dust-core.js',
+        dest: 'dist/dust-core.js'
+      },
+      coreMin: {
+        src: 'tmp/dust-core.min.js',
+        dest: 'dist/dust-core.min.js'
+      },
+      full: {
+        src: 'tmp/dust-full.js',
+        dest: 'dist/dust-full.js'
+      },
+      fullMin: {
+        src: 'tmp/dust-full.min.js',
+        dest: 'dist/dust-full.min.js'
+      },
+      license: {
+        src: 'LICENSE',
+        dest: 'dist/'
+      }
+    },
     uglify: {
       options: {
         banner: '<%= banner %>',
@@ -82,8 +92,8 @@ module.exports = function(grunt) {
       }
     },
     clean: {
-      build: ['tmp'],
-      dist: ['dist']
+      build: ['tmp/*'],
+      dist: ['dist/*']
     },
     jshint: {
       options: {
@@ -141,6 +151,35 @@ module.exports = function(grunt) {
         files: ['<%= jshint.libs.src %>', '<%= jasmine.allTests.options.specs%>'],
         tasks: ['jshint:libs', 'jasmine']
       }
+    },
+    release: {
+      options: {
+        push: false,
+        pushTags: false,
+        npm: false
+      }
+    },
+    log: {
+      coverage: {
+        options: {
+          message: 'Coverage is run with `grunt test`. Look inside tmp/coverage'
+        }
+      },
+      copyForRelease: {
+        options: {
+          message: 'OK. Done copying version <%= pkg.version %> build from tmp to dist'
+        }
+      },
+      release: {
+        options: {
+          message: ['OK. Done bumping, adding, committing, and tagging the new version',
+                    '',
+                    'You still need to manually do the following:',
+                    '  * git push',
+                    '  * git push --tags',
+                    '  * npm publish'].join('\n')
+        }
+      }
     }
   });
 
@@ -152,11 +191,25 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-release');
   grunt.loadNpmTasks('grunt-shell');
 
-  // Default task.
-  grunt.registerTask('default', ['build', 'test']);
+  // Npm tasks
+  grunt.registerTask('default', ['build']);
   grunt.registerTask('build', ['clean', 'jshint', 'shell:buildParser','concat', 'uglify']);
-  grunt.registerTask('test', ['jasmine', 'shell:oldTests']);
+  grunt.registerTask('test', ['build', 'jasmine', 'shell:oldTests']);
+  grunt.registerTask('copyForRelease', ['copy:core', 'copy:coreMin', 'copy:full', 'copy:fullMin', 'copy:license', 'log:copyForRelease']);
+  grunt.registerTask('releasePrerelease', ['test', 'release:prerelease', 'log:release']);
+  grunt.registerTask('releasePatch', ['test', 'copyForRelease', 'release:patch', 'log:release']);
+  grunt.registerTask('releaseMinor', ['test', 'copyForRelease', 'release:minor', 'log:release']);
+  // major release should probably be done with care
+  // grunt.registerTask('releaseMajor', ['test', 'copyForRelease', 'release:major', 'log:release']);
+
+  // Custom tasks
+  grunt.registerMultiTask('log', 'Print some messages', function() {
+    grunt.log.writeln(this.data.options.message);
+  });
+  grunt.registerTask('coverage', ['log:coverage']);
 
 };
