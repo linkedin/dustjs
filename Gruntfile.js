@@ -5,8 +5,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
     // Metadata.
     pkg: grunt.file.readJSON('package.json'),
-    banner: '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
-      '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
+    banner: '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %>\n' +
       '<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
       '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
       ' Released under the <%= pkg.license %> License */\n',
@@ -89,6 +88,28 @@ module.exports = function(grunt) {
       full: {
         src: '<%= concat.full.dest %>',
         dest: 'tmp/dust-full.min.js'
+      }
+    },
+    compress: {
+      distTarBall: {
+        options: {
+          archive: 'archive/dust-<%= pkg.version %>.tar.gz',
+          mode: 'tgz',
+          pretty: true
+        },
+        files: [
+          {cwd: 'dist', src: ['**'], dest: ['/'], filter: 'isFile'}
+        ]
+      },
+      distZip: {
+        options: {
+          archive: 'archive/dust-<%= pkg.version %>.zip',
+          mode: 'zip',
+          pretty: true
+        },
+        files: [
+          {cwd: 'dist', src: ['**'], dest: ['/'], filter: 'isFile'}
+        ]
       }
     },
     clean: {
@@ -192,6 +213,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-compress');
+  grunt.loadNpmTasks('grunt-gh-pages');
   grunt.loadNpmTasks('grunt-release');
   grunt.loadNpmTasks('grunt-shell');
 
@@ -199,10 +222,11 @@ module.exports = function(grunt) {
   grunt.registerTask('default', ['build']);
   grunt.registerTask('build', ['clean', 'jshint', 'shell:buildParser','concat', 'uglify']);
   grunt.registerTask('test', ['build', 'jasmine', 'shell:oldTests']);
+
   grunt.registerTask('copyForRelease', ['copy:core', 'copy:coreMin', 'copy:full', 'copy:fullMin', 'copy:license', 'log:copyForRelease']);
-  grunt.registerTask('releasePrerelease', ['test', 'release:prerelease', 'log:release']);
-  grunt.registerTask('releasePatch', ['test', 'copyForRelease', 'release:patch', 'log:release']);
-  grunt.registerTask('releaseMinor', ['test', 'copyForRelease', 'release:minor', 'log:release']);
+  grunt.registerTask('releasePrerelease', ['test', 'copyForRelease', 'compress:dist', 'release:prerelease', 'log:release']);
+  grunt.registerTask('releasePatch', ['test', 'copyForRelease', 'compress:dist', 'release:patch', 'log:release']);
+  grunt.registerTask('releaseMinor', ['test', 'copyForRelease', 'compress:dist', 'release:minor', 'log:release']);
   // major release should probably be done with care
   // grunt.registerTask('releaseMajor', ['test', 'copyForRelease', 'release:major', 'log:release']);
 
