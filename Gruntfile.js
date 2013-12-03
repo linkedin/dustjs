@@ -38,12 +38,6 @@ module.exports = function(grunt) {
           stdout: true
         }
       },
-      clean: {
-        command: 'rm dist/*',
-        options: {
-          stdout: true
-        }
-      },
       release: {
         command: 'echo "TBD: convert to using grunt-release"',
         options: {
@@ -51,7 +45,7 @@ module.exports = function(grunt) {
         }
       },
       coverage: {
-        command: 'echo "TBD: convert to using jasmine istanbul"',
+        command: 'echo "Run grunt jasmine and look in tmp/coverage"',
         options: {
           stdout: true
         }
@@ -64,11 +58,11 @@ module.exports = function(grunt) {
       },
       core: {
         src: ['lib/dust.js'],
-        dest: 'dist/dust-core.js'
+        dest: 'tmp/dust-core.js'
       },
       full: {
         src: ['lib/dust.js', 'lib/compiler.js', 'lib/parser.js'],
-        dest: 'dist/dust-full.js'
+        dest: 'tmp/dust-full.js'
       }
     },
     uglify: {
@@ -80,12 +74,16 @@ module.exports = function(grunt) {
       },
       core: {
         src: '<%= concat.core.dest %>',
-        dest: 'dist/dust-core.min.js'
+        dest: 'tmp/dust-core.min.js'
       },
       full: {
         src: '<%= concat.full.dest %>',
-        dest: 'dist/dust-full.min.js'
+        dest: 'tmp/dust-full.min.js'
       }
+    },
+    clean: {
+      build: ['tmp'],
+      dist: ['dist']
     },
     jshint: {
       options: {
@@ -123,7 +121,7 @@ module.exports = function(grunt) {
     },
     jasmine: {
       allTests: {
-        src: 'dist/dust-full.min.js',
+        src: 'tmp/dust-full.min.js',
         options: {
           specs: ['test/jasmine-test/spec/**/*.js'],
           template: require('grunt-template-jasmine-istanbul'),
@@ -153,11 +151,12 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-shell');
 
   // Default task.
-  grunt.registerTask('default', ['build']);
-  grunt.registerTask('build', ['jshint', 'shell:buildParser','concat', 'uglify', 'test']);
+  grunt.registerTask('default', ['build', 'test']);
+  grunt.registerTask('build', ['clean', 'jshint', 'shell:buildParser','concat', 'uglify']);
   grunt.registerTask('test', ['jasmine', 'shell:oldTests']);
 
 };
