@@ -36,7 +36,7 @@
   "bin": {
     "dustc": "./bin/dustc"
   },
-  "main": "dist/dust-full.min.js",
+  "main": "lib/dust.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/linkedin/dustjs.git"
