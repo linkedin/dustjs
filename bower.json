@@ -24,7 +24,7 @@
     "archive",
     "node_modules",
     ".grunt",
-    "_SpecRunner",
+    "_SpecRunner.html",
     ".travis.yml",
     "Gruntfile.js",
     "package.json",

@@ -1,6 +1,6 @@
 node_modules
 *.DS_Store
 .grunt
-_SpecRunner
+_SpecRunner.html
 tmp
 archive
