@@ -1,7 +1,4 @@
-/nbproject
 node_modules
-.coverage_data
-cover_html
 *.DS_Store
 .grunt
 _SpecRunner
