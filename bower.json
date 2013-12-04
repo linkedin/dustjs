@@ -25,7 +25,6 @@
     "node_modules",
     ".grunt",
     "_SpecRunner",
-    "*.md",
     ".travis.yml",
     "Gruntfile.js",
     "package.json",
