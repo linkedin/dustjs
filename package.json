@@ -55,7 +55,12 @@
     "grunt-contrib-copy": "~0.4.1",
     "grunt-release": "~0.6.0",
     "grunt-gh-pages": "~0.9.0",
-    "grunt-contrib-compress": "~0.5.3"
+    "grunt-contrib-compress": "~0.5.3",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-uglify": "~0.2.7",
+    "grunt-contrib-jshint": "~0.7.2",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-shell": "~0.6.1"
   },
   "license": "MIT",
   "engine": {
