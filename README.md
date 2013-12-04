@@ -19,10 +19,8 @@ For LinkedIn secure-filters : <https://github.com/linkedin/dustjs-filters-secure
 ### Grab a copy of the repo
 ```
 cd some_project_directory
-mkdir dustjs
-git clone ... dustjs
+git clone https://github.com/linkedin/dustjs.git dustjs
 cd dustjs
-
 
 ```
 
