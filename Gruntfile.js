@@ -114,7 +114,8 @@ module.exports = function(grunt) {
     },
     clean: {
       build: ['tmp/*'],
-      dist: ['dist/*']
+      dist: ['dist/*'],
+      specRunner: '_SpecRunner.html'
     },
     jshint: {
       options: {
@@ -146,7 +147,8 @@ module.exports = function(grunt) {
     connect: {
      testServer: {
        options: {
-         port: 3000
+         port: 3000,
+         keepalive: true
        }
      }
     },
@@ -191,6 +193,11 @@ module.exports = function(grunt) {
           message: 'OK. Done copying version <%= pkg.version %> build from tmp to dist'
         }
       },
+      testClient: {
+        options: {
+        message: 'go to http://localhost:<%= connect.testServer.options.port %>/_SpecRunner.html.\n Ctrl-C to kill the server.'
+        }
+      },
       release: {
         options: {
           message: ['OK. Done bumping, adding, committing, and tagging the new version',
@@ -220,10 +227,11 @@ module.exports = function(grunt) {
 
   // Npm tasks
   grunt.registerTask('default', ['build']);
-  grunt.registerTask('build', ['clean', 'jshint', 'shell:buildParser','concat', 'uglify']);
-  grunt.registerTask('test', ['build', 'jasmine', 'shell:oldTests']);
+  grunt.registerTask('build', ['clean:build', 'jshint', 'shell:buildParser','concat', 'uglify']);
+  grunt.registerTask('test', ['clean:specRunner', 'build', 'jasmine', 'shell:oldTests']);
+  grunt.registerTask('testClient', ['build', 'jasmine:allTests:build', 'log:testClient', 'connect:testServer']);
 
-  grunt.registerTask('copyForRelease', ['copy:core', 'copy:coreMin', 'copy:full', 'copy:fullMin', 'copy:license', 'log:copyForRelease']);
+  grunt.registerTask('copyForRelease', ['clean:dist', 'copy:core', 'copy:coreMin', 'copy:full', 'copy:fullMin', 'copy:license', 'log:copyForRelease']);
   grunt.registerTask('releasePrerelease', ['test', 'copyForRelease', 'compress:dist', 'release:prerelease', 'log:release']);
   grunt.registerTask('releasePatch', ['test', 'copyForRelease', 'compress:dist', 'release:patch', 'log:release']);
   grunt.registerTask('releaseMinor', ['test', 'copyForRelease', 'compress:dist', 'release:minor', 'log:release']);
