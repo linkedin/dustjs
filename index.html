@@ -102,6 +102,23 @@
       <hr>
       <div>
         <h2>LinkedIn additions include:</h2>
+        <h4>Release 2.2.3</h4>
+        <ul>
+          <li>PR-363, GH-340 - Remove old optimization to avoid looking at arrays in get.</li>
+        </ul>
+        <h4>Release 2.2.2</h4>
+        <ul>
+          <li>PR-368 - Add context.getTemplateName. This method now correctly returns the template name even for directly loaded templates being used as partials. For end users please use this api for getting the template name instead of ctx.templatename.</li>
+        </ul>
+        <h4>Release 2.2.0</h4>
+        <ul>
+          <li>PR-360 - Use get for all Dust references.</li>
+        </ul>
+        <h4>Release 2.1.0</h4>
+        <ul>
+          <li>PR-350 - Support dynamic template names for the context's template name.</li>
+          <li>PR-347, GH-137 - Improve JS debugging support for dust</li>
+        </ul>
         <h4>Release 2.0.3</h4>
         <ul>
           <li>PR-323, GH-322 - dynamic blocks {+"{dynam}"} has been corrected. It was adding the data twice.</li>
