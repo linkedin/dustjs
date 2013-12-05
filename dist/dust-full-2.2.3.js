@@ -1,5 +1,5 @@
 //
-// Dust - Asynchronous Templating v2.2.2
+// Dust - Asynchronous Templating v2.2.3
 // http://akdubya.github.com/dustjs
 //
 // Copyright (c) 2010, Aleksander Williams
@@ -389,7 +389,7 @@ function getGlobal(){
 
   function Stack(head, tail, idx, len) {
     this.tail = tail;
-    this.isObject = !dust.isArray(head) && head && typeof head === 'object';
+    this.isObject = head && typeof head === 'object';
     this.head = head;
     this.index = idx;
     this.of = len;
