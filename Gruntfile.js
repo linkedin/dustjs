@@ -98,7 +98,7 @@ module.exports = function(grunt) {
           pretty: true
         },
         files: [
-          {cwd: 'dist', src: ['**'], dest: ['/'], filter: 'isFile'}
+          {expand: true, cwd: 'dist', src: ['**'], dest: 'dust-<%= pkg.version %>/', filter: 'isFile'}
         ]
       },
       distZip: {
@@ -108,7 +108,7 @@ module.exports = function(grunt) {
           pretty: true
         },
         files: [
-          {cwd: 'dist', src: ['**'], dest: ['/'], filter: 'isFile'}
+          {expand: true, cwd: 'dist', src: ['**'], dest: 'dust-<%= pkg.version %>/', filter: 'isFile'}
         ]
       }
     },
