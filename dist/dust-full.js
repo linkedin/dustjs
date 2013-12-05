@@ -973,7 +973,7 @@ function compileBlocks(context) {
       name;
 
   for (name in blocks) {
-    out.push('\'' + name + '\':' + blocks[name]);
+    out.push('"' + name + '":' + blocks[name]);
   }
   if (out.length) {
     context.blocks = 'ctx=ctx.shiftBlocks(blocks);';
