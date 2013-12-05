@@ -6,5 +6,6 @@ Gruntfile.js
 benchmark
 docs
 src
+tmp
 test
 archive
