@@ -162,8 +162,7 @@ module.exports = function(grunt) {
     bump: {
       options: {
         files: ['package.json', 'bower.json'],
-        updateConfigs: ['pkg'],
-        push: false
+        updateConfigs: ['pkg']
       }
     },
     log: {
@@ -184,11 +183,9 @@ module.exports = function(grunt) {
       },
       release: {
         options: {
-          message: ['OK. Done bumping, adding, committing, and tagging the new version',
+          message: ['OK. Done bumping, adding, committing, tagging and pushing the new version',
                     '',
                     'You still need to manually do the following:',
-                    '  * git push',
-                    '  * git push --tags',
                     '  * npm publish'].join('\n')
         }
       }
@@ -216,10 +213,11 @@ module.exports = function(grunt) {
   grunt.registerTask('testClient', ['build', 'jasmine:allTests:build', 'log:testClient', 'connect:testServer']);
 
   grunt.registerTask('copyForRelease', ['clean:dist', 'copy:core', 'copy:coreMin', 'copy:full', 'copy:fullMin', 'copy:license', 'log:copyForRelease']);
-  grunt.registerTask('releasePatch', ['bump-only:patch', 'test', 'copyForRelease', 'compress', 'bump-commit:patch', 'log:release']);
-  grunt.registerTask('releaseMinor', ['bump-only:minor', 'test', 'copyForRelease', 'compress', 'bump-commit:minor', 'log:release']);
+  grunt.registerTask('buildRelease', ['test', 'copyForRelease', 'compress']);
+  grunt.registerTask('releasePatch', ['bump-only:patch', 'buildRelease', 'bump-commit:patch', 'log:release']);
+  grunt.registerTask('releaseMinor', ['bump-only:minor', 'buildRelease', 'bump-commit:minor', 'log:release']);
   // major release should probably be done with care
-  // grunt.registerTask('releaseMajor', ['test', 'copyForRelease', 'bump:major', 'log:release']);
+  // grunt.registerTask('releaseMajor', ['bump-only:major', 'buildRelease', 'bump-commit:major', 'log:release']);
 
   // Custom tasks
   grunt.registerMultiTask('log', 'Print some messages', function() {
