@@ -8,10 +8,10 @@ body
   = p:part* { return ["body"].concat(p).concat([['line', line], ['col', column]]) }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
-   part is defined as anything that matches with comment or section or partial or special or reference or buffer
+   part is defined as anything that matches with raw or comment or section or partial or special or reference or buffer
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 part
-  = comment / section / partial / special / reference / buffer
+  = raw / comment / section / partial / special / reference / buffer
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
    section is defined as matching with with sec_tag_start followed by 0 or more white spaces plus a closing brace plus body
@@ -155,7 +155,7 @@ inline_part
 buffer "buffer"
   = e:eol w:ws*
   { return ["format", e, w.join('')].concat([['line', line], ['col', column]]) }
-  / b:(!tag !comment !eol c:. {return c})+
+  / b:(!tag !raw !comment !eol c:. {return c})+
   { return ["buffer", b.join('')].concat([['line', line], ['col', column]]) }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
@@ -168,6 +168,9 @@ literal "literal"
 esc
   = '\\"' { return '"' }
 
+raw "raw"
+  = "{`" rawText:(!"`}" char:. {return char})* "`}"
+  { return ["raw", rawText.join('')].concat([['line', line], ['col', column]]) }
 comment "comment"
   = "{!" c:(!"!}" c:. {return c})* "!}"
   { return ["comment", c.join('')].concat([['line', line], ['col', column]]) }
