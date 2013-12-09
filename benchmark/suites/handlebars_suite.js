@@ -47,8 +47,8 @@ var benches = {
   filter: {
     source:   "{{#filter}}foo {{bar}}{{/filter}}",
     context:  {
-                filter: function(ctx, fn) {
-                  return fn(ctx).toUpperCase();
+                filter: function(options) {
+                  return options.fn(this).toUpperCase();
                 },
                 bar: "bar"
               }
@@ -68,9 +68,9 @@ var benches = {
                  {name: "green", current: false, url: "#Green"},
                  {name: "blue", current: false, url: "#Blue"}
                ],
-               hasItems: function(ctx, fn) {
-                 if (ctx.items.length) {
-                   return fn(ctx);
+               hasItems: function(options) {
+                 if (this.items.length) {
+                   return options.fn(this);
                  }
                }
              }
