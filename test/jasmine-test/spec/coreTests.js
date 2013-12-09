@@ -200,7 +200,7 @@ var coreTests = [
       {
         name:     "issue322 use base template picks up prefix chunk data",
         source:   '{>issue322 name="abc"/}' +
-		   "{<abc}ABC{/abc}",
+                  "{<abc}ABC{/abc}",
         context:  {},
         expected: "hiABC",
         message: "should use base template and honor name passed in"
@@ -686,7 +686,7 @@ var coreTests = [
     ]
   },
 /**
- * CONDITINOAL TESTS
+ * CONDITIONAL TESTS
  */
   {
     name: "conditional tests",
@@ -1659,6 +1659,13 @@ var coreTests = [
         context: {},
         expected: "{&partial/}",
         message: "given content should be parsed as buffer"
+      },
+      {
+        name: "buffer with slashes quotes etc",
+        source: "//inlineComment/*blockComment*/'single quote'\"double quote\"[bracket]\\backslash\\",
+        context: {},
+        expected: "//inlineComment/*blockComment*/'single quote'\"double quote\"[bracket]\\backslash\\",
+        message: "the compiled code should not break on commments etc"
       }
     ]
   },
