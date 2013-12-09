@@ -70,27 +70,26 @@
     <div id="content">
       <div id="charts"></div>
       <p style="clear: both">
-        Targets: <a href="http://linkedin.github.com/dustjs/">Dust 1.2.3</a>, 
-        <a href="http://github.com/wycats/handlebars.js">Handlebars</a>, 
-        <!-- <a href="http://mustache.github.com/">Mustache</a>, --> 
-        <a href="http://api.jquery.com/tmpl/">jquery-tmpl</a>. 
+        Targets: <a href="https://linkedin.github.com/dustjs/">Dust</a>, 
+        <a href="https://github.com/wycats/handlebars.js">Handlebars</a>, 
+        <a href="https://mustache.github.com/">Mustache</a>, 
+        <a href="https://api.jquery.com/tmpl/">jquery-tmpl</a>. 
         Each benchmark runs once using an adaptive test cycles algorithm similar to the one found in 
-        <a href="http://github.com/broofa/jslitmus">jslitmus</a>.</p>
+        <a href="https://github.com/broofa/jslitmus">jslitmus</a>.</p>
     </div>
 
-    <script src="../vendor/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="uubench.js"></script>
     <script src="suites/dust_suite.js"></script>
     <script src="suites/mustache_suite.js"></script>
     <script src="suites/handlebars_suite.js"></script>
     <script src="suites/jquery_suite.js"></script>
-    <!--<script src="https://raw.github.com/akdubya/dustjs/master/dist/dust-full-0.3.0.js"></script>
-    <script src="https://raw.github.com/linkedin/dustjs/master/dist/dust-full-1.1.1.js"></script>-->
-    <script src="https://raw.github.com/linkedin/dustjs/master/dist/dust-full-1.2.3.js"></script>
-    <script src="http://github.com/wycats/handlebars.js/raw/766497bb553a926c046c5e5b50ee35529d168ba5/lib/handlebars.js"></script>
-    <!--<script src="http://github.com/janl/mustache.js/raw/master/mustache.js"></script>-->
-    <script src="http://github.com/jquery/jquery-tmpl/raw/master/jquery.tmpl.js"></script>
-    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+    <script src="../dist/dust-full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.1.2/handlebars.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.7.2/mustache.min.js"></script>
+    <!-- jquery tmpl is no longer maintained, using rawgithub as a last resort. Do not use rawgithub in prod. Use real CDNs for that -->
+    <script src="https://rawgithub.com/BorisMoore/jquery-tmpl/master/jquery.tmpl.js"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
       google.load('visualization', '1.0', {packages: ['imagechart']});
     </script>
@@ -141,8 +140,7 @@
           });
           dustBench(suite, type, "dust");
           handlebarsBench(suite, type, "handlebars");
-          // TODO: fix issue with M and then enable
-         // mustacheBench(suite, type, "mustache");
+          mustacheBench(suite, type, "mustache");
           jqueryBench(suite, type, "jquery");
           suite.run();
         }
