@@ -48,7 +48,7 @@ module.exports = function(grunt) {
         dest: 'tmp/dust-core.js'
       },
       full: {
-        src: ['lib/dust.js', 'lib/compiler.js', 'lib/parser.js'],
+        src: ['lib/dust.js', 'lib/parser.js', 'lib/compiler.js'],
         dest: 'tmp/dust-full.js'
       }
     },

@@ -9,12 +9,9 @@ var options = {
     trackLineAndColumn: true
 };
 
-var parser = peg.buildParser(fs.readFileSync(path.join(root, 'src', 'dust.pegjs'), 'utf8'), options);
+var parser = peg.buildParser(fs.readFileSync(path.join(root, 'src', 'dust.pegjs'), 'utf8'), options),
+    umdWrapper = fs.readFileSync(path.join(root, 'src', 'umdWrapper.js'), 'utf8'),
+    placeholder = '\'PARSER_CODE_HERE\'';
 
-var namespace = 'parser';
 
-fs.writeFileSync(path.join(root, 'lib', 'parser.js'), '(function(dust){\n\nvar '+namespace+' = ' +
-    parser.toSource().replace('this.SyntaxError', ''+namespace+'.SyntaxError') + ';\n\n' +
-    'dust.parse = '+namespace+'.parse;\n\n' +
-    '})(typeof exports !== \'undefined\' ? exports : getGlobal());'
-);
+fs.writeFileSync(path.join(root, 'lib', 'parser.js'), umdWrapper.replace(placeholder, parser.toSource().replace('this.SyntaxError','parser.SyntaxError')));
