@@ -4,6 +4,7 @@ This is the LinkedIn fork of Dust.
 
 ## Getting Started
 A quick tutorial for how to use Dust <https://github.com/linkedin/dustjs/wiki/Dust-Tutorial>
+
 More info <http://linkedin.github.io/dustjs/> and <http://linkedin.github.io/dustjs/#installation>
 
 
@@ -36,7 +37,7 @@ npm install
 ```
 ### Run jshint and tests
 ```
-grunt jasmine
+grunt test
 ```
 
 ## Contributing to Dust
@@ -48,7 +49,7 @@ git checkout -b myBranchName
 
 ### Run jshint and tests
 ```
-grunt jasmine
+grunt test
 ```
 
 ### ... alternatively, run the watcher which hints and tests as you code
