@@ -11,7 +11,9 @@ var options = {
 
 var parser = peg.buildParser(fs.readFileSync(path.join(root, 'src', 'dust.pegjs'), 'utf8'), options),
     umdWrapper = fs.readFileSync(path.join(root, 'src', 'umdParserWrapper.js'), 'utf8'),
-    placeholder = '\'PARSER_CODE_HERE\'';
+    parserPlaceholder = '\'PARSER_CODE_HERE\'',
+    buildMessagePlaceHolder = 'BUILD_MESSAGE_HERE',
+    buildMessage = 'Do not edit the parser directly. This is a generated file created using a build script and the PEG grammar.';
 
 
-fs.writeFileSync(path.join(root, 'lib', 'parser.js'), umdWrapper.replace(placeholder, parser.toSource().replace('this.SyntaxError','parser.SyntaxError')));
+fs.writeFileSync(path.join(root, 'lib', 'parser.js'), umdWrapper.replace(parserPlaceholder, parser.toSource()).replace(buildMessagePlaceHolder, buildMessage).replace('this.SyntaxError','parser.SyntaxError'));
