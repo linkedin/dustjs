@@ -1,6 +1,6 @@
 /*global global, process, console */
 var uutest    = require('./uutest'),
-    dust      = require('../lib/dust'),
+    dust      = require('../lib/server'),
     coreTests     = require('./jasmine-test/spec/coreTests'),
     coreSetup = require('./core').coreSetup;
 
