@@ -199,9 +199,10 @@ module.exports = function(grunt) {
     var shellTaskConfig = grunt.config.get('shell'),
       commandList= [];
 
+    //iterate over rhino jars - list is defined in task config
     this.files.forEach(function(fileGroup) {
       fileGroup.src.forEach(function(rhinoJar) {
-        commandList.push('java -jar ' + rhinoJar + ' -f test/rhino/rhinoTest.js -debug');
+        commandList.push('java -jar ' + rhinoJar + ' -f test/rhino/rhinoTest.js');
       });
     });
 
