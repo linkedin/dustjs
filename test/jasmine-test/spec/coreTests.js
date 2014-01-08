@@ -607,7 +607,7 @@ var coreTests = [
       {
         name: "array reference $idx/$len not changed in nested object",
         source: "{#results}{#info}{$idx}{name}-{$len} {/info}{/results}",
-        context:  { results: [ {info: {name: "Steven"}  },  {info: {name: "Richard"} } ]  },
+        context:  {results: [{info: {name: "Steven"}},{info: {name: "Richard"}}]},
         expected: "0Steven-2 1Richard-2 ",
         message: "test array reference $idx/$len not changed in nested object"
       },
@@ -1840,5 +1840,5 @@ var coreTests = [
 if (typeof module !== "undefined" && typeof require !== "undefined") {
     module.exports = coreTests; // We're on node.js
 } else {
-    window.coreTests = coreTests; // We're on the browser
+    this['coreTests'] = coreTests; // Set it up as global  - browser or rhino
 }

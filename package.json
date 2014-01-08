@@ -60,7 +60,8 @@
     "grunt-contrib-watch": "~0.5.3",
     "grunt-shell": "~0.6.1",
     "grunt-contrib-jasmine": "~0.5.2",
-    "grunt-bump": "0.0.11"
+    "grunt-bump": "0.0.11",
+    "qunit": "~0.5.18"
   },
   "license": "MIT",
   "engine": {
