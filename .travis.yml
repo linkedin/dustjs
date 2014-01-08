@@ -4,6 +4,9 @@ node_js:
   - "0.8"
 notifications:
   email:
-    - kodnous@linkedin.com
+    - jdemorais@linkedin.com
+    - vbasavaraj@linkedin.com
+    - jleppert@linkedin.com
+    - jchan@linkedin.com
 before_install:
   - npm install -g grunt-cli

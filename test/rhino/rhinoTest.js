@@ -51,8 +51,13 @@ var jasmineEnv = jasmine.getEnv(),
 
 jasmineEnv.addReporter(reporter);
 
+reporter.reportSpecResults = function(spec){
+  java.lang.System.out.print('.');
+}
+
 //set up reporter to print results to console and quit rhino shell
 reporter.reportSuiteResults = function (suite) {
+  print('\n');
   var passed = 0, failed = [];
   for(var i = 0; i < suite.specs_.length; i ++) {
     if(suite.specs_[i].results_.failedCount > 0) {
@@ -63,7 +68,8 @@ reporter.reportSuiteResults = function (suite) {
       passed++;
     }
   }
-  print('Passed ' + passed + ' Failed ' + failed.length);
+  print('Passed ' + passed + ' Failed ' + failed.length + '\n');
+
   if(failed.length > 0) {
     throw 'There are failing tests.';
   } else {
