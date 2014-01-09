@@ -1834,11 +1834,11 @@ var coreTests = [
         message: "test the log messages for an existing not exists check."
       },
       {
-        name: "Non dust errors should be propogated",
+        name: "Non dust errors should be propogated when the debugLevel is set to anything but silent",
         source: "{#errorHelper}{/errorHelper}",
         context: { "errorHelper" : function(chunk, context, bodies, params)
                    {
-                     dust.isDebug = false;
+                     dust.debugLevel = 'NONE';
                      throw new Error('Error should be visible');
                      return chunk.write('');
                    }
@@ -1847,12 +1847,11 @@ var coreTests = [
         message: "test to make sure non dust errors are not swallowed."
       },
       {
-        name: "Non dust errors should not be propogated when the flag is on",
+        name: "Non dust errors should not be propogated when debug level is set to SILENT",
         source: "Error should NOT be visible{#errorHelper}{/errorHelper}",
         context: { "errorHelper" : function(chunk, context, bodies, params)
                    {
-                     dust.isDebug = false;
-                     dust.silenceAllErrors = true;
+                     dust.debugLevel = 'SILENT';
                      throw new Error('Error should be visible');
                      return chunk.write('');
                    }
