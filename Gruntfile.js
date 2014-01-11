@@ -241,8 +241,11 @@ module.exports = function(grunt) {
   // Npm tasks
   grunt.registerTask('default', ['build']);
   grunt.registerTask('build', ['clean:build', 'jshint', 'shell:buildParser','concat', 'uglify']);
+
   grunt.registerTask('test', ['clean:specRunner', 'build', 'jasmine', 'shell:oldTests', 'testRhino']);
+  grunt.registerTask('testNode', ['shell:oldTests']);
   grunt.registerTask('testClient', ['build', 'jasmine:allTests:build', 'log:testClient', 'connect:testServer']);
+
 
   grunt.registerTask('copyForRelease', ['clean:dist', 'copy:core', 'copy:coreMin', 'copy:full', 'copy:fullMin', 'copy:license', 'log:copyForRelease']);
   grunt.registerTask('buildRelease', ['test', 'copyForRelease', 'compress']);
