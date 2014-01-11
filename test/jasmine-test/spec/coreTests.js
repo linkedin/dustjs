@@ -1832,6 +1832,33 @@ var coreTests = [
         context: {"exists": "example text"},
         log: "Not rendering not exists (^) block check in template [No render for not exists], because above key was found",
         message: "test the log messages for an existing not exists check."
+      },
+      {
+        name: "Non dust errors should be propogated when the debugLevel is set to anything but silent",
+        source: "{#errorHelper}{/errorHelper}",
+        context: { "errorHelper" : function(chunk, context, bodies, params)
+                   {
+                     dust.debugLevel = 'NONE';
+                     throw new Error('Error should be visible');
+                     return chunk.write('');
+                   }
+                 },
+        error: "Error should be visible",
+        message: "test to make sure errors are not swallowed."
+      },
+      {
+        name: "Non dust errors should not be propogated when debug level is set to SILENT",
+        source: "Error should NOT be visible{#errorHelper}{/errorHelper}",
+        context: { "errorHelper" : function(chunk, context, bodies, params)
+                   {
+                     dust.debugLevel = 'NONE';
+                     dust.silenceErrors = true;
+                     throw new Error('Error should be visible');
+                     return chunk.write('');
+                   }
+                 },
+        expected: "Error should NOT be visible",
+        message: "test to make sure non dust errors are swallowed when the silenceErrors flag is set."
       }
     ]
   }
