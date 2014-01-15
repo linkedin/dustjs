@@ -1,36 +1,24 @@
-/*! Dust - Asynchronous Templating - v2.2.3
+/*! Dust - Asynchronous Templating - v2.2.4
 * http://linkedin.github.io/dustjs/
-* Copyright (c) 2013 Aleksander Williams; Released under the MIT License */
-/*jshint evil:true*/
-var dust = {};
-
-function getGlobal(){
-  return (function(){
-    return this.dust;
-  }).call(null);
-}
-
-(function(dust) {
-
-  if(!dust) {
-    return;
-  }
-  var ERROR = 'ERROR',
+* Copyright (c) 2014 Aleksander Williams; Released under the MIT License */
+(function(root) {
+  var dust = {},
+      ERROR = 'ERROR',
       WARN = 'WARN',
       INFO = 'INFO',
       DEBUG = 'DEBUG',
       levels = [DEBUG, INFO, WARN, ERROR],
       EMPTY_FUNC = function() {},
-      logger = EMPTY_FUNC;
+      logger = EMPTY_FUNC,
+      loggerContext = this;
 
   dust.isDebug = false;
   dust.debugLevel = INFO;
 
-  // Try to find the console logger in window scope (browsers) or top level scope (node.js)
-  if (typeof window !== 'undefined' && window && window.console && window.console.log) {
-    logger = window.console.log;
-  } else if (typeof console !== 'undefined' && console && console.log) {
-    logger = console.log;
+  // Try to find the console logger in global scope
+  if (root && root.console && root.console.log) {
+    logger = root.console.log;
+    loggerContext = root.console;
   }
 
   /**
@@ -47,7 +35,7 @@ function getGlobal(){
         dust.logQueue = [];
       }
       dust.logQueue.push({message: message, type: type});
-      logger.call(console || window.console, '[DUST ' + type + ']: ' + message);
+      logger.call(loggerContext, '[DUST ' + type + ']: ' + message);
     }
   };
 
@@ -154,13 +142,9 @@ function getGlobal(){
   }
 
   dust.nextTick = (function() {
-    if (typeof process !== 'undefined') {
-      return process.nextTick;
-    } else {
-      return function(callback) {
-        setTimeout(callback,0);
-      };
-    }
+    return function(callback) {
+      setTimeout(callback,0);
+    };
   } )();
 
   dust.isEmpty = function(value) {
@@ -819,11 +803,12 @@ function getGlobal(){
     return s;
   };
 
-})(dust);
 
-if (typeof exports !== 'undefined') {
-  if (typeof process !== 'undefined') {
-    require('./server')(dust);
+  if (typeof exports === 'object') {
+    module.exports = dust;
+  } else {
+    root.dust = dust;
   }
-  module.exports = dust;
-}
+
+})(this);
+
