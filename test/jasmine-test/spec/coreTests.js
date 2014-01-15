@@ -1,5 +1,8 @@
 var coreTests = [
-  { 
+/**
+ * CORE TESTS
+ */
+  {
     name: "core tests",
     tests: [
       {
@@ -33,9 +36,9 @@ var coreTests = [
       {
         name:     "global_template",
         source:   '{#helper foo="bar" boo="boo"} {/helper}',
-        context:  { "helper": function(chunk, context, bodies, params) 
+        context:  { "helper": function(chunk, context, bodies, params)
                      {
-                      currentTemplateName = context.templateName;
+                      currentTemplateName = context.getTemplateName();
                       return chunk.write(currentTemplateName);
                      }
                   },
@@ -48,9 +51,9 @@ var coreTests = [
          context:  { "helper": function(chunk, context, bodies, params)
                     {
                       // top of the current stack
-                      currentTemplateName = context.templateName;
+                      currentTemplateName = context.getTemplateName();
                       return chunk.write(currentTemplateName);
-                    } 
+                    }
                    },
         expected: "apps/test/foo.tl&v=0.1",
         message: "should render the template name with paths"
@@ -62,7 +65,7 @@ var coreTests = [
                     {
                       var newContext = {};
                       return bodies.block(chunk, dust.makeBase(newContext));
-                    } 
+                    }
                    },
         expected: "",
         message: "should render the helper with missing global context"
@@ -190,7 +193,7 @@ var coreTests = [
         name:     "issue322",
         source:   'hi{+"{name}"/}',
         context:  {},
-        expected: "hi", 
+        expected: "hi",
         message: "should setup base template for next test. hi should not be part of base block name"
 
       },
@@ -268,6 +271,9 @@ var coreTests = [
       }
     ]
   },
+/**
+ * TRUTH/FALSY TESTS
+ */
   {
     name: "truth/falsy tests",
     tests: [
@@ -357,6 +363,9 @@ var coreTests = [
        }
     ]
   },
+/**
+ * SCALAR DATA TESTS
+ */
   {
     name: "scalar data tests",
     tests: [
@@ -434,6 +443,9 @@ var coreTests = [
       }
     ]
   },
+/**
+ * EMPTY DATA TESTS
+ */
   {
     name: "empty data tests",
     tests: [
@@ -495,6 +507,9 @@ var coreTests = [
       }
     ]
   },
+/**
+ * ARRAY/INDEX ACCESS TESTS
+ */
   {
     name: "array/index-access tests",
     tests: [
@@ -627,7 +642,7 @@ var coreTests = [
       {
         name: "using len in array reference Accessing",
         source: "{#list3}{.[$len].idx}{/list3}",
-        context: { "list3": [ 
+        context: { "list3": [
                     [{"idx": "0"},
                      {"idx": "1"},
                      {"idx": "2"}],
@@ -638,9 +653,19 @@ var coreTests = [
         },
         expected: "22",
         message: "should test the array reference access with len and current context"
+      },
+      {
+        name: "using idx in double nested array",
+        source: "{#test}{#.}{.}i:{$idx}l:{$len},{/.}{/test}",
+        context: { "test": [[ 1,2,3 ]]},
+        expected: "1i:0l:3,2i:1l:3,3i:2l:3,",
+        message: "should test double nested array and . reference: issue #340"
       }
     ]
   },
+/**
+ * OBJECT TESTS
+ */
   {
     name: "object tests",
     tests: [
@@ -660,6 +685,9 @@ var coreTests = [
       }
     ]
   },
+/**
+ * CONDITINOAL TESTS
+ */
   {
     name: "conditional tests",
     tests: [
@@ -703,10 +731,13 @@ var coreTests = [
       }
     ]
   },
+/**
+ * NESTED PATH TESTS
+ */
   {
     name: "nested path tests",
     tests: [
-       { 
+       {
         name: "Verify local mode leading dot path in local mode",
         source: "{#people}{.name} is {?.age}{.age} years old.{:else}not telling us their age.{/age}{/people}",
         context:  {
@@ -833,16 +864,43 @@ var coreTests = [
           person: {
             firstName: "Peter",
             lastName:  "Jones",
-            fullName: function() { 
-                return this.firstName + ' ' + this.lastName; 
+            fullName: function() {
+                return this.firstName + ' ' + this.lastName;
             }
           }
         },
         expected: "Hello Peter Jones",
         message:  "should test resolve correct 'this' when invoking method"
+      },
+      {
+        name: "check null values in section iteration don't break path resolution",
+        source: "{#nulls}{names[0].name}{/nulls}",
+        options: {pathScope: "global"},
+        context: { "nulls": [1, null, null, 2],"names": [{"name": "Moe"}, {"name": "Curly"}] },
+        expected: "MoeMoeMoeMoe",
+        message: "Should resolve path correctly"
+      },
+      {
+        name: "check falsey value in section iteration don't break path resolution",
+        source: "{#list}{a.b}{/list}",
+        options: {pathScope: "global"},
+        context: { "list": ['', 2, ''],"a": {"b": "B"} },
+        expected: "BBB",
+        message: "Should resolve path correctly"
+      },
+      {
+        name: "check true value in section iteration are also OK",
+        source: "{#list}{a.b}{/list}",
+        options: {pathScope: "global"},
+        context: { "list": [true, 2, true],"a": {"b": "B"} },
+        expected: "BBB",
+        message: "Should resolve path correctly"
       }
     ]
   },
+/**
+ * FILTER TESTS
+ */
   {
     name: "filter tests",
     tests: [
@@ -865,8 +923,8 @@ var coreTests = [
         name:     "invalid filter",
         source:   "{obj|nullcheck|invalid}",
         context:  { obj: "test" },
-        expected: "test",
-        message: "should fail gracefully for invalid filter"
+        error:    "Invalid filter [nullcheck]",
+        message: "should fail hard for invalid filter"
       },
       {
         name:     "escapeJs filter without DQ",
@@ -898,6 +956,9 @@ var coreTests = [
       }
     ]
   },
+/**
+ * PARTIAL DEFINITIONS TESTS
+ */
   { 
     name: "partial definitions",
     tests: [
@@ -945,6 +1006,9 @@ var coreTests = [
       }
     ]
   },
+/**
+ * PARTIAL/PARAMS TESTS
+ */
   {
     name: "partial/params tests",
     tests : [
@@ -1049,9 +1113,9 @@ var coreTests = [
       {
         name:     "partial prints the current template name",
         source:   '{>partial_print_name/}',
-        context:  { "helper": function(chunk, context, bodies, params) 
+        context:  { "helper": function(chunk, context, bodies, params)
                       {
-                        currentTemplateName = context.templateName;
+                        currentTemplateName = context.getTemplateName();
                         return chunk.write(currentTemplateName);
                       }
                   },
@@ -1059,16 +1123,54 @@ var coreTests = [
         message: "should print the current template name"
       },
       {
+        name:     "partial prints the current dynamic template name",
+        source:   '{>"{partial_print_name}"/}',
+        context:  { "helper": function(chunk, context, bodies, params)
+                      {
+                        currentTemplateName = context.getTemplateName();
+                        return chunk.write(currentTemplateName);
+                      },
+                    "partial_print_name" : "partial prints the current template name"
+                  },
+        expected: "partial_print_name",
+        message: "should print the current dynamic template name"
+      },
+      {
         name:     "nested partial prints the current template name",
         source:   '{>nested_partial_print_name/}',
-        context:  { "helper": function(chunk, context, bodies, params) 
+        context:  { "helper": function(chunk, context, bodies, params)
                         {
-                          currentTemplateName = context.templateName;
+                          currentTemplateName = context.getTemplateName();
                           return chunk.write(currentTemplateName);
                         }
                     },
         expected: "partial_print_name",
         message: "should print the current template name"
+      },
+      {
+        name:     "nested partial 2 levels deep from loadSource prints the current template name",
+        source:   ['{#loadTemplate name="{contentTemplate}" source="{contentSource|s}"}{/loadTemplate}',
+                   '{#loadTemplate name="{parentTemplate}" source="{parentSource|s}"}{/loadTemplate}',
+                   '{>"{parentTemplate}"/} | additional parent output'].join("\n"),
+        context:  { "loadTemplate": function(chunk, context, bodies, params)
+                    {
+                      var source = dust.testHelpers.tap(params.source, chunk, context),
+                          name = dust.testHelpers.tap(params.name, chunk, context);
+                      dust.loadSource(dust.compile(source, name));
+                      return chunk.write('');
+                    },
+                    "printTemplateName": function(chunk, context, bodies, params)
+                    {
+                      return chunk.write(context.getTemplateName());
+                    },
+                    "parentTemplate": "parent",
+                    "parentSource": "{?undefinedVar}{:else}{>\"content\"/}{/undefinedVar}",
+                    "contentTemplate": "content",
+                    "contentSource": "templateName: {#printTemplateName}{/printTemplateName} output: additional output"
+
+                  },
+        expected: "templateName: content output: additional output | additional parent output",
+        message: "should print the current template name with some additional output"
       },
       {
         name:     "partial with makeBase_missing_global",
@@ -1077,13 +1179,16 @@ var coreTests = [
                     {
                       var newContext = {};
                       return chunk.partial(params.template, dust.makeBase(newContext));
-                    } 
+                    }
                   },
         expected: "Hello ! You have  new messages.",
         message: "should render the helper with missing global context"
       },
     ]
   },
+/**
+ * INLINE PARAMS TESTS
+ */
   {
     name: "inline params tests",
     tests: [
@@ -1111,13 +1216,23 @@ var coreTests = [
         context:  { helper: function(chunk, context, bodies, params) { return chunk.write(params.foo); } },
         expected: "3.14159",
         message: "Block handlers syntax should support decimal number parameters"
+      },
+      {
+        name:     "inline params with dashes",
+        source:   "{#helper data-foo=\"dashes\" /}",
+        context:  { helper: function(chunk, context, bodies, params) { return chunk.write(params['data-foo']); } },
+        expected: "dashes",
+        message: "should test parameters with dashes"
       }
     ]
   },
+/**
+ * INLINE PARTIAL/BLOCK TESTS
+ */
   {
     name: "inline partial/block tests",
     tests: [
-      {  
+      {
         name: "blocks with dynamic keys",
         source: ['{<title_A}',
                     'AAA',
@@ -1171,6 +1286,9 @@ var coreTests = [
       }
     ]
   },
+/**
+ * LAMBDA TESTS
+ */
   {
     name: "lambda tests",
     tests: [
@@ -1240,6 +1358,9 @@ var coreTests = [
         }
     ]
   },
+/**
+ * CORE GRAMMAR TESTS
+ */
   {
     name: "core-grammar tests",
     tests: [
@@ -1254,7 +1375,7 @@ var coreTests = [
         name:     "error: whitespaces between the opening brace and any of (#,?,@,^,+,%) is not allowed",
         source:   '{ # helper foo="bar" boo="boo" } {/helper}',
         context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
-        error: 'Expected buffer, comment, partial, reference, section or special but "{" found. At line : 1, column : 1',
+        error: 'Expected buffer, comment, partial, raw, reference, section or special but "{" found. At line : 1, column : 1',
         message: "should show an error for whitespces between the opening brace and any of (#,?,@,^,+,%)"
       },
       {
@@ -1282,7 +1403,7 @@ var coreTests = [
         name:     "error: whitespaces between the forward slash and the closing brace in self closing tags",
         source:   '{#helper foo="bar" boo="boo" / }',
         context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
-        error: 'Expected buffer, comment, partial, reference, section or special but "{" found. At line : 1, column : 1',
+        error: 'Expected buffer, comment, partial, raw, reference, section or special but "{" found. At line : 1, column : 1',
         message: "should show an error for whitespaces  etween the forward slash and the closing brace in self closing tags"
       },
       {
@@ -1296,7 +1417,7 @@ var coreTests = [
         name: "error : whitespaces between the '{' plus '>' and partial identifier is not supported",
         source: '{ > partial/} {> "hello_world"/} {> "{ref}"/}',
         context: { "name": "Jim", "count": 42, "ref": "hello_world" },
-        error: 'Expected buffer, comment, partial, reference, section or special but "{" found. At line : 1, column : 1',
+        error: 'Expected buffer, comment, partial, raw, reference, section or special but "{" found. At line : 1, column : 1',
         message: "should show an error for whitespaces between the '{' plus '>' and partial identifier"
       },
       {
@@ -1386,6 +1507,9 @@ var coreTests = [
       }
     ]
   },
+/**
+ * SYNTAX ERROR TESTS
+ */
   {
     name: "syntax error tests",
     tests: [
@@ -1393,7 +1517,7 @@ var coreTests = [
         name: "Dust syntax error",
         source: "RRR {##}",
         context: { name: "Mick", count: 30 },
-        error: 'Expected buffer, comment, partial, reference, section or special but "{" found. At line : 1, column : 5',
+        error: 'Expected buffer, comment, partial, raw, reference, section or special but "{" found. At line : 1, column : 5',
         message: "should test that the error message shows line and column."
       },
       {
@@ -1480,7 +1604,7 @@ var coreTests = [
         name: "Dust syntax error. Error in Conditional",
         source:["{?tags}",
                   "<ul>{~n}",
-                    "{#tags}{~s}", 
+                    "{#tags}{~s}",
                       "<li>{#@$}</li>{~n}",
                     "{/tags}",
                   "</ul>",
@@ -1495,7 +1619,7 @@ var coreTests = [
         name: "Dust syntax error. Error in Conditional's else",
         source:["{?tags}",
                   "<ul>{~n}",
-                    "{#tags}{~s}", 
+                    "{#tags}{~s}",
                       "<li>{.}</li>{~n}",
                     "{/tags}",
                   "</ul>",
@@ -1511,7 +1635,7 @@ var coreTests = [
         name: "Dust syntax error. Error in Conditional without end tag",
         source:["{?tags}",
                   "<ul>{~n}",
-                    "{#tags}{~s}", 
+                    "{#tags}{~s}",
                       "<li>{.}</li>{~n}",
                     "{/tags}",
                   "</ul>",
@@ -1523,6 +1647,9 @@ var coreTests = [
       }
     ]
   },
+/**
+ * BUFFER TESTS
+ */
   {
     name: "buffer test",
     tests: [
@@ -1535,6 +1662,113 @@ var coreTests = [
       }
     ]
   },
+/**
+ * COMMENT TESTS
+ */
+  {
+    name: "comment test",
+    tests: [
+      {
+        name: "comment",
+        source: ["before {!  this is a comment { and } and all sorts of stuff including",
+                 "newlines and tabs \t are valid and is simply ignored !}after"].join('\n'),
+        context: {},
+        expected: "before after",
+        message: "comments should be ignored"
+      }
+    ]
+  },
+/**
+ * RAW TEXT TESTS
+ */
+  {
+    name: "raw text test",
+    tests: [
+      {
+        name: "simple raw text",
+        source: ["{`<pre>",
+                 'A: "hello"',
+                 "              B: 'hello'?",
+                 "A: a walrus (:{=",
+                 "              B: Lols!",
+"               __ ___                              ",
+"            .'. -- . '.                            ",
+"           /U)  __   (O|                           ",
+"          /.'  ()()   '.\._                        ",
+"        .',/;,_.--._.;;) . '--..__                 ",
+"       /  ,///|.__.|.\\\  \ '.  '.''---..___       ",
+"      /'._ '' ||  ||  '' _'\  :   \   '   . '.     ",
+"     /        ||  ||        '.,    )   )   :  \    ",
+"    :'-.__ _  ||  ||   _ __.' _\_ .'  '   '   ,)   ",
+"    (          '  |'        ( __= ___..-._ ( (.\\  ",
+"   ('\      .___ ___.      /'.___=          \.\.\  ",
+"    \\\-..____________..-''                        ",
+                 "</pre>`}"].join('\n'),
+        context: {},
+        expected: ["<pre>",
+                 'A: "hello"',
+                 "              B: 'hello'?",
+                 "A: a walrus (:{=",
+                 "              B: Lols!",
+"               __ ___                              ",
+"            .'. -- . '.                            ",
+"           /U)  __   (O|                           ",
+"          /.'  ()()   '.\._                        ",
+"        .',/;,_.--._.;;) . '--..__                 ",
+"       /  ,///|.__.|.\\\  \ '.  '.''---..___       ",
+"      /'._ '' ||  ||  '' _'\  :   \   '   . '.     ",
+"     /        ||  ||        '.,    )   )   :  \    ",
+"    :'-.__ _  ||  ||   _ __.' _\_ .'  '   '   ,)   ",
+"    (          '  |'        ( __= ___..-._ ( (.\\  ",
+"   ('\      .___ ___.      /'.___=          \.\.\  ",
+"    \\\-..____________..-''                        ",
+                 "</pre>"].join('\n'),
+        message: "raw text should keep all whitespace"
+      },
+      {
+        name: "raw text more likely example",
+        source: ["{#A}",
+                 "buffer text",
+                 "         !spaces and new lines are nullified (by default). Booo",
+                 "{~n}   Starting with newline make it not so bad",
+                 "{`<pre>",
+                 "but",
+                 "  what{",
+                 "  \twe",
+                 "      want is this",
+                 "helpful for:",
+                 " * talking about Dust syntax which looks like `{ref}` `{@helpers}`",
+                 " * interpolations like 'My name is:`} {#name}{first} {last}{/name}{`",
+                 "</pre>`}",
+                 "after",
+                 "!newline",
+                 "{/A}"].join('\n'),
+        context: {A:{ name: {first: 'Paul', last: 'Walrus'}}},
+        expected: ["buffer text!spaces and new lines are nullified (by default). Booo",
+                 "   Starting with newline make it not so bad<pre>",
+                 "but",
+                 "  what{",
+                 "  \twe",
+                 "      want is this",
+                 "helpful for:",
+                 " * talking about Dust syntax which looks like `{ref}` `{@helpers}`",
+                 " * interpolations like 'My name is: Paul Walrus",
+                 "</pre>after!newline"].join('\n'),
+        message: "raw text is not matching"
+      },
+      {
+        name: "using raw to allow {",
+        source: ["<div data-fancy-json={`\"{rawJsonKey: 'value'}\"`}>",
+                 "</div>"].join('\n'),
+        context: {},
+        expected: "<div data-fancy-json=\"{rawJsonKey: 'value'}\"></div>",
+        message: "raw text should allow {"
+      }
+    ]
+  },
+/**
+ * INVALID HELPER TESTS
+ */
   {
     name:"invalid helper test",
     tests: [
@@ -1542,8 +1776,62 @@ var coreTests = [
         name:     "non-existing helper",
         source:   "some text {@notfound}foo{/notfound} some text",
         context:  {},
-        expected: "some text  some text",
-        message: "Should not crash the application if an helper is not found"
+        error: "Invalid helper [notfound]",
+        message: "Should crash the application if a helper is not found"
+      }
+    ]
+  },
+  {
+    name: "debugger tests",
+    tests: [
+      {
+        name: "Using unescape filter",
+        source:"{test|s}",
+        context: {"test": "example text"},
+        log: "Using unescape filter on [example text]",
+        message: "test the log messages for an unescape filter."
+      },
+      {
+        name: "Reference lookup",
+        source:"{test}",
+        context: {"test": "example text"},
+        log: "Searching for reference [{test}] in template [Reference lookup]",
+        message: "test the log messages for a reference lookup."
+      },
+      {
+        name: "Reference lookup with dots",
+        source:"{test.anotherTest}",
+        context: {"test": "example text"},
+        log: "Searching for reference [{test.anotherTest}] in template [Reference lookup with dots]",
+        message: "test the log messages for a reference lookup."
+      },
+      {
+        name: "Reference not found",
+        source:"{wrongTest}",
+        context: {"test": "example text"},
+        log: "Cannot find the value for reference [{wrongTest}] in template [Reference not found]",
+        message: "test the log messages for a reference not found."
+      },
+      {
+        name: "Unhandled section tag",
+        source:"{#strangeSection}{/strangeSection}",
+        context: {"test": "example text"},
+        log: "Not rendering section (#) block in template [Unhandled section tag], because above key was not found",
+        message: "test the log messages for an unhandled section."
+      },
+      {
+        name: "No render for exists",
+        source:"{?doesNotExist}{/doesNotExist}",
+        context: {},
+        log: "Not rendering exists (?) block in template [No render for exists], because above key was not found",
+        message: "test the log messages for a non existing exists check."
+      },
+      {
+        name: "No render for not exists",
+        source:"{^exists}{/exists}",
+        context: {"exists": "example text"},
+        log: "Not rendering not exists (^) block check in template [No render for not exists], because above key was found",
+        message: "test the log messages for an existing not exists check."
       }
     ]
   }

@@ -1,22 +1,36 @@
+/*! Dust - Asynchronous Templating - v2.2.3
+* http://linkedin.github.io/dustjs/
+* Copyright (c) 2013 Aleksander Williams; Released under the MIT License */
 /*jshint evil:true*/
-(function(root) {
-  var dust = {},
-      ERROR = 'ERROR',
+var dust = {};
+
+function getGlobal(){
+  return (function(){
+    return this.dust;
+  }).call(null);
+}
+
+(function(dust) {
+
+  if(!dust) {
+    return;
+  }
+  var ERROR = 'ERROR',
       WARN = 'WARN',
       INFO = 'INFO',
       DEBUG = 'DEBUG',
       levels = [DEBUG, INFO, WARN, ERROR],
       EMPTY_FUNC = function() {},
-      logger = EMPTY_FUNC,
-      loggerContext = this;
+      logger = EMPTY_FUNC;
 
   dust.isDebug = false;
   dust.debugLevel = INFO;
 
-  // Try to find the console logger in global scope
-  if (root && root.console && root.console.log) {
-    logger = root.console.log;
-    loggerContext = root.console;
+  // Try to find the console logger in window scope (browsers) or top level scope (node.js)
+  if (typeof window !== 'undefined' && window && window.console && window.console.log) {
+    logger = window.console.log;
+  } else if (typeof console !== 'undefined' && console && console.log) {
+    logger = console.log;
   }
 
   /**
@@ -33,7 +47,7 @@
         dust.logQueue = [];
       }
       dust.logQueue.push({message: message, type: type});
-      logger.call(loggerContext, '[DUST ' + type + ']: ' + message);
+      logger.call(console || window.console, '[DUST ' + type + ']: ' + message);
     }
   };
 
@@ -140,9 +154,13 @@
   }
 
   dust.nextTick = (function() {
-    return function(callback) {
-      setTimeout(callback,0);
-    };
+    if (typeof process !== 'undefined') {
+      return process.nextTick;
+    } else {
+      return function(callback) {
+        setTimeout(callback,0);
+      };
+    }
   } )();
 
   dust.isEmpty = function(value) {
@@ -801,12 +819,11 @@
     return s;
   };
 
+})(dust);
 
-  if (typeof exports === 'object') {
-    module.exports = dust;
-  } else {
-    root.dust = dust;
+if (typeof exports !== 'undefined') {
+  if (typeof process !== 'undefined') {
+    require('./server')(dust);
   }
-
-})(this);
-
+  module.exports = dust;
+}
