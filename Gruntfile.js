@@ -37,7 +37,7 @@ module.exports = function(grunt) {
           stdout: true
         }
       },
-      gitAdd: {
+      gitAddArchive: {
         command: 'git add <%= compress.distTarBall.options.archive %> <%= compress.distZip.options.archive %>',
         options: {
           stdout: true
@@ -258,8 +258,8 @@ module.exports = function(grunt) {
 
   grunt.registerTask('copyForRelease', ['clean:dist', 'copy:core', 'copy:coreMin', 'copy:full', 'copy:fullMin', 'copy:license', 'log:copyForRelease']);
   grunt.registerTask('buildRelease', ['test', 'copyForRelease', 'compress']);
-  grunt.registerTask('releasePatch', ['bump-only:patch', 'buildRelease', 'shell:gitAdd:archive', 'bump-commit', 'log:release']);
-  grunt.registerTask('releaseMinor', ['bump-only:minor', 'buildRelease', 'shell:gitAdd:archive', 'bump-commit', 'log:release']);
+  grunt.registerTask('releasePatch', ['bump-only:patch', 'buildRelease', 'shell:gitAddArchive', 'bump-commit', 'log:release']);
+  grunt.registerTask('releaseMinor', ['bump-only:minor', 'buildRelease', 'shell:gitAddArchive', 'bump-commit', 'log:release']);
   // major release should probably be done with care
   // grunt.registerTask('releaseMajor', ['bump-only:major', 'buildRelease', 'bump-commit:major', 'log:release']);
 
