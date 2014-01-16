@@ -168,7 +168,9 @@ module.exports = function(grunt) {
     bump: {
       options: {
         files: ['package.json', 'bower.json'],
-        updateConfigs: ['pkg']
+        updateConfigs: ['pkg'],
+        push: false,
+        commitFiles: ['-a']
       }
     },
     log: {
@@ -192,6 +194,7 @@ module.exports = function(grunt) {
           message: ['OK. Done bumping, adding, committing, tagging and pushing the new version',
                     '',
                     'You still need to manually do the following:',
+                    '  * git push upstream && git push upstream --tags',
                     '  * npm publish'].join('\n')
         }
       }
