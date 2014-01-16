@@ -27,6 +27,12 @@ var coreTests = [
         message: "should test the stream rendering"
       },
       {
+        name: undefined,
+        source: "compilation_failure",
+        error: "Template name parameter cannot be undefined when calling dust.compile",
+        message: "if the name is not there compilation should be failed, unless it is called from renderSource"
+      },
+      {
         name:     "hello_world",
         source:   "Hello World!",
         context:  {},
