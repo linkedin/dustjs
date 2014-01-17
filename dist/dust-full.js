@@ -1,53 +1,55 @@
-/*! Dust - Asynchronous Templating - v2.2.3
+/*! Dust - Asynchronous Templating - v2.3.0
 * http://linkedin.github.io/dustjs/
-* Copyright (c) 2013 Aleksander Williams; Released under the MIT License */
-/*jshint evil:true*/
-var dust = {};
-
-function getGlobal(){
-  return (function(){
-    return this.dust;
-  }).call(null);
-}
-
-(function(dust) {
-
-  if(!dust) {
-    return;
-  }
-  var ERROR = 'ERROR',
+* Copyright (c) 2014 Aleksander Williams; Released under the MIT License */
+(function(root) {
+  var dust = {},
+      NONE = 'NONE',
+      ERROR = 'ERROR',
       WARN = 'WARN',
       INFO = 'INFO',
       DEBUG = 'DEBUG',
-      levels = [DEBUG, INFO, WARN, ERROR],
+      loggingLevels = [DEBUG, INFO, WARN, ERROR, NONE],
       EMPTY_FUNC = function() {},
-      logger = EMPTY_FUNC;
+      logger = EMPTY_FUNC,
+      loggerContext = this;
 
-  dust.isDebug = false;
-  dust.debugLevel = INFO;
+  dust.debugLevel = NONE;
+  dust.silenceErrors = false;
 
-  // Try to find the console logger in window scope (browsers) or top level scope (node.js)
-  if (typeof window !== 'undefined' && window && window.console && window.console.log) {
-    logger = window.console.log;
-  } else if (typeof console !== 'undefined' && console && console.log) {
-    logger = console.log;
+  // Try to find the console logger in global scope
+  if (root && root.console && root.console.log) {
+    logger = root.console.log;
+    loggerContext = root.console;
   }
 
   /**
    * If dust.isDebug is true, Log dust debug statements, info statements, warning statements, and errors.
    * This default implementation will print to the console if it exists.
-   * @param {String} message the message to print
+   * @param {String|Error} message the message to print/throw
    * @param {String} type the severity of the message(ERROR, WARN, INFO, or DEBUG)
    * @public
    */
   dust.log = function(message, type) {
+    if(dust.isDebug && dust.debugLevel === NONE) {
+      logger.call(loggerContext, '[!!!DEPRECATION WARNING!!!]: dust.isDebug is deprecated.  Set dust.debugLevel instead to the level of logging you want ["debug","info","warn","error","none"]');
+      dust.debugLevel = INFO;
+    }
+
     type = type || INFO;
-    if(dust.isDebug && levels.indexOf(type) >= levels.indexOf(dust.debugLevel)) {
+    if (loggingLevels.indexOf(type) >= loggingLevels.indexOf(dust.debugLevel)) {
       if(!dust.logQueue) {
         dust.logQueue = [];
       }
       dust.logQueue.push({message: message, type: type});
-      logger.call(console || window.console, '[DUST ' + type + ']: ' + message);
+      logger.call(loggerContext, '[DUST ' + type + ']: ' + message);
+    }
+
+    if (!dust.silenceErrors && type === ERROR) {
+      if (typeof message === 'string') {
+        throw new Error(message);
+      } else {
+        throw message;
+      }
     }
   };
 
@@ -59,8 +61,9 @@ function getGlobal(){
    * @public
    */
   dust.onError = function(error, chunk) {
+    logger.call(loggerContext, '[!!!DEPRECATION WARNING!!!]: dust.onError will no longer return a chunk object.');
     dust.log(error.message || error, ERROR);
-    if(dust.isDebug) {
+    if(!dust.silenceErrors) {
       throw error;
     } else {
       return chunk;
@@ -83,7 +86,7 @@ function getGlobal(){
     try {
       dust.load(name, chunk, Context.wrap(context, name)).end();
     } catch (err) {
-      dust.onError(err, chunk);
+      dust.log(err, ERROR);
     }
   };
 
@@ -93,14 +96,15 @@ function getGlobal(){
       try {
         dust.load(name, stream.head, Context.wrap(context, name)).end();
       } catch (err) {
-        dust.onError(err, stream.head);
+        dust.log(err, ERROR);
       }
     });
     return stream;
   };
 
   dust.renderSource = function(source, context, callback) {
-    return dust.compileFn(source)(context, callback);
+    //passing null, so that 'compile' knows that template has to be compiled but not to be stored in cache
+    return dust.compileFn(source, null)(context, callback);
   };
 
   dust.compileFn = function(source, name) {
@@ -112,7 +116,7 @@ function getGlobal(){
           tmpl(master.head, Context.wrap(context, name)).end();
         }
         else {
-          dust.onError(new Error('Template [' + name + '] cannot be resolved to a Dust function'));
+          dust.log(new Error('Template [' + name + '] cannot be resolved to a Dust function'), ERROR);
         }
       });
       return master;
@@ -154,13 +158,9 @@ function getGlobal(){
   }
 
   dust.nextTick = (function() {
-    if (typeof process !== 'undefined') {
-      return process.nextTick;
-    } else {
-      return function(callback) {
-        setTimeout(callback,0);
-      };
-    }
+    return function(callback) {
+      setTimeout(callback,0);
+    };
   } )();
 
   dust.isEmpty = function(value) {
@@ -186,7 +186,7 @@ function getGlobal(){
           string = dust.filters[name](string);
         }
         else {
-          dust.onError(new Error('Invalid filter [' + name + ']'));
+          dust.log(new Error('Invalid filter [' + name + ']'), ERROR);
         }
       }
     }
@@ -315,7 +315,11 @@ function getGlobal(){
     // Return the ctx or a function wrapping the application of the context.
     if (typeof ctx === 'function') {
       var fn = function() {
-        return ctx.apply(ctxThis, arguments);
+        try {
+          return ctx.apply(ctxThis, arguments);
+        } catch (err) {
+          return dust.log(err, ERROR);
+        }
       };
       fn.isFunction = true;
       return fn;
@@ -405,7 +409,7 @@ function getGlobal(){
         this.out += chunk.data.join(''); //ie7 perf
       } else if (chunk.error) {
         this.callback(chunk.error);
-        dust.onError(new Error('Chunk error [' + chunk.error + '] thrown. Ceasing to render this template.'));
+        dust.log(new Error('Chunk error [' + chunk.error + '] thrown. Ceasing to render this template.'), ERROR);
         this.flush = EMPTY_FUNC;
         return;
       } else {
@@ -429,7 +433,7 @@ function getGlobal(){
         this.emit('data', chunk.data.join('')); //ie7 perf
       } else if (chunk.error) {
         this.emit('error', chunk.error);
-        dust.onError(new Error('Chunk error [' + chunk.error + '] thrown. Ceasing to render this template.'));
+        dust.log(new Error('Chunk error [' + chunk.error + '] thrown. Ceasing to render this template.'), ERROR);
         this.flush = EMPTY_FUNC;
         return;
       } else {
@@ -459,7 +463,7 @@ function getGlobal(){
         listeners[i](data);
       }
     } else {
-      dust.onError(new Error('Event Handler [' + handler + '] is not of a type that is handled by emit'));
+      dust.log(new Error('Event Handler [' + handler + '] is not of a type that is handled by emit'), ERROR);
     }
   };
 
@@ -487,13 +491,13 @@ function getGlobal(){
       try {
         stream.write(data, 'utf8');
       } catch (err) {
-        dust.onError(err, stream.head);
+        dust.log(err, ERROR);
       }
     }).on('end', function() {
       try {
         return stream.end();
       } catch (err) {
-        dust.onError(err, stream.head);
+        dust.log(err, ERROR);
       }
     }).on('error', function(err) {
       stream.error(err);
@@ -729,10 +733,12 @@ function getGlobal(){
       if(dust.helpers[name]) {
         return dust.helpers[name](chunk, context, bodies, params);
       } else {
-        return dust.onError(new Error('Invalid helper [' + name + ']'), chunk);
+        dust.log(new Error('Invalid helper [' + name + ']'), ERROR);
+        return chunk;
       }
     } catch (err) {
-      return dust.onError(err, chunk);
+      dust.log(err, ERROR);
+      return chunk;
     }
   };
 
@@ -819,395 +825,27 @@ function getGlobal(){
     return s;
   };
 
-})(dust);
 
-if (typeof exports !== 'undefined') {
-  if (typeof process !== 'undefined') {
-    require('./server')(dust);
+  if (typeof exports === 'object') {
+    module.exports = dust;
+  } else {
+    root.dust = dust;
   }
-  module.exports = dust;
-}
 
-/*jshint latedef:false */
-var dustCompiler = function(dust) {
+})(this);
 
-dust.compile = function(source, name) {
-  try {
-    var ast = filterAST(dust.parse(source));
-    return compile(ast, name);
+
+(function(root, factory) {
+  if (typeof exports === 'object') {
+    // in Node, require this file if we want to use the parser as a standalone module
+    module.exports = factory(require('./dust'));
+    // @see server file for parser methods exposed in node
+  } else {
+    // in the browser, store the factory output if we want to use the parser directly
+    factory(root.dust);
   }
-  catch (err)
-  {
-    if (!err.line || !err.column) {
-      throw err;
-    }
-    throw new SyntaxError(err.message + ' At line : ' + err.line + ', column : ' + err.column);
-  }
-};
-
-function filterAST(ast) {
-  var context = {};
-  return dust.filterNode(context, ast);
-}
-
-dust.filterNode = function(context, node) {
-  return dust.optimizers[node[0]](context, node);
-};
-
-dust.optimizers = {
-  body:      compactBuffers,
-  buffer:    noop,
-  special:   convertSpecial,
-  format:    nullify,        // TODO: convert format
-  reference: visit,
-  '#':       visit,
-  '?':       visit,
-  '^':       visit,
-  '<':       visit,
-  '+':       visit,
-  '@':       visit,
-  '%':       visit,
-  partial:   visit,
-  context:   visit,
-  params:    visit,
-  bodies:    visit,
-  param:     visit,
-  filters:   noop,
-  key:       noop,
-  path:      noop,
-  literal:   noop,
-  comment:   nullify,
-  line:      nullify,
-  col:       nullify
-};
-
-dust.pragmas = {
-  esc: function(compiler, context, bodies, params) {
-    var old = compiler.auto,
-        out;
-    if (!context) {
-      context = 'h';
-    }
-    compiler.auto = (context === 's') ? '' : context;
-    out = compileParts(compiler, bodies.block);
-    compiler.auto = old;
-    return out;
-  }
-};
-
-function visit(context, node) {
-  var out = [node[0]],
-      i, len, res;
-  for (i=1, len=node.length; i<len; i++) {
-    res = dust.filterNode(context, node[i]);
-    if (res) {
-      out.push(res);
-    }
-  }
-  return out;
-}
-
-// Compacts consecutive buffer nodes into a single node
-function compactBuffers(context, node) {
-  var out = [node[0]],
-      memo, i, len, res;
-  for (i=1, len=node.length; i<len; i++) {
-    res = dust.filterNode(context, node[i]);
-    if (res) {
-      if (res[0] === 'buffer') {
-        if (memo) {
-          memo[1] += res[1];
-        } else {
-          memo = res;
-          out.push(res);
-        }
-      } else {
-        memo = null;
-        out.push(res);
-      }
-    }
-  }
-  return out;
-}
-
-var specialChars = {
-  's': ' ',
-  'n': '\n',
-  'r': '\r',
-  'lb': '{',
-  'rb': '}'
-};
-
-function convertSpecial(context, node) {
-  return ['buffer', specialChars[node[1]]];
-}
-
-function noop(context, node) {
-  return node;
-}
-
-function nullify(){}
-
-function compile(ast, name) {
-  var context = {
-    name: name,
-    bodies: [],
-    blocks: {},
-    index: 0,
-    auto: 'h'
-  };
-
-  return '(function(){dust.register(' +
-      (name ? '"' + name + '"' : 'null') + ',' +
-      dust.compileNode(context, ast) +
-      ');' +
-      compileBlocks(context) +
-      compileBodies(context) +
-      'return body_0;' +
-      '})();';
-}
-
-function compileBlocks(context) {
-  var out = [],
-      blocks = context.blocks,
-      name;
-
-  for (name in blocks) {
-    out.push('"' + name + '":' + blocks[name]);
-  }
-  if (out.length) {
-    context.blocks = 'ctx=ctx.shiftBlocks(blocks);';
-    return 'var blocks={' + out.join(',') + '};';
-  }
-  return context.blocks = '';
-}
-
-function compileBodies(context) {
-  var out = [],
-      bodies = context.bodies,
-      blx = context.blocks,
-      i, len;
-
-  for (i=0, len=bodies.length; i<len; i++) {
-    out[i] = 'function body_' + i + '(chk,ctx){' +
-        blx + 'return chk' + bodies[i] + ';}';
-  }
-  return out.join('');
-}
-
-function compileParts(context, body) {
-  var parts = '',
-      i, len;
-  for (i=1, len=body.length; i<len; i++) {
-    parts += dust.compileNode(context, body[i]);
-  }
-  return parts;
-}
-
-dust.compileNode = function(context, node) {
-  return dust.nodes[node[0]](context, node);
-};
-
-dust.nodes = {
-  body: function(context, node) {
-    var id = context.index++,
-        name = 'body_' + id;
-    context.bodies[id] = compileParts(context, node);
-    return name;
-  },
-
-  buffer: function(context, node) {
-    return '.write(' + escape(node[1]) + ')';
-  },
-
-  format: function(context, node) {
-    return '.write(' + escape(node[1] + node[2]) + ')';
-  },
-
-  reference: function(context, node) {
-    return '.reference(' + dust.compileNode(context, node[1]) +
-      ',ctx,' + dust.compileNode(context, node[2]) + ')';
-  },
-
-  '#': function(context, node) {
-    return compileSection(context, node, 'section');
-  },
-
-  '?': function(context, node) {
-    return compileSection(context, node, 'exists');
-  },
-
-  '^': function(context, node) {
-    return compileSection(context, node, 'notexists');
-  },
-
-  '<': function(context, node) {
-    var bodies = node[4];
-    for (var i=1, len=bodies.length; i<len; i++) {
-      var param = bodies[i],
-          type = param[1][1];
-      if (type === 'block') {
-        context.blocks[node[1].text] = dust.compileNode(context, param[2]);
-        return '';
-      }
-    }
-    return '';
-  },
-
-  '+': function(context, node) {
-    if (typeof(node[1].text) === 'undefined'  && typeof(node[4]) === 'undefined'){
-      return '.block(ctx.getBlock(' +
-            dust.compileNode(context, node[1]) +
-            ',chk, ctx),' + dust.compileNode(context, node[2]) + ', {},' +
-            dust.compileNode(context, node[3]) +
-            ')';
-    } else {
-      return '.block(ctx.getBlock(' +
-          escape(node[1].text) +
-          '),' + dust.compileNode(context, node[2]) + ',' +
-          dust.compileNode(context, node[4]) + ',' +
-          dust.compileNode(context, node[3]) +
-          ')';
-    }
-  },
-
-  '@': function(context, node) {
-    return '.helper(' +
-      escape(node[1].text) +
-      ',' + dust.compileNode(context, node[2]) + ',' +
-      dust.compileNode(context, node[4]) + ',' +
-      dust.compileNode(context, node[3]) +
-      ')';
-  },
-
-  '%': function(context, node) {
-    // TODO: Move these hacks into pragma precompiler
-    var name = node[1][1],
-        rawBodies,
-        bodies,
-        rawParams,
-        params,
-        ctx, b, p, i, len;
-    if (!dust.pragmas[name]) {
-      return '';
-    }
-
-    rawBodies = node[4];
-    bodies = {};
-    for (i=1, len=rawBodies.length; i<len; i++) {
-      b = rawBodies[i];
-      bodies[b[1][1]] = b[2];
-    }
-
-    rawParams = node[3];
-    params = {};
-    for (i=1, len=rawParams.length; i<len; i++) {
-      p = rawParams[i];
-      params[p[1][1]] = p[2][1];
-    }
-
-    ctx = node[2][1] ? node[2][1].text : null;
-
-    return dust.pragmas[name](context, ctx, bodies, params);
-  },
-
-  partial: function(context, node) {
-    return '.partial(' +
-        dust.compileNode(context, node[1]) +
-        ',' + dust.compileNode(context, node[2]) +
-        ',' + dust.compileNode(context, node[3]) + ')';
-  },
-
-  context: function(context, node) {
-    if (node[1]) {
-      return 'ctx.rebase(' + dust.compileNode(context, node[1]) + ')';
-    }
-    return 'ctx';
-  },
-
-  params: function(context, node) {
-    var out = [];
-    for (var i=1, len=node.length; i<len; i++) {
-      out.push(dust.compileNode(context, node[i]));
-    }
-    if (out.length) {
-      return '{' + out.join(',') + '}';
-    }
-    return 'null';
-  },
-
-  bodies: function(context, node) {
-    var out = [];
-    for (var i=1, len=node.length; i<len; i++) {
-      out.push(dust.compileNode(context, node[i]));
-    }
-    return '{' + out.join(',') + '}';
-  },
-
-  param: function(context, node) {
-    return dust.compileNode(context, node[1]) + ':' + dust.compileNode(context, node[2]);
-  },
-
-  filters: function(context, node) {
-    var list = [];
-    for (var i=1, len=node.length; i<len; i++) {
-      var filter = node[i];
-      list.push('"' + filter + '"');
-    }
-    return '"' + context.auto + '"' +
-      (list.length ? ',[' + list.join(',') + ']' : '');
-  },
-
-  key: function(context, node) {
-    return 'ctx._get(false, ["' + node[1] + '"])';
-  },
-
-  path: function(context, node) {
-    var current = node[1],
-        keys = node[2],
-        list = [];
-
-    for (var i=0,len=keys.length; i<len; i++) {
-      if (dust.isArray(keys[i])) {
-        list.push(dust.compileNode(context, keys[i]));
-      } else {
-        list.push('"' + keys[i] + '"');
-      }
-    }
-    return 'ctx._get(' + current + ',[' + list.join(',') + '])';
-  },
-
-  literal: function(context, node) {
-    return escape(node[1]);
-  }
-};
-
-function compileSection(context, node, cmd) {
-  return '.' + cmd + '(' +
-    dust.compileNode(context, node[1]) +
-    ',' + dust.compileNode(context, node[2]) + ',' +
-    dust.compileNode(context, node[4]) + ',' +
-    dust.compileNode(context, node[3]) +
-    ')';
-}
-
-var escape = (typeof JSON === 'undefined') ?
-                function(str) { return '"' + dust.escapeJs(str) + '"';} :
-                JSON.stringify;
-
-return dust;
-
-};
-
-if (typeof exports !== 'undefined') {
-  module.exports = dustCompiler;
-} else {
-  dustCompiler(getGlobal());
-}
-
-(function(dust){
-
-var parser = (function(){
+}(this, function(dust) {
+  var parser = (function(){
   /*
    * Generated by PEG.js 0.7.0.
    *
@@ -1271,6 +909,7 @@ var parser = (function(){
         "buffer": parse_buffer,
         "literal": parse_literal,
         "esc": parse_esc,
+        "raw": parse_raw,
         "comment": parse_comment,
         "tag": parse_tag,
         "ld": parse_ld,
@@ -1387,17 +1026,20 @@ var parser = (function(){
       function parse_part() {
         var result0;
         
-        result0 = parse_comment();
+        result0 = parse_raw();
         if (result0 === null) {
-          result0 = parse_section();
+          result0 = parse_comment();
           if (result0 === null) {
-            result0 = parse_partial();
+            result0 = parse_section();
             if (result0 === null) {
-              result0 = parse_special();
+              result0 = parse_partial();
               if (result0 === null) {
-                result0 = parse_reference();
+                result0 = parse_special();
                 if (result0 === null) {
-                  result0 = parse_buffer();
+                  result0 = parse_reference();
+                  if (result0 === null) {
+                    result0 = parse_buffer();
+                  }
                 }
               }
             }
@@ -2943,7 +2585,7 @@ var parser = (function(){
       }
       
       function parse_buffer() {
-        var result0, result1, result2, result3, result4;
+        var result0, result1, result2, result3, result4, result5;
         var pos0, pos1, pos2, pos3;
         
         reportFailures++;
@@ -2990,7 +2632,7 @@ var parser = (function(){
           if (result1 !== null) {
             pos3 = clone(pos);
             reportFailures++;
-            result2 = parse_comment();
+            result2 = parse_raw();
             reportFailures--;
             if (result2 === null) {
               result2 = "";
@@ -3001,7 +2643,7 @@ var parser = (function(){
             if (result2 !== null) {
               pos3 = clone(pos);
               reportFailures++;
-              result3 = parse_eol();
+              result3 = parse_comment();
               reportFailures--;
               if (result3 === null) {
                 result3 = "";
@@ -3010,17 +2652,32 @@ var parser = (function(){
                 pos = clone(pos3);
               }
               if (result3 !== null) {
-                if (input.length > pos.offset) {
-                  result4 = input.charAt(pos.offset);
-                  advance(pos, 1);
+                pos3 = clone(pos);
+                reportFailures++;
+                result4 = parse_eol();
+                reportFailures--;
+                if (result4 === null) {
+                  result4 = "";
                 } else {
                   result4 = null;
-                  if (reportFailures === 0) {
-                    matchFailed("any character");
-                  }
+                  pos = clone(pos3);
                 }
                 if (result4 !== null) {
-                  result1 = [result1, result2, result3, result4];
+                  if (input.length > pos.offset) {
+                    result5 = input.charAt(pos.offset);
+                    advance(pos, 1);
+                  } else {
+                    result5 = null;
+                    if (reportFailures === 0) {
+                      matchFailed("any character");
+                    }
+                  }
+                  if (result5 !== null) {
+                    result1 = [result1, result2, result3, result4, result5];
+                  } else {
+                    result1 = null;
+                    pos = clone(pos2);
+                  }
                 } else {
                   result1 = null;
                   pos = clone(pos2);
@@ -3038,7 +2695,7 @@ var parser = (function(){
             pos = clone(pos2);
           }
           if (result1 !== null) {
-            result1 = (function(offset, line, column, c) {return c})(pos1.offset, pos1.line, pos1.column, result1[3]);
+            result1 = (function(offset, line, column, c) {return c})(pos1.offset, pos1.line, pos1.column, result1[4]);
           }
           if (result1 === null) {
             pos = clone(pos1);
@@ -3062,7 +2719,7 @@ var parser = (function(){
               if (result1 !== null) {
                 pos3 = clone(pos);
                 reportFailures++;
-                result2 = parse_comment();
+                result2 = parse_raw();
                 reportFailures--;
                 if (result2 === null) {
                   result2 = "";
@@ -3073,7 +2730,7 @@ var parser = (function(){
                 if (result2 !== null) {
                   pos3 = clone(pos);
                   reportFailures++;
-                  result3 = parse_eol();
+                  result3 = parse_comment();
                   reportFailures--;
                   if (result3 === null) {
                     result3 = "";
@@ -3082,17 +2739,32 @@ var parser = (function(){
                     pos = clone(pos3);
                   }
                   if (result3 !== null) {
-                    if (input.length > pos.offset) {
-                      result4 = input.charAt(pos.offset);
-                      advance(pos, 1);
+                    pos3 = clone(pos);
+                    reportFailures++;
+                    result4 = parse_eol();
+                    reportFailures--;
+                    if (result4 === null) {
+                      result4 = "";
                     } else {
                       result4 = null;
-                      if (reportFailures === 0) {
-                        matchFailed("any character");
-                      }
+                      pos = clone(pos3);
                     }
                     if (result4 !== null) {
-                      result1 = [result1, result2, result3, result4];
+                      if (input.length > pos.offset) {
+                        result5 = input.charAt(pos.offset);
+                        advance(pos, 1);
+                      } else {
+                        result5 = null;
+                        if (reportFailures === 0) {
+                          matchFailed("any character");
+                        }
+                      }
+                      if (result5 !== null) {
+                        result1 = [result1, result2, result3, result4, result5];
+                      } else {
+                        result1 = null;
+                        pos = clone(pos2);
+                      }
                     } else {
                       result1 = null;
                       pos = clone(pos2);
@@ -3110,7 +2782,7 @@ var parser = (function(){
                 pos = clone(pos2);
               }
               if (result1 !== null) {
-                result1 = (function(offset, line, column, c) {return c})(pos1.offset, pos1.line, pos1.column, result1[3]);
+                result1 = (function(offset, line, column, c) {return c})(pos1.offset, pos1.line, pos1.column, result1[4]);
               }
               if (result1 === null) {
                 pos = clone(pos1);
@@ -3261,6 +2933,156 @@ var parser = (function(){
         }
         if (result0 === null) {
           pos = clone(pos0);
+        }
+        return result0;
+      }
+      
+      function parse_raw() {
+        var result0, result1, result2, result3;
+        var pos0, pos1, pos2, pos3, pos4;
+        
+        reportFailures++;
+        pos0 = clone(pos);
+        pos1 = clone(pos);
+        if (input.substr(pos.offset, 2) === "{`") {
+          result0 = "{`";
+          advance(pos, 2);
+        } else {
+          result0 = null;
+          if (reportFailures === 0) {
+            matchFailed("\"{`\"");
+          }
+        }
+        if (result0 !== null) {
+          result1 = [];
+          pos2 = clone(pos);
+          pos3 = clone(pos);
+          pos4 = clone(pos);
+          reportFailures++;
+          if (input.substr(pos.offset, 2) === "`}") {
+            result2 = "`}";
+            advance(pos, 2);
+          } else {
+            result2 = null;
+            if (reportFailures === 0) {
+              matchFailed("\"`}\"");
+            }
+          }
+          reportFailures--;
+          if (result2 === null) {
+            result2 = "";
+          } else {
+            result2 = null;
+            pos = clone(pos4);
+          }
+          if (result2 !== null) {
+            if (input.length > pos.offset) {
+              result3 = input.charAt(pos.offset);
+              advance(pos, 1);
+            } else {
+              result3 = null;
+              if (reportFailures === 0) {
+                matchFailed("any character");
+              }
+            }
+            if (result3 !== null) {
+              result2 = [result2, result3];
+            } else {
+              result2 = null;
+              pos = clone(pos3);
+            }
+          } else {
+            result2 = null;
+            pos = clone(pos3);
+          }
+          if (result2 !== null) {
+            result2 = (function(offset, line, column, char) {return char})(pos2.offset, pos2.line, pos2.column, result2[1]);
+          }
+          if (result2 === null) {
+            pos = clone(pos2);
+          }
+          while (result2 !== null) {
+            result1.push(result2);
+            pos2 = clone(pos);
+            pos3 = clone(pos);
+            pos4 = clone(pos);
+            reportFailures++;
+            if (input.substr(pos.offset, 2) === "`}") {
+              result2 = "`}";
+              advance(pos, 2);
+            } else {
+              result2 = null;
+              if (reportFailures === 0) {
+                matchFailed("\"`}\"");
+              }
+            }
+            reportFailures--;
+            if (result2 === null) {
+              result2 = "";
+            } else {
+              result2 = null;
+              pos = clone(pos4);
+            }
+            if (result2 !== null) {
+              if (input.length > pos.offset) {
+                result3 = input.charAt(pos.offset);
+                advance(pos, 1);
+              } else {
+                result3 = null;
+                if (reportFailures === 0) {
+                  matchFailed("any character");
+                }
+              }
+              if (result3 !== null) {
+                result2 = [result2, result3];
+              } else {
+                result2 = null;
+                pos = clone(pos3);
+              }
+            } else {
+              result2 = null;
+              pos = clone(pos3);
+            }
+            if (result2 !== null) {
+              result2 = (function(offset, line, column, char) {return char})(pos2.offset, pos2.line, pos2.column, result2[1]);
+            }
+            if (result2 === null) {
+              pos = clone(pos2);
+            }
+          }
+          if (result1 !== null) {
+            if (input.substr(pos.offset, 2) === "`}") {
+              result2 = "`}";
+              advance(pos, 2);
+            } else {
+              result2 = null;
+              if (reportFailures === 0) {
+                matchFailed("\"`}\"");
+              }
+            }
+            if (result2 !== null) {
+              result0 = [result0, result1, result2];
+            } else {
+              result0 = null;
+              pos = clone(pos1);
+            }
+          } else {
+            result0 = null;
+            pos = clone(pos1);
+          }
+        } else {
+          result0 = null;
+          pos = clone(pos1);
+        }
+        if (result0 !== null) {
+          result0 = (function(offset, line, column, rawText) { return ["raw", rawText.join('')].concat([['line', line], ['col', column]]) })(pos0.offset, pos0.line, pos0.column, result0[1]);
+        }
+        if (result0 === null) {
+          pos = clone(pos0);
+        }
+        reportFailures--;
+        if (reportFailures === 0 && result0 === null) {
+          matchFailed("raw");
         }
         return result0;
       }
@@ -3830,6 +3652,427 @@ var parser = (function(){
   return result;
 })();
 
-dust.parse = parser.parse;
+  // expose parser methods
+  dust.parse = parser.parse;
 
-})(typeof exports !== 'undefined' ? exports : getGlobal());
+  return parser;
+}));
+  
+
+
+(function(root, factory) {
+  if (typeof exports === 'object') {
+    // in Node, require this file if we want to use the compiler as a standalone module
+    module.exports = factory(require('./parser').parse, require('./dust'));
+  } else {
+    // in the browser, store the factory output if we want to use the compiler directly
+    factory(root.dust.parse, root.dust);
+  }
+}(this, function(parse, dust) {
+  var compiler = {},
+      isArray = dust.isArray;
+
+  
+  compiler.compile = function(source, name) {
+    // if compile is called from compileFn via renderSource, name parameter can be ignored,
+    // as the templates will be rendered immediately and need not be stored in cache, but if 
+    // compile is called directly, the template will be cached with its name, so name is mandatory.
+    // Only renderSource passes null as name
+    if (!name && name !== null) {
+      dust.log(new Error("Template name parameter cannot be undefined when calling dust.compile"), 'ERROR');
+    }
+ 
+    try {
+      var ast = filterAST(parse(source));
+      return compile(ast, name);
+    }
+    catch (err)
+    {
+      if (!err.line || !err.column) {
+        throw err;
+      }
+      throw new SyntaxError(err.message + ' At line : ' + err.line + ', column : ' + err.column);
+    }
+  };
+
+  function filterAST(ast) {
+    var context = {};
+    return compiler.filterNode(context, ast);
+  }
+
+  compiler.filterNode = function(context, node) {
+    return compiler.optimizers[node[0]](context, node);
+  };
+
+  compiler.optimizers = {
+    body:      compactBuffers,
+    buffer:    noop,
+    special:   convertSpecial,
+    format:    nullify,        // TODO: convert format
+    reference: visit,
+    '#':       visit,
+    '?':       visit,
+    '^':       visit,
+    '<':       visit,
+    '+':       visit,
+    '@':       visit,
+    '%':       visit,
+    partial:   visit,
+    context:   visit,
+    params:    visit,
+    bodies:    visit,
+    param:     visit,
+    filters:   noop,
+    key:       noop,
+    path:      noop,
+    literal:   noop,
+    raw:       noop,
+    comment:   nullify,
+    line:      nullify,
+    col:       nullify
+  };
+
+  compiler.pragmas = {
+    esc: function(compiler, context, bodies, params) {
+      var old = compiler.auto,
+          out;
+      if (!context) {
+        context = 'h';
+      }
+      compiler.auto = (context === 's') ? '' : context;
+      out = compileParts(compiler, bodies.block);
+      compiler.auto = old;
+      return out;
+    }
+  };
+
+  function visit(context, node) {
+    var out = [node[0]],
+        i, len, res;
+    for (i=1, len=node.length; i<len; i++) {
+      res = compiler.filterNode(context, node[i]);
+      if (res) {
+        out.push(res);
+      }
+    }
+    return out;
+  }
+
+  // Compacts consecutive buffer nodes into a single node
+  function compactBuffers(context, node) {
+    var out = [node[0]],
+        memo, i, len, res;
+    for (i=1, len=node.length; i<len; i++) {
+      res = compiler.filterNode(context, node[i]);
+      if (res) {
+        if (res[0] === 'buffer') {
+          if (memo) {
+            memo[1] += res[1];
+          } else {
+            memo = res;
+            out.push(res);
+          }
+        } else {
+          memo = null;
+          out.push(res);
+        }
+      }
+    }
+    return out;
+  }
+
+  var specialChars = {
+    's': ' ',
+    'n': '\n',
+    'r': '\r',
+    'lb': '{',
+    'rb': '}'
+  };
+
+  function convertSpecial(context, node) {
+    return ['buffer', specialChars[node[1]]];
+  }
+
+  function noop(context, node) {
+    return node;
+  }
+
+  function nullify(){}
+
+  function compile(ast, name) {
+    var context = {
+      name: name,
+      bodies: [],
+      blocks: {},
+      index: 0,
+      auto: 'h'
+    };
+
+    return '(function(){dust.register(' +
+        (name ? '"' + name + '"' : 'null') + ',' +
+        compiler.compileNode(context, ast) +
+        ');' +
+        compileBlocks(context) +
+        compileBodies(context) +
+        'return body_0;' +
+        '})();';
+  }
+
+  function compileBlocks(context) {
+    var out = [],
+        blocks = context.blocks,
+        name;
+
+    for (name in blocks) {
+      out.push('"' + name + '":' + blocks[name]);
+    }
+    if (out.length) {
+      context.blocks = 'ctx=ctx.shiftBlocks(blocks);';
+      return 'var blocks={' + out.join(',') + '};';
+    }
+    return context.blocks = '';
+  }
+
+  function compileBodies(context) {
+    var out = [],
+        bodies = context.bodies,
+        blx = context.blocks,
+        i, len;
+
+    for (i=0, len=bodies.length; i<len; i++) {
+      out[i] = 'function body_' + i + '(chk,ctx){' +
+          blx + 'return chk' + bodies[i] + ';}';
+    }
+    return out.join('');
+  }
+
+  function compileParts(context, body) {
+    var parts = '',
+        i, len;
+    for (i=1, len=body.length; i<len; i++) {
+      parts += compiler.compileNode(context, body[i]);
+    }
+    return parts;
+  }
+
+  compiler.compileNode = function(context, node) {
+    return compiler.nodes[node[0]](context, node);
+  };
+
+  compiler.nodes = {
+    body: function(context, node) {
+      var id = context.index++,
+          name = 'body_' + id;
+      context.bodies[id] = compileParts(context, node);
+      return name;
+    },
+
+    buffer: function(context, node) {
+      return '.write(' + escape(node[1]) + ')';
+    },
+
+    format: function(context, node) {
+      return '.write(' + escape(node[1] + node[2]) + ')';
+    },
+
+    reference: function(context, node) {
+      return '.reference(' + compiler.compileNode(context, node[1]) +
+        ',ctx,' + compiler.compileNode(context, node[2]) + ')';
+    },
+
+    '#': function(context, node) {
+      return compileSection(context, node, 'section');
+    },
+
+    '?': function(context, node) {
+      return compileSection(context, node, 'exists');
+    },
+
+    '^': function(context, node) {
+      return compileSection(context, node, 'notexists');
+    },
+
+    '<': function(context, node) {
+      var bodies = node[4];
+      for (var i=1, len=bodies.length; i<len; i++) {
+        var param = bodies[i],
+            type = param[1][1];
+        if (type === 'block') {
+          context.blocks[node[1].text] = compiler.compileNode(context, param[2]);
+          return '';
+        }
+      }
+      return '';
+    },
+
+    '+': function(context, node) {
+      if (typeof(node[1].text) === 'undefined'  && typeof(node[4]) === 'undefined'){
+        return '.block(ctx.getBlock(' +
+              compiler.compileNode(context, node[1]) +
+              ',chk, ctx),' + compiler.compileNode(context, node[2]) + ', {},' +
+              compiler.compileNode(context, node[3]) +
+              ')';
+      } else {
+        return '.block(ctx.getBlock(' +
+            escape(node[1].text) +
+            '),' + compiler.compileNode(context, node[2]) + ',' +
+            compiler.compileNode(context, node[4]) + ',' +
+            compiler.compileNode(context, node[3]) +
+            ')';
+      }
+    },
+
+    '@': function(context, node) {
+      return '.helper(' +
+        escape(node[1].text) +
+        ',' + compiler.compileNode(context, node[2]) + ',' +
+        compiler.compileNode(context, node[4]) + ',' +
+        compiler.compileNode(context, node[3]) +
+        ')';
+    },
+
+    '%': function(context, node) {
+      // TODO: Move these hacks into pragma precompiler
+      var name = node[1][1],
+          rawBodies,
+          bodies,
+          rawParams,
+          params,
+          ctx, b, p, i, len;
+      if (!compiler.pragmas[name]) {
+        return '';
+      }
+
+      rawBodies = node[4];
+      bodies = {};
+      for (i=1, len=rawBodies.length; i<len; i++) {
+        b = rawBodies[i];
+        bodies[b[1][1]] = b[2];
+      }
+
+      rawParams = node[3];
+      params = {};
+      for (i=1, len=rawParams.length; i<len; i++) {
+        p = rawParams[i];
+        params[p[1][1]] = p[2][1];
+      }
+
+      ctx = node[2][1] ? node[2][1].text : null;
+
+      return compiler.pragmas[name](context, ctx, bodies, params);
+    },
+
+    partial: function(context, node) {
+      return '.partial(' +
+          compiler.compileNode(context, node[1]) +
+          ',' + compiler.compileNode(context, node[2]) +
+          ',' + compiler.compileNode(context, node[3]) + ')';
+    },
+
+    context: function(context, node) {
+      if (node[1]) {
+        return 'ctx.rebase(' + compiler.compileNode(context, node[1]) + ')';
+      }
+      return 'ctx';
+    },
+
+    params: function(context, node) {
+      var out = [];
+      for (var i=1, len=node.length; i<len; i++) {
+        out.push(compiler.compileNode(context, node[i]));
+      }
+      if (out.length) {
+        return '{' + out.join(',') + '}';
+      }
+      return 'null';
+    },
+
+    bodies: function(context, node) {
+      var out = [];
+      for (var i=1, len=node.length; i<len; i++) {
+        out.push(compiler.compileNode(context, node[i]));
+      }
+      return '{' + out.join(',') + '}';
+    },
+
+    param: function(context, node) {
+      return compiler.compileNode(context, node[1]) + ':' + compiler.compileNode(context, node[2]);
+    },
+
+    filters: function(context, node) {
+      var list = [];
+      for (var i=1, len=node.length; i<len; i++) {
+        var filter = node[i];
+        list.push('"' + filter + '"');
+      }
+      return '"' + context.auto + '"' +
+        (list.length ? ',[' + list.join(',') + ']' : '');
+    },
+
+    key: function(context, node) {
+      return 'ctx._get(false, ["' + node[1] + '"])';
+    },
+
+    path: function(context, node) {
+      var current = node[1],
+          keys = node[2],
+          list = [];
+
+      for (var i=0,len=keys.length; i<len; i++) {
+        if (isArray(keys[i])) {
+          list.push(compiler.compileNode(context, keys[i]));
+        } else {
+          list.push('"' + keys[i] + '"');
+        }
+      }
+      return 'ctx._get(' + current + ',[' + list.join(',') + '])';
+    },
+
+    literal: function(context, node) {
+      return escape(node[1]);
+    },
+    raw: function(context, node) {
+      return ".write(" + escape(node[1]) + ")";
+    }
+  };
+
+  function compileSection(context, node, cmd) {
+    return '.' + cmd + '(' +
+      compiler.compileNode(context, node[1]) +
+      ',' + compiler.compileNode(context, node[2]) + ',' +
+      compiler.compileNode(context, node[4]) + ',' +
+      compiler.compileNode(context, node[3]) +
+      ')';
+  }
+
+  var BS = /\\/g,
+      DQ = /"/g,
+      LF = /\f/g,
+      NL = /\n/g,
+      CR = /\r/g,
+      TB = /\t/g;
+  function escapeToJsSafeString(str) {
+    return str.replace(BS, '\\\\')
+              .replace(DQ, '\\"')
+              .replace(LF, '\\f')
+              .replace(NL, '\\n')
+              .replace(CR, '\\r')
+              .replace(TB, '\\t');
+  }
+
+  var escape = (typeof JSON === 'undefined') ?
+                  function(str) { return '"' + escapeToJsSafeString(str) + '"';} :
+                  JSON.stringify;
+
+  // expose compiler methods
+  dust.compile = compiler.compile;
+  dust.filterNode = compiler.filterNode;
+  dust.optimizers = compiler.optimizers;
+  dust.pragmas = compiler.pragmas;
+  dust.compileNode = compiler.compileNode;
+  dust.nodes = compiler.nodes;
+  
+  return compiler;
+
+}));
+
