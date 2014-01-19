@@ -49,6 +49,21 @@ exports.coreSetup = function(suite, auto) {
     });
   });
 
+  suite.test("compileFn", function() {
+    var unit = this,
+        tmpl = dust.compileFn('Hello World');
+    tmpl({}, function(err, out) {
+      try {
+        unit.ifError(err);
+        unit.equals(out, "Hello World");
+      } catch(err) {
+        unit.fail(err);
+        return;
+      }
+      unit.pass();
+    });
+  });
+
   suite.test("renderSource (stream)", function() {
     var unit = this;
     dust.renderSource('Hello World', {}).on('data', function(data) {
