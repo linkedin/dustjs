@@ -1,4 +1,4 @@
-/*! Dust - Asynchronous Templating - v2.3.0
+/*! Dust - Asynchronous Templating - v2.3.1
 * http://linkedin.github.io/dustjs/
 * Copyright (c) 2014 Aleksander Williams; Released under the MIT License */
 (function(root) {
@@ -103,11 +103,13 @@
   };
 
   dust.renderSource = function(source, context, callback) {
-    //passing null, so that 'compile' knows that template has to be compiled but not to be stored in cache
-    return dust.compileFn(source, null)(context, callback);
+    return dust.compileFn(source)(context, callback);
   };
 
   dust.compileFn = function(source, name) {
+    // name is optional. When name is not provided the template can only be rendered using the callable returned by this function.
+    // If a name is provided the compiled template can also be rendered by name.
+    name = name || null;
     var tmpl = dust.loadSource(dust.compile(source, name));
     return function(context, callback) {
       var master = callback ? new Stub(callback) : new Stream();
@@ -3674,10 +3676,11 @@
 
   
   compiler.compile = function(source, name) {
-    // if compile is called from compileFn via renderSource, name parameter can be ignored,
-    // as the templates will be rendered immediately and need not be stored in cache, but if 
-    // compile is called directly, the template will be cached with its name, so name is mandatory.
-    // Only renderSource passes null as name
+    // the name parameter is optional.
+    // this can happen for templates that are rendered immediately (renderSource which calls compileFn) or
+    // for templates that are compiled as a callable (compileFn)
+    //
+    // for the common case (using compile and render) a name is required so that templates will be cached by name and rendered later, by name.
     if (!name && name !== null) {
       dust.log(new Error("Template name parameter cannot be undefined when calling dust.compile"), 'ERROR');
     }

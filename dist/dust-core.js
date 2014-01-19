@@ -1,4 +1,4 @@
-/*! Dust - Asynchronous Templating - v2.3.0
+/*! Dust - Asynchronous Templating - v2.3.1
 * http://linkedin.github.io/dustjs/
 * Copyright (c) 2014 Aleksander Williams; Released under the MIT License */
 (function(root) {
@@ -103,11 +103,13 @@
   };
 
   dust.renderSource = function(source, context, callback) {
-    //passing null, so that 'compile' knows that template has to be compiled but not to be stored in cache
-    return dust.compileFn(source, null)(context, callback);
+    return dust.compileFn(source)(context, callback);
   };
 
   dust.compileFn = function(source, name) {
+    // name is optional. When name is not provided the template can only be rendered using the callable returned by this function.
+    // If a name is provided the compiled template can also be rendered by name.
+    name = name || null;
     var tmpl = dust.loadSource(dust.compile(source, name));
     return function(context, callback) {
       var master = callback ? new Stub(callback) : new Stream();
