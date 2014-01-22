@@ -1,0 +1,4 @@
+@import "archetype";
+body {
+  @include styleguide(medium copy);
+}

@@ -1,0 +1,9 @@
+/* line 2, ../scss/main.scss */
+body {
+  /* [archetype:styleguide:begin] --- medium copy --- */
+  font-size: 13px;
+  line-height: 17px;
+  color: #222222;
+  font-weight: normal;
+  /* [archetype:styleguide:end]   --- medium copy --- */
+}
