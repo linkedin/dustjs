@@ -1867,6 +1867,13 @@ var coreTests = [
                  },
         expected: "Error should NOT be visible",
         message: "test to make sure non dust errors are swallowed when the silenceErrors flag is set."
+      },
+      {
+        name: "Errors should be throwable from helpers",
+        source: "{@error errorMessage=\"helper error\"}{/error}",
+        context: { },
+        error: "helper error",
+        message: "test to make sure errors are properly caught and thrown when thrown from helpers."
       }
     ]
   }

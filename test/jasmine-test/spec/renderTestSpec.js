@@ -101,6 +101,7 @@ function stream(test) {
         .on('error', function(err) {
           output = err.message;
           log = dust.logQueue;
+          flag= true;
         })
       } catch(error) {
         output = error.message;
