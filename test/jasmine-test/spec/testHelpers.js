@@ -27,4 +27,9 @@
     }
    return output;
   };
+
+  dust.helpers = {};
+  dust.helpers.error = function(chunk, context, bodies, params) {
+    throw params.errorMessage;
+  };
 }));
