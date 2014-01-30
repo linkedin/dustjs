@@ -862,13 +862,6 @@ var coreTests = [
         message: "should test the filter tag"
       },
       {
-        name:     "invalid filter",
-        source:   "{obj|nullcheck|invalid}",
-        context:  { obj: "test" },
-        error:    "Invalid filter [nullcheck]",
-        message: "should fail hard for invalid filter"
-      },
-      {
         name:     "escapeJs filter without DQ",
         source:   "{obj|j|s}",
         context:  { obj: "<script>\\testBS\\ \rtestCR\r \u2028testLS\u2028 \u2029testPS\u2029 \ntestNL\n \ftestLF\f 'testSQ' \ttestTB\t /testFS/</script>" },
@@ -1556,20 +1549,22 @@ var coreTests = [
     ]
   },
   {
-    name:"invalid helper test",
+    name: "debugger tests",
     tests: [
       {
         name:     "non-existing helper",
         source:   "some text {@notfound}foo{/notfound} some text",
         context:  {},
-        error: "Invalid helper [notfound]",
+        log: "Invalid helper [notfound]",
         message: "Should crash the application if a helper is not found"
-      }
-    ]
-  },
-  {
-    name: "debugger tests",
-    tests: [
+      },
+      {
+        name:     "invalid filter",
+        source:   "{obj|nullcheck|invalid}",
+        context:  { obj: "test" },
+        log:    "Invalid filter [nullcheck]",
+        message: "should fail hard for invalid filter"
+      },
       {
         name: "Using unescape filter",
         source:"{test|s}",

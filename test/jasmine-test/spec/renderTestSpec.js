@@ -78,7 +78,14 @@ function stream(test) {
             };
           } else {
             return function(callback) {
-              setTimeout(callback,0);
+              setTimeout(function() {
+                try {
+                  callback();
+                } catch(error) {
+                  output = error.message;
+                  flag = true;
+                }
+              },0);
             };
           }
         } )();
@@ -161,7 +168,16 @@ function pipe(test) {
             };
           } else {
             return function(callback) {
-              setTimeout(callback,0);
+              setTimeout(function() {
+                try {
+                  callback();
+                } catch(error) {
+                  output = error.message;
+                  outputTwo = error.message;
+                  flag = true;
+                  flagTwo = true;
+                }
+              }, 0);
             };
           }
         } )();
