@@ -1,4 +1,4 @@
-/*! Dust - Asynchronous Templating - v2.3.2
+/*! Dust - Asynchronous Templating - v2.3.3
 * http://linkedin.github.io/dustjs/
 * Copyright (c) 2014 Aleksander Williams; Released under the MIT License */
 (function(root) {
@@ -188,7 +188,7 @@
           string = dust.filters[name](string);
         }
         else {
-          dust.log(new Error('Invalid filter [' + name + ']'), ERROR);
+          dust.log('Invalid filter [' + name + ']', WARN);
         }
       }
     }
@@ -411,7 +411,7 @@
         this.out += chunk.data.join(''); //ie7 perf
       } else if (chunk.error) {
         this.callback(chunk.error);
-        dust.log(new Error('Chunk error [' + chunk.error + '] thrown. Ceasing to render this template.'), ERROR);
+        dust.log('Chunk error [' + chunk.error + '] thrown. Ceasing to render this template.', WARN);
         this.flush = EMPTY_FUNC;
         return;
       } else {
@@ -435,7 +435,7 @@
         this.emit('data', chunk.data.join('')); //ie7 perf
       } else if (chunk.error) {
         this.emit('error', chunk.error);
-        dust.log(new Error('Chunk error [' + chunk.error + '] thrown. Ceasing to render this template.'), ERROR);
+        dust.log('Chunk error [' + chunk.error + '] thrown. Ceasing to render this template.', WARN);
         this.flush = EMPTY_FUNC;
         return;
       } else {
@@ -465,7 +465,7 @@
         listeners[i](data);
       }
     } else {
-      dust.log(new Error('Event Handler [' + handler + '] is not of a type that is handled by emit'), ERROR);
+      dust.log('Event Handler [' + handler + '] is not of a type that is handled by emit', WARN);
     }
   };
 
@@ -735,7 +735,7 @@
       if(dust.helpers[name]) {
         return dust.helpers[name](chunk, context, bodies, params);
       } else {
-        dust.log(new Error('Invalid helper [' + name + ']'), ERROR);
+        dust.log('Invalid helper [' + name + ']', WARN);
         return chunk;
       }
     } catch (err) {
