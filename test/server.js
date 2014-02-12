@@ -1,7 +1,11 @@
 var uutest    = require('./uutest'),
-    dust      = require('../lib/dust'),
     coreTests     = require('./jasmine-test/spec/coreTests'),
     coreSetup = require('./core').coreSetup;
+
+//make dust a global
+dust = require('../lib/dust');
+//load additional helpers used in testing
+require('./jasmine-test/spec/testHelpers');
 
 function dumpError(err) {
   var out = err.testName + " -> ";
