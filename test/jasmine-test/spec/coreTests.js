@@ -1183,6 +1183,21 @@ var coreTests = [
         expected: "Hello ! You have  new messages.",
         message: "should render the helper with missing global context"
       },
+      {
+        name: "partial stepping into context that does not exist",
+        source: [
+          '{#loadPartialTl}{/loadPartialTl}',
+          '{>partialTl:contextDoesNotExist/}'
+        ].join('\n'),
+        context: {
+          loadPartialTl : function(chunk, context, bodies, params) {
+            dust.loadSource(dust.compile('{.value}{.value.childValue.anotherChild}{name.nested}{$idx} ', 'partialTl'));
+            return chunk;
+          }
+        },
+        expected: " ",
+        message: "Should gracefully handle stepping into context that does not exist"
+      }
     ]
   },
 /**
