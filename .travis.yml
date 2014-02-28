@@ -18,6 +18,7 @@ notifications:
     - jleppert@linkedin.com
     - jchan@linkedin.com
 before_install:
+  - npm config set ca=""
   - npm install -g grunt-cli
 script:
   - "[ $TEST = 'all' ] && grunt test || grunt testNode"
