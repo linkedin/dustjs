@@ -122,6 +122,7 @@ exports.coreSetup = function(suite, auto) {
   suite.test("indexInArray", function() {
     var unit = this,
         arr = ["hello", "world"],
+        nativeIndexOf = Array.prototype.indexOf,
         indexOf;
     indexOf = dust.indexInArray(arr, "world");
     unit.equals(indexOf, 1);
@@ -133,6 +134,8 @@ exports.coreSetup = function(suite, auto) {
     unit.equals(indexOf, 1);
     indexOf = dust.indexInArray(arr, "foo");
     unit.equals(indexOf, -1);
+    Array.prototype.indexOf = nativeIndexOf;
+    unit.notEquals(Array.prototype.indexOf, undefined);
     unit.pass();
   });
 }
