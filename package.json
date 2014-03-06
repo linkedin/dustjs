@@ -1,7 +1,7 @@
 {
   "name": "dustjs-linkedin",
   "title": "Dust - Asynchronous Templating",
-  "version": "2.3.3",
+  "version": "2.3.4",
   "author": {
     "name": "Aleksander Williams",
     "url": "http://akdubya.github.com/dustjs"
