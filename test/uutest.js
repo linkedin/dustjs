@@ -27,6 +27,14 @@ Test.prototype.equals = function(actual, expected, message) {
     }
 }
 
+Test.prototype.notEquals = function(actual, expected, message) {
+    if (actual === expected) {
+        var err = new Error();
+        if (message) err.message = message;
+        throw wrapAssertionError(err, actual, expected, "===");
+    }
+}
+
 Test.prototype.ifError = function(err) {
   if (err) throw err;
 }

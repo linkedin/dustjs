@@ -118,6 +118,26 @@ exports.coreSetup = function(suite, auto) {
       unit.fail(err);
     });
   });
+
+  suite.test("indexInArray", function() {
+    var unit = this,
+        arr = ["hello", "world"],
+        nativeIndexOf = Array.prototype.indexOf,
+        indexOf;
+    indexOf = dust.indexInArray(arr, "world");
+    unit.equals(indexOf, 1);
+    indexOf = dust.indexInArray(arr, "foo");
+    unit.equals(indexOf, -1);
+    Array.prototype.indexOf = undefined;
+    // test indexOf when the array indexOf function is undefined (IE lte 8)
+    indexOf = dust.indexInArray(arr, "world");
+    unit.equals(indexOf, 1);
+    indexOf = dust.indexInArray(arr, "foo");
+    unit.equals(indexOf, -1);
+    Array.prototype.indexOf = nativeIndexOf;
+    unit.notEquals(Array.prototype.indexOf, undefined);
+    unit.pass();
+  });
 }
 
 function testRender(unit, source, context, expected, options, baseContext, error, logMessage) {
