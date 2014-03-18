@@ -144,8 +144,7 @@ function testRender(unit, source, context, expected, options, baseContext, error
   var name = unit.id,
       messageInLog = '';
    try {
-     dust.isDebug = !!(error || logMessage);
-     dust.debugLevel = 'DEBUG';
+     dust.debugLevel = (error || logMessage) ? 'DEBUG' : 'NONE';
      dust.loadSource(dust.compile(source, name));
      if (baseContext){
         context = dust.makeBase(baseContext).push(context);
