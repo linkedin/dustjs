@@ -67,6 +67,7 @@ var benches = {
 
   complex: {
     source:  "<h1>{header}</h1>\n"                             +
+             "<h2>{>string/}</h2>\n"                           +
              "{?items}\n"                                      +
              "  <ul>\n"                                        +
              "    {#items}\n"                                  +

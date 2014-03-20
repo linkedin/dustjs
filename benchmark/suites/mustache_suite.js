@@ -57,7 +57,8 @@ var benches = {
   },
 
   complex: {
-    source:  "<h1>{{header}}</h1>{{#hasItems}}<ul>{{#items}}{{#current}}" +
+    source:  "<h1>{{header}}</h1><h2>{{>string}}</h2>" +
+             "{{#hasItems}}<ul>{{#items}}{{#current}}" +
              "<li><strong>{{name}}</strong></li>{{/current}}{{^current}}" +
              "<li><a href=\"{{url}}\">{{name}}</a></li>{{/current}}"      +
              "{{/items}}</ul>{{/hasItems}}{{^hasItems}}<p>The list is empty.</p>{{/hasItems}}",
@@ -76,7 +77,8 @@ var benches = {
                empty: function() {
                  return this.items.length === 0;
                }
-             }
+             },
+    partials: { string: "Hello World!" }
   }
 }
 

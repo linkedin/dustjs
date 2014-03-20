@@ -55,7 +55,8 @@ var benches = {
   },
 
   complex: {
-    source:  "<h1>{{header}}</h1>{{#hasItems}}<ul>{{#items}}{{#current}}" +
+    source:  "<h1>{{header}}</h1><h2>{{>string}}</h2>" +
+             "{{#hasItems}}<ul>{{#items}}{{#current}}" +
              "<li><strong>{{name}}</strong></li>{{/current}}{{^current}}" +
              "<li><a href=\"{{url}}\">{{name}}</a></li>{{/current}}"      +
              "{{/items}}</ul>{{^}}<p>The list is empty.</p>{{/hasItems}}",
@@ -73,7 +74,8 @@ var benches = {
                    return options.fn(this);
                  }
                }
-             }
+             },
+    partials: { string: "Hello World!" }
   }
 
 }
