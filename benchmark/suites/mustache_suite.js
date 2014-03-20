@@ -23,9 +23,9 @@ var benches = {
   },
 
   partial: {
-    source:   "{{#peeps}}{{>replace}}{{/peeps}}",
+    source:   "{{#peeps}}{{>string}}{{/peeps}}",
     context:  { peeps: [{name: "Moe", count: 15}, {name: "Larry", count: 5}, {name: "Curly", count: 1}] },
-    partials: { replace: "Hello {{name}}! You have {{count}} new messages." }
+    partials: { string: "Hello World!" }
   },
 
   recursion: {

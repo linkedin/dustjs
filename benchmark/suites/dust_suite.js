@@ -29,7 +29,7 @@ var benches = {
   },
 
   partial: {
-    source:  "{#peeps}{>replace/}{/peeps}",
+    source:  "{#peeps}{>string/}{/peeps}",
     context: { peeps: [
                  { name: "Moe", count: 15 },
                  { name: "Larry", count: 5 },
