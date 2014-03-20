@@ -84,16 +84,22 @@ exports.handlebarsBench = function(suite, name, id) {
   var bench = benches[name],
       fn = Handlebars.compile(bench.source),
       ctx = bench.context,
-      partials = {};
+      src = bench.source,
+      partials = bench.partials;
 
-  if (bench.partials) {
-    for (var key in bench.partials) {
-      partials[key] = Handlebars.compile(bench.partials[key]);
+  if (partials) {
+    for (var key in partials) {
+      Handlebars.registerPartial(key, partials[key]);
     }
   }
 
+  suite.bench((id || name) + " compile time", function(next) {
+    Handlebars.compile(src);
+    next();
+  });
+
   suite.bench(id || name, function(next) {
-    fn(ctx, {partials: partials});
+    fn(ctx);
     next();
   });
 }

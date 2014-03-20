@@ -97,9 +97,16 @@ var benches = {
 
 exports.dustBench = function(suite, name, id) {
   var bench = benches[name],
-      ctx = bench.context;
+      ctx = bench.context,
+      src = bench.source;
 
   dust.loadSource(dust.compile(bench.source, name));
+
+  suite.bench((id || name) + " compile time", function(next) {
+    dust.compile(src, name);
+    next();
+  });
+
   suite.bench(id || name, function(next) {
     dust.render(name, ctx, function() {
       next();

@@ -88,8 +88,19 @@ exports.mustacheBench = function(suite, name, id) {
       ctx = bench.context,
       partials = bench.partials;
 
+  if (partials) {
+    for (var key in partials) {
+      Mustache.compilePartial(key, partials[key]);
+    }
+  }
+
+  suite.bench((id || name) + " compile time", function(next) {
+    Mustache.compile(bench.source);
+    next();
+  });
+
   suite.bench(id || name, function(next) {
-    Mustache.to_html(src, ctx, partials);
+    Mustache.render(src, ctx);
     next();
   });
 }
