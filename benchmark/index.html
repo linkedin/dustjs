@@ -85,6 +85,7 @@
     <script src="../dist/dust-full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.1.2/handlebars.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.7.2/mustache.min.js"></script>
+    <script src="htmlbars-0.1.0.min.js"></script>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
       google.load('visualization', '1.0', {packages: ['imagechart']});
@@ -137,6 +138,8 @@
           });
 
           dustBench(suite, type, test, "dust");
+          handlebarsBench(suite, type, test, "handlebars");
+          mustacheBench(suite, type, test, "mustache");
           suite.run();
         }
 
