@@ -134,7 +134,7 @@ exports.htmlbarsBench = function(suite, type, name, id) {
     });
 
     if(fails[0]) {
-      console.log(fails.shift(); + " fail");
+      console.log(fails.shift() + " fail");
     }
   }
 }
