@@ -80,7 +80,7 @@ var benches = {
 
 }
 
-exports.handlebarsBench = function(suite, name, id) {
+exports.handlebarsBench = function(suite, type, name, id) {
   var bench = benches[name],
       fn = Handlebars.compile(bench.source),
       ctx = bench.context,
@@ -93,15 +93,17 @@ exports.handlebarsBench = function(suite, name, id) {
     }
   }
 
-  suite.bench((id || name) + " compile time", function(next) {
-    Handlebars.compile(src);
-    next();
-  });
-
-  suite.bench(id || name, function(next) {
-    fn(ctx);
-    next();
-  });
+  if (type === 'compile') {
+    suite.bench(id || name, function(next) {
+      Handlebars.compile(src);
+      next();
+    });
+  } else if (type === 'render') {
+    suite.bench(id || name, function(next) {
+      fn(ctx);
+      next();
+    });
+  }
 }
 
 exports.handlebarsBench.benches = benches;

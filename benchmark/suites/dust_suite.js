@@ -95,23 +95,25 @@ var benches = {
 
 }
 
-exports.dustBench = function(suite, name, id) {
+exports.dustBench = function(suite, type, name, id) {
   var bench = benches[name],
       ctx = bench.context,
       src = bench.source;
 
   dust.loadSource(dust.compile(bench.source, name));
 
-  suite.bench((id || name) + " compile time", function(next) {
-    dust.compile(src, name);
-    next();
-  });
-
-  suite.bench(id || name, function(next) {
-    dust.render(name, ctx, function() {
+  if (type === 'compile') {
+    suite.bench(id || name, function(next) {
+      dust.compile(src, name);
       next();
     });
-  });
+  } else if (type === 'render') {
+    suite.bench(id || name, function(next) {
+      dust.render(name, ctx, function() {
+        next();
+      });
+    });
+  }
 };
 
 exports.dustBench.benches = benches;

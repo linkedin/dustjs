@@ -112,7 +112,8 @@
         function next() {
           var test = testQueue.shift();
           if (test) {
-            runSuite(test);
+            runSuite(test + " compile time", "compile");
+            runSuite(test + " render time", "render");
           } else {
             $('#progress').fadeOut(1000, function() {
               $('#run').fadeIn();
@@ -120,7 +121,7 @@
           }
         }
 
-        function runSuite(type) {
+        function runSuite(test, type) {
           var rows = [];
           var suite = new uubench.Suite({
             iterations: 1000,
@@ -129,19 +130,20 @@
               rows.push([name, opms]);
             },
             start: function() {
-              $('#charts').append("<div id=\"" + type + "\" class=\"chart\"></div>");
+              $('#charts').append("<div id=\"" + test + "\" class=\"chart\"></div>");
             },
             done: function() {
               var pct = parseFloat($bar.css('width')) + tick;
-              drawBarChart(type, rows);
+              drawBarChart(test, rows);
               $('#progress > div').css('width', pct + "%");
               next();
             }
           });
-          dustBench(suite, type, "dust");
-          handlebarsBench(suite, type, "handlebars");
-          mustacheBench(suite, type, "mustache");
-          jqueryBench(suite, type, "jquery");
+
+          dustBench(suite, type, test, "dust");
+          handlebarsBench(suite, type, test, "handlebars");
+          mustacheBench(suite, type, test, "mustache");
+          jqueryBench(suite, type, test, "jquery");
           suite.run();
         }
 

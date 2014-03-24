@@ -82,7 +82,7 @@ var benches = {
   }
 }
 
-exports.mustacheBench = function(suite, name, id) {
+exports.mustacheBench = function(suite, type, name, id) {
   var bench = benches[name],
       src = bench.source,
       ctx = bench.context,
@@ -93,16 +93,17 @@ exports.mustacheBench = function(suite, name, id) {
       Mustache.compilePartial(key, partials[key]);
     }
   }
-
-  suite.bench((id || name) + " compile time", function(next) {
-    Mustache.compile(bench.source);
-    next();
-  });
-
-  suite.bench(id || name, function(next) {
-    Mustache.render(src, ctx);
-    next();
-  });
+  if (type === 'compile') {
+    suite.bench(id || name, function(next) {
+      Mustache.compile(bench.source);
+      next();
+    });
+  } else if (type === 'render') {
+    suite.bench(id || name, function(next) {
+      Mustache.render(src, ctx);
+      next();
+    });
+  }
 }
 
 exports.mustacheBench.benches = benches;
