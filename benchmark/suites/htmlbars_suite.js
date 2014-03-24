@@ -86,7 +86,8 @@ exports.htmlbarsBench = function(suite, type, name, id) {
       ctx = bench.context,
       src = bench.source,
       partials = bench.partials,
-      compiledPartials = {};
+      compiledPartials = {},
+      fail;
 
   if (partials) {
     for (var key in partials) {
@@ -109,7 +110,7 @@ exports.htmlbarsBench = function(suite, type, name, id) {
       try {
         HTMLBars.compile(src);
       } catch (e) {
-        console.log(id + " " + name + " fail");
+        fail = true;
         for (var i=0; i<10000; i++) {
           i++;
         }
@@ -122,19 +123,23 @@ exports.htmlbarsBench = function(suite, type, name, id) {
         try {
           fn(ctx, {partials: compiledPartials});
         } catch (e) {
-          console.log(id + " " + name + " fail");
+          fail = true;
           for (var i=0; i<10000; i++) {
             i++;
           }
         }
       } else {
-        console.log(id + " " + name + " fail");
+        fail = true;
         for (var i=0; i<10000; i++) {
           i++;
         }
       }
       next();
     });
+
+    if (fail) {
+      console.log(id + " " + name + " fail");
+    }
   }
 }
 
