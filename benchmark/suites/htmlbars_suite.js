@@ -82,7 +82,7 @@ var benches = {
 
 exports.htmlbarsBench = function(suite, type, name, id) {
   var bench = benches[name],
-      fn = HTMLBars.compile(bench.source),
+      fn,
       ctx = bench.context,
       src = bench.source,
       partials = bench.partials,
@@ -90,18 +90,40 @@ exports.htmlbarsBench = function(suite, type, name, id) {
 
   if (partials) {
     for (var key in partials) {
-      compiledPartials[key] = HTMLBars.compile(partials[key]);
+      try {
+        compiledPartials[key] = HTMLBars.compile(partials[key]);
+      } catch (e) {
+        /* no op */
+      }
     }
+  }
+
+  try {
+    fn = HTMLBars.compile(bench.source);
+  } catch (e) {
+    /* no op */
   }
 
   if (type === 'compile') {
     suite.bench(id || name, function(next) {
-      HTMLBars.compile(src);
+      try {
+        HTMLBars.compile(src);
+      } catch (e) {
+        for (var i=0; i<10000; i++) {
+          i++;
+        }
+      }
       next();
     });
   } else if (type === 'render') {
     suite.bench(id || name, function(next) {
-      fn(ctx, {partials: compiledPartials});
+      if (fn) {
+        fn(ctx, {partials: compiledPartials});
+      } else {
+        for (var i=0; i<10000; i++) {
+          i++;
+        }
+      }
       next();
     });
   }
