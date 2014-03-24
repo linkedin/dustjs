@@ -118,7 +118,13 @@ exports.htmlbarsBench = function(suite, type, name, id) {
   } else if (type === 'render') {
     suite.bench(id || name, function(next) {
       if (fn) {
-        fn(ctx, {partials: compiledPartials});
+        try {
+          fn(ctx, {partials: compiledPartials});
+        } catch (e) {
+          for (var i=0; i<10000; i++) {
+            i++;
+          }
+        }
       } else {
         for (var i=0; i<10000; i++) {
           i++;
