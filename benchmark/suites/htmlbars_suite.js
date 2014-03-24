@@ -133,8 +133,11 @@ exports.htmlbarsBench = function(suite, type, name, id) {
       next();
     });
 
-    if(fails[0]) {
-      console.log(fails.shift() + " fail");
+    if(fails.length) {
+      for var(i=0; i<fails.length; i++) {
+        console.log(fails[i] + " fail");
+      }
+      fails = [];
     }
   }
 }
