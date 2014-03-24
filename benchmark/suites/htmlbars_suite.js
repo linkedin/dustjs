@@ -85,11 +85,12 @@ exports.htmlbarsBench = function(suite, type, name, id) {
       fn = HTMLBars.compile(bench.source),
       ctx = bench.context,
       src = bench.source,
-      partials = bench.partials;
+      partials = bench.partials,
+      compiledPartials = {};
 
   if (partials) {
     for (var key in partials) {
-      Handlebars.registerPartial(key, partials[key]);
+      compiledPartials[key] = HTMLBars.compile(partials[key]);
     }
   }
 
@@ -100,7 +101,7 @@ exports.htmlbarsBench = function(suite, type, name, id) {
     });
   } else if (type === 'render') {
     suite.bench(id || name, function(next) {
-      fn(ctx);
+      fn(ctx, {partials: compiledPartials});
       next();
     });
   }
