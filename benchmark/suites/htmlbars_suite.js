@@ -110,10 +110,8 @@ exports.htmlbarsBench = function(suite, type, name, id) {
       try {
         HTMLBars.compile(src);
       } catch (e) {
-        fail = true;
-        for (var i=0; i<10000; i++) {
-          i++;
-        }
+        console.log(id + " " + name + " fail");
+        return;
       }
       next();
     });
@@ -123,23 +121,16 @@ exports.htmlbarsBench = function(suite, type, name, id) {
         try {
           fn(ctx, {partials: compiledPartials});
         } catch (e) {
-          fail = true;
-          for (var i=0; i<10000; i++) {
-            i++;
-          }
+          console.log(id + " " + name + " fail");
+        return;
         }
       } else {
-        fail = true;
-        for (var i=0; i<10000; i++) {
-          i++;
-        }
+        console.log(id + " " + name + " fail");
+        return;
       }
       next();
     });
 
-    if (fail) {
-      console.log(id + " " + name + " fail");
-    }
   }
 }
 
