@@ -112,8 +112,8 @@
         function next() {
           var test = testQueue.shift();
           if (test) {
-            runSuite(test + " compile time", "compile");
-            runSuite(test + " render time", "render");
+            runSuite(test, "compile");
+            runSuite(test, "render");
           } else {
             $('#progress').fadeOut(1000, function() {
               $('#run').fadeIn();
@@ -130,11 +130,11 @@
               rows.push([name, opms]);
             },
             start: function() {
-              $('#charts').append("<div id=\"" + test + "\" class=\"chart\"></div>");
+              $('#charts').append("<div id=\"" + test + " " + type + "\" class=\"chart\"></div>");
             },
             done: function() {
               var pct = parseFloat($bar.css('width')) + tick;
-              drawBarChart(test, rows);
+              drawBarChart(test + " " + type, rows);
               $('#progress > div').css('width', pct + "%");
               next();
             }
