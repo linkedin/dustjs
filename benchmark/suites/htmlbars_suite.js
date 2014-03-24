@@ -87,7 +87,6 @@ exports.htmlbarsBench = function(suite, type, name, id) {
       src = bench.source,
       partials = bench.partials,
       compiledPartials = {};
-  fails.shift();
 
   if (partials) {
     for (var key in partials) {
@@ -110,8 +109,8 @@ exports.htmlbarsBench = function(suite, type, name, id) {
       try {
         HTMLBars.compile(src);
       } catch (e) {
-        if (fails.indexOf(id + " " + name) === -1) {
-          fails.push(id + " " + name);
+        if (fails.indexOf(id + " " + name + " " + type) === -1) {
+          fails.push(id + " " + name + " " + type);
         }
       }
       next();
@@ -122,20 +121,20 @@ exports.htmlbarsBench = function(suite, type, name, id) {
         try {
           fn(ctx, {partials: compiledPartials});
         } catch (e) {
-          if (fails.indexOf(id + " " + name) === -1) {
-            fails.push(id + " " + name);
-          }
+          if (fails.indexOf(id + " " + name + " " + type) === -1) {
+          fails.push(id + " " + name + " " + type);
+        }
         }
       } else {
-        if (fails.indexOf(id + " " + name) === -1) {
-          fails.push(id + " " + name);
+        if (fails.indexOf(id + " " + name + " " + type) === -1) {
+          fails.push(id + " " + name + " " + type);
         }
       }
       next();
     });
 
     if(fails[0]) {
-      console.log(fails[0] + " fail");
+      console.log(fails.shift(); + " fail");
     }
   }
 }
