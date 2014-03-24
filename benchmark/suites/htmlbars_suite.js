@@ -87,7 +87,7 @@ exports.htmlbarsBench = function(suite, type, name, id) {
       src = bench.source,
       partials = bench.partials,
       compiledPartials = {},
-      fail;
+      fail = false;
 
   if (partials) {
     for (var key in partials) {
