@@ -134,7 +134,7 @@ exports.htmlbarsBench = function(suite, type, name, id) {
     });
 
     if(fails.length) {
-      for var(i=0; i<fails.length; i++) {
+      for(var i=0; i<fails.length; i++) {
         console.log(fails[i] + " fail");
       }
       fails = [];
