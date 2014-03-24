@@ -111,6 +111,7 @@ exports.htmlbarsBench = function(suite, type, name, id) {
       } catch (e) {
         if (fails.indexOf(id + " " + name + " " + type) === -1) {
           fails.push(id + " " + name + " " + type);
+          console.log(id + " " + name + " " + type + " fail");
         }
       }
       next();
@@ -122,23 +123,18 @@ exports.htmlbarsBench = function(suite, type, name, id) {
           fn(ctx, {partials: compiledPartials});
         } catch (e) {
           if (fails.indexOf(id + " " + name + " " + type) === -1) {
-          fails.push(id + " " + name + " " + type);
-        }
+            fails.push(id + " " + name + " " + type);
+            console.log(id + " " + name + " " + type + " fail");
+          }
         }
       } else {
         if (fails.indexOf(id + " " + name + " " + type) === -1) {
           fails.push(id + " " + name + " " + type);
+          console.log(id + " " + name + " " + type + " fail");
         }
       }
       next();
     });
-  }
-
-  if(fails.length) {
-    for(var i=0; i<fails.length; i++) {
-      console.log(fails[i] + " fail");
-    }
-    fails = [];
   }
 }
 
