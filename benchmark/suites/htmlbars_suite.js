@@ -79,15 +79,15 @@ var benches = {
   }
 
 }
-
+var fails = [];
 exports.htmlbarsBench = function(suite, type, name, id) {
   var bench = benches[name],
       fn,
       ctx = bench.context,
       src = bench.source,
       partials = bench.partials,
-      compiledPartials = {},
-      fail = false;
+      compiledPartials = {};
+  fails.shift();
 
   if (partials) {
     for (var key in partials) {
@@ -110,8 +110,9 @@ exports.htmlbarsBench = function(suite, type, name, id) {
       try {
         HTMLBars.compile(src);
       } catch (e) {
-        console.log(id + " " + name + " fail");
-        return;
+        if (fails.indexOf(id + " " + name) === -1) {
+          fails.push(id + " " + name);
+        }
       }
       next();
     });
@@ -121,16 +122,21 @@ exports.htmlbarsBench = function(suite, type, name, id) {
         try {
           fn(ctx, {partials: compiledPartials});
         } catch (e) {
-          console.log(id + " " + name + " fail");
-        return;
+          if (fails.indexOf(id + " " + name) === -1) {
+            fails.push(id + " " + name);
+          }
         }
       } else {
-        console.log(id + " " + name + " fail");
-        return;
+        if (fails.indexOf(id + " " + name) === -1) {
+          fails.push(id + " " + name);
+        }
       }
       next();
     });
 
+    if(fails[0]) {
+      console.log(fails[0] + " fail");
+    }
   }
 }
 
