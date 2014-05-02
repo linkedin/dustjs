@@ -748,8 +748,8 @@
     }
     var body = bodies.block;
 
-    if (elem) {
-      body = elem;
+    if (topElem) {
+      body = topElem;
     }
 
     if (body) {
