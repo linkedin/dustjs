@@ -418,13 +418,11 @@
       dust.log('No blocks for context[{' + key + '}] in template [' + this.getTemplateName() + ']', DEBUG);
       return;
     }
-    var len = blocks.length, fn;
-    while (len--) {
-      fn = blocks[len][key];
-      if (fn) {
-        return fn;
-      }
+    var newBlocks = [];
+    for (var i = 0, len = blocks.length; i < len; i++) {
+        newBlocks.push(blocks[i][key]);
     }
+    return newBlocks;
   };
 
   Context.prototype.shiftBlocks = function(locals) {
@@ -739,10 +737,19 @@
   };
 
   Chunk.prototype.block = function(elem, context, bodies) {
+    var topElem = elem ? elem.shift() : undefined;
+    if (topElem) {
+        context.global = context.global || {};
+        // Add `_SUPER_` to the block context.
+        context.global['_SUPER_'] = function(_elem, context, _bodies) {
+            return _elem.block(elem, context, bodies);
+        };
+        context = new context.constructor(context.stack, context.global, context.blocks);
+    }
     var body = bodies.block;
 
-    if (elem) {
-      body = elem;
+    if (topElem) {
+      body = topElem;
     }
 
     if (body) {
@@ -891,7 +898,7 @@
     root.dust = dust;
   }
 
-})(this);
+})((function(){return this;})());
 
 (function(root, factory) {
   if (typeof exports === 'object') {
