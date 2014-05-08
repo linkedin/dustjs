@@ -1,4 +1,4 @@
-/*! Dust - Asynchronous Templating - v2.3.4
+/*! Dust - Asynchronous Templating - v2.3.5
 * http://linkedin.github.io/dustjs/
 * Copyright (c) 2014 Aleksander Williams; Released under the MIT License */
 (function(root) {
@@ -48,13 +48,8 @@
    * @public
    */
   dust.log = function(message, type) {
-    if(dust.isDebug && dust.debugLevel === NONE) {
-      logger.log('[!!!DEPRECATION WARNING!!!]: dust.isDebug is deprecated.  Set dust.debugLevel instead to the level of logging you want ["debug","info","warn","error","none"]');
-      dust.debugLevel = INFO;
-    }
-
     type = type || INFO;
-    if (dust.indexInArray(loggingLevels, type) >= dust.indexInArray(loggingLevels, dust.debugLevel)) {
+    if (dust.debugLevel !== NONE && dust.indexInArray(loggingLevels, type) >= dust.indexInArray(loggingLevels, dust.debugLevel)) {
       if(!dust.logQueue) {
         dust.logQueue = [];
       }
@@ -234,7 +229,6 @@
         var name = filters[i];
         if (name === 's') {
           auto = null;
-          dust.log('Using unescape filter on [' + string + ']', DEBUG);
         }
         else if (typeof dust.filters[name] === 'function') {
           string = dust.filters[name](string);
@@ -328,7 +322,6 @@
     var ctx = this.stack,
         i = 1,
         value, first, len, ctxThis;
-    dust.log('Searching for reference [{' + down.join('.') + '}] in template [' + this.getTemplateName() + ']', DEBUG);
     first = down[0];
     len = down.length;
 
@@ -891,7 +884,7 @@
     root.dust = dust;
   }
 
-})(this);
+})((function(){return this;})());
 
 (function(root, factory) {
   if (typeof exports === 'object') {
