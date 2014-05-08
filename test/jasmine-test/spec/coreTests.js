@@ -1801,27 +1801,6 @@ var coreTests = [
         message: "should fail hard for invalid filter"
       },
       {
-        name: "Using unescape filter",
-        source:"{test|s}",
-        context: {"test": "example text"},
-        log: "Using unescape filter on [example text]",
-        message: "test the log messages for an unescape filter."
-      },
-      {
-        name: "Reference lookup",
-        source:"{test}",
-        context: {"test": "example text"},
-        log: "Searching for reference [{test}] in template [Reference lookup]",
-        message: "test the log messages for a reference lookup."
-      },
-      {
-        name: "Reference lookup with dots",
-        source:"{test.anotherTest}",
-        context: {"test": "example text"},
-        log: "Searching for reference [{test.anotherTest}] in template [Reference lookup with dots]",
-        message: "test the log messages for a reference lookup."
-      },
-      {
         name: "Reference not found",
         source:"{wrongTest}",
         context: {"test": "example text"},
