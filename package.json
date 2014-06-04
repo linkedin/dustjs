@@ -37,6 +37,7 @@
     "dustc": "./bin/dustc"
   },
   "main": "lib/server.js",
+  "browser": "./lib/dust.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/linkedin/dustjs.git"
