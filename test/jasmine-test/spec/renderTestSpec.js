@@ -23,7 +23,11 @@ function render(test) {
       }
       dust.render(test.name, context, function(err, output) {
         var log = dust.logQueue;
-        expect(err).toBeNull();
+        if (test.error) {
+          expect(test.error).toEqual(err.message);
+        } else {
+          expect(err).toBeNull();
+        }
         if (test.log) {
           for(var i=0; i<log.length; i++) {
             if(log[i].message === test.log) {
@@ -99,6 +103,7 @@ function stream(test) {
           log = dust.logQueue;
         })
         .on('error', function(err) {
+          flag = true;
           output = err.message;
           log = dust.logQueue;
         })
