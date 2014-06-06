@@ -138,36 +138,6 @@ exports.coreSetup = function(suite, auto) {
     unit.notEquals(Array.prototype.indexOf, undefined);
     unit.pass();
   });
-
-  suite.test("throwError", function() {
-    var unit = this,
-        silenceErrors = dust.silenceErrors,
-        caughtError;
-    try {
-      dust.silenceErrors = false;
-      // throw string
-      dust.throwError('fail hard string');
-    } catch (err) {
-      unit.equals(err.message, 'fail hard string');
-    }
-    try {
-      dust.silenceErrors = false;
-      // throw actual error
-      dust.throwError(new Error('fail hard error object'));
-    } catch (err) {
-      unit.equals(err.message, 'fail hard error object');
-    }
-    try {
-      dust.silenceErrors = true;
-      // throw actual error
-      dust.throwError(new Error('silenced error'));
-    } catch (err) {
-      caughtError = err.message;
-    }
-    unit.equals(caughtError, undefined);
-    dust.silenceErrors = silenceErrors;
-    unit.pass();
-  });
 }
 
 function testRender(unit, source, context, expected, options, baseContext, error, logMessage) {
