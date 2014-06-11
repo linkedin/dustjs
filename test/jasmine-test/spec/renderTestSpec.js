@@ -23,7 +23,11 @@ function render(test) {
       }
       dust.render(test.name, context, function(err, output) {
         var log = dust.logQueue;
-        expect(err).toBeNull();
+        if (test.error) {
+          expect(test.error).toEqual(err.message || err);
+        } else {
+          expect(err).toBeNull();
+        }
         if (test.log) {
           for(var i=0; i<log.length; i++) {
             if(log[i].message === test.log) {
@@ -99,7 +103,8 @@ function stream(test) {
           log = dust.logQueue;
         })
         .on('error', function(err) {
-          output = err.message;
+          flag = true;
+          output = err.message || err;
           log = dust.logQueue;
         })
       } catch(error) {
@@ -193,9 +198,9 @@ function pipe(test) {
           },
           error: function (err) {
             flag = true;
-            output = err.message;
+            output = err.message || err;
             log = dust.logQueue;
-          }
+          } 
         });
         // Pipe to a second stream to test multiple event-listeners
         tpl.pipe({
@@ -209,7 +214,7 @@ function pipe(test) {
           },
           error: function (err) {
             flagTwo = true;
-            outputTwo = err.message;
+            outputTwo = err.message || err;
             logTwo = logTwo.concat(dust.logQueue);
           }
         });

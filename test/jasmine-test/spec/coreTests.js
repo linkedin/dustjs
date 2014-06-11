@@ -1836,40 +1836,11 @@ var coreTests = [
         message: "test the log messages for an existing not exists check."
       },
       {
-        name: "Errors should be propogated if the silenceErrors flag is not set",
-        source: "{#errorHelper}{/errorHelper}",
-        context: { "errorHelper" : function(chunk, context, bodies, params)
-                   {
-                     dust.debugLevel = 'NONE';
-                     throw new Error('Error should be visible');
-                     return chunk.write('');
-                   }
-                 },
-        error: "Error should be visible",
-        message: "test to make sure errors are not swallowed."
-      },
-      {
-        name: "Errors should not be propogated when the silenceErrors is set to true",
-        source: "Error should NOT be visible{#errorHelper}{/errorHelper}",
-        context: { "error":  {
-                     "errorHelper" : function(chunk, context, bodies, params)
-                     {
-                       dust.debugLevel = 'NONE';
-                       dust.silenceErrors = true;
-                       throw new Error('Error message');
-                       return chunk.write('');
-                     }
-                   }
-                 },
-        expected: "Error should NOT be visible",
-        message: "test to make sure non dust errors are swallowed when the silenceErrors flag is set."
-      },
-      {
-        name: "Errors should be throwable from helpers",
+        name: "Errors should be throwable from helpers and consumed in the render callback/stream onerror",
         source: "{@error errorMessage=\"helper error\"}{/error}",
         context: { },
         error: "helper error",
-        message: "test to make sure errors are properly caught and thrown when thrown from helpers."
+        message: "test to make sure errors are properly caught and propogated to the callbacks."
       }
     ]
   }
