@@ -510,6 +510,16 @@ var coreTests = [
         context:  { title: "Sir", names: [] },
         expected: "",
         message: "should test an empty array"
+      },
+      {
+        name:     "empty params in helper",
+        source:   "{#emptyParamHelper}{/emptyParamHelper}",
+        context:  { "emptyParamHelper" : function(chunk, context, bodies, params) {
+                      return chunk.write(params.foo);
+                    }
+                  },
+        expected: "",
+        message: "should output nothing, but no error should fire"
       }
     ]
   },
