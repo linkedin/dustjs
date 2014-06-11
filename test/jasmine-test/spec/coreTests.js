@@ -698,6 +698,13 @@ var coreTests = [
         context:  { foo: {bar: "Hello!"} },
         expected: "Hello!",
         message: "should test an object path"
+      },
+      {
+        name:     "path should not look in the prototype",
+        source:   "{arr.sort}",
+        context:  { arr: [5, 3, 2, 1, 4]},
+        expected: '',
+        message: "should not be looking in the prototype"
       }
     ]
   },
