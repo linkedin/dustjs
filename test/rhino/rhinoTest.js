@@ -36,7 +36,7 @@ print('Running unit tests with ' + environment['java.class.path']);
 
 var requiredFiles = [
     'node_modules/grunt-contrib-jasmine/vendor/jasmine-1.3.1/jasmine.js',
-    'tmp/dust-full.js',
+    'tmp/dust-full.min.js',
     'test/jasmine-test/spec/testHelpers.js',
     'test/jasmine-test/spec/coreTests.js',
     'test/jasmine-test/spec/renderTestSpec.js'
