@@ -1,4 +1,4 @@
-/*! Dust - Asynchronous Templating - v2.3.5
+/*! Dust - Asynchronous Templating - v2.4.0
 * http://linkedin.github.io/dustjs/
 * Copyright (c) 2014 Aleksander Williams; Released under the MIT License */
 (function(root) {
@@ -12,10 +12,26 @@
       EMPTY_FUNC = function() {},
       logger = {},
       originalLog,
-      loggerContext;
+      loggerContext,
+      hasOwnProperty = Object.prototype.hasOwnProperty,
+      getResult;
 
   dust.debugLevel = NONE;
-  dust.silenceErrors = false;
+
+  /**
+   * Given an object and a key, return the value. Use this instead of obj[key] in order to:
+   *     prevent looking up the prototype chain
+   *     fail nicely when the object is falsy
+   * @param {Object} obj the object to inspect
+   * @param {String} key the name of the property to resolve
+   * @return {*} the resolved value
+   */
+  getResult = function(obj, key) {
+    if (obj && hasOwnProperty.call(obj, key)) {
+      return obj[key];
+    }
+  };
+
 
   // Try to find the console in global scope
   if (root && root.console && root.console.log) {
@@ -41,7 +57,8 @@
   } : function() { /* no op */ };
 
   /**
-   * If dust.isDebug is true, Log dust debug statements, info statements, warning statements, and errors.
+   * Log dust debug statements, info statements, warning statements, and errors.
+   * Filters out the messages based on the dust.debuglevel.
    * This default implementation will print to the console if it exists.
    * @param {String|Error} message the message to print/throw
    * @param {String} type the severity of the message(ERROR, WARN, INFO, or DEBUG)
@@ -55,31 +72,6 @@
       }
       dust.logQueue.push({message: message, type: type});
       logger.log('[DUST ' + type + ']: ' + message);
-    }
-
-    if (!dust.silenceErrors && type === ERROR) {
-      if (typeof message === 'string') {
-        throw new Error(message);
-      } else {
-        throw message;
-      }
-    }
-  };
-
-  /**
-   * If debugging is turned on(dust.isDebug=true) log the error message and throw it.
-   * Otherwise try to keep rendering.  This is useful to fail hard in dev mode, but keep rendering in production.
-   * @param {Error} error the error message to throw
-   * @param {Object} chunk the chunk the error was thrown from
-   * @public
-   */
-  dust.onError = function(error, chunk) {
-    logger.log('[!!!DEPRECATION WARNING!!!]: dust.onError will no longer return a chunk object.');
-    dust.log(error.message || error, ERROR);
-    if(!dust.silenceErrors) {
-      throw error;
-    } else {
-      return chunk;
     }
   };
 
@@ -99,17 +91,18 @@
     try {
       dust.load(name, chunk, Context.wrap(context, name)).end();
     } catch (err) {
-      dust.log(err, ERROR);
+      chunk.setError(err);
     }
   };
 
   dust.stream = function(name, context) {
-    var stream = new Stream();
+    var stream = new Stream(),
+        chunk = stream.head;
     dust.nextTick(function() {
       try {
         dust.load(name, stream.head, Context.wrap(context, name)).end();
       } catch (err) {
-        dust.log(err, ERROR);
+        chunk.setError(err);
       }
     });
     return stream;
@@ -334,7 +327,7 @@
         while (ctx) {
           if (ctx.isObject) {
             ctxThis = ctx.head;
-            value = ctx.head[first];
+            value = getResult(ctx.head, first);
             if (value !== undefined) {
               break;
             }
@@ -345,36 +338,29 @@
         if (value !== undefined) {
           ctx = value;
         } else {
-          ctx = this.global ? this.global[first] : undefined;
+          ctx = getResult(this.global, first);
         }
       } else if (ctx) {
         // if scope is limited by a leading dot, don't search up the tree
-        if(ctx.head) {
-          ctx = ctx.head[first];
-        } else {
-          //context's head is empty, value we are searching for is not defined
-          ctx = undefined;
-        }
+        ctx = getResult(ctx.head, first);
       }
 
       while (ctx && i < len) {
         ctxThis = ctx;
-        ctx = ctx[down[i]];
+        ctx = getResult(ctx, down[i]);
         i++;
       }
     }
 
     // Return the ctx or a function wrapping the application of the context.
     if (typeof ctx === 'function') {
-      var fn = function() {
+      return function() {
         try {
           return ctx.apply(ctxThis, arguments);
         } catch (err) {
           return dust.log(err, ERROR);
         }
       };
-      fn.isFunction = true;
-      return fn;
     } else {
       if (ctx === undefined) {
         dust.log('Cannot find the value for reference [{' + down.join('.') + '}] in template [' + this.getTemplateName() + ']');
@@ -616,7 +602,6 @@
 
   Chunk.prototype.reference = function(elem, context, auto, filters) {
     if (typeof elem === 'function') {
-      elem.isFunction = true;
       // Changed the function calling to use apply with the current context to make sure
       // that "this" is wat we expect it to be inside the function
       elem = elem.apply(context.current(), [this, context, null, {auto: auto, filters: filters}]);
@@ -789,7 +774,7 @@
         return chunk;
       }
     } catch (err) {
-      dust.log(err, ERROR);
+      chunk.setError(err);
       return chunk;
     }
   };
