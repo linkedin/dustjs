@@ -1,8 +1,7 @@
 ---
 title: DustJS by LinkedIn
 layout: default
+permalink: /about/
 ---
 
-<section>
-IT WORKS!
-</section>
+Why Dust is great:
