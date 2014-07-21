@@ -1,4 +1,77 @@
 @import "archetype";
 body {
-  @include styleguide(medium copy);
+  @include styleguide(large copy);
+  font-family: 'Roboto', sans-serif;
+
+  ul {
+    list-style: none;
+  }
+}
+
+#body {
+  height: 100%;
+  @include clearfix();
+}
+
+header {
+  @include styleguide(punchcut);
+  padding: 40px 90px;
+
+  h1 {
+    @include styleguide(xxlarge headline in a punchcut);
+    font-size: 92px;
+    line-height: 100px;
+    a, a:visited {
+      color: #FFF;
+      text-decoration: none;
+    }
+    &::before {
+      content: '{';
+    }
+    &::after {
+      content: '}';
+    }
+  }
+
+  h2 {
+    @include styleguide(muted medium headline in a punchcut);
+  }
+}
+
+nav {
+  @include styleguide(light module);
+  @include grid(6, $first: true);
+  height: 100%;
+
+  ul li {
+    padding: 15px 30px;
+
+    a {
+      @include styleguide(medium muted headline in a module, link in a module);
+
+      &.nav-button {
+        @include styleguide(primary button);
+      }
+    }
+  }
+}
+
+#content {
+  @include grid(18);
+  padding: 15px;
+
+  h1 {
+    @include styleguide(xlarge headline);
+  }
+
+  h2 {
+    @include styleguide(large headline);
+  }
+  p {
+    margin-bottom: 12px;
+  }
+}
+
+#footer {
+
 }

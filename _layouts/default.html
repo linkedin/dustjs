@@ -3,10 +3,12 @@
 {%include head.html %}
 
 <body>
-  {%include nav.html %}
+  <div id="body">
+    {%include nav.html %}
 
-  {{ content }}
-
-  {{%include footer.html }}
-
+    <div id="content">
+      {{ content }}
+    </div>
+  </div>
+  {%include footer.html %}
 </body>

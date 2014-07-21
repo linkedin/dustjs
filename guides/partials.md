@@ -4,3 +4,4 @@ layout: guides
 permalink: /guides/partials/
 ---
 
+#Partials

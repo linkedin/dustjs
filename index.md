@@ -2,7 +2,3 @@
 title: DustJS by LinkedIn
 layout: default
 ---
-
-<section>
-IT WORKS!
-</section>

@@ -4,3 +4,4 @@ layout: guides
 permalink: /guides/using-filters/
 ---
 
+#Using Filters

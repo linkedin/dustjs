@@ -4,3 +4,4 @@ layout: guides
 permalink: /guides/using-helpers/
 ---
 
+#Using Helpers
