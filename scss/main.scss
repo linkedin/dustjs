@@ -21,15 +21,18 @@ header {
     @include styleguide(xxlarge headline in a punchcut);
     font-size: 92px;
     line-height: 100px;
+    margin-bottom: 10px;
     a, a:visited {
       color: #FFF;
       text-decoration: none;
     }
     &::before {
       content: '{';
+      padding-right: 15px;
     }
     &::after {
       content: '}';
+      padding-left: 15px;
     }
   }
 
@@ -48,9 +51,35 @@ nav {
 
     a {
       @include styleguide(medium muted headline in a module, link in a module);
+      color: #666;
 
       &.nav-button {
         @include styleguide(primary button);
+      }
+    }
+
+    label {
+      color: #666;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+
+      }
+    }
+
+    &.sub {
+
+      input {
+        @include hide-element();
+
+        &:checked ~ ul {
+          display: block;
+        }
+      }
+
+      ul {
+        display: none;
       }
     }
   }

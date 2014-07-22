@@ -41,21 +41,24 @@ header h1 {
   /* [archetype:styleguide:end]   --- xxlarge headline in a punchcut --- */
   font-size: 92px;
   line-height: 100px;
+  margin-bottom: 10px;
 }
-/* line 24, ../scss/main.scss */
+/* line 25, ../scss/main.scss */
 header h1 a, header h1 a:visited {
   color: #FFF;
   text-decoration: none;
 }
-/* line 28, ../scss/main.scss */
+/* line 29, ../scss/main.scss */
 header h1::before {
   content: '{';
+  padding-right: 15px;
 }
-/* line 31, ../scss/main.scss */
+/* line 33, ../scss/main.scss */
 header h1::after {
   content: '}';
+  padding-left: 15px;
 }
-/* line 36, ../scss/main.scss */
+/* line 39, ../scss/main.scss */
 header h2 {
   /* [archetype:styleguide:begin] --- muted medium headline in a punchcut --- */
   font-size: 16px;
@@ -66,7 +69,7 @@ header h2 {
   /* [archetype:styleguide:end]   --- muted medium headline in a punchcut --- */
 }
 
-/* line 41, ../scss/main.scss */
+/* line 44, ../scss/main.scss */
 nav {
   /* [archetype:styleguide:begin] --- light module --- */
   background: #eeeeee;
@@ -75,11 +78,11 @@ nav {
   width: 236px;
   height: 100%;
 }
-/* line 46, ../scss/main.scss */
+/* line 49, ../scss/main.scss */
 nav ul li {
   padding: 15px 30px;
 }
-/* line 49, ../scss/main.scss */
+/* line 52, ../scss/main.scss */
 nav ul li a {
   /* [archetype:styleguide:begin] --- medium muted headline in a module, link in a module --- */
   font-size: 16px;
@@ -88,12 +91,13 @@ nav ul li a {
   color: #0088cc;
   text-decoration: none;
   /* [archetype:styleguide:end]   --- medium muted headline in a module, link in a module --- */
+  color: #666;
 }
 /* line 205, ../../../../../Library/Ruby/Gems/2.0.0/gems/archetype-0.0.1.pre.3.6ed259b/stylesheets/archetype/util/_styles.scss */
 nav ul li a.hover, nav ul li a:hover, nav ul li a.focus, nav ul li a:focus {
   text-decoration: underline;
 }
-/* line 52, ../scss/main.scss */
+/* line 56, ../scss/main.scss */
 nav ul li a.nav-button {
   /* [archetype:styleguide:begin] --- primary button --- */
   font-weight: bold;
@@ -175,15 +179,48 @@ nav ul li a.nav-button.disabled, nav ul li a.nav-button[disabled] {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=60);
   opacity: 0.6;
 }
+/* line 61, ../scss/main.scss */
+nav ul li label {
+  color: #666;
+  cursor: pointer;
+}
+/* line 65, ../scss/main.scss */
+nav ul li label:hover {
+  text-decoration: underline;
+}
+/* line 73, ../scss/main.scss */
+nav ul li.sub input {
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  /* [archetype:target-browser:being] --- ie lte 7 --- */
+  *clip: rect(1px 1px 1px 1px);
+  /* [archetype:target-browser:end]   --- ie lte 7 --- */
+  clip: rect(1px, 1px, 1px, 1px);
+}
+/* line 164, ../../../../../Library/Ruby/Gems/2.0.0/gems/archetype-0.0.1.pre.3.6ed259b/stylesheets/archetype/util/_targeting.scss */
+.ie.lte7 nav ul li.sub input {
+  /* [archetype:target-browser:begin] --- ie lte 7 --- */
+  /* [archetype:target-browser:end]   --- ie lte 7 --- */
+}
+/* line 76, ../scss/main.scss */
+nav ul li.sub input:checked ~ ul {
+  display: block;
+}
+/* line 81, ../scss/main.scss */
+nav ul li.sub ul {
+  display: none;
+}
 
-/* line 59, ../scss/main.scss */
+/* line 88, ../scss/main.scss */
 #content {
   margin-left: 10px;
   float: left;
   width: 728px;
   padding: 15px;
 }
-/* line 63, ../scss/main.scss */
+/* line 92, ../scss/main.scss */
 #content h1 {
   /* [archetype:styleguide:begin] --- xlarge headline --- */
   font-size: 22px;
@@ -192,7 +229,7 @@ nav ul li a.nav-button.disabled, nav ul li a.nav-button[disabled] {
   color: black;
   /* [archetype:styleguide:end]   --- xlarge headline --- */
 }
-/* line 67, ../scss/main.scss */
+/* line 96, ../scss/main.scss */
 #content h2 {
   /* [archetype:styleguide:begin] --- large headline --- */
   font-size: 18px;
@@ -201,7 +238,7 @@ nav ul li a.nav-button.disabled, nav ul li a.nav-button[disabled] {
   color: black;
   /* [archetype:styleguide:end]   --- large headline --- */
 }
-/* line 70, ../scss/main.scss */
+/* line 99, ../scss/main.scss */
 #content p {
   margin-bottom: 12px;
 }
