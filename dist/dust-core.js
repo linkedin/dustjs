@@ -24,12 +24,14 @@
    *     fail nicely when the object is falsy
    * @param {Object} obj the object to inspect
    * @param {String} key the name of the property to resolve
-   * @return {*} the resolved value
+   * @return {*} the resolved value or undefined
    */
   getResult = function(obj, key) {
+    var result;
     if (obj && hasOwnProperty.call(obj, key)) {
-      return obj[key];
+      result = obj[key];
     }
+    return result;
   };
 
 

@@ -24,12 +24,14 @@
    *     fail nicely when the object is falsy
    * @param {Object} obj the object to inspect
    * @param {String} key the name of the property to resolve
-   * @return {*} the resolved value
+   * @return {*} the resolved value or undefined
    */
   getResult = function(obj, key) {
+    var result;
     if (obj && hasOwnProperty.call(obj, key)) {
-      return obj[key];
+      result = obj[key];
     }
+    return result;
   };
 
 
@@ -887,7 +889,7 @@
    *
    * http://pegjs.majda.cz/
    */
-  
+
   function quote(s) {
     /*
      * ECMA-262, 5th ed., 7.8.4: All characters may appear literally in a
@@ -910,7 +912,7 @@
       .replace(/[\x00-\x07\x0B\x0E-\x1F\x80-\uFFFF]/g, escape)
       + '"';
   }
-  
+
   var result = {
     /*
      * Parses the input with a generated parser. If the parsing is successfull,
@@ -955,7 +957,7 @@
         "eol": parse_eol,
         "ws": parse_ws
       };
-      
+
       if (startRule !== undefined) {
         if (parseFunctions[startRule] === undefined) {
           throw new Error("Invalid rule name: " + quote(startRule) + ".");
@@ -963,28 +965,28 @@
       } else {
         startRule = "body";
       }
-      
+
       var pos = { offset: 0, line: 1, column: 1, seenCR: false };
       var reportFailures = 0;
       var rightmostFailuresPos = { offset: 0, line: 1, column: 1, seenCR: false };
       var rightmostFailuresExpected = [];
-      
+
       function padLeft(input, padding, length) {
         var result = input;
-        
+
         var padLength = length - input.length;
         for (var i = 0; i < padLength; i++) {
           result = padding + result;
         }
-        
+
         return result;
       }
-      
+
       function escape(ch) {
         var charCode = ch.charCodeAt(0);
         var escapeChar;
         var length;
-        
+
         if (charCode <= 0xFF) {
           escapeChar = 'x';
           length = 2;
@@ -992,10 +994,10 @@
           escapeChar = 'u';
           length = 4;
         }
-        
+
         return '\\' + escapeChar + padLeft(charCode.toString(16).toUpperCase(), '0', length);
       }
-      
+
       function clone(object) {
         var result = {};
         for (var key in object) {
@@ -1003,10 +1005,10 @@
         }
         return result;
       }
-      
+
       function advance(pos, n) {
         var endOffset = pos.offset + n;
-        
+
         for (var offset = pos.offset; offset < endOffset; offset++) {
           var ch = input.charAt(offset);
           if (ch === "\n") {
@@ -1022,27 +1024,27 @@
             pos.seenCR = false;
           }
         }
-        
+
         pos.offset += n;
       }
-      
+
       function matchFailed(failure) {
         if (pos.offset < rightmostFailuresPos.offset) {
           return;
         }
-        
+
         if (pos.offset > rightmostFailuresPos.offset) {
           rightmostFailuresPos = clone(pos);
           rightmostFailuresExpected = [];
         }
-        
+
         rightmostFailuresExpected.push(failure);
       }
-      
+
       function parse_body() {
         var result0, result1;
         var pos0;
-        
+
         pos0 = clone(pos);
         result0 = [];
         result1 = parse_part();
@@ -1058,10 +1060,10 @@
         }
         return result0;
       }
-      
+
       function parse_part() {
         var result0;
-        
+
         result0 = parse_raw();
         if (result0 === null) {
           result0 = parse_comment();
@@ -1083,11 +1085,11 @@
         }
         return result0;
       }
-      
+
       function parse_section() {
         var result0, result1, result2, result3, result4, result5, result6;
         var pos0, pos1;
-        
+
         reportFailures++;
         pos0 = clone(pos);
         pos1 = clone(pos);
@@ -1200,11 +1202,11 @@
         }
         return result0;
       }
-      
+
       function parse_sec_tag_start() {
         var result0, result1, result2, result3, result4, result5;
         var pos0, pos1;
-        
+
         pos0 = clone(pos);
         pos1 = clone(pos);
         result0 = parse_ld();
@@ -1265,11 +1267,11 @@
         }
         return result0;
       }
-      
+
       function parse_end_tag() {
         var result0, result1, result2, result3, result4, result5;
         var pos0, pos1;
-        
+
         reportFailures++;
         pos0 = clone(pos);
         pos1 = clone(pos);
@@ -1340,11 +1342,11 @@
         }
         return result0;
       }
-      
+
       function parse_context() {
         var result0, result1;
         var pos0, pos1, pos2;
-        
+
         pos0 = clone(pos);
         pos1 = clone(pos);
         pos2 = clone(pos);
@@ -1384,11 +1386,11 @@
         }
         return result0;
       }
-      
+
       function parse_params() {
         var result0, result1, result2, result3, result4;
         var pos0, pos1, pos2;
-        
+
         reportFailures++;
         pos0 = clone(pos);
         result0 = [];
@@ -1519,11 +1521,11 @@
         }
         return result0;
       }
-      
+
       function parse_bodies() {
         var result0, result1, result2, result3, result4, result5;
         var pos0, pos1, pos2;
-        
+
         reportFailures++;
         pos0 = clone(pos);
         result0 = [];
@@ -1636,11 +1638,11 @@
         }
         return result0;
       }
-      
+
       function parse_reference() {
         var result0, result1, result2, result3;
         var pos0, pos1;
-        
+
         reportFailures++;
         pos0 = clone(pos);
         pos1 = clone(pos);
@@ -1681,11 +1683,11 @@
         }
         return result0;
       }
-      
+
       function parse_partial() {
         var result0, result1, result2, result3, result4, result5, result6, result7, result8;
         var pos0, pos1, pos2;
-        
+
         reportFailures++;
         pos0 = clone(pos);
         pos1 = clone(pos);
@@ -1803,11 +1805,11 @@
         }
         return result0;
       }
-      
+
       function parse_filters() {
         var result0, result1, result2;
         var pos0, pos1, pos2;
-        
+
         reportFailures++;
         pos0 = clone(pos);
         result0 = [];
@@ -1884,11 +1886,11 @@
         }
         return result0;
       }
-      
+
       function parse_special() {
         var result0, result1, result2, result3;
         var pos0, pos1;
-        
+
         reportFailures++;
         pos0 = clone(pos);
         pos1 = clone(pos);
@@ -1937,11 +1939,11 @@
         }
         return result0;
       }
-      
+
       function parse_identifier() {
         var result0;
         var pos0;
-        
+
         reportFailures++;
         pos0 = clone(pos);
         result0 = parse_path();
@@ -1967,11 +1969,11 @@
         }
         return result0;
       }
-      
+
       function parse_number() {
         var result0;
         var pos0;
-        
+
         reportFailures++;
         pos0 = clone(pos);
         result0 = parse_float();
@@ -1990,11 +1992,11 @@
         }
         return result0;
       }
-      
+
       function parse_float() {
         var result0, result1, result2, result3;
         var pos0, pos1;
-        
+
         reportFailures++;
         pos0 = clone(pos);
         pos1 = clone(pos);
@@ -2046,11 +2048,11 @@
         }
         return result0;
       }
-      
+
       function parse_integer() {
         var result0, result1;
         var pos0;
-        
+
         reportFailures++;
         pos0 = clone(pos);
         if (/^[0-9]/.test(input.charAt(pos.offset))) {
@@ -2091,11 +2093,11 @@
         }
         return result0;
       }
-      
+
       function parse_path() {
         var result0, result1, result2;
         var pos0, pos1;
-        
+
         reportFailures++;
         pos0 = clone(pos);
         pos1 = clone(pos);
@@ -2194,11 +2196,11 @@
         }
         return result0;
       }
-      
+
       function parse_key() {
         var result0, result1, result2;
         var pos0, pos1;
-        
+
         reportFailures++;
         pos0 = clone(pos);
         pos1 = clone(pos);
@@ -2256,11 +2258,11 @@
         }
         return result0;
       }
-      
+
       function parse_array() {
         var result0, result1, result2;
         var pos0, pos1, pos2, pos3, pos4;
-        
+
         reportFailures++;
         pos0 = clone(pos);
         pos1 = clone(pos);
@@ -2351,11 +2353,11 @@
         }
         return result0;
       }
-      
+
       function parse_array_part() {
         var result0, result1, result2;
         var pos0, pos1, pos2, pos3;
-        
+
         reportFailures++;
         pos0 = clone(pos);
         pos1 = clone(pos);
@@ -2450,11 +2452,11 @@
         }
         return result0;
       }
-      
+
       function parse_inline() {
         var result0, result1, result2;
         var pos0, pos1;
-        
+
         reportFailures++;
         pos0 = clone(pos);
         pos1 = clone(pos);
@@ -2598,11 +2600,11 @@
         }
         return result0;
       }
-      
+
       function parse_inline_part() {
         var result0;
         var pos0;
-        
+
         result0 = parse_special();
         if (result0 === null) {
           result0 = parse_reference();
@@ -2619,11 +2621,11 @@
         }
         return result0;
       }
-      
+
       function parse_buffer() {
         var result0, result1, result2, result3, result4, result5;
         var pos0, pos1, pos2, pos3;
-        
+
         reportFailures++;
         pos0 = clone(pos);
         pos1 = clone(pos);
@@ -2840,11 +2842,11 @@
         }
         return result0;
       }
-      
+
       function parse_literal() {
         var result0, result1, result2;
         var pos0, pos1, pos2, pos3;
-        
+
         reportFailures++;
         pos0 = clone(pos);
         pos1 = clone(pos);
@@ -2949,11 +2951,11 @@
         }
         return result0;
       }
-      
+
       function parse_esc() {
         var result0;
         var pos0;
-        
+
         pos0 = clone(pos);
         if (input.substr(pos.offset, 2) === "\\\"") {
           result0 = "\\\"";
@@ -2972,11 +2974,11 @@
         }
         return result0;
       }
-      
+
       function parse_raw() {
         var result0, result1, result2, result3;
         var pos0, pos1, pos2, pos3, pos4;
-        
+
         reportFailures++;
         pos0 = clone(pos);
         pos1 = clone(pos);
@@ -3122,11 +3124,11 @@
         }
         return result0;
       }
-      
+
       function parse_comment() {
         var result0, result1, result2, result3;
         var pos0, pos1, pos2, pos3, pos4;
-        
+
         reportFailures++;
         pos0 = clone(pos);
         pos1 = clone(pos);
@@ -3272,11 +3274,11 @@
         }
         return result0;
       }
-      
+
       function parse_tag() {
         var result0, result1, result2, result3, result4, result5, result6, result7;
         var pos0, pos1, pos2;
-        
+
         pos0 = clone(pos);
         result0 = parse_ld();
         if (result0 !== null) {
@@ -3448,10 +3450,10 @@
         }
         return result0;
       }
-      
+
       function parse_ld() {
         var result0;
-        
+
         if (input.charCodeAt(pos.offset) === 123) {
           result0 = "{";
           advance(pos, 1);
@@ -3463,10 +3465,10 @@
         }
         return result0;
       }
-      
+
       function parse_rd() {
         var result0;
-        
+
         if (input.charCodeAt(pos.offset) === 125) {
           result0 = "}";
           advance(pos, 1);
@@ -3478,10 +3480,10 @@
         }
         return result0;
       }
-      
+
       function parse_lb() {
         var result0;
-        
+
         if (input.charCodeAt(pos.offset) === 91) {
           result0 = "[";
           advance(pos, 1);
@@ -3493,10 +3495,10 @@
         }
         return result0;
       }
-      
+
       function parse_rb() {
         var result0;
-        
+
         if (input.charCodeAt(pos.offset) === 93) {
           result0 = "]";
           advance(pos, 1);
@@ -3508,10 +3510,10 @@
         }
         return result0;
       }
-      
+
       function parse_eol() {
         var result0;
-        
+
         if (input.charCodeAt(pos.offset) === 10) {
           result0 = "\n";
           advance(pos, 1);
@@ -3567,10 +3569,10 @@
         }
         return result0;
       }
-      
+
       function parse_ws() {
         var result0;
-        
+
         if (/^[\t\x0B\f \xA0\uFEFF]/.test(input.charAt(pos.offset))) {
           result0 = input.charAt(pos.offset);
           advance(pos, 1);
@@ -3585,11 +3587,11 @@
         }
         return result0;
       }
-      
-      
+
+
       function cleanupExpected(expected) {
         expected.sort();
-        
+
         var lastExpected = null;
         var cleanExpected = [];
         for (var i = 0; i < expected.length; i++) {
@@ -3600,11 +3602,11 @@
         }
         return cleanExpected;
       }
-      
-      
-      
+
+
+
       var result = parseFunctions[startRule]();
-      
+
       /*
        * The parser is now in one of the following three states:
        *
@@ -3633,7 +3635,7 @@
         var offset = Math.max(pos.offset, rightmostFailuresPos.offset);
         var found = offset < input.length ? input.charAt(offset) : null;
         var errorPosition = pos.offset > rightmostFailuresPos.offset ? pos : rightmostFailuresPos;
-        
+
         throw new parser.SyntaxError(
           cleanupExpected(rightmostFailuresExpected),
           found,
@@ -3642,20 +3644,20 @@
           errorPosition.column
         );
       }
-      
+
       return result;
     },
-    
+
     /* Returns the parser source code. */
     toSource: function() { return this._source; }
   };
-  
+
   /* Thrown when a parser encounters a syntax error. */
-  
+
   result.SyntaxError = function(expected, found, offset, line, column) {
     function buildMessage(expected, found) {
       var expectedHumanized, foundHumanized;
-      
+
       switch (expected.length) {
         case 0:
           expectedHumanized = "end of input";
@@ -3668,12 +3670,12 @@
             + " or "
             + expected[expected.length - 1];
       }
-      
+
       foundHumanized = found ? quote(found) : "end of input";
-      
+
       return "Expected " + expectedHumanized + " but " + foundHumanized + " found.";
     }
-    
+
     this.name = "SyntaxError";
     this.expected = expected;
     this.found = found;
@@ -3682,9 +3684,9 @@
     this.line = line;
     this.column = column;
   };
-  
+
   result.SyntaxError.prototype = Error.prototype;
-  
+
   return result;
 })();
 
@@ -3693,7 +3695,7 @@
 
   return parser;
 }));
-  
+
 
 
 (function(root, factory) {
@@ -3708,7 +3710,7 @@
   var compiler = {},
       isArray = dust.isArray;
 
-  
+
   compiler.compile = function(source, name) {
     // the name parameter is optional.
     // this can happen for templates that are rendered immediately (renderSource which calls compileFn) or
@@ -3718,7 +3720,7 @@
     if (!name && name !== null) {
       throw new Error('Template name parameter cannot be undefined when calling dust.compile');
     }
- 
+
     try {
       var ast = filterAST(parse(source));
       return compile(ast, name);
@@ -4108,8 +4110,7 @@
   dust.pragmas = compiler.pragmas;
   dust.compileNode = compiler.compileNode;
   dust.nodes = compiler.nodes;
-  
+
   return compiler;
 
 }));
-
