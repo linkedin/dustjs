@@ -35,6 +35,14 @@ Test.prototype.notEquals = function(actual, expected, message) {
     }
 }
 
+Test.prototype.contains = function(actual, expected, message) {
+  if (expected.indexOf(actual) === -1) {
+    var err = new Error();
+    if (message) err.message = message;
+    throw wrapAssertionError(err, actual, expected, "contains");
+  }
+}
+
 Test.prototype.ifError = function(err) {
   if (err) throw err;
 }
