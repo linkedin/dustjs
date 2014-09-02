@@ -1,4 +1,4 @@
-/*! Dust - Asynchronous Templating - v2.4.0
+/*! Dust - Asynchronous Templating - v2.4.1
 * http://linkedin.github.io/dustjs/
 * Copyright (c) 2014 Aleksander Williams; Released under the MIT License */
 (function(root) {
@@ -12,26 +12,9 @@
       EMPTY_FUNC = function() {},
       logger = {},
       originalLog,
-      loggerContext,
-      hasOwnProperty = Object.prototype.hasOwnProperty,
-      getResult;
+      loggerContext;
 
   dust.debugLevel = NONE;
-
-  /**
-   * Given an object and a key, return the value. Use this instead of obj[key] in order to:
-   *     prevent looking up the prototype chain
-   *     fail nicely when the object is falsy
-   * @param {Object} obj the object to inspect
-   * @param {String} key the name of the property to resolve
-   * @return {*} the resolved value
-   */
-  getResult = function(obj, key) {
-    if (obj && hasOwnProperty.call(obj, key)) {
-      return obj[key];
-    }
-  };
-
 
   // Try to find the console in global scope
   if (root && root.console && root.console.log) {
@@ -327,7 +310,7 @@
         while (ctx) {
           if (ctx.isObject) {
             ctxThis = ctx.head;
-            value = getResult(ctx.head, first);
+            value = ctx.head[first];
             if (value !== undefined) {
               break;
             }
@@ -338,16 +321,21 @@
         if (value !== undefined) {
           ctx = value;
         } else {
-          ctx = getResult(this.global, first);
+          ctx = this.global ? this.global[first] : undefined;
         }
       } else if (ctx) {
         // if scope is limited by a leading dot, don't search up the tree
-        ctx = getResult(ctx.head, first);
+        if(ctx.head) {
+          ctx = ctx.head[first];
+        } else {
+          //context's head is empty, value we are searching for is not defined
+          ctx = undefined;
+        }
       }
 
       while (ctx && i < len) {
         ctxThis = ctx;
-        ctx = getResult(ctx, down[i]);
+        ctx = ctx[down[i]];
         i++;
       }
     }
