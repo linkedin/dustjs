@@ -968,7 +968,7 @@ var coreTests = [
 /**
  * PARTIAL DEFINITIONS TESTS
  */
-  { 
+  {
     name: "partial definitions",
     tests: [
       {
@@ -1668,7 +1668,21 @@ var coreTests = [
         context: {},
         error: 'Expected end tag for tags but it was not found. At line : 8, column : 9',
         message: "should test the errors message for Conditional without end tag."
-      }
+      },
+      {
+        name: "Helper syntax error. TypeError",
+        source:"{#hello/}",
+        context: {"hello":function() { var a; a.slice(1); }},
+        error: "Cannot read property 'slice' of undefined",
+        message: "should test helper syntax errors being handled gracefully"
+      },
+      {
+        name: "Helper syntax error. async TypeError",
+        source:"{#hello/}",
+        context: {"hello":function(chunk, context, bodies, params) { return chunk.map(function(chunk) { var a; a.slice(1); chunk.end(); })}},
+        error: "Cannot read property 'slice' of undefined",
+        message: "should test helper syntax errors inside an async block being handled gracefully"
+       }
     ]
   },
 /**
