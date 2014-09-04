@@ -50,7 +50,7 @@ context
   params is defined as matching white space followed by = and identfier or inline
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 params "params"
-  = p:(ws+ k:key "=" v:(number / identifier / inline) {return ["param", ["literal", k], v]})*
+  = p:(ws+ k:key ws* "=" ws* v:(number / identifier / inline) {return ["param", ["literal", k], v]})*
   { return ["params"].concat(p) }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------

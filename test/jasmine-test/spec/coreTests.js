@@ -1438,6 +1438,18 @@ var coreTests = [
         message: "should ignore extra whitespaces between inline params"
       },
       {
+        name: "extra whitespaces between key-value pairs of params supported",
+        source: '\n\
+        {#helper \n\
+          foo  = "bar"\n\
+          boo  = "boo"\n\
+          baz  = "baz"\n\
+        /}',
+        context: { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo + " " + params.baz); } },
+        expected: "boo bar baz",
+        message: "should ignore extra whitespaces between key-value pairs of params"
+      },
+      {
         name: "error : whitespaces between the '{' plus '>' and partial identifier is not supported",
         source: '{ > partial/} {> "hello_world"/} {> "{ref}"/}',
         context: { "name": "Jim", "count": 42, "ref": "hello_world" },
