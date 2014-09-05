@@ -958,7 +958,7 @@ var coreTests = [
 /**
  * PARTIAL DEFINITIONS TESTS
  */
-  { 
+  {
     name: "partial definitions",
     tests: [
       {
@@ -1389,7 +1389,7 @@ var coreTests = [
         name:     "error: whitespaces between the opening brace and any of (#,?,@,^,+,%) is not allowed",
         source:   '{ # helper foo="bar" boo="boo" } {/helper}',
         context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
-        error: 'Expected buffer, comment, partial, raw, reference, section or special but "{" found. At line : 1, column : 1',
+        error: 'Expected buffer, comment, end of input, partial, raw, reference, section or special but "{" found. At line : 1, column : 1',
         message: "should show an error for whitespces between the opening brace and any of (#,?,@,^,+,%)"
       },
       {
@@ -1417,7 +1417,7 @@ var coreTests = [
         name:     "error: whitespaces between the forward slash and the closing brace in self closing tags",
         source:   '{#helper foo="bar" boo="boo" / }',
         context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
-        error: 'Expected buffer, comment, partial, raw, reference, section or special but "{" found. At line : 1, column : 1',
+        error: 'Expected buffer, comment, end of input, partial, raw, reference, section or special but "{" found. At line : 1, column : 1',
         message: "should show an error for whitespaces  etween the forward slash and the closing brace in self closing tags"
       },
       {
@@ -1431,7 +1431,7 @@ var coreTests = [
         name: "error : whitespaces between the '{' plus '>' and partial identifier is not supported",
         source: '{ > partial/} {> "hello_world"/} {> "{ref}"/}',
         context: { "name": "Jim", "count": 42, "ref": "hello_world" },
-        error: 'Expected buffer, comment, partial, raw, reference, section or special but "{" found. At line : 1, column : 1',
+        error: 'Expected buffer, comment, end of input, partial, raw, reference, section or special but "{" found. At line : 1, column : 1',
         message: "should show an error for whitespaces between the '{' plus '>' and partial identifier"
       },
       {
@@ -1531,7 +1531,7 @@ var coreTests = [
         name: "Dust syntax error",
         source: "RRR {##}",
         context: { name: "Mick", count: 30 },
-        error: 'Expected buffer, comment, partial, raw, reference, section or special but "{" found. At line : 1, column : 5',
+        error: 'Expected buffer, comment, end of input, partial, raw, reference, section or special but "{" found. At line : 1, column : 5',
         message: "should test that the error message shows line and column."
       },
       {
