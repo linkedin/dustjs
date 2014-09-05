@@ -192,9 +192,9 @@ module.exports = function(grunt) {
             report: 'tmp/coverage',
             thresholds: {
               lines: 82,
-              statements: 83,
-              branches: 73,
-              functions: 89
+              statements: 82,
+              branches: 70,
+              functions: 88
             }
           }
         }
