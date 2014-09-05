@@ -5,7 +5,11 @@ start
    body is defined as anything that matches with the part 0 or more times
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 body
-  = p:part* { return ["body"].concat(p).concat([['line', line()], ['col', column()]]) }
+  = p:part* {
+    return ["body"]
+           .concat(p)
+           .concat([['line', line()], ['col', column()]]);
+  }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
    part is defined as anything that matches with raw or comment or section or partial or special or reference or buffer
@@ -18,10 +22,21 @@ part
    plus bodies plus end_tag or sec_tag_start followed by a slash and closing brace
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 section "section"
-  = t:sec_tag_start ws* rd b:body e:bodies n:end_tag? &{if( (!n) || (t[1].text !== n.text) ) { throw new Error("Expected end tag for "+t[1].text+" but it was not found. At line : "+line()+", column : " + column())} return true;}
-    { e.push(["param", ["literal", "block"], b]); t.push(e); return t.concat([['line', line()], ['col', column()]]) }
-  / t:sec_tag_start ws* "/" rd
-  { t.push(["bodies"]); return t.concat([['line', line()], ['col', column()]]) }
+  = t:sec_tag_start ws* rd b:body e:bodies n:end_tag? &{
+    if( (!n) || (t[1].text !== n.text) ) {
+      error("Expected end tag for "+t[1].text+" but it was not found.");
+    }
+    return true;
+  }
+  {
+    e.push(["param", ["literal", "block"], b]);
+    t.push(e);
+    return t.concat([['line', line()], ['col', column()]]);
+  }
+  / t:sec_tag_start ws* "/" rd {
+    t.push(["bodies"]);
+    return t.concat([['line', line()], ['col', column()]]);
+  }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
    sec_tag_start is defined as matching an opening brace followed by one of #?^<+@% plus identifier plus context plus param
@@ -73,7 +88,10 @@ reference "reference"
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 partial "partial"
   = ld s:(">"/"+") ws* n:(k:key {return ["literal", k]} / inline) c:context p:params ws* "/" rd
-  { var key = (s ===">")? "partial" : s; return [key, n, c, p].concat([['line', line()], ['col', column()]]) }
+  {
+    var key = (s === ">") ? "partial" : s;
+    return [key, n, c, p].concat([['line', line()], ['col', column()]]);
+  }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
    filters is defined as matching a pipe character followed by anything that matches the key
