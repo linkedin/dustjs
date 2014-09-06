@@ -1,4 +1,4 @@
-/*! Dust - Asynchronous Templating - v2.3.5
+/*! Dust - Asynchronous Templating - v2.3.6
 * http://linkedin.github.io/dustjs/
 * Copyright (c) 2014 Aleksander Williams; Released under the MIT License */
 (function(root) {
