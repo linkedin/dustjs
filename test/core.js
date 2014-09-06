@@ -167,7 +167,7 @@ function testRender(unit, source, context, expected, options, baseContext, error
        }
      });
     } catch(err) {
-      unit.equals(err.message || err, error);
+      unit.contains(error, err.message || err);
     }
     unit.pass();
 };
