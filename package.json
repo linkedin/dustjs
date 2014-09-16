@@ -9,26 +9,15 @@
   "homepage": "http://linkedin.github.io/dustjs/",
   "description": "Asynchronous templates for the browser and node.js ( LinkedIn fork )",
   "contributors": [
-    {
-      "name": "Jairo de Morais",
-      "email": "jdemorais@linkedin.com"
-    },
-    {
-      "name": "Veena Basavaraj",
-      "email": "vbasavaraj@linkedin.com"
-    },
-    {
-      "name": "Jimmy Chan",
-      "email": "jchan@linkedin.com"
-    },
-    {
-      "name": "Richard Ragan",
-      "email": "rragan@ebay.com"
-    },
-    {
-      "name": "Steven Foote",
-      "email": "sfoote@linkedin.com"
-    }
+    "Veena Basavaraj <veena.braj@gmail.com>",
+    "Tom Carchrae",
+    "Jimmy Chan <jchan@linkedin.com>",
+    "Steven Foote <sfoote@linkedin.com>",
+    "Prayrit Prash Jain <prjain@linkedin.com>",
+    "Seth Kinast <skinast@linkedin.com>",
+    "Jairo de Morais <jairodemorais@gmail.com>",
+    "Kate Odnous <kodnous@linkedin.com>",
+    "Richard Ragan <rragan@ebay.com>"
   ],
   "scripts": {
     "test": "grunt test"
