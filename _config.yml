@@ -1,2 +1,2 @@
 relative_permalinks: false
-markdown: kramdown
+markdown: redcarpet

@@ -1,4 +1,5 @@
 node_modules
+bower_components
 tmp
 _site/
 *.sass-cache/
