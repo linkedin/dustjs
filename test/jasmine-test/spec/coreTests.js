@@ -1247,6 +1247,13 @@ var coreTests = [
         context:  { helper: function(chunk, context, bodies, params) { return chunk.write(params['data-foo']); } },
         expected: "dashes",
         message: "should test parameters with dashes"
+      },
+      {
+	name:     "inline params as dust function",
+	source:   "{#section a=\"{b}\"}{#a}Hello, {.}!{/a}{/section}",
+	context:  {"section": true, "b": "world"},
+	expected: "Hello, world!",
+	message: "Inline params that evaluate to a dust function should evaluate their body"
       }
     ]
   },
@@ -1322,13 +1329,13 @@ var coreTests = [
         context: {
                    foo: {
                      foobar: 'Foo Bar',
-                     bar: function () {
+                     bar: function biz() {
                        return this.foobar;
                      }
                    }
                  },
         expected: "Hello Foo Bar World!",
-        message: "should test scope of context function"
+        message: "should test that a non-chunk return value is used for truthiness"
       },
       {
         name: "test that function that do not return chunk and return falsy are treated as falsy",
@@ -1378,7 +1385,7 @@ var coreTests = [
                       }
                     },
           expected: "Hello Foo Bar World!",
-          message: "should test scope of context function"
+          message: "should test that function returning object is resolved"
         }
     ]
   },
