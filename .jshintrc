@@ -12,7 +12,7 @@
   "eqnull": true,
   "browser": true,
   "globals": {
-  "jQuery": true,
+    "jQuery": true,
     "require": true,
     "module": true
   }
