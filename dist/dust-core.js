@@ -1,4 +1,4 @@
-/*! Dust - Asynchronous Templating - v2.4.2
+/*! Dust - Asynchronous Templating - v2.5.0
 * http://linkedin.github.io/dustjs/
 * Copyright (c) 2014 Aleksander Williams; Released under the MIT License */
 (function(root) {
@@ -15,6 +15,25 @@
       loggerContext;
 
   dust.debugLevel = NONE;
+
+  dust.config = {
+    whitespace: false,
+  };
+
+  // Directive aliases to minify code
+  dust._aliases = {
+    "write": "w",
+    "end": "e",
+    "map": "m",
+    "render": "r",
+    "reference": "f",
+    "section": "s",
+    "exists": "x",
+    "notexists": "nx",
+    "block": "b",
+    "partial": "p",
+    "helper": "h"
+  };
 
   // Try to find the console in global scope
   if (root && root.console && root.console.log) {
@@ -297,7 +316,7 @@
   Context.prototype._get = function(cur, down) {
     var ctx = this.stack,
         i = 1,
-        value, first, len, ctxThis;
+        value, first, len, ctxThis, fn;
     first = down[0];
     len = down.length;
 
@@ -342,7 +361,7 @@
 
     // Return the ctx or a function wrapping the application of the context.
     if (typeof ctx === 'function') {
-      return function() {
+      fn = function() {
         try {
           return ctx.apply(ctxThis, arguments);
         } catch (err) {
@@ -350,6 +369,8 @@
           throw err;
         }
       };
+      fn.__dustBody = !!ctx.__dustBody;
+      return fn;
     } else {
       if (ctx === undefined) {
         dust.log('Cannot find the value for reference [{' + down.join('.') + '}] in template [' + this.getTemplateName() + ']');
@@ -499,7 +520,6 @@
       this.events = {};
     }
     if (!this.events[type]) {
-      dust.log('Event type [' + type + '] does not exist. Using just the specified callback.', WARN);
       if(callback) {
         this.events[type] = callback;
       } else {
@@ -612,7 +632,7 @@
 
   Chunk.prototype.section = function(elem, context, bodies, params) {
     // anonymous functions
-    if (typeof elem === 'function') {
+    if (typeof elem === 'function' && !elem.__dustBody) {
       try {
         elem = elem.apply(context.current(), [this, context, bodies, params]);
       } catch(e) {
@@ -797,6 +817,13 @@
     return this;
   };
 
+  // Chunk aliases
+  for(var f in Chunk.prototype) {
+    if(dust._aliases[f]) {
+      Chunk.prototype[dust._aliases[f]] = Chunk.prototype[f];
+    }
+  }
+
   function Tap(head, tail) {
     this.head = head;
     this.tail = tail;
@@ -816,7 +843,7 @@
     return value;
   };
 
-  var HCHARS = new RegExp(/[&<>\"\']/),
+  var HCHARS = /[&<>"']/,
       AMP    = /&/g,
       LT     = /</g,
       GT     = />/g,
