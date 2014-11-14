@@ -676,6 +676,18 @@ var coreTests = [
         context: { "test": [[ 1,2,3 ]]},
         expected: "1i:0l:3,2i:1l:3,3i:2l:3,",
         message: "should test double nested array and . reference: issue #340"
+      },
+      {
+	name: "using a nested key as a reference for array index access",
+	source: "{#loop.array[key.foo].sub}{.}{/loop.array[key.foo].sub}",
+	context: {
+		  "loop": {
+		   "array": {"thing": {sub: 1, sap: 2}, "thing2": "bar"}
+		  },
+		  "key": { "foo": "thing" }
+		 },
+	expected: "1",
+	message: "should test using a multilevel reference as a key in array access"
       }
     ]
   },

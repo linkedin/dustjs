@@ -111,7 +111,7 @@ special "special"
    identifier is defined as matching a path or key
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 identifier "identifier"
-  = p:path     { var arr = ["path"].concat(p); arr.text = p[1].join('.'); return arr; }
+  = p:path     { var arr = ["path"].concat(p); arr.text = p[1].join('.').replace(/,line,\d+,col,\d+/g,''); return arr; }
   / k:key      { var arr = ["key", k]; arr.text = k; return arr; }
 
 number "number"
