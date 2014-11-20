@@ -1,5 +1,8 @@
 ## Change Log
 
+### v2.5.1 (2014/11/20 00:58 +00:00)
+- [#522](https://github.com/linkedin/dustjs/pull/522) Fix the use of a multi-level object key (e.g. foo.bar) as the key for an index lookup inside non-self-closing tags. (@sethkinast)
+
 ### v2.5.0 (2014/11/04 00:15 +00:00)
 - [#515](https://github.com/linkedin/dustjs/pull/515) Remove the warning log when you attach a new Stream event (@sethkinast)
 - [#513](https://github.com/linkedin/dustjs/pull/513) Treat compiled body functions as blocks to render instead of functions to evaluate.   Dust body functions are now flagged with .___dustBody to differentiate them from functions set in the context. (@sethkinast)
