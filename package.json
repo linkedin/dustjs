@@ -33,7 +33,11 @@
   },
   "keywords": [
     "templates",
-    "views"
+    "views",
+    "dust",
+    "dustjs",
+    "dust.js",
+    "linkedin"
   ],
   "devDependencies": {
     "pegjs": "0.8.0",
