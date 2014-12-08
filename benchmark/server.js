@@ -1,5 +1,5 @@
 var uubench    = require('./uubench'),
-    dust       = require('../lib/dust'),
+    dust       = require('../lib/server'),
     dustBench  = require('./suites/dust_suite').dustBench;
 
 uubench.nextTick = process.nextTick;
