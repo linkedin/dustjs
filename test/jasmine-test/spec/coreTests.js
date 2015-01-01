@@ -1736,6 +1736,46 @@ var coreTests = [
     ]
   },
 /**
+ * WHITESPACE TESTS
+ */
+  {
+    name: "whitespace test",
+    tests: [
+      {
+        name: "whitespace",
+        source: ["<html>",
+                 "    <head>"].join('\n'),
+        context: {},
+        expected: "<html>\n    <head>",
+        message: "whitespace and linebreaks should be preserved",
+        config: { whitespace: true }
+      },
+      {
+        name: "partial indentation",
+        source: ["{<body}",
+                 "    <h1>Title</h1>",
+                 "    <p>Content...</p>",
+                 "{/body}",
+                 "<html>",
+                 "<head>",
+                 "</head>",
+                 "<body>{+body/}<body>",
+                 "</html>"].join('\n'),
+        context: {},
+        expected: ["<html>",
+                 "<head>",
+                 "</head>",
+                 "<body>",
+                 "    <h1>Title</h1>",
+                 "    <p>Content...</p>",
+                 "<body>",
+                 "</html>"].join('\n'),
+        message: "preserve indentation.",
+        config: { whitespace: true }
+      }      
+    ]
+  },
+/**
  * RAW TEXT TESTS
  */
   {
