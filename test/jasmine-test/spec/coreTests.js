@@ -1742,6 +1742,37 @@ var coreTests = [
     name: "whitespace test",
     tests: [
       {
+        name: "multiline text block runs together",
+        source: ["<p>",
+                 "    foo bar baz",
+                 "    foo bar baz",
+                 "</p>"].join('\n'),
+        context: {},
+        expected: "<p>foo bar bazfoo bar baz</p>",
+        message: "multiline text block should run together."
+      },
+      {
+        name: "multiline text block with trailing space does not run together",
+        source: ["<p>",
+                 "    foo bar baz ",
+                 "    foo bar baz",
+                 "</p>"].join('\n'),
+        context: {},
+        expected: "<p>foo bar baz foo bar baz</p>",
+        message: "multiline text block with a trailing space should not run together."
+      },
+      {
+        name: "multiline text block",
+        source: ["<p>",
+                 "    foo bar baz",
+                 "    foo bar baz",
+                 "</p>"].join('\n'),
+        context: {},
+        expected: "<p>\n    foo bar baz\n    foo bar baz\n</p>",
+        message: "multiline text block should maintain indent.",
+        config: { whitespace: true }
+      },
+      {
         name: "whitespace",
         source: ["<html>",
                  "    <head>"].join('\n'),
@@ -1749,14 +1780,15 @@ var coreTests = [
         expected: "<html>\n    <head>",
         message: "whitespace and linebreaks should be preserved",
         config: { whitespace: true }
-      },
+      },    
       {
         name: "partial indentation",
         source: ["<html>",
                  "<head>",
                  "</head>",
                  "<body>{+body/}<body>",
-                 "</html>{<body}",
+                 "</html>",
+                 "{<body}",
                  "    <h1>Title</h1>",
                  "    <p>Content...</p>",
                  "{/body}"].join('\n'),
@@ -1768,7 +1800,7 @@ var coreTests = [
                  "    <h1>Title</h1>",
                  "    <p>Content...</p>",
                  "<body>",
-                 "</html>"].join('\n'),
+                 "</html>\n"].join('\n'),
         message: "preserve indentation.",
         config: { whitespace: true }
       }      
