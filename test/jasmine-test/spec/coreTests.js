@@ -688,6 +688,13 @@ var coreTests = [
 		 },
 	expected: "1",
 	message: "should test using a multilevel reference as a key in array access"
+      },
+      {
+	name: "Outputting an array calls toString and HTML-encodes",
+	source: "{array}",
+	context: { "array": ["You & I", " & Moe"] },
+	expected: "You &amp; I, &amp; Moe",
+	message: "should HTML-encode stringified arrays referenced directly"
       }
     ]
   },
