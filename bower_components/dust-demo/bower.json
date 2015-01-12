@@ -1,0 +1,27 @@
+{
+  "name": "dust-demo",
+  "version": "0.1.1",
+  "homepage": "http://smfoote.github.io/dust-demo/",
+  "authors": [
+    "Steven Foote <smfoote@gmail.com>"
+  ],
+  "description": "A web component for demoing dust",
+  "main": "components/dust-demo.html",
+  "keywords": [
+    "dust",
+    "html5",
+    "web components"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "webcomponentsjs": "~0.5.2",
+    "polymer": "Polymer/polymer#~0.5.2"
+  }
+}

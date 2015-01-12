@@ -1,0 +1,191 @@
+<!-- Dependencies -->
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/dustjs-linkedin/2.4.0/dust-full.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/dustjs-helpers/1.2.0/dust-helpers.min.js"></script>
+<link rel="import" href="dust-demo-template.html">
+<link rel="import" href="dust-demo-json.html">
+
+<!-- HTML -->
+<template id="dust-demo-template">
+  <div class="container">
+    <h3 id="template-header">Dust Template</h3>
+    <content select="dust-demo-template"></content>
+  </div>
+  <div class="container">
+    <h3 id="data-header">Data</h3>
+    <content select="dust-demo-json"></content>
+  </div>
+  <div class="container">
+    <h3 id="compiled-header">Compiled Dust</h3>
+    <pre id="compiled-dust"></pre>
+  </div>
+  <div class="container">
+    <h3 id="output-header">Output</h3>
+    <pre id="output"></pre>
+  </div>
+  <button id="dev-toggle">Dev Mode</button>
+
+  <!-- component styling -->
+  <style>
+    :host {
+      position: relative;
+      display: block;
+    }
+
+    pre {
+      min-height: 120px;
+      padding: 10px;
+      margin: 10px 0;
+      background-color: #222;
+      color: #72CC72;
+      font-family: Consolas, Courier, monospace;
+      font-size: 15px;
+      white-space: pre-wrap;
+    }
+
+    #compiled-dust,
+    #compiled-header {
+      display: none;
+    }
+
+    :host([dev]) #compiled-dust,
+    :host([dev]) #compiled-header {
+      display: block;
+    }
+
+    #dev-toggle {
+      position: absolute;
+      top: 10px;
+      right: 0;
+      opacity: 0;
+    }
+
+    #dev-toggle:focus,
+    :host(:hover) #dev-toggle:focus,
+    #dev-toggle:active,
+    :host(:hover) #dev-toggle:active,
+    #dev-toggle:hover,
+    :host(:hover) #dev-toggle:hover {
+      opacity: 1;
+    }
+
+    :host(:hover) #dev-toggle {
+      opacity: 0.7;
+    }
+
+    .container {
+      position: relative;
+    }
+
+    h3 {
+      float: right;
+      padding: 5px;
+      margin: 0;
+      color: #FFF;
+      border: 1px dashed #72CC72;
+      border-right: none;
+      border-top: none;
+      font-family: Helvetica, sans-serif;
+      font-size: 15px;
+      font-weight: normal;
+    }
+  </style>
+</template>
+
+<!-- Interaction -->
+<script>
+  (function(dom) {
+    var DustDemoController = function(context) {
+      this.context = context;
+      this.templateName = this.context.getAttribute('template-name') || 'default' + (new Date()).getTime();
+
+      // Create a shadow root
+      this.shadow = this.context.createShadowRoot();
+
+      // stamp out our template in the shadow dom
+      var template = dom.querySelector("#dust-demo-template").content.cloneNode(true);
+      this.shadow.appendChild(template);
+
+      this.setupListeners();
+      this.renderDust();
+    };
+
+    DustDemoController.prototype.setupListeners = function() {
+      var toggleDevButton = this.shadow.querySelector('#dev-toggle');
+      var that = this;
+
+      this.setupEditorListeners();
+      toggleDevButton.addEventListener('click', function(evt) {
+        that.toggleDev();
+      });
+
+      this.context.addEventListener('DOMSubtreeModified', function() {
+        that.setupEditorListeners();
+        that.renderDust();
+      });
+    };
+
+    DustDemoController.prototype.setupEditorListeners = function() {
+      if (!this.editorListenersInitialized) {
+        var editors = this.context.querySelectorAll('dust-demo-template, dust-demo-json');
+        var that = this;
+        var editor;
+
+        for (var i=0; (editor = editors[i]); i++) {
+          editor.addEventListener('input', function(evt) {
+            that.renderDust();
+          });
+        }
+        this.editorListenersInitialized = true;
+      }
+    };
+
+    DustDemoController.prototype.renderDust = function() {
+      var templateEl = this.context.querySelector('dust-demo-template');
+      var jsonEl = this.context.querySelector('dust-demo-json');
+      if (!(templateEl && jsonEl)) {
+        return;
+      }
+      var template = templateEl.innerHTML;
+      if (!template) {
+        return;
+      }
+      var data = jsonEl.innerHTML.replace('&nbsp;', ' ');
+      if (data) {
+        eval('var data = ' + data + ';');
+      }
+      var compiledContainer = this.shadow.getElementById('compiled-dust');
+      var outputContainer = this.shadow.getElementById('output');
+      var compiledDust = dust.compile(template, this.templateName);
+      dust.loadSource(compiledDust);
+      dust.render(this.templateName, data, function(err, out) {
+        if (err) {
+          console.log('render error');
+        }
+        compiledContainer.innerHTML = compiledDust;
+        outputContainer.innerHTML = out;
+      })
+    };
+
+    DustDemoController.prototype.toggleDev = function() {
+      var el = this.context;
+      if (el.hasAttribute('dev')) {
+        el.removeAttribute('dev');
+      } else {
+        el.setAttribute('dev', '');
+      }
+    };
+
+    var DustDemo = Object.create(HTMLElement.prototype);
+    DustDemo.createdCallback = function() {
+      this.controller = new DustDemoController(this);
+    };
+
+    // Don't strip whitespace
+    dust.optimizers.format = function(ctx, node) {
+      return node;
+    };
+
+    document.registerElement('dust-demo', {prototype: DustDemo});
+
+  })((document._currentScript || document.currentScript).ownerDocument);
+</script>
