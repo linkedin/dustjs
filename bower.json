@@ -15,7 +15,8 @@
     "tests"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#~0.3.4",
-    "dust-demo": "~0.0.3"
+    "polymer": "Polymer/polymer#~0.5.2",
+    "dust-demo": "~0.1.1",
+    "webcomponentsjs": "~0.5.2"
   }
 }

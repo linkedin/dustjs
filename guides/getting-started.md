@@ -8,7 +8,7 @@ permalink: /guides/getting-started/
 
 Welcome to Dust! Dust is an asynchronous templating engine that is used primarily for creating HTML.
 
-<dust-demo template-name="reference">
+<dust-demo template-name="intro">
 <dust-demo-template>Welcome to Dust, {user.name}.</dust-demo-template>
 <dust-demo-json>{
   "user": {
