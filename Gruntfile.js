@@ -62,11 +62,11 @@ module.exports = function(grunt) {
         stripBanners: true
       },
       core: {
-        src: ['lib/dust.js'],
+        src: ['lib/dust.js', 'src/amd-core.js'],
         dest: 'tmp/dust-core.js'
       },
       full: {
-        src: ['lib/dust.js', 'lib/parser.js', 'lib/compiler.js'],
+        src: ['lib/dust.js', 'lib/parser.js', 'lib/compiler.js', 'src/amd-full.js'],
         dest: 'tmp/dust-full.js'
       }
     },
@@ -166,7 +166,7 @@ module.exports = function(grunt) {
               lines: 82,
               statements: 82,
               branches: 70,
-              functions: 88
+              functions: 85
             }
           }
         }
