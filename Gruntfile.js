@@ -54,12 +54,6 @@ module.exports = function(grunt) {
         options: {
           stdout: true
         }
-      },
-      gitAddArchive: {
-        command: 'git add <%= compress.distTarBall.options.archive %> <%= compress.distZip.options.archive %>',
-        options: {
-          stdout: true
-        }
       }
     },
     concat: {
@@ -112,28 +106,6 @@ module.exports = function(grunt) {
       full: {
         src: '<%= concat.full.dest %>',
         dest: 'tmp/dust-full.min.js'
-      }
-    },
-    compress: {
-      distTarBall: {
-        options: {
-          archive: 'archive/dust-<%= pkg.version %>.tar.gz',
-          mode: 'tgz',
-          pretty: true
-        },
-        files: [
-          {expand: true, cwd: 'dist', src: ['**'], dest: 'dust-<%= pkg.version %>/', filter: 'isFile'}
-        ]
-      },
-      distZip: {
-        options: {
-          archive: 'archive/dust-<%= pkg.version %>.zip',
-          mode: 'zip',
-          pretty: true
-        },
-        files: [
-          {expand: true, cwd: 'dist', src: ['**'], dest: 'dust-<%= pkg.version %>/', filter: 'isFile'}
-        ]
       }
     },
     clean: {
@@ -269,7 +241,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-compress');
   grunt.loadNpmTasks('grunt-gh-pages');
   grunt.loadNpmTasks('grunt-bump');
   grunt.loadNpmTasks('grunt-shell');
@@ -297,9 +268,9 @@ module.exports = function(grunt) {
 
   //release tasks
   grunt.registerTask('copyForRelease', ['clean:dist', 'copy:core', 'copy:coreMin', 'copy:full', 'copy:fullMin', 'copy:license', 'log:copyForRelease']);
-  grunt.registerTask('buildRelease',   ['test', 'copyForRelease', 'compress']);
-  grunt.registerTask('releasePatch',   ['bump-only:patch', 'buildRelease', 'shell:gitAddArchive', 'bump-commit', 'log:release']);
-  grunt.registerTask('releaseMinor',   ['bump-only:minor', 'buildRelease', 'shell:gitAddArchive', 'bump-commit', 'log:release']);
+  grunt.registerTask('buildRelease',   ['test', 'copyForRelease']);
+  grunt.registerTask('releasePatch',   ['bump-only:patch', 'buildRelease', 'bump-commit', 'log:release']);
+  grunt.registerTask('releaseMinor',   ['bump-only:minor', 'buildRelease', 'bump-commit', 'log:release']);
   // major release should probably be done with care
   //grunt.registerTask('releaseMajor',   ['bump-only:major', 'buildRelease', 'bump-commit:major', 'log:release']);
 

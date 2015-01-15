@@ -12,7 +12,6 @@
     "test",
     "src",
     "benchmark",
-    "archive",
     "node_modules",
     ".grunt",
     "_SpecRunner.html",
