@@ -10,9 +10,9 @@ Helpers are extensions added to Dust to increase its functionality. They make it
 
 ## Installing Helpers
 
-Helpers are bundled separately as the `dustjs-helpers` library. After the dustjs-linkedin library is loaded, follow the same instructions in the [Getting Started guide](/guides/getting-started/) to install `dustjs-helpers`. If you are cloning or downloading from GitHub, you can find the helpers in the [dustjs-helpers repository](https://github.com/linkedin/dustjs-helpers).
+Officially supported helpers are bundled separately in the `dustjs-helpers` library. After the dustjs-linkedin library is loaded, follow the same instructions in the [Getting Started guide](/guides/getting-started/) to install `dustjs-helpers`. If you are cloning or downloading from GitHub, you can find the helpers in the [dustjs-helpers repository](https://github.com/linkedin/dustjs-helpers).
 
-If you are using node.js, then the following `require` statements will ensure you have the needed Dust modules available.
+If you are using Node.js, then the following `require` statements will ensure you have the needed Dust modules available.
 
 ```
 require('dustjs-linkedin');
@@ -21,27 +21,36 @@ require('dustjs-helpers');
 
 ## Logic Helpers
 
-The helpers library comes with the following logic helpers: `{@eq}`, `{@ne}`, `{@gt}`, `{@lt}`, `{@gte}`, and `{@lte}`. These helpers allow you to print content if one value compared in a certain way (e.g. equal, greater than or equal to) to another value is true. For each helper, you specify the first value with the `key` attribute and the second value with the `value` attribute. Both `key` and `value` can point to a reference or a literal value. Wrap literal values in quotes and leave references un-quoted.
+The helpers library comes with the following logic helpers:
 
-In the following example, the first helper looks for the value of `level` in the underlying JSON data and checks if it is equal to the literal string "master". The second checks to see if the value for the `age` reference is greater than the value of the `carRentalAge` reference.
+* `{@eq}` equal to
+* `{@ne}` not equal to
+* `{@gt}` greater than
+* `{@lt}` less than
+* `{@gte}` greater than or equal to
+* `{@lte}` less than or equal to
+
+These helpers allow you to print content if one value compared in a certain way to another value is true. For each helper, you specify the first value with the `key` attribute and the second value with the `value` attribute. Both `key` and `value` can point to a reference or a literal value. Wrap literal values in quotes and leave references un-quoted.
+
+In the following example, the first helper looks for the value of `level` in the underlying JSON data and checks if it is equal to the literal string "master". The second checks to see if the value for the `age` reference is greater than the value of the `starfighterRentalAge` reference.
 
 <dust-demo template-name="helpers-logic">
 <dust-demo-template>
 {@eq key=level value="master"}You are no longer a Padawan. {/eq}
-{@gt key=age value=carRentalAge}Rent a Car!{/gt}
+{@gt key=age value=starfighterRentalAge}Rent a Starfighter!{/gt}
 </dust-demo-template>
 <dust-demo-json>
 {
   "level": "master",
   "age": 27,
-  "carRentalAge": 25
+  "starfighterRentalAge": 25
 }
 </dust-demo-json>
 </dust-demo>
 
 ### Else
 
-You can use an `{:else}` clause to do something if the comparison is false.
+For all logic helpers, you can use an `{:else}` clause to do something if the comparison is false.
 
 <dust-demo template-name="helpers-else">
 <dust-demo-template>
@@ -60,34 +69,12 @@ You can use an `{:else}` clause to do something if the comparison is false.
 
 ### Casting
 
-If you are comparing a literal value to one that you know is not a string (e.g. a number or a boolean), make sure to specify the `type` attribute so Dust knows how to cast the literal value.
+If you are comparing a literal value to one that you know is not a string (e.g. a number or a boolean), make sure to specify the `type` attribute so Dust knows how to cast the literal value. For `@lt`, `@gt`, `@lte`, and `@gte`, the type is automatically coerced to a number.
 
 <dust-demo template-name="helpers-casting">
 <dust-demo-template>
-{! Convert "18" to a number before comparing !}
-{@gte key=age value="18" type="number"}You can vote!{/gte}
-</dust-demo-template>
-<dust-demo-json>
-{
-  "age": 20
-}
-</dust-demo-json>
-</dust-demo>
-
-## Select Helper
-
-The `@select` helper can be combined with the other logic helpers to form a `switch`-like structure, allowing you to take one action based on multiple comparisons with a single key value. You move the `key` attribute to `@select` and wrap the helper around the comparisons, specifying only a `value` attribute for each one. Each condition will be tested until one is true. When a true condition is
-found, Dust executes the condition's body and skips the rest of the conditions. You can specify what to do if none of the conditions are true using the `@default` helper.
-
-<dust-demo template-name="helpers-select">
-<dust-demo-template>
-{@select key=bilbosAge}
-  {@lt value=gandalfsAge}Indeed, Bilbo is younger than Gandalf.{/lt}
-  {@eq value=gandalfsAge}Bilbo and Gandalf are the same age.{/eq}
-  {@gt value=gandalfsAge}Wait, Bilbo is older than Gandalf?!{/gt}
-  {! default can catch when gandalfsAge is undefined !}
-  {@default}Gandalf's age is a conundrum.{/default}
-{/select}
+{@eq key=bilbosAge value="50" type="number"}Looking nifty at fifty, Bilbo! {/eq}
+{@gt key=gandalfsAge value="10000"}Gandalf is really old...{/gt}
 </dust-demo-template>
 <dust-demo-json>
 {
@@ -96,6 +83,35 @@ found, Dust executes the condition's body and skips the rest of the conditions. 
 }
 </dust-demo-json>
 </dust-demo>
+
+## Select Helper
+
+The `@select` helper can be nested around the other logic helpers to form a `switch`-like structure, allowing you to take one action based on multiple comparisons with a single key value. You move the `key` attribute to `@select` and set only a `value` attribute for each logic helper inside the `@select`.
+
+You can specify what to do if none of the conditions are true using a `@none` helper in the `@select`. Its opposite, the `@any` helper, is run if any of the conditions are true, in addition to those true conditions. Dust evaluates `@any` and `@none` asynchronously, so there can be any number of them in any order.
+
+When a true logic helper condition is found in the `@select`, Dust executes the condition's body and skips the rest of its sibling conditions, excepting any `@any` helpers.
+
+<dust-demo template-name="helpers-select">
+<dust-demo-template>
+&lt;span class="
+  {@select key=test}
+    {@any}test-enabled {/any}
+    {@none}test-disabled {/none}
+    {@eq="puppies"}test-puppies{/eq}
+    {@eq="bunnies"}test-bunnies{/eq}
+  {/select}
+"&rt;
+</dust-demo-template>
+<dust-demo-json>
+{
+  "testEnabled": "bunnies"
+}
+</dust-demo-json>
+</dust-demo>
+
+<!-- TODO update version number -->
+*Note that the `@default` helper has been* ***deprecated*** *as of Dust Helpers version 1.6.0.* This helper was similar to `@none`, except there could only be one instance per `@select`, and it needed to be placed after all logic helpers to ensure that all previous comparisons were false.
 
 ## Loop Index
 
