@@ -86,7 +86,7 @@ If you are comparing a literal value to one that you know is not a string (e.g. 
 
 ## Select Helper
 
-The `@select` helper can be nested around the other logic helpers to form a `switch`-like structure, allowing you to take one action based on multiple comparisons with a single key value. You move the `key` attribute to `@select` and set only a `value` attribute for each logic helper inside the `@select`.
+The `@select` helper can be nested around the other logic helpers to form a `switch`-like structure, allowing you to take one action based on multiple comparisons with a single key value. You move the `key` attribute into the `@select` helper and set only a `value` attribute for each logic helper inside the `@select`.
 
 You can specify what to do if none of the conditions are true using a `@none` helper in the `@select`. Its opposite, the `@any` helper, is run if any of the conditions are true, in addition to those true conditions. Dust evaluates `@any` and `@none` asynchronously, so there can be any number of them in any order.
 
@@ -101,7 +101,7 @@ When a true logic helper condition is found in the `@select`, Dust executes the 
     {@eq="puppies"}test-puppies{/eq}
     {@eq="bunnies"}test-bunnies{/eq}
   {/select}
-"&rt;
+"&gt;
 </dust-demo-template>
 <dust-demo-json>
 {
@@ -112,30 +112,6 @@ When a true logic helper condition is found in the `@select`, Dust executes the 
 
 <!-- TODO update version number -->
 *Note that the `@default` helper has been* ***deprecated*** *as of Dust Helpers version 1.6.0.* This helper was similar to `@none`, except there could only be one instance per `@select`, and it needed to be placed after all logic helpers to ensure that all previous comparisons were false.
-
-## Loop Index
-
-When inside the body of a loop, Dust provides the special variable `$idx` that contains the index of the current array element. Knowing which iteration the loop is currently on can be useful for various purposes. For example, you could add a class to the first item in a list:
-
-<dust-demo template-name="helpers-loop">
-<dust-demo-template>
-&lt;ol&gt;
-  {#ranks}
-    &lt;li{@eq key=$idx value=0} class="first"{/eq}&gt;{position}&lt;/li&gt;
-  {/ranks}
-&lt;/ol&gt;
-</dust-demo-template>
-<dust-demo-json>
-{
-  "ranks": [
-    { "position": "Principal" },
-    { "position": "Soloist" },
-    { "position": "Corps" },
-    { "position": "Apprentice" }
-  ]
-}
-</dust-demo-json>
-</dust-demo>
 
 ## Math Helper
 
@@ -169,7 +145,7 @@ Another handy helper is the `@math` helper. It allows you to take different cour
 <!-- TODO update link -->
 A full list of values that the `method` attribute can take is found in the [Syntax documentation](/docs/syntax/).
 
-## Printing the Result
+### Printing the Result
 
 To simply output the result of the mathematical expression, use the `@math` helper as a self-closing tag.
 
@@ -180,6 +156,37 @@ There is {@math key=100 method="subtract" operand=progress/}% left to do.
 <dust-demo-json>
 {
   "progress": 70
+}
+</dust-demo-json>
+</dust-demo>
+
+## Debugging with `@contextDump`
+
+The `{@contextDump}` helper outputs the current context portion of the JSON data model to the output stream. This can help with debugging if you suspect the context data is not as expected or you aren't sure what the current context is.
+
+You can set `key="full"` to print the full context, and `to="console"` to print to the console.
+
+Remove this helper when you are done debugging.
+
+<dust-demo>
+<dust-demo-template>
+{#houses.gryffindor}
+  {! Default: key="current" and to="output" !}
+  {@contextDump/}
+  {! Check your console for the full context !}
+  {@contextDump key="full" to="console"/}
+{/houses.gryffindor}
+</dust-demo-template>
+<dust-demo-json>
+{
+  "houses": {
+    "gryffindor": {
+      "founder": "Godric Gryffindor"
+    },
+    "hufflepuff": {
+      "founder": "Helga Hufflepuff"
+    }
+  }
 }
 </dust-demo-json>
 </dust-demo>
