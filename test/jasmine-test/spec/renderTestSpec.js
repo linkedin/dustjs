@@ -16,6 +16,7 @@ function render(test) {
     try {
       dust.isDebug = !!(test.error || test.log);
       dust.debugLevel = 'DEBUG';
+      dust.config = test.config || { whitespace: false };
       dust.loadSource(dust.compile(test.source, test.name, test.strip));
       context = test.context;
       if (test.base) {
@@ -63,6 +64,7 @@ function stream(test) {
       try {
         dust.isDebug = !!(test.error || test.log);
         dust.debugLevel = 'DEBUG';
+        dust.config = test.config || { whitespace: false };
         dust.loadSource(dust.compile(test.source, test.name));
         context = test.context;
         if (test.base){
@@ -152,6 +154,7 @@ function pipe(test) {
       try {
         dust.isDebug = !!(test.error || test.log);
         dust.debugLevel = 'DEBUG';
+        dust.config = test.config || { whitespace: false };
         dust.loadSource(dust.compile(test.source, test.name));
         context = test.context;
         if (test.base){
