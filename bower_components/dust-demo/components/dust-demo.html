@@ -180,11 +180,6 @@
       this.controller = new DustDemoController(this);
     };
 
-    // Don't strip whitespace
-    dust.optimizers.format = function(ctx, node) {
-      return node;
-    };
-
     document.registerElement('dust-demo', {prototype: DustDemo});
 
   })((document._currentScript || document.currentScript).ownerDocument);
