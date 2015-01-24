@@ -1,0 +1,143 @@
+---
+layout: docs
+title: Dust Template API
+permalink: /docs/syntax/
+---
+
+##Dust Template API
+
+
+<h3 id="reference"><code>{reference}</code></h3>
+
+A reference is used to insert values from your context (or JSON data) into your template.
+
+<pre><code>{<i>key</i>[|filter1|filterN]}</code></pre>
+
+A reference is a single opening curly brace `{`, followed by a Dust path, optionally followed by one or more filters, followed by a single closing curly brace `}`.
+
+A Dust path is one or more Dust keys, separated by dots (`.`).
+
+A Dust key is one or more of the following characters: `a-z`, `A-Z`, `_` (underscore), `$`, `0-9`, or `-`
+
+NOTE: The first character of a reference cannot be `0-9` or `-`.
+
+<dust-demo template-name="reference">
+<dust-demo-template>{name} is a valid Dust reference.{~n}
+{0name} is not a valid Dust reference.{~n}
+{.name} is a valid Dust reference.{~n}
+{.} is a valid dust reference.{~n}
+{markup|s}: The |s filter does not escape HTML.{~n}
+{markup}: HTML is escaped by default.</dust-demo-template>
+<dust-demo-json>{
+  "name": "name",
+  "0name": "0name",
+  "markup": "&lt;span class=\"highlight\"&gt;Markup allowed&lt;/span&gt;"
+}</dust-demo-json>
+</dust-demo>
+
+<h3 id="section"><code>{#section/}</code></h3>
+A standard section is used to change what level of the context Dust uses to look up values. If the new context is an array, the standard section automatically loops through the array. If an `{:else}` body is used, its contents are output if the new context does not exist.
+
+<dust-demo template-name="standard-section">
+<dust-demo-template>{!
+  Outside of the section, Dust looks for values
+  at the root of the JSON context
+!}
+The value of name is: {name}{~n}
+{#extraData}
+  {!
+    Inside this section, Dust looks for
+    values within the extraData object
+  !}
+  Inside the section, the value of name is: {name}{~n}
+{/extraData}
+The value of name is: {name}, again.{~n}
+{#nonExistentContext}
+  This is only output if "nonExistentContext" exists.
+{:else}
+  Because "nonExistentContext" does not exist, the else body is output.
+{/nonExistentContext}
+</dust-demo-template>
+<dust-demo-json>{
+  "name": "Jimmy",
+  "extraData": {
+    "name": "Kate"
+  }
+}</dust-demo-json>
+</dust-demo>
+
+A section is a single opening curly brace `{`, followed by a hash `#`, followed by a Dust key, followed by a closing curly brace `}`, followed by some content, then a closing tag using the same key.
+
+Section with content:
+
+<pre><code>{#<i>key</i>}
+  Some content
+{/<i>key</i>}
+</code></pre>
+
+Section with `{:else}` body:
+
+<pre><code>{#<i>key</i>}
+  Some content
+{:else}
+  Some other content, if <i>key</i> doesn't exist in the context.
+{/<i>key</i>}
+</code></pre>
+
+Self-closing section (note: this doesn't do anything, but is technically valid Dust):
+
+<pre><code>{#<i>key</i>/}</code></pre>
+
+<h3 id="exists"><code>{?exists/}</code></h3>
+
+An exists section is a special type of section that outputs its contents if the value it is referencing exists. The syntax for the exists section is the same as the standard section, but the `#` is replaced by a `?`. However, unlike the standard section, the exists section does not change the context.
+
+<dust-demo template-name="exists">
+<dust-demo-template>{?isReady}Ready!{:else}Wait a minute...{/isReady}</dust-demo-template>
+<dust-demo-json>{
+  "isReady": false
+}</dust-demo-json>
+</dust-demo>
+
+<h3 id="not-exists"><code>{^not-exists/}</code></h3>
+
+A not-exists section is a special type of section that outputs its contents if the value it is referencing __does not__ exist. The syntax for the not exists is the same as the standard section, but the `#` is replaced by a `^`. Unlike the standard section, the not exists section does not change the context.
+
+<dust-demo template-name="exists">
+<dust-demo-template>{^isReady}Not ready yet.{:else}I'm ready to go!{/isReady}</dust-demo-template>
+<dust-demo-json>{
+  "isReady": false
+}</dust-demo-json>
+</dust-demo>
+
+<h3 id="helper"><code>{@helper/}</code></h3>
+
+<h3 id="block"><code>{+block/}</code></h3>
+
+<h3 id="inline-partial"><code>{&lt;inline-partial/}</code></h3>
+
+<h3 id="partial"><code>{&gt;partial/}</code></h3>
+
+A partial is used to include one dust template inside of another dust template.
+
+A partials is a single opening brace `{`, followed by a greater than symbol `&gt;`, followed by the name of the template to be included (the name may need to be surrounded by quotes if it includes characters outside of the set used by [references](#reference)), optionally followed by parameters, followed by a forward slash `/`, followed by a single closing brace.
+
+Basic example:
+
+`{&gt;my_template/}`
+
+With parameters:
+
+`{&gt;my_template_with_params foo="bar" contacts=friends/}`
+
+<h3 id="special"><code>{~special}</code></h3>
+
+A special is converted to a special character
+
+A special is a single opeing curly brace `{`, followed by a tilde `~`, follwed by any of the characters in a [reference](#reference), followed by a single closing curly brace `}`. Dust supports five "specials":
+
+- `{~s}` becomes a single space
+- `{~n}` becomes a new line
+- `{~r}` becomes a carriage return
+- `{~lb}` becomes a left curly brace `{`
+- `{~rb}` becomes a right curly brace `}`

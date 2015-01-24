@@ -81,7 +81,9 @@
       }
 
       :host /deep/ h3 {
-        float: right;
+        position: absolute;
+        top: 0;
+        right: 0;
         padding: 5px;
         margin: 0;
         color: #FFF;
@@ -116,7 +118,7 @@
           var editor;
 
           for (var i=0; (editor = editors[i]); i++) {
-            editor.addEventListener('input', this.handleEditorUpdate.bind(this));
+            editor.addEventListener('dust-update', this.handleEditorUpdate.bind(this));
           }
           this.editorListenersInitialized = true;
         }
@@ -203,6 +205,10 @@
       :host([was-correct]) #congrats {
         opacity: 0;
         left: 115px;
+      }
+
+      .container {
+        position: relative;
       }
     </style>
   </template>

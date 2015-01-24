@@ -1,23 +1,33 @@
 <polymer-element name="dust-demo-json">
-  <template id="dust-json-template" whitespace="preserve"><content></content>
+  <template id="dust-json-template">
+    <textarea id="workspace"></textarea>
     <style>
-      :host {
+      #workspace {
         display: block;
-        min-height: 120px;
         padding: 10px;
         margin-bottom: 10px;
+        min-height: 120px;
         background-color: #222;
         color: #72CC72;
         font-family: Consolas, Courier, monospace;
         font-size: 15px;
-        white-space: pre;
+        width: calc(100% - 23px);
+        resize: vertical;
       }
     </style>
   </template>
   <script>
     Polymer({
       ready: function() {
-        this.setAttribute('contenteditable', 'true');
+        this.$.workspace.innerHTML = this.innerHTML;
+        this.setupEventListeners();
+      },
+      setupEventListeners: function() {
+        this.$.workspace.addEventListener('input', function(evt) {
+          var newEvt = new Event('dust-update');
+          this.innerHTML = this.$.workspace.value;
+          this.dispatchEvent(newEvt);
+        }.bind(this));
       }
     });
   </script>

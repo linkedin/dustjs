@@ -1,6 +1,7 @@
-<template id="dust-demo-tl-template" whitespace="preserve"><content></content>
+<template id="dust-demo-tl-template">
+  <textarea id="workspace"></textarea>
   <style>
-    :host {
+    #workspace {
       display: block;
       padding: 10px;
       margin-bottom: 10px;
@@ -9,7 +10,8 @@
       color: #72CC72;
       font-family: Consolas, Courier, monospace;
       font-size: 15px;
-      white-space: pre;
+      width: calc(100% - 23px);
+      resize: vertical;
     }
   </style>
 </template>
@@ -19,11 +21,22 @@
       this.context = context;
 
       this.shadow = this.context.createShadowRoot();
-      this.context.setAttribute('contenteditable', 'true');
 
       // stamp out our template in the shadow dom
       var template = dom.querySelector("#dust-demo-tl-template").content.cloneNode(true);
       this.shadow.appendChild(template);
+      this.textarea = this.shadow.querySelector('#workspace');
+      this.textarea.innerHTML = this.context.innerHTML;
+
+      this.setupListeners();
+    }
+
+    DustDemoTemplateController.prototype.setupListeners = function() {
+      this.textarea.addEventListener('input', function(evt) {
+        var newEvt = new Event('dust-update');
+        this.context.innerHTML = this.textarea.value;
+        this.context.dispatchEvent(newEvt);
+      }.bind(this));
     }
 
 

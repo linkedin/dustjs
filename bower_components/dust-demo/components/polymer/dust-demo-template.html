@@ -1,7 +1,8 @@
 <polymer-element name="dust-demo-template">
-  <template id="dust-demo-tl-template" whitespace="preserve"><content></content>
+  <template id="dust-demo-tl-template">
+    <textarea id="workspace"></textarea>
     <style>
-      :host {
+      #workspace {
         display: block;
         padding: 10px;
         margin-bottom: 10px;
@@ -10,14 +11,23 @@
         color: #72CC72;
         font-family: Consolas, Courier, monospace;
         font-size: 15px;
-        white-space: pre;
+        width: calc(100% - 23px);
+        resize: vertical;
       }
     </style>
   </template>
   <script>
     Polymer({
       ready: function() {
-        this.setAttribute('contenteditable', 'true');
+        this.$.workspace.innerHTML = this.innerHTML;
+        this.setupEventListeners();
+      },
+      setupEventListeners: function() {
+        this.$.workspace.addEventListener('input', function(evt) {
+          var newEvt = new Event('dust-update');
+          this.innerHTML = this.$.workspace.value;
+          this.dispatchEvent(newEvt);
+        }.bind(this));
       }
     });
   </script>
