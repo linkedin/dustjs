@@ -41,6 +41,5 @@ dust.stream(test.name, context)
       }).on('error', function(err) {
         finished = true;
         output = err.message || err;
-      })
-    }
+      });
 ```
