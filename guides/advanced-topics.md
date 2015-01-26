@@ -17,4 +17,4 @@ The compiler is written in javascript and the parser relies on pegjs.  Using nod
 
 ##Rendering on the server
 
-If performance is an even bigger concern, you may consider rendering your templates on the server as well.  At that point, the server will send down full HTML pages to the client, instead of sending down the compiled template and the json data that it will consume.
+If performance is an even bigger concern, you may consider rendering your templates on the server as well.  This means that the server will send down full HTML pages to the client, instead of sending down the compiled template and the json data that the template will consume.
