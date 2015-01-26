@@ -34,7 +34,7 @@
     DustDemoTemplateController.prototype.setupListeners = function() {
       this.textarea.addEventListener('input', function(evt) {
         var newEvt = new Event('dust-update');
-        this.context.innerHTML = this.textarea.value;
+        this.context.innerText = this.textarea.value;
         this.context.dispatchEvent(newEvt);
       }.bind(this));
     }

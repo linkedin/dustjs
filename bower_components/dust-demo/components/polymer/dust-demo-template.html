@@ -25,7 +25,7 @@
       setupEventListeners: function() {
         this.$.workspace.addEventListener('input', function(evt) {
           var newEvt = new Event('dust-update');
-          this.innerHTML = this.$.workspace.value;
+          this.innerText = this.$.workspace.value;
           this.dispatchEvent(newEvt);
         }.bind(this));
       }

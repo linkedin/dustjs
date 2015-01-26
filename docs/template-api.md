@@ -66,7 +66,7 @@ The value of name is: {name}, again.{~n}
 }</dust-demo-json>
 </dust-demo>
 
-A section is a single opening curly brace `{`, followed by a hash `#`, followed by a Dust key, followed by a closing curly brace `}`, followed by some content, then a closing tag using the same key.
+A section is a single opening curly brace `{`, followed by a hash `#`, followed by a Dust path, followed by a closing curly brace `}`, followed by some content, then a closing tag using the same Dust path.
 
 Section with content:
 
@@ -103,7 +103,7 @@ An exists section is a special type of section that outputs its contents if the 
 
 A not-exists section is a special type of section that outputs its contents if the value it is referencing __does not__ exist. The syntax for the not exists is the same as the standard section, but the `#` is replaced by a `^`. Unlike the standard section, the not exists section does not change the context.
 
-<dust-demo template-name="exists">
+<dust-demo template-name="not-exists">
 <dust-demo-template>{^isReady}Not ready yet.{:else}I'm ready to go!{/isReady}</dust-demo-template>
 <dust-demo-json>{
   "isReady": false
@@ -112,9 +112,23 @@ A not-exists section is a special type of section that outputs its contents if t
 
 <h3 id="helper"><code>{@helper/}</code></h3>
 
-<h3 id="block"><code>{+block/}</code></h3>
-
 <h3 id="inline-partial"><code>{&lt;inline-partial/}</code></h3>
+An inline-partial is an inert piece of Dust that can be inserted in one or more places in a Dust template. An inline-partial is inserted using a block. For example use cases of inline-partials and blocks, see the [base and override templates guide](/guides/base-and-override-templates).
+
+An inline-partial is defined as a single opening curly brace `{`, follwed by a less than sign `&lt;`, followed by a name (with the same characters allowed in a Dust key), followed by a single closing curly brace `}`, followed by some content, followed by a closing tag.
+
+```
+{&lt;classNames}primary hero{/classNames}
+```
+
+A self-closing block is defined as a single opening curly brace `{`, followed by a plus sign `+`, followed by the name used in the inline-partial, followed by a forward slash and single closing curly brace `/}`. Alternatively, a block can have content. A block's content is output only if a matching inline-partial is not found. For more info, see the [base and override templates guide](/guides/base-and-override-templates).
+
+<dust-demo template-name="inline-partial">
+<dust-demo-template>{+greeting}Hello!{/greeting} world.
+{&lt;greeting}Howdy{/greeting}
+</dust-demo-template>
+<dust-demo-json>{}</dust-demo-json>
+</dust-demo>
 
 <h3 id="partial"><code>{&gt;partial/}</code></h3>
 
@@ -124,11 +138,22 @@ A partials is a single opening brace `{`, followed by a greater than symbol `&gt
 
 Basic example:
 
-`{&gt;my_template/}`
+```
+{>my_template/}
+```
 
 With parameters:
 
-`{&gt;my_template_with_params foo="bar" contacts=friends/}`
+```
+{>my_template_with_params foo="bar" contacts=friends/}
+```
+
+<dust-demo template-name="partial">
+<dust-demo-template>You want to know if I'm ready. {&gt;exists/}</dust-demo-template>
+<dust-demo-json>{
+  "isReady": "totally"
+}</dust-demo-json>
+</dust-demo>
 
 <h3 id="special"><code>{~special}</code></h3>
 
