@@ -17,7 +17,7 @@ Filters are attached to a Dust reference by adding a pipe `|` and the filter nam
 {title|s}
 {title|j}</dust-demo-template>
 <dust-demo-json>{
-  "title": '"All is &lt;Fair&gt; in Love & War"'
+  "title": '"All is <Fair> in Love & War"'
 }</dust-demo-json>
 </dust-demo>
 
