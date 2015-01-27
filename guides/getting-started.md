@@ -4,13 +4,13 @@ layout: guides
 permalink: /guides/getting-started/
 ---
 
-#Getting started
+# Getting started
 
 Welcome to Dust! The exercises in this tutorial will help you get familiar with Dust's core features and syntax. To complete the exercises, edit the "Dust Template" or "Data" so that the "Output" matches the "Expected Output".
 
 ## Writing Templates
 
-###References
+### References
 The first thing to learn is how to reference your data using Dust. You will learn below how to tell Dust what data to use, but for now the exercises will handle that for you. A reference in Dust is written by surrounding a JSON key with a single set of curly braces (`{key}`). In the introductory exercise below, we welcome you to Dust, but the greeting is a bit too formal.
 
 <dust-tutorial template-name="intro">
@@ -22,7 +22,7 @@ The first thing to learn is how to reference your data using Dust. You will lear
 <dust-tutorial-answer>Welcome to Dust, pal.</dust-tutorial-answer>
 </dust-tutorial>
 
-###References with dot-notation (AKA paths)
+### References with dot-notation (AKA paths)
 If you need to reference values within nested objects, you can use dot-notation the same way you would in JavaScript.
 
 <dust-tutorial template-name="dot_notation">
@@ -59,7 +59,7 @@ You can also use an `{:else}` statement with conditionals.
 <dust-tutorial-answer>&lt;li class="result secondary"&gt;</dust-tutorial-answer>
 </dust-tutorial>
 
-###Sections
+### Sections
 
 Sections, which work a lot like conditionals, are a useful alternative to the sometimes verbose dot-notation. A section is used to switch the context in which Dust looks up references. In the example below, the section begins with `{#friend}` and ends with `{/friend}`. While inside of the `{#friend}` section, Dust looks for references inside of the `friend` object. That's why the output is `Hello, John` instead of `Hello, Jacob`.
 
@@ -88,7 +88,8 @@ However, if Dust doesn't find a reference in a given context, it will look into 
 }</dust-demo-json>
 <dust-tutorial-answer>Hello, John Jacob Jingleheimer Schmidt. That's my name, too.</dust-tutorial-answer>
 </dust-tutorial>
-###Looping
+
+### Looping
 
 Looping in Dust is easy. In fact, a loop is just a section where the reference of the section is an array.
 
@@ -140,7 +141,7 @@ You can use key value references when the array contains objects. Below is an ex
 <dust-tutorial-answer>&lt;ul&gt;&lt;li&gt;HTML by Tim Berners Lee&lt;/li&gt;&lt;li&gt;CSS by Håkon Wium Lie and Bert Bos&lt;/li&gt;&lt;li&gt;JavaScript by Brendan Eich&lt;/li&gt;&lt;li&gt;Dust by akdubya&lt;/li&gt;&lt;/ul&gt;</dust-tutorial-answer>
 </dust-tutorial>
 
-##Compiling Dust Templates
+## Compiling Dust Templates
 Dust templates are compiled to JavaScript. A template is compiled using `dust.compile`. Templates can also be compiled from the command line using `dustc` (which calls `dust.compile` internally).
 
 Compiling with `dust.compile`:
@@ -155,14 +156,14 @@ Compiling with [`dustc`](/docs/dustc-api/):
 local-user $ dustc
 ```
 
-##Serving Dust Templates
+## Serving Dust Templates
 Save your compiled Dust template as a JavaScript file, and serve it how you normally serve JavaScript files:
 
 ```html
 <script src="/static/tl/myTemplate.js"></script>
 ```
 
-##Rendering Dust Templates
+## Rendering Dust Templates
 
 ```javascript
 dust.render('myTemplate', {template: 'AWESOME'}, function(err, output) {
