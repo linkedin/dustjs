@@ -140,40 +140,6 @@ You can use key value references when the array contains objects. Below is an ex
 <dust-tutorial-answer>&lt;ul&gt;&lt;li&gt;HTML by Tim Berners Lee&lt;/li&gt;&lt;li&gt;CSS by Håkon Wium Lie and Bert Bos&lt;/li&gt;&lt;li&gt;JavaScript by Brendan Eich&lt;/li&gt;&lt;li&gt;Dust by akdubya&lt;/li&gt;&lt;/ul&gt;</dust-tutorial-answer>
 </dust-tutorial>
 
-##Installing Dust
-
-You have a few options when it comes to downloading and installing Dust. The easiest are [npm](https://www.npmjs.org/) and [bower](http://bower.io/).
-
-###npm
-
-To install as a Node module:
-
-```
-npm install -g dustjs-linkedin
-```
-
-or, if you don't want the command-line tool (`dustc`) for compiling templates:
-
-```
-npm install dustjs-linkedin
-```
-
-###Bower
-To install using Bower:
-```
-bower install dustjs-linkedin
-```
-
-###Download
-The latest version of Dust is available on the GitHub <a target="_blank" href="https://github.com/linkedin/dustjs/tree/master/dist">page</a> (or <a target="_blank" href="">past versions</a>).
-
-###git clone
-You can clone the [Dust project repository](https://github.com/linkedin/dustjs), but then you will have to manage updates and dependencies on your own.
-
-```
-git clone https://github.com/linkedin/dustjs.git
-```
-
 ##Compiling Dust Templates
 Dust templates are compiled to JavaScript. A template is compiled using `dust.compile`. Templates can also be compiled from the command line using `dustc` (which calls `dust.compile` internally).
 
