@@ -4,7 +4,7 @@ title: Dust Template API
 permalink: /docs/syntax/
 ---
 
-##Dust Template API
+## Dust Template API
 
 
 <h3 id="reference"><code>{reference}</code></h3>
