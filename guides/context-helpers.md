@@ -1,7 +1,7 @@
 ---
 layout: docs
 title: Context Helpers
-permalink: /docs/context-helpers/
+permalink: /guides/context-helpers/
 ---
 
 ## Why use context helpers at all?

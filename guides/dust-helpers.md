@@ -1,7 +1,7 @@
 ---
 title: DustJS | Getting Started
 layout: guides
-permalink: /guides/using-helpers/
+permalink: /guides/dust-helpers/
 ---
 
 # Using Helpers
