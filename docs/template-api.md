@@ -118,7 +118,7 @@ An inline-partial is an inert piece of Dust that can be inserted in one or more 
 An inline-partial is defined as a single opening curly brace `{`, follwed by a less than sign `&lt;`, followed by a name (with the same characters allowed in a Dust key), followed by a single closing curly brace `}`, followed by some content, followed by a closing tag.
 
 ```
-{&lt;classNames}primary hero{/classNames}
+{<classNames}primary hero{/classNames}
 ```
 
 A self-closing block is defined as a single opening curly brace `{`, followed by a plus sign `+`, followed by the name used in the inline-partial, followed by a forward slash and single closing curly brace `/}`. Alternatively, a block can have content. A block's content is output only if a matching inline-partial is not found. For more info, see the [base and override templates guide](/guides/base-and-override-templates).
