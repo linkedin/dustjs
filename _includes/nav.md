@@ -9,6 +9,7 @@
     <li>
       Guides
       <ul>
+      <li><a href="/guides/setup">Download &amp; Setup</a></li>
       <li><a href="/guides/getting-started">Getting Started</a></li>
       <li><a href="/guides/context-helpers">Context Helpers</a></li>
       <li><a href="/guides/dust-helpers">Dust Helpers</a></li>
