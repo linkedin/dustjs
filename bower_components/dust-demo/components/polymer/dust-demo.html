@@ -10,19 +10,19 @@
 <polymer-element name="dust-demo">
   <template id="dust-demo-template">
     <div class="container">
-      <h3 id="template-header">Dust Template</h3>
+      <h3 id="template-header" on-click="{{collapseContainer}}">Dust Template</h3>
       <content select="dust-demo-template"></content>
     </div>
     <div class="container">
-      <h3 id="data-header">Data</h3>
+      <h3 id="data-header" on-click="{{collapseContainer}}">Data</h3>
       <content select="dust-demo-json"></content>
     </div>
     <div class="container">
-      <h3 id="compiled-header">Compiled Dust</h3>
+      <h3 id="compiled-header" on-click="{{collapseContainer}}">Compiled Dust</h3>
       <pre id="compiled-dust"></pre>
     </div>
     <div class="container">
-      <h3 id="output-header">Output</h3>
+      <h3 id="output-header" on-click="{{collapseContainer}}">Output</h3>
       <pre id="output"></pre>
     </div>
     <button id="devToggle" on-click="{{toggleDev}}">Dev Mode</button>
@@ -133,7 +133,7 @@
           return;
         }
         // Unescape '>' and '<' to read Dust's include syntax correctly
-        var template = templateEl.innerHTML.replace('&gt;', '>').replace('&lt;', '<');
+        var template = templateEl.innerHTML.replace(/&gt;/g, '>').replace(/&lt;/g, '<');
         if (!template) {
           return;
         }
@@ -150,7 +150,7 @@
             console.log('render error');
           }
           compiledContainer.innerHTML = compiledDust;
-          outputContainer.innerHTML = out;
+          outputContainer.innerHTML = dust.escapeHtml(out);
         })
       },
       toggleDev: function(evt) {
@@ -158,6 +158,14 @@
           this.removeAttribute('dev');
         } else {
           this.setAttribute('dev', '');
+        }
+      },
+      collapseContainer: function(evt) {
+        var parent = evt.target.parentElement;
+        if (parent.classList.contains('collapsed')) {
+          parent.classList.remove('collapsed');
+        } else {
+          parent.classList.add('collapsed');
         }
       }
     });

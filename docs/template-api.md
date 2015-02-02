@@ -111,6 +111,14 @@ A not-exists section is a special type of section that outputs its contents if t
 </dust-demo>
 
 <h3 id="helper"><code>{@helper/}</code></h3>
+A helper is special kind of section that executes some JavaScript when it is rendered. For more information on using helpers, see the [Dust helpers guide](/guides/dust-helpers). For more information on writing Dust helpers, see the [writing helpers guide](/guides/writing-helpers).
+
+<dust-demo template-name="helper">
+<dust-demo-template>The answer is {@eq key=answer value=42}42{:else}wrong{/eq}.</dust-demo-template>
+<dust-demo-json>{
+  "answer": 42
+}</dust-demo-json>
+</dust-demo>
 
 <h3 id="inline-partial"><code>{&lt;inline-partial/}</code></h3>
 An inline-partial is an inert piece of Dust that can be inserted in one or more places in a Dust template. An inline-partial is inserted using a block. For example use cases of inline-partials and blocks, see the [base and override templates guide](/guides/base-and-override-templates).
@@ -149,7 +157,7 @@ With parameters:
 ```
 
 <dust-demo template-name="partial">
-<dust-demo-template>You want to know if I'm ready. {&gt;exists/}</dust-demo-template>
+<dust-demo-template>You want to know if I'm ready? {&gt;exists/}</dust-demo-template>
 <dust-demo-json>{
   "isReady": "totally"
 }</dust-demo-json>
@@ -166,3 +174,8 @@ A special is a single opeing curly brace `{`, followed by a tilde `~`, follwed b
 - `{~r}` becomes a carriage return
 - `{~lb}` becomes a left curly brace `{`
 - `{~rb}` becomes a right curly brace `}`
+
+<dust-demo template-name="special">
+<dust-demo-template>You{~s}can{~s}add{~s}spaces{~s}and{~n}new-lines with Dust specials.{~n}{~n}Curly braces that are usually reserved for {~lb}dust{~rb} syntax can be created with Dust specials, too.</dust-demo-template>
+<dust-demo-json>{}</dust-demo-json>
+</dust-demo>

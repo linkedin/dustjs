@@ -4,13 +4,13 @@ layout: guides
 permalink: /guides/getting-started/
 ---
 
-# Getting started
+#Getting started
 
 Welcome to Dust! The exercises in this tutorial will help you get familiar with Dust's core features and syntax. To complete the exercises, edit the "Dust Template" or "Data" so that the "Output" matches the "Expected Output".
 
 ## Writing Templates
 
-### References
+###References
 The first thing to learn is how to reference your data using Dust. You will learn below how to tell Dust what data to use, but for now the exercises will handle that for you. A reference in Dust is written by surrounding a JSON key with a single set of curly braces (`{key}`). In the introductory exercise below, we welcome you to Dust, but the greeting is a bit too formal.
 
 <dust-tutorial template-name="intro">
@@ -22,7 +22,7 @@ The first thing to learn is how to reference your data using Dust. You will lear
 <dust-tutorial-answer>Welcome to Dust, pal.</dust-tutorial-answer>
 </dust-tutorial>
 
-### References with dot-notation (AKA paths)
+###References with dot-notation (AKA paths)
 If you need to reference values within nested objects, you can use dot-notation the same way you would in JavaScript.
 
 <dust-tutorial template-name="dot_notation">
@@ -36,10 +36,10 @@ If you need to reference values within nested objects, you can use dot-notation 
 <dust-tutorial-answer>Hello, Dusty</dust-tutorial-answer>
 </dust-tutorial>
 
-Learn more about [Dust References](/docs/syntax#references).
+Learn more about [Dust References](/docs/syntax#reference).
 
-### Conditionals
-Dust can include content conditionally with `?` (exists) and `^` (not exists). Given a reference, the conditionals check if the value of that reference is truthy or falsy, then output the content accordingly. See the [conditionals syntax documentation](/docs/syntax#conditionals) for more information on what is truthy and what is falsy in Dust.
+###Conditionals
+Dust can include content conditionally with `?` (exists) and `^` (not exists). Given a reference, the conditionals check if the value of that reference is truthy or falsy, then output the content accordingly. See the [conditionals syntax documentation](/docs/syntax#exists) for more information on what is truthy and what is falsy in Dust.
 
 <dust-tutorial template-name="reference">
 <dust-demo-template>&lt;input type="checkbox"{^isSelected} selected{/isSelected}&gt;</dust-demo-template>
@@ -59,7 +59,7 @@ You can also use an `{:else}` statement with conditionals.
 <dust-tutorial-answer>&lt;li class="result secondary"&gt;</dust-tutorial-answer>
 </dust-tutorial>
 
-### Sections
+###Sections
 
 Sections, which work a lot like conditionals, are a useful alternative to the sometimes verbose dot-notation. A section is used to switch the context in which Dust looks up references. In the example below, the section begins with `{#friend}` and ends with `{/friend}`. While inside of the `{#friend}` section, Dust looks for references inside of the `friend` object. That's why the output is `Hello, John` instead of `Hello, Jacob`.
 
@@ -78,7 +78,7 @@ Sections, which work a lot like conditionals, are a useful alternative to the so
 However, if Dust doesn't find a reference in a given context, it will look into all of the data's parent contexts before it gives up.
 
 <dust-tutorial template-name="reference-lookup">
-<dust-demo-template>Hello, {name} {#friend}{name} {PUT\_YOUR\_ANSWER\_HERE}{/friend}. That's my name, too.</dust-demo-template>
+<dust-demo-template>Hello, {name} {#friend}{name} [[ PUT YOUR ANSWER HERE ]]{/friend}. That's my name, too.</dust-demo-template>
 <dust-demo-json>{
   "name": "John",
   "nickname": "Jingleheimer Schmidt",
@@ -88,8 +88,7 @@ However, if Dust doesn't find a reference in a given context, it will look into 
 }</dust-demo-json>
 <dust-tutorial-answer>Hello, John Jacob Jingleheimer Schmidt. That's my name, too.</dust-tutorial-answer>
 </dust-tutorial>
-
-### Looping
+###Looping
 
 Looping in Dust is easy. In fact, a loop is just a section where the reference of the section is an array.
 
@@ -97,7 +96,7 @@ You can use `{.}` to reference the current item in the loop. Below is an example
 
 <dust-tutorial template-name="loop">
 <dust-demo-template>&lt;ul&gt;
-  {#languages}&lt;li&gt;[YOUR CODE GOES HERE]&lt;/li&gt;{/languages}
+  {#languages}&lt;li&gt;[[ YOUR CODE GOES HERE ]]&lt;/li&gt;{/languages}
 &lt;/ul&gt;</dust-demo-template>
 <dust-demo-json>{
   "languages": [
@@ -115,7 +114,7 @@ You can use key value references when the array contains objects. Below is an ex
 <dust-tutorial template-name="loop">
 <dust-demo-template>&lt;ul&gt;
   {#languages}
-    &lt;li&gt;[INSERT\_LANGUAGE\_NAME\_HERE] by {#creators}{.}{@sep} and {/sep}{/creators}&lt;/li&gt;
+    &lt;li&gt;[[ INSERT LANGUAGE NAME HERE ]] by {#creators}{.}{@sep} and {/sep}{/creators}&lt;/li&gt;
   {/languages}
 &lt;/ul&gt;</dust-demo-template>
 <dust-demo-json>{
@@ -141,7 +140,41 @@ You can use key value references when the array contains objects. Below is an ex
 <dust-tutorial-answer>&lt;ul&gt;&lt;li&gt;HTML by Tim Berners Lee&lt;/li&gt;&lt;li&gt;CSS by Håkon Wium Lie and Bert Bos&lt;/li&gt;&lt;li&gt;JavaScript by Brendan Eich&lt;/li&gt;&lt;li&gt;Dust by akdubya&lt;/li&gt;&lt;/ul&gt;</dust-tutorial-answer>
 </dust-tutorial>
 
-## Compiling Dust Templates
+##Installing Dust
+
+You have a few options when it comes to downloading and installing Dust. The easiest are [npm](https://www.npmjs.org/) and [bower](http://bower.io/).
+
+###npm
+
+To install as a Node module:
+
+```
+npm install -g dustjs-linkedin
+```
+
+or, if you don't want the command-line tool (`dustc`) for compiling templates:
+
+```
+npm install dustjs-linkedin
+```
+
+###Bower
+To install using Bower:
+```
+bower install dustjs-linkedin
+```
+
+###Download
+The latest version of Dust is available on the GitHub <a target="_blank" href="https://github.com/linkedin/dustjs/tree/master/dist">page</a> (or <a target="_blank" href="">past versions</a>).
+
+###git clone
+You can clone the [Dust project repository](https://github.com/linkedin/dustjs), but then you will have to manage updates and dependencies on your own.
+
+```
+git clone https://github.com/linkedin/dustjs.git
+```
+
+##Compiling Dust Templates
 Dust templates are compiled to JavaScript. A template is compiled using `dust.compile`. Templates can also be compiled from the command line using `dustc` (which calls `dust.compile` internally).
 
 Compiling with `dust.compile`:
@@ -156,14 +189,14 @@ Compiling with [`dustc`](/docs/dustc-api/):
 local-user $ dustc
 ```
 
-## Serving Dust Templates
+##Serving Dust Templates
 Save your compiled Dust template as a JavaScript file, and serve it how you normally serve JavaScript files:
 
 ```html
 <script src="/static/tl/myTemplate.js"></script>
 ```
 
-## Rendering Dust Templates
+##Rendering Dust Templates
 
 ```javascript
 dust.render('myTemplate', {template: 'AWESOME'}, function(err, output) {
