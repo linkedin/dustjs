@@ -1,0 +1,50 @@
+nav {
+  @include even-shadow($dark-shadow, $shadow-large-size);
+  width: $nav-width;
+  height: 100%;
+  background: $brand-graphite;
+  position: fixed;
+
+  ul.main-nav > li {
+    padding: 10px 0px 0px $nav-indent;
+    color: white;
+
+    a {
+      @include styleguide(medium muted headline in a module, link in a module);
+      color: #FFF;
+    }
+
+    & > ul > li {
+      padding-left: $nav-sub-indent;
+    }
+
+    label {
+      color: tint($brand-light-graphite, 30%);
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+
+      }
+    }
+
+    &.sub {
+
+      input {
+        @include hide-element();
+
+        &:checked ~ ul {
+          display: block;
+
+          li {
+            padding-left: $nav-sub-indent;
+          }
+        }
+      }
+
+      ul {
+        display: none;
+      }
+    }
+  }
+}

@@ -1,10 +1,10 @@
 BUILD LOG
 ---------
-Build Time: 2014-12-11T12:46:30
+Build Time: 2015-01-23T16:15:54
 
 NODEJS INFORMATION
 ==================
-nodejs: v0.10.33
+nodejs: v0.10.35
 grunt: 0.4.5
 grunt-audit: 1.0.0
 grunt-contrib-concat: 0.5.0
@@ -14,12 +14,12 @@ grunt-string-replace: 1.0.0
 
 REPO REVISIONS
 ==============
-polymer-expressions: 197c3a0150e7a13374cfcc72e7066113723a623d
-polymer-gestures: 17a6304916521be39409af292e8adf899bae0ce7
-polymer: a74e9f36526361dccb6df91be439ff9c3e043f41
+polymer-expressions: bbe5e753aa4aec7653145d403abb5c4c152b565c
+polymer-gestures: d796c5a47b33c7feeb5bfdbdb67040e74b1fbee7
+polymer: d65025bae57be28f20c113818ef13e24d180fae6
 
 BUILD HASHES
 ============
-dist/polymer.js: b9ad4c86af79c748cf4ea722f6d56671079fadf7
-dist/polymer.min.js: 2f2021ba9682b0bb702ee7fb68fb6fbfd288eac2
+dist/polymer.js: 54c5a39a737129b4d0742eaf151e48f7f212a40a
+dist/polymer.min.js: 950ed84abd9a7ad9c24615176d3c7f5b2a142b79
 dist/layout.html: 348d358a91712ecc2f8811efa430fcd954b4590c

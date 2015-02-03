@@ -1,0 +1,30 @@
+@import "compass/css3";
+
+///////////////////////
+//Font-face Includes //
+///////////////////////
+@include font-face("Dosis Light",
+                   font-files("../../fonts/dosis-light-webfont.woff",
+                              "../../fonts/dosis-light-webfont.ttf",
+                              "../../fonts/dosis-light-webfont.svg"),
+                   "../../fonts/dosis-light-webgont.eot");
+
+////////////////
+//Font Mixins //
+////////////////
+@mixin Dosis-light() {
+  font-family: "Dosis Light";
+}
+
+@mixin sub-section-headline () {
+  border-bottom-width: 3px;
+  border-style: solid;
+  border-color: $brand-light-graphite;
+}
+
+///////////////
+//Font Sizes //
+///////////////
+$tagline-font-size: 32px;
+$headline-font-size: 28px;
+$subheadline-font-size: 20px;

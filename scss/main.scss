@@ -1,106 +1,41 @@
+///////////////////////////////////////////////////////
+//Archetype Core + Archetype Sub-Module Dependencies //
+///////////////////////////////////////////////////////
 @import "archetype";
+@import "archetype/grid";
+@import "archetype/theme";
+
+/////////////
+//Partials //
+/////////////
+@import "partials/colors";
+@import "partials/layout";
+@import "partials/fonts";
+
+///////////////
+//Components //
+///////////////
+@import "components/nav";
+@import "components/header";
+@import "components/content";
+@import "components/footer";
+
+html {
+  height: 100%;
+}
+
 body {
   @include styleguide(large copy);
+  height: 100%;
+  background: $brand-neutral;
   font-family: 'Roboto', sans-serif;
 
   ul {
     list-style: none;
   }
+
 }
 
 #body {
-  height: 100%;
-  @include clearfix();
-}
-
-header {
-  @include styleguide(punchcut);
-  padding: 40px 90px;
-
-  h1 {
-    @include styleguide(xxlarge headline in a punchcut);
-    font-size: 92px;
-    line-height: 100px;
-    margin-bottom: 10px;
-    a, a:visited {
-      color: #FFF;
-      text-decoration: none;
-    }
-    &::before {
-      content: '{';
-      padding-right: 15px;
-    }
-    &::after {
-      content: '}';
-      padding-left: 15px;
-    }
-  }
-
-  h2 {
-    @include styleguide(muted medium headline in a punchcut);
-  }
-}
-
-nav {
-  @include styleguide(light module);
-  @include grid(6, $first: true);
-  height: 100%;
-
-  ul li {
-    padding: 15px 30px;
-
-    a {
-      @include styleguide(medium muted headline in a module, link in a module);
-      color: #666;
-
-      &.nav-button {
-        @include styleguide(primary button);
-      }
-    }
-
-    label {
-      color: #666;
-      cursor: pointer;
-
-      &:hover {
-        text-decoration: underline;
-
-      }
-    }
-
-    &.sub {
-
-      input {
-        @include hide-element();
-
-        &:checked ~ ul {
-          display: block;
-        }
-      }
-
-      ul {
-        display: none;
-      }
-    }
-  }
-}
-
-#content {
-  @include grid(18);
-  padding: 15px;
-
-  h1 {
-    @include styleguide(xlarge headline);
-  }
-
-  h2 {
-    @include styleguide(large headline);
-  }
-  p {
-    margin-bottom: 12px;
-  }
-}
-
-#footer {
-
+  overflow: hidden;
 }

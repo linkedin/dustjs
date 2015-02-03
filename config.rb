@@ -1,5 +1,8 @@
 # Require any additional compass plugins here.
+# Be sure to require any archetype sub-module dependencies
 require "archetype"
+require "archetype-grid"
+require "archetype-theme"
 
 # Set this to the root of your project when deployed:
 http_path = "/"

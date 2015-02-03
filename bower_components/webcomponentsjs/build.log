@@ -1,31 +1,31 @@
 BUILD LOG
 ---------
-Build Time: 2014-12-11T12:45:39-0800
+Build Time: 2015-01-23T16:15:30-0800
 
 NODEJS INFORMATION
 ==================
-nodejs: v0.10.33
+nodejs: v0.10.35
 gulp: 3.8.10
 gulp-audit: 1.0.0
-gulp-concat: 2.4.2
+gulp-concat: 2.4.3
 gulp-header: 1.2.2
-gulp-uglify: 1.0.2
+gulp-uglify: 1.1.0
 run-sequence: 1.0.2
-web-component-tester: 2.0.1
+web-component-tester: 2.0.5
 
 REPO REVISIONS
 ==============
-webcomponentsjs: d83cc676df65dc61db22bca47d33da679391f5a0
+webcomponentsjs: 9f91fd5d9d68a96821283869efac008535446218
 
 BUILD HASHES
 ============
-CustomElements.js: b221f7741515b570df70fd1c50b398bb8f731b81
-CustomElements.min.js: 6a55999d9f4895525d35c5248e2f409f176162a6
-HTMLImports.js: 72dd4ea891dc3c5256c569992288eca9f5c5e450
-HTMLImports.min.js: 1677819e83722c7d163a571598d8d36cdc8ae690
-ShadowDOM.js: a1cce2304031d5acb440978761b346b98d06e1a4
-ShadowDOM.min.js: 9371908d889872eb7e8e320e8877c394eb906732
-webcomponents-lite.js: 7b6c8fbd7f67a2bd04b797a72e808b16ab54518f
-webcomponents-lite.min.js: 41b033fa7e52bf612686f222d5a496d48bd2909c
-webcomponents.js: 523f45c65c94d71543729f7e3d32ec4b7a48ae5b
-webcomponents.min.js: 645b22d4c22bf6eaf470bc03d819d396661ac439
+CustomElements.js: 4580193ee75072cb380d439fbf75a62deb9ca233
+CustomElements.min.js: 4b2c4f065126f25cfdf5f6c23f12169c9c18baa2
+HTMLImports.js: 736763ab217d150ccb625f42362fc03158fcaeb1
+HTMLImports.min.js: 7df544b9a6ac9f93dcdefa3eb6eaaea68c228967
+ShadowDOM.js: 1f6f01526cbc098563bf5b2d217090bf210a42f3
+ShadowDOM.min.js: 06f2ab5b486297bc9e3ce2a8b5cfe2130aa6ccbb
+webcomponents-lite.js: 644f816326e29842a8fb7cb0fa82636540d46257
+webcomponents-lite.min.js: 3f54f511045bd45d89df2c5bbcade19a242e2a64
+webcomponents.js: 9ea79ac36b5875de59b8277c5867bff72e3dab6c
+webcomponents.min.js: 97774057dcb06111606cf1b48623b7441a1d3f6a
