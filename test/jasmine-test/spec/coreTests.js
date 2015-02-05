@@ -969,11 +969,18 @@ var coreTests = [
         message: "should escapeJs a string with double quotes when using the j filter"
       },
       {
-        name:     "JSON.stringify filter",
+        name:     "escapeJSON filter",
         source:   "{obj|js|s}",
         context:  { obj: { id: 1, name: "bob", occupation: "construction" } },
         expected: JSON.stringify({ id: 1, name: "bob", occupation: "construction" }),
         message: "should stringify a JSON literal when using the js filter"
+      },
+      {
+        name:     "escapeJSON filter with bad characters",
+        source:   "{obj|js|s}",
+        context:  { obj: { name: "<<\u2028testLS \u2029testPS"} },
+        expected: '{"name":"\\u003c\\u003c\\u2028testLS \\u2029testPS"}',
+        message: "should escape bad characters when using the js filter"
       },
       {
         name:     "JSON.parse filter",
