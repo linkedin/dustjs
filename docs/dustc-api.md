@@ -4,6 +4,8 @@ title: Dust Syntax
 permalink: /docs/dustc-api/
 ---
 
+# dustc
+
 To compile a template on the command line, use the dustc command.  Everything in square brackets is optional. The syntax is:
 
 ```

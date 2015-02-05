@@ -10,7 +10,7 @@ Helpers are extensions added to Dust to increase its functionality. They make it
 
 ## Installing Helpers
 
-Officially supported helpers are bundled separately in the `dustjs-helpers` library. After the dustjs-linkedin library is loaded, follow the same instructions in the [Getting Started guide](/guides/getting-started/) to install `dustjs-helpers`. If you are cloning or downloading from GitHub, you can find the helpers in the [dustjs-helpers repository](https://github.com/linkedin/dustjs-helpers).
+Officially supported helpers are bundled separately in the `dustjs-helpers` library. After the dustjs-linkedin library is loaded, follow the same instructions in the [Getting Started guide](/guides/getting-started/) to install `dustjs-helpers`. If you are cloning or downloading from GitHub, you can find the helpers in the <a href="https://github.com/linkedin/dustjs-helpers" target="_blank">dustjs-helpers repository</a>.
 
 If you are using Node.js, then the following `require` statements will ensure you have the needed Dust modules available.
 

@@ -31,7 +31,6 @@
         <li><a href="/docs/dustc-api">dustc API</a></li>
       </ul>
     </li>
-    <li><a href="https://github.com/linkedin/dustjs">Contributing</a></li>
-    <li><a class="nav-button" href="">Download</a></li>
+    <li><a href="https://github.com/linkedin/dustjs" target="_blank">Contributing</a></li>
   </ul>
 </nav>

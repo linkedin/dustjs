@@ -1,7 +1,7 @@
 ---
 title: DustJS | Getting Started
 layout: guides
-permalink: /guides/layouts/
+permalink: /guides/writing-helpers/
 ---
 
-#Layouts
+# Writing Helpers
