@@ -29,20 +29,14 @@ Blocks in the base template can contain default content and a child template can
 
 Now that we have defined a base template with the named blocks pageHeader, bodyContent, pageFooter , let's look at how a child template can use it to supply body content and override the pageFooter. First, you insert the base template as a partial. Then you use one or more "inline partials" defining the values for the named blocks in the template.  You'll see in the example below that we override the bodyContent block and the pageFooter block, while we leave the pageHeader block alone, thereby using it's default.
 
-<dust-demo template-name="base-template">
+<dust-demo template-name="child-template">
 <dust-demo-template>{! First, insert the base template as a partial !}
 {&gt;&quot;base-template&quot;/}
 {&lt;bodyContent}
-&lt;p&gt;These are your current settings:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;xxxx&lt;/li&gt;
-  &lt;li&gt;yyy&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;This your body&lt;/p&gt;
 {/bodyContent}
 {&lt;pageFooter}
-       &lt;hr&gt;
-       &lt;a href=&quot;/contactUs&quot;&gt;About Us&lt;/a&gt; |
-       &lt;a href=&quot;/contactUs&quot;&gt;Contact Us&lt;/a&gt;
+       This is your NEW footer
 {/pageFooter}
 </dust-demo-template>
 <dust-demo-json>{}</dust-demo-json>
