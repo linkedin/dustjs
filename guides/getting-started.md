@@ -38,7 +38,7 @@ If you need to reference values within nested objects, you can use dot-notation 
 
 Learn more about [Dust References](/docs/syntax#reference).
 
-###Conditionals
+### Conditionals
 Dust can include content conditionally with `?` (exists) and `^` (not exists). Given a reference, the conditionals check if the value of that reference is truthy or falsy, then output the content accordingly. See the [conditionals syntax documentation](/docs/syntax#exists) for more information on what is truthy and what is falsy in Dust.
 
 <dust-tutorial template-name="reference">
