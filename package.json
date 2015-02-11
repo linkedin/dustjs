@@ -39,21 +39,25 @@
     "dust.js",
     "linkedin"
   ],
+  "dependencies": {
+    "cli": "~0.6.5"
+  },
   "devDependencies": {
-    "pegjs": "0.8.0",
     "grunt": "~0.4.2",
-    "grunt-contrib-connect": "~0.5.0",
-    "grunt-template-jasmine-istanbul": "~0.2.5",
+    "grunt-bump": "0.0.11",
     "grunt-contrib-clean": "~0.5.0",
-    "grunt-contrib-copy": "~0.4.1",
-    "grunt-gh-pages": "~0.9.0",
     "grunt-contrib-concat": "~0.3.0",
-    "grunt-contrib-uglify": "~0.2.7",
-    "grunt-contrib-jshint": "~0.7.2",
-    "grunt-contrib-watch": "~0.5.3",
-    "grunt-shell": "~0.6.1",
+    "grunt-contrib-connect": "~0.5.0",
+    "grunt-contrib-copy": "~0.4.1",
     "grunt-contrib-jasmine": "~0.5.2",
-    "grunt-bump": "0.0.11"
+    "grunt-contrib-jshint": "~0.7.2",
+    "grunt-contrib-uglify": "~0.2.7",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-gh-pages": "~0.9.0",
+    "grunt-jasmine-node": "~0.2.1",
+    "grunt-shell": "~0.6.1",
+    "grunt-template-jasmine-istanbul": "~0.2.5",
+    "pegjs": "0.8.0"
   },
   "license": "MIT",
   "engine": {

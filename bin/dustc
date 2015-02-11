@@ -1,82 +1,122 @@
 #!/usr/bin/env node
 
-var path = require('path'),
-    fs = require('fs'),
-    dust = require('../lib/server');
+var cli = require('cli').enable('glob', 'version'),
+    dust = require('../lib/server.js'),
+    fs = cli.native.fs,
+    path = cli.native.path,
+    eol = cli.native.os.EOL;
 
-var ARG_REGEX = /^--?([a-z][0-9a-z-]*)(?:=([^\s]+))?$/i,
-    args = process.argv.slice(1),
-    name = null;
+cli.setApp('dustc', require('../package.json').version);
 
-args = args.filter(function(arg) {
-    var match = arg.match(ARG_REGEX),
-        val;
+cli.setUsage(cli.app + ' [options] [path1 [path2 path3...]]\n\n' +
+             '  Compile all .dust files in a directory tree:\n    ' +
+             cli.app + ' --output=compiled.js tmpl/**/*.dust\n' +
+             '  Compile some files to AMD modules:\n    ' +
+             cli.app + ' -as one.dust two.dust');
 
-    if (!match) {
-        return true;
-    }
-
-    arg = match[1];
-    val = match[2];
-
-    switch (arg) {
-        case 'h':
-        case 'help':
-            console.log("usage: dustc [{-n|--name}=<template_name>] [--whitespace=true|false] {source|-} [destination]");
-            process.exit(0);
-            break;
-        case 'n':
-        case 'name':
-            name = val;
-            break;
-        case 'whitespace':
-            dust.config.whitespace = (val === 'true');
-            break;
-    }
-
-    return false;
+cli.parse({
+    name:       ['n',   'name to use when rendering the template (multiple inputs automatically use their paths)',  'string'],
+    output:     ['o',   'concatenate all output to this file',                                                        'path'],
+    split:      ['s',   'create one output file per input file instead of concatenating them to --output'                   ],
+    pwd:        [false, 'generate template names starting from this directory',                                     'string'],
+    whitespace: ['w',   'preserve whitespace in templates',                                                                 ],
+    amd:        ['a',   'register templates as AMD modules'                                                                 ]
 });
 
-var input = args[1];
-var output = args[2];
-if (output) {
-    output = path.resolve(process.cwd(), output);
+/**
+ * Handle input piped via stdin
+ */
+if (!cli.argc) {
+    if (!cli.options.name) {
+        cli.getUsage();
+    }
+    cli.info('No files to compile. Write template code and use ^D to exit');
+    cli.withStdin(function(data) {
+        output(compile(data, cli.options.name), cli.options.output);
+    });
 }
 
-var fd, template;
+/**
+ * Handle a list of paths passed as args
+ * Each path gets globbed in case the OS doesn't support it
+ */
+cli.args
+.map(function(arg) { return cli.glob.sync(arg); })
+.reduce(function(a, b) { return a.concat(b); }, [])
+.forEach(function(inputFile, index, filesToProcess) {
+    read(inputFile, function(err, data) {
+        if (err) {
+            cli.info('Couldn\'t open ' + inputFile + ' for reading');
+            return;
+        }
 
-if (! input) {
-    console.log("dustc: no input files");
-    process.exit(1);
+        var outputFile = cli.options.output,
+            templateName = path.join(path.dirname(inputFile),
+                                     path.basename(inputFile, path.extname(inputFile))),
+            compiledData;
+
+        // Use the template's path as the output path if split-files is turned on
+        if (cli.options.split) {
+            outputFile = templateName + '.js';
+        }
+
+        // Allow override of template name as long as there's only one template
+        if (cli.options.name && filesToProcess.length === 1) {
+            templateName = cli.options.name;
+        }
+
+        // Optionally strip leading directories from a template name
+        // For example, if --pwd=tmpl, `tmpl/foo/a` becomes `foo/a`
+        if (cli.options.pwd) {
+            templateName = path.relative(cli.options.pwd, templateName);
+        }
+
+        compiledData = compile(data, templateName);
+        output(compiledData, outputFile);
+    });
+});
+
+/*** helper functions ***/
+
+function read(filename, cb) {
+    var data = '',
+        file = fs.createReadStream(filename);
+
+    file.on('error', cb);
+    file.on('data', function(chunk) {
+        data += chunk;
+    });
+    file.on('end', function() {
+        cb(null, data);
+    });
 }
 
-var parseDustFile = function (e, data) {
-    if (e) {
-        console.log("dustc: " + e.message);
-        process.exit(1);
+function compile(data, name) {
+    var compiled;
+
+    dust.config.whitespace = (cli.options.whitespace === true);
+    dust.config.amd = (cli.options.amd === true);
+
+    try {
+        compiled = dust.compile(data, name);
+    } catch(e) {
+        return cli.fatal('[' + name + '] ' + e);
     }
+    return compiled;
+}
 
-    template = dust.compile(data, name || input);
-    if (output) {
-        fd = fs.openSync(output, "w");
-        fs.writeSync(fd, template, 0, "utf8");
-    } else {
-        console.log(template);
+var streams = {};
+function output(data, file) {
+    var output_stream;
+    try {
+        if (file) {
+            output_stream = streams[file] ? streams[file]
+                                          : streams[file] = cli.native.fs.createWriteStream(file);
+        } else {
+            output_stream = process.stdout;
+        }
+        output_stream.write(data + eol);
+    } catch (e) {
+        cli.fatal('Could not write to output stream');
     }
-};
-
-if (input != '-') {
-    fs.readFile(input, 'utf-8', parseDustFile);
-} else {
-    process.stdin.resume();
-    process.stdin.setEncoding('utf8');
-
-    var buffer = '';
-    process.stdin.on('data', function(data) {
-        buffer += data;
-    });
-
-    process.stdin.on('end', function() {
-        parseDustFile(false, buffer);
-    });
 }
