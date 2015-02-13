@@ -40,6 +40,13 @@ var coreTests = [
         message: "should test basic text rendering"
       },
       {
+        name:     "confusing \" \n \' \u0000 \u2028 \u2029 template name\\",
+        source:   "Hello World!",
+        context:  {},
+        expected: "Hello World!",
+        message:  "javascript-special characters in template names shouldn't break things"
+      },
+      {
         name:     "global_template",
         source:   '{#helper foo="bar" boo="boo"} {/helper}',
         context:  { "helper": function(chunk, context, bodies, params)
