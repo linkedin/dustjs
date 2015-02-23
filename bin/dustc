@@ -2,7 +2,6 @@
 
 var path = require('path'),
     fs = require('fs'),
-    sys = require('util'),
     dust = require('../lib/server');
 
 var ARG_REGEX = /^--?([a-z][0-9a-z-]*)(?:=([^\s]+))?$/i,
@@ -23,7 +22,7 @@ args = args.filter(function(arg) {
     switch (arg) {
         case 'h':
         case 'help':
-            sys.puts("usage: dustc [{-n|--name}=<template_name>] [--whitespace=true|false] {source|-} [destination]");
+            console.log("usage: dustc [{-n|--name}=<template_name>] [--whitespace=true|false] {source|-} [destination]");
             process.exit(0);
             break;
         case 'n':
@@ -47,13 +46,13 @@ if (output) {
 var fd, template;
 
 if (! input) {
-    sys.puts("dustc: no input files");
+    console.log("dustc: no input files");
     process.exit(1);
 }
 
 var parseDustFile = function (e, data) {
     if (e) {
-        sys.puts("dustc: " + e.message);
+        console.log("dustc: " + e.message);
         process.exit(1);
     }
 
@@ -62,7 +61,7 @@ var parseDustFile = function (e, data) {
         fd = fs.openSync(output, "w");
         fs.writeSync(fd, template, 0, "utf8");
     } else {
-        sys.print(template);
+        console.log(template);
     }
 };
 
