@@ -55,7 +55,7 @@
 
   pre {
     @include interior-shadow($light-shadow, $shadow-small-size);
-    overflow-x: scroll;
+    overflow-x: auto;
     background: $brand-neutral;
     color: $brand-blue;
     padding: $pre-padding;
