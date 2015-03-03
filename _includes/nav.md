@@ -5,7 +5,7 @@
     <h2 class="tagline">Asynchronous templates for the browser and Node.js</h2>
   </header>
   <ul class="main-nav">
-    <li><a href="/about">About</a></li>
+    <li><a href="/guides/setup">Get Dust</a></li>
     <li>
       Guides
       <ul>

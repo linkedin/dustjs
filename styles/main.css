@@ -17,10 +17,12 @@ nav {
 /* line 10, ../scss/components/_nav.scss */
 nav ul.main-nav > li {
   line-height: 26px;
+  margin-bottom: 1em;
   padding: 0;
-  color: white;
+  color: #999;
+  cursor: default;
 }
-/* line 15, ../scss/components/_nav.scss */
+/* line 17, ../scss/components/_nav.scss */
 nav ul.main-nav > li a {
   /* [archetype:styleguide:begin] --- `medium muted headline in a module, link in a module` --- */
   font-size: 16px;
@@ -40,20 +42,20 @@ nav ul.main-nav > li a {
 nav ul.main-nav > li a.hover, nav ul.main-nav > li a:hover, nav ul.main-nav > li a.focus, nav ul.main-nav > li a:focus {
   text-decoration: underline;
 }
-/* line 20, ../scss/components/_nav.scss */
+/* line 22, ../scss/components/_nav.scss */
 nav ul.main-nav > li li {
   padding-left: 10px;
 }
-/* line 24, ../scss/components/_nav.scss */
+/* line 26, ../scss/components/_nav.scss */
 nav ul.main-nav > li label {
   color: #a5a5a5;
   cursor: pointer;
 }
-/* line 28, ../scss/components/_nav.scss */
+/* line 30, ../scss/components/_nav.scss */
 nav ul.main-nav > li label:hover {
   text-decoration: underline;
 }
-/* line 36, ../scss/components/_nav.scss */
+/* line 38, ../scss/components/_nav.scss */
 nav ul.main-nav > li.sub input {
   position: absolute !important;
   height: 1px;
@@ -69,15 +71,15 @@ nav ul.main-nav > li.sub input {
   /* [archetype:target:browser:begin] --- ie lte 7 --- */
   /* [archetype:target:browser:end]   --- ie lte 7 --- */
 }
-/* line 39, ../scss/components/_nav.scss */
+/* line 41, ../scss/components/_nav.scss */
 nav ul.main-nav > li.sub input:checked ~ ul {
   display: block;
 }
-/* line 42, ../scss/components/_nav.scss */
+/* line 44, ../scss/components/_nav.scss */
 nav ul.main-nav > li.sub input:checked ~ ul li {
   padding-left: 10px;
 }
-/* line 48, ../scss/components/_nav.scss */
+/* line 50, ../scss/components/_nav.scss */
 nav ul.main-nav > li.sub ul {
   display: none;
 }

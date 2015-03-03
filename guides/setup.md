@@ -52,43 +52,43 @@ To maintain backwards compatibility, you must enable a config flag to tell Dust 
 
     define.amd.dust = true;
 
-After you've done this, you can use the module names `dust` or `dust-core` to load Dust, and `dust-full` to load Dust plus the compiler.
+After you've done this, you can load `dust-core.js` or `dust-full.js` as a module.
 
     <script src="r.js"></script>
     <script type="text/javascript">
         define.amd.dust = true;
-        require(["dust-full"], function(dust) {
-            dust.render(...);
-        });
-    </script>
-
-### Custom require path
-
-Because Dust registers itself as a named module, you cannot pass a path to `require`:
-
-    // Does not work
-    require('lib/dust/dust-full', function(dust) {
-
-Instead, you can set a custom path for Dust using `require.config`:
-
-    <script src="r.js"></script>
-    <script type="text/javascript">
-        require.config({
-            paths: {
-                "dust-full": "lib/dust/2.5.1/dust-full"
-            }
-        });
-        define.amd.dust = true;
-        require(["dust-full"], function(dust) {
+        require(["lib/dust-full"], function(dust) {
             dust.render(...);
         });
     </script>
 
 ### Helpers
 
-If you are using `dustjs-helpers` 1.5.1 or newer, the helpers also register themselves as an anonymous AMD module.
+If you are using `dustjs-helpers` 1.5.1 or newer, the helpers also register themselves as an anonymous AMD module. It seems to work best if you require the helpers after Dust has already been loaded.
 
-    define.amd.dust = true;
-    require(["dust", "path/to/dust-helpers"], function(dust) {
-        // dust helpers are available when you call dust.render()
-    });
+```js
+define.amd.dust = true;
+require(["lib/dust-full"], function(dust) {
+  require(["lib/dust-helpers"], function() {
+    // dust helpers are available when you call dust.render()
+  });
+});
+```
+
+### Templates
+
+You can also compile your templates as AMD modules. Before compiling a template, set
+
+    dust.config.amd = true
+
+You can preload your templates using Require by including a template file as a dependency.
+
+```js
+define.amd.dust = true;
+require(["lib/dust-full", "tmpl/compiled"], function(dust) {
+    // tmpl/compiled contains several compiled templates
+    dust.render("hello", ...); // render one of the templates in tmpl/compiled
+});
+```
+
+If a template is not preloaded, Dust will attempt to `require` it by passing the template's name to `require`. To make use of this feature, templates should be compiled with names that an AMD loader would expect. For example, a template located at `tmpl/home/main.dust` must be named `tmpl/home/main` for Dust to load it correctly. If you use the `dustc` compiler this is handled for you.
