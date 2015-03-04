@@ -1,36 +1,48 @@
 ---
-title: DustJS | Getting Started
+title: Dust.js | Partials
 layout: guides
 permalink: /guides/partials/
 ---
 
-## Partials
+# Partials
 
-A Dust partial promotes "DRY" behavior for reusable/shared markup. Partials themselves can be composed of one or more partials. Partials rely on the JSON/context of the parent template invoking it. Lets peek under the covers to see how a Dust partial works.
+A Dust partial promotes *DRY* ("don't repeat yourself") conventions in shared markup. Breaking templates up into partials can make them easier to maintain and reuse, and partials themselves can be composed of one or more partials. This is the basis for components or reusable templates for tasks like including a common header and footer on multiple pages. Lets peek under the hood to see how a Dust partial works.
 
-You can have multiple .dust files and reference one Dust template as part of another one. This is the basis for components or reusable templates for tasks like a common header and footer on multiple pages. Note that the .dust file extension is used here in examples, but .tl is also commonly seen. Since it only matters to the build process you can use whatever extension works for you.
+A partial template is added to another template using Dust's [partial syntax](/docs/syntax/#partial). The template name is the name that is chosen [when the template is compiled](/guides/getting-started/#compiling-dust-templates).
 
-Let's see how the Dust template rendering knows about a template. As we said earlier, Dust templates are compiled to JavaScript. Part of that compiled result is a call to `dust.register(name, functionImplementingCompiledTemplate)`.
+```
+{>"template-name"/}
+```
 
-Like sections, partials accept parameters so you can build reusable components that are parameterizable easily. This gives you the same foundation for building libraries as other languages. By passing all the data into the partial using parameters, you isolate the partial from any dependence on the context when it is invoked. So you might have things like `{>header mode="classic" /}` to control the header behavior.
+A partial relies on the JSON context of the parent template invoking it. Like [sections](/guides/getting-started/#sections), partials also accept parameters that add extra references. By passing more data into the partial using parameters, you can build components that are customized to different contexts easily. For example, there might be several versions of a header that you wish to include, which can be controlled using parameters: `{>"header" mode="classic"/}`.
 
-Just like in sections, inline parameters will not override the current context if a property of the same name exists. For example, if the current context already has {name: "Albert"} adding name as a parameter will not override the value when used inside the partial foo.
+Just like in sections, inline parameters will not override the current context if a reference of the same name already exists.
 
-```{>foo name="will not override Albert"/}```
-
-You will use parameters to pass an object like:
-
-<dust-demo template-name="list_item">
-<dust-demo-template><li>{name}</li></dust-demo-template>
-<dust-demo-json>{}</dust-demo-json>
+<dust-demo templateName="disney-park" hideOutput="true">
+<dust-demo-template showTemplateName="true">
+<p>{?isGreeting}Greetings{:else}Goodbye{/isGreeting} from {parkName}, The {qualifier} Place on Earth!</p>
+</dust-demo-template>
 </dust-demo>
-<dust-demo template-name="list">
-  <dust-demo-template><ul>{#names}{>"list_item" name=name/}{/names}</ul></dust-demo-template>
-  <dust-demo-json>
+
+<dust-demo templateName="disney">
+<dust-demo-template showTemplateName="true">
+{#parks}
+  {>"disney-park" parkName=name qualifier=qualifier/} 
+{/parks}
+</dust-demo-template>
+<dust-demo-json>
+{
+  "isGreeting": true,
+  "parks": [
     {
-      names: ['Dust', 'partial', 'example']
+      "name": "Disneyland",
+      "qualifier": "Happiest"
+    },
+    {
+      "name": "Disney World Magic Kingdom",
+      "qualifier": "Most Magical"
     }
-  </dust-demo-json>
-
+  ]
+}
+</dust-demo-json>
 </dust-demo>
-
