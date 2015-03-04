@@ -253,15 +253,13 @@ Try these exercises to help you further your understanding of context helpers!
 
 Your JSON data is badly-formatted, as seen in the sample. Write a helper to reformat this data to make the template work.
 
-```
+<dust-tutorial templateName="bad-api">
+<dust-demo-template showTemplateName="true">
 {#friends}
-  {name} - {birthday}
+  {name} - {birthday}{~s}
 {/friends}
-```
-
-#### Solution
-
-```
+</dust-demo-template>
+<dust-demo-json>
 {
   "people": ["Alice", "Bob", "Charles"],
   "birthdays": {
@@ -270,17 +268,27 @@ Your JSON data is badly-formatted, as seen in the sample. Write a helper to refo
     "Charles": "07/07/77"
   },
   "friends": function(chunk, context, bodies, params) {
-    var friends = [],
-        people = context.get("people"),
-        birthdays = context.get("birthdays");
 
-    people.forEach(function(person) {
-      chunk.render(bodies.block, context.push({
-        "name": person,
-        "birthday": birthdays[person]
-      }));
-    });
   }
+}
+</dust-demo-json>
+<dust-tutorial-answer>Alice - 12/01/84 Bob - 08/30/66 Charles - 07/07/77 </dust-tutorial-answer>
+</dust-tutorial>
+
+#### Solution
+
+```
+"friends": function(chunk, context, bodies, params) {
+  var friends = [],
+      people = context.get("people"),
+      birthdays = context.get("birthdays");
+
+  people.forEach(function(person) {
+    chunk.render(bodies.block, context.push({
+      "name": person,
+      "birthday": birthdays[person]
+    }));
+  });
 }
 ```
 
@@ -288,25 +296,34 @@ Your JSON data is badly-formatted, as seen in the sample. Write a helper to refo
 
 Our weather API reports temperatures in Fahrenheit, but we need to display in Celsius.
 
-```
-{#convertToCelsius temp="32" /} {! 0 !}
-```
-
 The formula to convert is:
 
 ```
 (F - 32) * 5/9
 ```
 
+<dust-tutorial templateName="temperature-converter">
+<dust-demo-template showTemplateName="true">
+{#convertToCelsius temperatureF="68" /}
+</dust-demo-template>
+<dust-demo-json>
+{
+  "convertToCelsius": function(chunk, context, bodies, params) {
+
+  }
+}
+</dust-demo-json>
+<dust-tutorial-answer>20</dust-tutorial-answer>
+</dust-tutorial>
+
+
 #### Solution
 
 ```
-{
-  "convertToCelsius": function(chunk, context, bodies, params) {
-    var f = params.temp,
-        c = (f - 32) * 5/9;
-    return chunk.write(c);
-  }
+"convertToCelsius": function(chunk, context, bodies, params) {
+  var f = params.temperatureF,
+      c = (f - 32) * 5/9;
+  return chunk.write(c);
 }
 ```
 
@@ -318,15 +335,13 @@ Turn your helper into a `temperatureConverter` that takes **either** a `c` or `f
 
 We have a list of racers and their times, but we want to show them in order so we know who won.
 
-```
+<dust-tutorial templateName="race-results">
+<dust-demo-template showTemplateName="true">
 {#orderedRacers}
-  {name} - {time} minutes {~n}
+  {name} - {time} minutes{~s}
 {/orderedRacers}
-```
-
-#### Solution
-
-```
+</dust-demo-template>
+<dust-demo-json>
 {
   "racers": [
     { "name": "Mario", time: 5.8 },
@@ -336,12 +351,23 @@ We have a list of racers and their times, but we want to show them in order so w
     { "name": "Toad", time: 5.2 }
   ],
   "orderedRacers": function(chunk, context, bodies, params) {
-    var racers = context.get("racers");
-    racers.sort(function(a, b) {
-      return a.time - b.time;
-    });
-    return racers;
+
   }
+}
+</dust-demo-json>
+<dust-tutorial-answer>Bowser - 4.9 minutes Peach - 5.1 minutes Toad - 5.2 minutes Mario - 5.8 minutes Daisy - 7 minutes </dust-tutorial-answer>
+</dust-tutorial>
+
+
+#### Solution
+
+```
+"orderedRacers": function(chunk, context, bodies, params) {
+  var racers = context.get("racers");
+  racers.sort(function(a, b) {
+    return a.time - b.time;
+  });
+  return racers;
 }
 ```
 
@@ -350,15 +376,13 @@ We have a list of racers and their times, but we want to show them in order so w
 Write a second helper that takes the `{time}` in minutes from the context and formats it into minutes and seconds, and incorporate that into your list.
 
 ```
-{
-  "minutesSeconds": function(chunk, context, bodies, params) {
-    var time = context.get("time"),
-        minutes = Math.floor(time),
-        seconds = Math.round((time - minutes) * 60);
+"minutesSeconds": function(chunk, context, bodies, params) {
+  var time = context.get("time"),
+      minutes = Math.floor(time),
+      seconds = Math.round((time - minutes) * 60);
 
-    if(minutes) { chunk.write(minutes + "m"); }
-    if(seconds) { chunk.write(seconds + "s"); }
-    return chunk;
-  }
+  if(minutes) { chunk.write(minutes + "m"); }
+  if(seconds) { chunk.write(seconds + "s"); }
+  return chunk;
 }
 ```
