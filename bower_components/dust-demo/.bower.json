@@ -1,6 +1,6 @@
 {
   "name": "dust-demo",
-  "version": "0.1.9",
+  "version": "0.1.11",
   "homepage": "http://smfoote.github.io/dust-demo/",
   "authors": [
     "Steven Foote <smfoote@gmail.com>"
@@ -24,13 +24,13 @@
     "webcomponentsjs": "~0.5.2",
     "polymer": "Polymer/polymer#~0.5.2"
   },
-  "_release": "0.1.9",
+  "_release": "0.1.11",
   "_resolution": {
     "type": "version",
-    "tag": "v0.1.9",
-    "commit": "f868a90c383e9188f04fd276f176b078317704cb"
+    "tag": "v0.1.11",
+    "commit": "7e2c9a73c18692287864bda452372056cdd89351"
   },
   "_source": "git://github.com/smfoote/dust-demo.git",
-  "_target": "~0.1.9",
+  "_target": "~0.1.11",
   "_originalSource": "dust-demo"
 }

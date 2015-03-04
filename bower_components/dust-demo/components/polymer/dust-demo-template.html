@@ -1,25 +1,33 @@
-<polymer-element name="dust-demo-template">
+<polymer-element name="dust-demo-template" attributes="templateName showTemplateName">
   <template id="dust-demo-tl-template">
-    <textarea id="workspace"></textarea>
+    <div id="template-container" class="container">
+      <dust-demo-header id="header" type="template" text="Dust Template"></dust-demo-header>
+      <textarea id="workspace"></textarea>
+    </div>
+
     <style>
       #workspace {
         display: block;
-        padding: 10px;
+        padding: 15px 20px;
         margin-bottom: 10px;
-        min-height: 120px;
+        min-height: 60px;
+        border: none;
         background-color: #222;
         color: #72CC72;
         font-family: Consolas, Courier, monospace;
         font-size: 15px;
-        width: calc(100% - 23px);
+        width: calc(100% - 40px);
         resize: vertical;
       }
     </style>
   </template>
+
   <script>
     Polymer({
       ready: function() {
-        this.$.workspace.innerHTML = this.innerHTML;
+        // This element was selected from dust-demo, so get the selected content and
+        // insert it into into the textarea
+        this.$.workspace.value = this.textContent.trim();
         this.setupEventListeners();
       },
       setupEventListeners: function() {
@@ -28,6 +36,12 @@
           this.innerText = this.$.workspace.value;
           this.dispatchEvent(newEvt);
         }.bind(this));
+      },
+      templateNameChanged: function() {
+        this.$.header.setAttribute('templateName', this.templateName);
+      },
+      showTemplateNameChanged: function() {
+        this.$.header.setAttribute('showTemplateName', this.showTemplateName);
       }
     });
   </script>

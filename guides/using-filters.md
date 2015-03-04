@@ -12,8 +12,8 @@ Filters are used to transform a variable before outputting it. You can attach on
 
 Filters are attached to a Dust reference by adding a pipe `|` and the filter name after the reference name. You can chain filters by adding multiple pipes. The filters will be run from left-to-right.
 
-<dust-demo template-name="loop">
-<dust-demo-template>{title}
+<dust-demo templatename="filters">
+<dust-demo-template showtemplatename="true">{title}
 {title|s}
 {title|j}</dust-demo-template>
 <dust-demo-json>{

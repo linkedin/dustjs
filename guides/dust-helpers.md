@@ -36,8 +36,8 @@ These helpers allow you to print content if one value compared in a certain way 
 
 In the following example, the first helper looks for the value of `level` in the underlying JSON data and checks if it is equal to the literal string "master". The second checks to see if the value for the `age` reference is greater than the value of the `starfighterRentalAge` reference.
 
-<dust-demo template-name="helpers-logic">
-<dust-demo-template>
+<dust-demo templatename="helpers_logic">
+<dust-demo-template showtemplatename="true">
 {@eq key=level value="master"}You are no longer a Padawan. {/eq}
 {@gt key=age value=starfighterRentalAge}Rent a Starfighter!{/gt}
 </dust-demo-template>
@@ -54,8 +54,8 @@ In the following example, the first helper looks for the value of `level` in the
 
 For all logic helpers, you can use an `{:else}` clause to do something if the comparison is false.
 
-<dust-demo template-name="helpers-else">
-<dust-demo-template>
+<dust-demo templatename="helpers_else">
+<dust-demo-template showtemplatename="true">
 {@eq key=level value="master"}
   You are no longer a Padawan.
 {:else}
@@ -73,8 +73,8 @@ For all logic helpers, you can use an `{:else}` clause to do something if the co
 
 If you are comparing a literal value to one that you know is not a string (e.g. a number or a boolean), make sure to specify the `type` attribute so Dust knows how to cast the literal value. For `@lt`, `@gt`, `@lte`, and `@gte`, the type is automatically coerced to a number.
 
-<dust-demo template-name="helpers-casting">
-<dust-demo-template>
+<dust-demo templatename="helpers_casting">
+<dust-demo-template showtemplatename="true">
 {@eq key=bilbosAge value="50" type="number"}Looking nifty at fifty, Bilbo! {/eq}
 {@gt key=gandalfsAge value="10000"}Gandalf is really old...{/gt}
 </dust-demo-template>
@@ -94,10 +94,10 @@ You can specify what to do if none of the conditions are true using a `@none` he
 
 When a true logic helper condition is found in the `@select`, Dust executes the condition's body and skips the rest of its sibling conditions, excepting any `@any` helpers.
 
-<dust-demo template-name="helpers-select">
-<dust-demo-template>
+<dust-demo templatename="helpers_select">
+<dust-demo-template showtemplatename="true">
 &lt;span class="
-  {@select key=test}
+  {@select key=testEnabled}
     {@any}test-enabled {/any}
     {@none}test-disabled {/none}
     {@eq="puppies"}test-puppies{/eq}
@@ -119,8 +119,8 @@ When a true logic helper condition is found in the `@select`, Dust executes the 
 
 Another handy helper is the `@math` helper. It allows you to take different courses of action based on the result of a mathematical expression. You provide it the lefthand operand using the `key` attribute, the operation to perform using the `method` attribute, and the righthand operand using the `operand` attribute. Then you can nest logical operators within the `@math` tag to test the result of the `@math` helper. For example, we can combine a loop's `$idx` with the `@math` helper to add a class to every other item in a list:
 
-<dust-demo template-name="helpers-math">
-<dust-demo-template>
+<dust-demo templatename="helpers_math">
+<dust-demo-template showtemplatename="true">
 &lt;ul&gt;
   {#flavors}
     &lt;li
@@ -144,15 +144,14 @@ Another handy helper is the `@math` helper. It allows you to take different cour
 </dust-demo-json>
 </dust-demo>
 
-<!-- TODO update link -->
-A full list of values that the `method` attribute can take is found in the [Syntax documentation](/docs/syntax/).
+A full list of values that the `method` attribute can take is found in the [Helpers API documentation](/docs/helpers-api/).
 
 ### Printing the Result
 
 To simply output the result of the mathematical expression, use the `@math` helper as a self-closing tag.
 
-<dust-demo template-name="helpers-math-output">
-<dust-demo-template>
+<dust-demo templatename="helpers_math_output">
+<dust-demo-template showtemplatename="true">
 There is {@math key=100 method="subtract" operand=progress/}% left to do.
 </dust-demo-template>
 <dust-demo-json>
@@ -170,8 +169,8 @@ You can set `key="full"` to print the full context, and `to="console"` to print 
 
 Remove this helper when you are done debugging.
 
-<dust-demo>
-<dust-demo-template>
+<dust-demo templatename="helpers_contextdump">
+<dust-demo-template showtemplatename="true">
 {#houses.gryffindor}
   {! Default: key="current" and to="output" !}
   {@contextDump/}

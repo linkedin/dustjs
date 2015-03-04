@@ -2,27 +2,22 @@
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/dustjs-linkedin/2.4.0/dust-full.min.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/dustjs-helpers/1.2.0/dust-helpers.min.js"></script>
 <link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="dust-demo-header.html">
 <link rel="import" href="dust-demo-template.html">
 <link rel="import" href="dust-demo-json.html">
 <link rel="import" href="dust-tutorial-answer.html">
 
 <!-- HTML -->
-<polymer-element name="dust-demo">
-  <template id="dust-demo-template">
-    <div class="container">
-      <h3 id="template-header" on-click="{{collapseContainer}}">Dust Template</h3>
-      <content select="dust-demo-template"></content>
+<polymer-element name="dust-demo" attributes="templateName hideOutput">
+  <template>
+    <content id="template" select="dust-demo-template"></content>
+    <content select="dust-demo-json"></content>
+    <div id="compiled-container" class="container">
+      <dust-demo-header type="compiled" text="Compiled Dust"></dust-demo-header>
+      <pre id="compiled"></pre>
     </div>
-    <div class="container">
-      <h3 id="data-header" on-click="{{collapseContainer}}">Data</h3>
-      <content select="dust-demo-json"></content>
-    </div>
-    <div class="container">
-      <h3 id="compiled-header" on-click="{{collapseContainer}}">Compiled Dust</h3>
-      <pre id="compiled-dust"></pre>
-    </div>
-    <div class="container">
-      <h3 id="output-header" on-click="{{collapseContainer}}">Output</h3>
+    <div id="output-container" class="container">
+      <dust-demo-header type="output" text="Output"></dust-demo-header>
       <pre id="output"></pre>
     </div>
     <button id="devToggle" on-click="{{toggleDev}}">Dev Mode</button>
@@ -36,9 +31,11 @@
       }
 
       pre {
-        min-height: 120px;
-        padding: 10px;
-        margin: 10px 0;
+        padding: 15px 20px;
+        margin: 0;
+        margin-bottom: 10px;
+        min-height: 60px;
+        border: none;
         background-color: #222;
         color: #72CC72;
         font-family: Consolas, Courier, monospace;
@@ -46,14 +43,16 @@
         white-space: pre-wrap;
       }
 
-      #compiled-dust,
-      #compiled-header {
+      #compiled-container {
         display: none;
       }
 
-      :host([dev]) #compiled-dust,
-      :host([dev]) #compiled-header {
+      :host([dev]) #compiled-container {
         display: block;
+      }
+
+      :host([hideOutput]) #output-container {
+        display: none;
       }
 
       #devToggle {
@@ -75,39 +74,19 @@
       :host(:hover) #devToggle {
         opacity: 0.7;
       }
-
-      .container {
-        position: relative;
-      }
-
-      :host /deep/ h3 {
-        position: absolute;
-        top: 0;
-        right: 0;
-        padding: 5px;
-        margin: 0;
-        color: #FFF;
-        border: 1px dashed #72CC72;
-        border-right: none;
-        border-top: none;
-        font-family: Helvetica, sans-serif;
-        font-size: 15px;
-        font-weight: normal;
-      }
     </style>
   </template>
 
   <!-- Interaction -->
   <script>
     Polymer({
-      ready: function() {
-        this.templateName = this.getAttribute('template-name') || 'default' + (new Date()).getTime();
+      attached: function() {
         this.setupListeners();
-        this.renderDust();
         this.onMutation(this, function() {
           this.setupEditorListeners();
           this.renderDust();
         }.bind(this));
+        this.templateName = this.templateName || 'default' + (new Date()).getTime();
       },
       setupListeners: function() {
         this.setupEditorListeners();
@@ -127,31 +106,50 @@
         this.renderDust();
       },
       renderDust: function() {
-        var templateEl = this.querySelector('dust-demo-template');
-        var jsonEl = this.querySelector('dust-demo-json');
-        if (!(templateEl && jsonEl)) {
+        var templateEditorEl, jsonEl,
+            template, data,
+            compiledBox, outputBox,
+            compiledDust;
+
+        if (this.$.template.getDistributedNodes()) {
+          templateEditorEl = this.$.template.getDistributedNodes()[0].$.workspace;
+        }
+        if (!templateEditorEl) {
           return;
         }
         // Unescape '>' and '<' to read Dust's include syntax correctly
-        var template = templateEl.innerHTML.replace(/&gt;/g, '>').replace(/&lt;/g, '<');
+        var template = templateEditorEl.value.replace(/&gt;/g, '>').replace(/&lt;/g, '<');
         if (!template) {
           return;
         }
-        var data = jsonEl.innerHTML.replace('&nbsp;', ' ');
-        if (data) {
-          eval('var data = ' + data + ';');
+
+        // JSON container is optional
+        jsonEl = this.querySelector('dust-demo-json');
+        if (jsonEl) {
+          data = jsonEl.textContent;
         }
-        var compiledContainer = this.$['compiled-dust'];
-        var outputContainer = this.$.output;
-        var compiledDust = dust.compile(template, this.templateName);
+        if (data) {
+          eval('data = ' + data + ';');
+        } else {
+          data = {};
+        }
+
+        compiledBox = this.$['compiled'];
+        outputBox = this.$.output;
+        compiledDust = dust.compile(template, this.templateName);
         dust.loadSource(compiledDust);
         dust.render(this.templateName, data, function(err, out) {
           if (err) {
             console.log('render error');
           }
-          compiledContainer.innerHTML = compiledDust;
-          outputContainer.innerHTML = dust.escapeHtml(out);
+          compiledBox.innerHTML = compiledDust;
+          outputBox.innerHTML = dust.escapeHtml(out);
         })
+      },
+      templateNameChanged: function() {
+        var template = this.$.template.getDistributedNodes()[0];
+        template.setAttribute('templateName', this.templateName);
+        this.handleEditorUpdate();
       },
       toggleDev: function(evt) {
         if (this.hasAttribute('dev')) {
@@ -175,9 +173,9 @@
 <polymer-element name="dust-tutorial" extends="dust-demo">
   <template>
     <shadow></shadow>
-    <div class="container">
-      <h3>Expected Output</h3>
-      <content select="dust-tutorial-answer">Hello Steven</content>
+    <div id="expected-output-container" class="container">
+      <dust-demo-header type="expected-output" text="Expected Output"></dust-demo-header>
+      <content select="dust-tutorial-answer"></content>
     </div>
     <div id="congrats">You're right!</div>
     <style>
@@ -189,7 +187,6 @@
       :host([was-correct]) {
         background-color: #6BA96B;
       }
-
 
       #congrats {
         display: none;
@@ -214,10 +211,6 @@
       :host([was-correct]) #congrats {
         opacity: 0;
         left: 115px;
-      }
-
-      .container {
-        position: relative;
       }
     </style>
   </template>

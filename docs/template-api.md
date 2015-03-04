@@ -21,8 +21,8 @@ A Dust key is one or more of the following characters: `a-z`, `A-Z`, `_` (unders
 
 NOTE: The first character of a reference cannot be `0-9` or `-`.
 
-<dust-demo template-name="reference">
-<dust-demo-template>{name} is a valid Dust reference.{~n}
+<dust-demo templatename="reference">
+<dust-demo-template showtemplatename="true">{name} is a valid Dust reference.{~n}
 {0name} is not a valid Dust reference.{~n}
 {.name} is a valid Dust reference.{~n}
 {.} is a valid dust reference.{~n}
@@ -38,8 +38,8 @@ NOTE: The first character of a reference cannot be `0-9` or `-`.
 <h3 id="section"><code>{#section/}</code></h3>
 A standard section is used to change what level of the context Dust uses to look up values. If the new context is an array, the standard section automatically loops through the array. If an `{:else}` body is used, its contents are output if the new context does not exist.
 
-<dust-demo template-name="standard-section">
-<dust-demo-template>{!
+<dust-demo templatename="standard_section">
+<dust-demo-template showtemplatename="true">{!
   Outside of the section, Dust looks for values
   at the root of the JSON context
 !}
@@ -92,8 +92,8 @@ Self-closing section (note: this doesn't do anything, but is technically valid D
 
 An exists section is a special type of section that outputs its contents if the value it is referencing exists. The syntax for the exists section is the same as the standard section, but the `#` is replaced by a `?`. However, unlike the standard section, the exists section does not change the context.
 
-<dust-demo template-name="exists">
-<dust-demo-template>{?isReady}Ready!{:else}Wait a minute...{/isReady}</dust-demo-template>
+<dust-demo templatename="exists">
+<dust-demo-template showtemplatename="true">{?isReady}Ready!{:else}Wait a minute...{/isReady}</dust-demo-template>
 <dust-demo-json>{
   "isReady": false
 }</dust-demo-json>
@@ -103,8 +103,8 @@ An exists section is a special type of section that outputs its contents if the 
 
 A not-exists section is a special type of section that outputs its contents if the value it is referencing __does not__ exist. The syntax for the not exists is the same as the standard section, but the `#` is replaced by a `^`. Unlike the standard section, the not exists section does not change the context.
 
-<dust-demo template-name="not-exists">
-<dust-demo-template>{^isReady}Not ready yet.{:else}I'm ready to go!{/isReady}</dust-demo-template>
+<dust-demo templatename="not_exists">
+<dust-demo-template showtemplatename="true">{^isReady}Not ready yet.{:else}I'm ready to go!{/isReady}</dust-demo-template>
 <dust-demo-json>{
   "isReady": false
 }</dust-demo-json>
@@ -113,8 +113,8 @@ A not-exists section is a special type of section that outputs its contents if t
 <h3 id="helper"><code>{@helper/}</code></h3>
 A helper is special kind of section that executes some JavaScript when it is rendered. For more information on using helpers, see the [Dust helpers guide](/guides/dust-helpers). For more information on writing Dust helpers, see the [writing helpers guide](/guides/writing-helpers).
 
-<dust-demo template-name="helper">
-<dust-demo-template>The answer is {@eq key=answer value=42}42{:else}wrong{/eq}.</dust-demo-template>
+<dust-demo templatename="helper">
+<dust-demo-template showtemplatename="true">The answer is {@eq key=answer value=42}42{:else}wrong{/eq}.</dust-demo-template>
 <dust-demo-json>{
   "answer": 42
 }</dust-demo-json>
@@ -131,8 +131,8 @@ An inline-partial is defined as a single opening curly brace `{`, follwed by a l
 
 A self-closing block is defined as a single opening curly brace `{`, followed by a plus sign `+`, followed by the name used in the inline-partial, followed by a forward slash and single closing curly brace `/}`. Alternatively, a block can have content. A block's content is output only if a matching inline-partial is not found. For more info, see the [base and override templates guide](/guides/base-and-override-templates).
 
-<dust-demo template-name="inline-partial">
-<dust-demo-template>{+greeting}Hello!{/greeting} world.
+<dust-demo templatename="inline_partial">
+<dust-demo-template showtemplatename="true">{+greeting}Hello!{/greeting} world.
 {&lt;greeting}Howdy{/greeting}
 </dust-demo-template>
 <dust-demo-json>{}</dust-demo-json>
@@ -156,8 +156,8 @@ With parameters:
 {>my_template_with_params foo="bar" contacts=friends/}
 ```
 
-<dust-demo template-name="partial">
-<dust-demo-template>You want to know if I'm ready? {&gt;exists/}</dust-demo-template>
+<dust-demo templatename="partial">
+<dust-demo-template showtemplatename="true">You want to know if I'm ready? {&gt;exists/}</dust-demo-template>
 <dust-demo-json>{
   "isReady": "totally"
 }</dust-demo-json>
@@ -175,7 +175,7 @@ A special is a single opeing curly brace `{`, followed by a tilde `~`, follwed b
 - `{~lb}` becomes a left curly brace `{`
 - `{~rb}` becomes a right curly brace `}`
 
-<dust-demo template-name="special">
-<dust-demo-template>You{~s}can{~s}add{~s}spaces{~s}and{~n}new-lines with Dust specials.{~n}{~n}Curly braces that are usually reserved for {~lb}dust{~rb} syntax can be created with Dust specials, too.</dust-demo-template>
+<dust-demo templatename="special">
+<dust-demo-template showtemplatename="true">You{~s}can{~s}add{~s}spaces{~s}and{~n}new-lines with Dust specials.{~n}{~n}Curly braces that are usually reserved for {~lb}dust{~rb} syntax can be created with Dust specials, too.</dust-demo-template>
 <dust-demo-json>{}</dust-demo-json>
 </dust-demo>
