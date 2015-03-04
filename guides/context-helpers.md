@@ -1,5 +1,5 @@
 ---
-layout: docs
+layout: guides
 title: Context Helpers
 permalink: /guides/context-helpers/
 ---
@@ -68,9 +68,11 @@ As a bonus, your handler can be much smarter than a template. Don't worry about 
 {
   "appStatusOK": function(chunk, context, bodies, params) {
      if(!gearsTurning) {
-       return chunk.render(bodies.gearsError, context.push({ error: gears.status });
+       return chunk.render(bodies.gearsError,
+                           context.push({ error: gears.status });
      } else if(!engineRunning) {
-       return chunk.render(bodies.engineError, context.push({ engineTemp: context.get("engine.temperature") });
+       return chunk.render(bodies.engineError,
+                           context.push({ engineTemp: context.get("engine.temperature") });
      } else if(oilLevel < 0.7) {
        return chunk.render(bodies.oilLevelError, context);
      }
@@ -124,7 +126,7 @@ Context helpers can access the current section of their template to modify it. I
 
 Context helpers can read values out of any level of the Dust context passed to the template, not just the current scope.
 
-Remember that Dust contexts are "stacks" of objects, and that Dust can read upwards through multiple levels. For a refresher on contexts, see [Contexts](/contexts).
+Remember that Dust contexts are "stacks" of objects, and that Dust can read upwards through multiple levels. For a refresher on contexts, see [Helper API](/docs/helper-api/).
 
 ```
 {

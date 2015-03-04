@@ -1,6 +1,6 @@
 ---
 layout: docs
-title: Dust Syntax
+title: Dust.js | Filter API
 permalink: /docs/filter-api/
 ---
 ## Dust Filters

@@ -1,6 +1,6 @@
 ---
 layout: docs
-title: Dust Syntax
+title: Dust.js | Helper API
 permalink: /docs/helper-api/
 ---
 
@@ -76,7 +76,7 @@ permalink: /docs/helper-api/
     * {Chunk} The chunk object that was passed in so that chunk function calls can be chained.  It is important to not forget to return this, or your template will cease rendering early
 
 ### Example
-In this example, we will write a helper that will add a period to the end or beginning of the body depending on a parameter. 
+In this example, we will write a helper that will add a period to the end or beginning of the body depending on a parameter.
 
 #### JavaScript function definition for a helper
 

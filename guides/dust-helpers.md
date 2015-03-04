@@ -1,16 +1,18 @@
 ---
-title: DustJS | Using Helpers
+title: Dust.js | Dust Core Helpers
 layout: guides
 permalink: /guides/dust-helpers/
 ---
 
 # Using Helpers
 
-Helpers are extensions added to Dust to increase its functionality. They make it possible for anyone to extend the way Dust works. They are commonly used to add functionality related to things like logic, formatting, and internationalization. Helpers are denoted by the `@` symbol. Let's take a look at some commonly used helpers.
+Helpers are extensions to Dust that make it possible for anyone to extend the way Dust works. For example, you could write a helper to add internationalization support or to provide custom formatting for output.
+
+Helpers look like `{@helper}`.
 
 ## Installing Helpers
 
-Officially supported helpers are bundled separately in the `dustjs-helpers` library. After the dustjs-linkedin library is loaded, follow the same instructions in the [Getting Started guide](/guides/getting-started/) to install `dustjs-helpers`. If you are cloning or downloading from GitHub, you can find the helpers in the <a href="https://github.com/linkedin/dustjs-helpers" target="_blank">dustjs-helpers repository</a>.
+Officially supported helpers are bundled separately in the `dustjs-helpers` library. After the dustjs-linkedin library is loaded, follow the same instructions in the [Setup guide](/guides/setup/) to install `dustjs-helpers`.
 
 If you are using Node.js, then the following `require` statements will ensure you have the needed Dust modules available.
 
@@ -23,12 +25,12 @@ require('dustjs-helpers');
 
 The helpers library comes with the following logic helpers:
 
-* `{@eq}` equal to
-* `{@ne}` not equal to
-* `{@gt}` greater than
-* `{@lt}` less than
-* `{@gte}` greater than or equal to
-* `{@lte}` less than or equal to
+* `{@eq}`: equal to
+* `{@ne}`: not equal to
+* `{@gt}`: greater than
+* `{@lt}`: less than
+* `{@gte}`: greater than or equal to
+* `{@lte}`: less than or equal to
 
 These helpers allow you to print content if one value compared in a certain way to another value is true. For each helper, you specify the first value with the `key` attribute and the second value with the `value` attribute. Both `key` and `value` can point to a reference or a literal value. Wrap literal values in quotes and leave references un-quoted.
 
@@ -168,7 +170,7 @@ You can set `key="full"` to print the full context, and `to="console"` to print 
 
 Remove this helper when you are done debugging.
 
-<dust-demo template-name="helpers-contextdump">
+<dust-demo>
 <dust-demo-template>
 {#houses.gryffindor}
   {! Default: key="current" and to="output" !}

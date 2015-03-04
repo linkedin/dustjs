@@ -1,54 +1,43 @@
 ---
-title: DustJS | Partials
+title: Dust.js | Partials
 layout: guides
 permalink: /guides/partials/
 ---
 
 # Partials
 
-A Dust partial promotes *DRY* ("don't repeat yourself") conventions in shared markup. Breaking templates up into partials can make them easier to maintain and reuse, and partials themselves can be composed of one or more partials. This is the basis for components or reusable templates for tasks like including a common header and footer on multiple pages. Lets peek under the covers to see how a Dust partial works.
+A Dust partial promotes "DRY" behavior for reusable/shared markup. Templates can include other templates using the `{>partial}` tag. When a partial is included, it has access to the parent template's context.
 
-A partial template is added to another template using Dust's partial syntax. Note that the tag is self-closing (`/}`).
+Templates commonly make use of partials to include shared code such as headers and footers.
+
+Like sections, partials accept parameters, so you can build reusable components that are parameterizable easily. By passing data into a partial using parameters, the partial can render independent of its parent context.
 
 ```
-{>"template-name"/}
+{>header theme="classic" /}
+
+Sign up for the newsletter: {>"signup-form" action="/newsletter" /}
+
+{>footer/}
 ```
 
-Partials rely on the JSON context of the parent template invoking it. Like [sections](/guides/getting-started/#sections), partials also accept parameters that add extra references. By passing more data into the partial using parameters, you can build components that are customized to different contexts easily. For example, there might be several versions of a header that you wish to include, which can be controlled with code like `{>"header" mode="classic"/}`.
+Just like in sections, inline parameters will not override the current context if a property of the same name exists. For example, if the current context already has `{name: "Albert"}` adding `name` as a parameter will not override the value when used inside the partial foo.
 
-Just like in sections, inline parameters will not override the current context if a reference of the same name already exists.
+```
+{>foo name="will not override Albert"/}
+```
 
-In the following example, notice that `isGreeting` is only defined in the data for the `disney` template, but it is available in every instance of the included `disney-park` partial, while `parkName` and `qualifier` vary per instance.
+You can also pass entire objects to partials.
 
-<dust-demo templateName="disney-park" hideOutput="true">
-<dust-demo-template showTemplateName="true">
-<p>{?isGreeting}Greetings{:else}Goodbye{/isGreeting} from {parkName}, The {qualifier} Place on Earth!</p>
-</dust-demo-template>
+<dust-demo template-name="list_item">
+  <dust-demo-template><li>{name}</li></dust-demo-template>
+  <dust-demo-json>{}</dust-demo-json>
 </dust-demo>
 
-<dust-demo templateName="disney">
-<dust-demo-template showTemplateName="true">
-{#parks}
-  {>"disney-park" parkName=name qualifier=qualifier/} 
-{/parks}
-</dust-demo-template>
-<dust-demo-json>
-{
-  "isGreeting": true,
-  "parks": [
+<dust-demo template-name="list">
+  <dust-demo-template><ul>{#names}{>"list_item" name=name/}{/names}</ul></dust-demo-template>
+  <dust-demo-json>
     {
-      "name": "Disneyland",
-      "qualifier": "Happiest"
-    },
-    {
-      "name": "Disney World Magic Kingdom",
-      "qualifier": "Most Magical"
+      names: ['Dust', 'partial', 'example']
     }
-  ]
-}
-</dust-demo-json>
+  </dust-demo-json>
 </dust-demo>
-
-Let's see how the Dust template rendering knows about a template. Since Dust templates are compiled to JavaScript, part of that compiled result is a call to `dust.register(name, functionImplementingCompiledTemplate)`---check out the Dev Mode of the example above to see this.
-
-The name is not necessarily the file name, but it will be the template name that is used when including the partial with the include syntax. This means that it doesn't really matter what extension you give your Dust template files, though `.dust` and `.tl` are most commonly seen.

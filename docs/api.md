@@ -1,13 +1,13 @@
 ---
 layout: docs
-title: Dust Syntax
+title: Dust.js | Syntax
 permalink: /docs/api/
 ---
 
 ## dust.compile
 
 ### Function call
-```    
+```
 dust.compile(content, templateName);
 ```
 
@@ -25,7 +25,7 @@ Assuming you have the dust compiler in your JS environment, you can compile a Du
 var compiledTemplate = dust.compile("Hello {name}!", "intro");
 ```
 
-If you include the "compiled" output as part of a script block of JS that you load, then the "intro" template will be defined and registered. 
+If you include the "compiled" output as part of a script block of JS that you load, then the "intro" template will be defined and registered.
 
 ```
 <script type="text/javascript">
@@ -99,7 +99,7 @@ dust.render("intro", {name: "Fred"}, function(error, output) {
 ## dust.stream
 
 ### Function call
-```    
+```
 var stream = dust.stream(templateName, data);
 stream.on('data', dataCallback)
       .on('end', endCallback)

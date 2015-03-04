@@ -1,5 +1,5 @@
 ---
-title: DustJS | Getting Started
+title: Dust.js | Getting Started
 layout: guides
 permalink: /guides/getting-started/
 ---
@@ -61,7 +61,9 @@ You can also use an `{:else}` statement with conditionals.
 
 ### Sections
 
-Sections, which work a lot like conditionals, are a useful alternative to the sometimes verbose dot-notation. A section is used to switch the context in which Dust looks up references. In the example below, the section begins with `{#friend}` and ends with `{/friend}`. While inside of the `{#friend}` section, Dust looks for references inside of the `friend` object. That's why the output is `Hello, John` instead of `Hello, Jacob`.
+Sections, which work a lot like conditionals, are a useful alternative to the sometimes verbose dot-notation. A section is used to switch the context in which Dust looks up references.
+
+In the example below, the section begins with `{#friend}` and ends with `{/friend}`. While inside of the `{#friend}` section, Dust looks for references inside of the `friend` object. That's why the output is `Hello, Jacob` instead of `Hello, John`.
 
 <dust-tutorial template-name="section">
 <dust-demo-template>Hello, {#friend}{name}{/friend}.</dust-demo-template>
@@ -153,7 +155,7 @@ var compiledTemplateString = dust.compile('My {template}', 'myTemplate');
 Compiling with [`dustc`](/docs/dustc-api/):
 
 ```bash
-local-user $ dustc
+local-user $ dustc my-template.dust --output=myTemplate.js
 ```
 
 ## Serving Dust Templates

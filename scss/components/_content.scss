@@ -10,6 +10,10 @@
     margin-bottom: $content-h1-margin-bottom;
   }
 
+  p {
+    line-height: 26px;
+  }
+
   p:last-child {
     margin-bottom: $content-h1-margin-bottom + 15px;
   }
@@ -45,7 +49,15 @@
   }
 
   code {
-      color: $brand-blue;
+    color: $brand-blue;
+  }
+
+  p code,
+  li code {
+    background-color: $brand-neutral;
+    padding: 4px 8px;
+    border-radius: 2px;
+    @include interior-shadow($light-shadow, $shadow-small-size);
   }
 
   a {

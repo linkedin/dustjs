@@ -130,10 +130,14 @@ header h2.tagline {
   margin-bottom: 32px;
 }
 /* line 13, ../scss/components/_content.scss */
+#content p {
+  line-height: 26px;
+}
+/* line 17, ../scss/components/_content.scss */
 #content p:last-child {
   margin-bottom: 47px;
 }
-/* line 17, ../scss/components/_content.scss */
+/* line 21, ../scss/components/_content.scss */
 #content h1 {
   /* [archetype:styleguide:begin] --- `xlarge headline` --- */
   font-size: 22px;
@@ -148,7 +152,7 @@ header h2.tagline {
   /* [archetype:target-os:begin] --- default --- */
   /* [archetype:target-os:end]   --- default --- */
 }
-/* line 22, ../scss/components/_content.scss */
+/* line 26, ../scss/components/_content.scss */
 #content h2 {
   /* [archetype:styleguide:begin] --- `large headline` --- */
   font-size: 18px;
@@ -163,21 +167,21 @@ header h2.tagline {
   /* [archetype:target-os:begin] --- default --- */
   /* [archetype:target-os:end]   --- default --- */
 }
-/* line 27, ../scss/components/_content.scss */
+/* line 31, ../scss/components/_content.scss */
 #content h3 {
   font-size: 18px;
   margin-bottom: 32px;
   margin-top: 16px;
   color: #7f7f7f;
 }
-/* line 34, ../scss/components/_content.scss */
+/* line 38, ../scss/components/_content.scss */
 #content h4 {
   font-size: 16px;
   margin-bottom: 24px;
   margin-top: 16px;
   color: #7f7f7f;
 }
-/* line 41, ../scss/components/_content.scss */
+/* line 45, ../scss/components/_content.scss */
 #content h1, #content h2 {
   border-bottom-width: 3px;
   border-style: solid;
@@ -185,16 +189,26 @@ header h2.tagline {
   color: #323232;
   padding-bottom: 15px;
 }
-/* line 47, ../scss/components/_content.scss */
+/* line 51, ../scss/components/_content.scss */
 #content code {
   color: #00698c;
 }
-/* line 51, ../scss/components/_content.scss */
+/* line 55, ../scss/components/_content.scss */
+#content p code,
+#content li code {
+  background-color: #dddddd;
+  padding: 4px 8px;
+  border-radius: 2px;
+  -moz-box-shadow: inset 0 0 3px #939393;
+  -webkit-box-shadow: inset 0 0 3px #939393;
+  box-shadow: inset 0 0 3px #939393;
+}
+/* line 63, ../scss/components/_content.scss */
 #content a {
   color: #267f9d;
   text-decoration: none;
 }
-/* line 56, ../scss/components/_content.scss */
+/* line 68, ../scss/components/_content.scss */
 #content pre {
   -moz-box-shadow: inset 0 0 3px #939393;
   -webkit-box-shadow: inset 0 0 3px #939393;
@@ -204,7 +218,7 @@ header h2.tagline {
   color: #00698c;
   padding: 15px;
 }
-/* line 64, ../scss/components/_content.scss */
+/* line 76, ../scss/components/_content.scss */
 #content #parameters + ul > li > ul {
   -moz-box-shadow: inset 0 0 3px #939393;
   -webkit-box-shadow: inset 0 0 3px #939393;
@@ -214,17 +228,17 @@ header h2.tagline {
   margin-bottom: 32px;
   margin-top: 32px;
 }
-/* line 71, ../scss/components/_content.scss */
+/* line 83, ../scss/components/_content.scss */
 #content #parameters + ul > li > ul > li > ul {
   margin: 32px 0px 32px 0px;
 }
-/* line 73, ../scss/components/_content.scss */
+/* line 85, ../scss/components/_content.scss */
 #content #parameters + ul > li > ul > li > ul > li {
   margin: 16px 0px 32px 0px;
   color: #323232;
   font-size: 16px;
 }
-/* line 77, ../scss/components/_content.scss */
+/* line 89, ../scss/components/_content.scss */
 #content #parameters + ul > li > ul > li > ul > li > ul {
   padding: 15px;
   margin-top: 15px;
@@ -232,16 +246,16 @@ header h2.tagline {
   color: #323232;
   font-size: 14px;
 }
-/* line 83, ../scss/components/_content.scss */
+/* line 95, ../scss/components/_content.scss */
 #content #parameters + ul > li > ul > li > ul > li > ul > li {
   color: #7f7f7f;
   margin-top: 10px;
 }
-/* line 86, ../scss/components/_content.scss */
+/* line 98, ../scss/components/_content.scss */
 #content #parameters + ul > li > ul > li > ul > li > ul > li:first-child {
   margin-top: 0px;
 }
-/* line 89, ../scss/components/_content.scss */
+/* line 101, ../scss/components/_content.scss */
 #content #parameters + ul > li > ul > li > ul > li > ul > li > ul {
   padding-left: 15px;
   color: #323232;

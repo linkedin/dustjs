@@ -1,5 +1,5 @@
 ---
-title: DustJS | Using Filters
+title: Dust.js | Using Filters
 layout: guides
 permalink: /guides/using-filters/
 ---
@@ -23,13 +23,13 @@ Filters are attached to a Dust reference by adding a pipe `|` and the filter nam
 
 ## Built-In Filters
 
-* `h` HTML-encode
-* `s` turn off automatic HTML encoding
-* `j` Javascript string encode
-* `u` encodeURI
-* `uc` encodeURIComponent
-* `js` JSON.stringify
-* `jp` JSON.parse
+* `h`: HTML-encode
+* `s`: turn off automatic HTML encoding
+* `j`: Javascript string encode
+* `u`: encodeURI
+* `uc`: encodeURIComponent
+* `js`: JSON.stringify
+* `jp`: JSON.parse
 
 Dust applies the `h` filter to all references by default, ensuring that variables are HTML-escaped. You can undo this autoescaping by appending the `s` filter.
 

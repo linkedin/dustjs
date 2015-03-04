@@ -1,6 +1,6 @@
 ---
 layout: docs
-title: Dust Template API
+title: Dust.js | Template API
 permalink: /docs/syntax/
 ---
 
