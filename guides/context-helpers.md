@@ -87,7 +87,14 @@ As a bonus, your handler can be much smarter than a template. Don't worry about 
 
 The most basic context helpers simply return a value. The value will act just like a value contained in the context.
 
-```
+<dust-demo templateName="friends">
+<dust-demo-template showTemplateName="true">
+{#friends}{.} {/friends}{~n}
+{#friendsHelper}{.} {/friendsHelper}{~n}
+{?hasFriends}Yay friends!{/hasFriends}{~n}
+{?hasFriendsHelper}Yay friends!{/hasFriendsHelper}
+</dust-demo-template>
+<dust-demo-json>
 {
   "friends": ["Alice", "Bob", "Charlie"],
   "friendsHelper": function() {
@@ -98,7 +105,8 @@ The most basic context helpers simply return a value. The value will act just li
     return this.friends.length > 0;
   }
 }
-```
+</dust-demo-json>
+</dust-demo>
 
 ### Accessing the template
 
@@ -112,15 +120,23 @@ function(chunk, context, bodies, params) {}
 
 Context helpers can access the current section of their template to modify it. In Dust, this section is called a **chunk**. Returning the chunk instead of a value tells Dust that you have manually overridden the output of that variable or section.
 
-```
+<dust-demo templateName="starship">
+<dust-demo-template showTemplateName="true">
+{#status}No Status Available!{/status}
+</dust-demo-template>
+<dust-demo-json>
 {
+  "hyperDriveStatus": "Warp Speed 9",
+  "photonTorpedoCount": 800,
   "status": function(chunk) {
-    return chunk.write("System Status:\n")
+    return chunk.write("System Status\n".toUpperCase())
                 .write("Hyperdrive: " + this.hyperDriveStatus + "\n")
                 .write("Photon Torpedoes: " + this.photonTorpedoCount);
   }
 }
-```
+</dust-demo-json>
+</dust-demo>
+
 
 #### Context
 
@@ -155,7 +171,8 @@ As you've seen, Dust sections might have multiple bodies that output conditional
 
 Using a context helper, you can define your own bodies and have as many as you want. This lets you keep HTML and text in the template where it belongs, instead of conditionally outputting various strings as part of your Javascript.
 
-```
+<dust-demo templateName="login">
+<dust-demo-template showTemplateName="true">
 {#login}
   Welcome!
   {:usernameError}
@@ -165,9 +182,17 @@ Using a context helper, you can define your own bodies and have as many as you w
   {:else}
   Please log in!
 {/login}
-```
-```
-{
+</dust-demo-template>
+<dust-demo-json>
+(function() {
+
+function authorizeUser(username, password) {
+  /* fake API - change the message and change the output! */
+  return { message: "InvalidPassword",
+           loginAttemptsRemaining: 42 };
+}
+
+return {
   "login": function(chunk, context, bodies) {
     var username = context.get("username"),
         password = context.get("password"),
@@ -180,55 +205,63 @@ Using a context helper, you can define your own bodies and have as many as you w
         return chunk.render(bodies.usernameError, context);
       case "InvalidPassword":
         return chunk.render(bodies.passwordError,
-                            context.push(status.loginAttemptsRemaining);
+                            context.push(status.loginAttemptsRemaining));
     }
 
     return false;
   }
-}
-```
+};
+
+})();
+</dust-demo-json>
+</dust-demo>
 
 #### Params
 
 Context helpers can be passed parameters just like regular Dust sections. They are accessed through the **params** argument.
 
-```
-{#price value="39.9" /}
-```
-```
+<dust-demo templateName="price">
+<dust-demo-template showTemplateName="true">
+{#price value=39.9 /}
+</dust-demo-template>
+<dust-demo-json>
 {
   "price": function(chunk, context, bodies, params) {
     return chunk.write("$" + Number(params.value).toFixed(2));
   }
 }
-```
+</dust-demo-json>
+</dust-demo>
 
 ##### Evaluating a parameter
 
 If a parameter contains a Dust reference, you must evaluate the reference if you want to use it in your context helper. Reference evaluation is done using `dust.helpers.tap()` (provided as part of the `dustjs-helpers` addon).
 
-```
+<dust-demo templateName="HELLO">
+<dust-demo-template showTemplateName="true">
 {#say text="Hello {name}!"/}
-```
-```
+</dust-demo-template>
+<dust-demo-json>
 {
+  "name": "lowercase person",
   "say": function(chunk, context, bodies, params) {
     var text = dust.helpers.tap(params.text, chunk, context);
     text = text.toUpperCase();
     return chunk.write(text);
   }
 }
-```
+</dust-demo-json>
+</dust-demo>
 
 ## Asynchronous context helpers
 
 Dust's asynchronous nature is one of its defining features. Writing context helpers in an async way lets you make HTTP requests or call services without blocking the rendering of your template.
 
-```
+<dust-demo templateName="ip">
+<dust-demo-template showTemplateName="true">
 {#ip}Your IP address: {ip}{/ip}
-```
-
-```
+</dust-demo-template>
+<dust-demo-json>
 {
   "ip": function(chunk, context, bodies, params) {
     return chunk.map(function(chunk) {
@@ -240,7 +273,9 @@ Dust's asynchronous nature is one of its defining features. Writing context help
     });
   }
 }
-```
+</dust-demo-json>
+</dust-demo>
+
 To start an asynchronous block, call `chunk.map`. Inside its callback function, you can perform any sync or async operations. The only difference is that when you're done, you must call `chunk.end` to signal that the async operations have completed.
 
 You can't return a value from an asynchronous helper like you can a normal one. You must return a chunk that has been `end`ed.
