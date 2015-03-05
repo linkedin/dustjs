@@ -137,7 +137,7 @@ module.exports = function(grunt) {
         src: 'tmp/dust-full.min.js',
         options: {
           keepRunner: false,
-          specs: ['test/jasmine-test/spec/**/*.js']
+          specs: ['test/jasmine-test/spec/*.js']
         }
       },
       /*tests unminified code, mostly used for debugging by `grunt dev` task*/
@@ -171,6 +171,9 @@ module.exports = function(grunt) {
           }
         }
       }
+    },
+    jasmine_node: {
+      dustc: ['test/jasmine-test/spec/cli/']
     },
     watch: {
       lib: {
@@ -244,6 +247,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-gh-pages');
   grunt.loadNpmTasks('grunt-bump');
   grunt.loadNpmTasks('grunt-shell');
+  grunt.loadNpmTasks('grunt-jasmine-node');
 
   //--------------------------------------------------
   //------------Grunt task aliases -------------------
@@ -255,7 +259,8 @@ module.exports = function(grunt) {
   grunt.registerTask('testNode',       ['shell:oldTests']);
   grunt.registerTask('testRhino',      ['build', 'shell:testRhino']);
   grunt.registerTask('testPhantom',    ['build', 'jasmine:testProd']);
-  grunt.registerTask('test',           ['build', 'jasmine:testProd', 'shell:oldTests', 'shell:testRhino', 'jasmine:coverage']);
+  grunt.registerTask('testCli',        ['build', 'jasmine_node:dustc']);
+  grunt.registerTask('test',           ['build', 'jasmine:testProd', 'jasmine_node:dustc', 'shell:oldTests', 'shell:testRhino', 'jasmine:coverage']);
 
   //task for debugging in browser
   grunt.registerTask('dev',            ['build', 'jasmine:testDev:build', 'connect:testServer','log:testClient', 'watch:lib']);
