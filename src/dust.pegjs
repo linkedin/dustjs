@@ -115,13 +115,16 @@ identifier "identifier"
   / k:key      { var arr = ["key", k]; arr.text = k; return arr; }
 
 number "number"
-  = n:(float / integer) { return ['literal', n]; }
+  = n:(float / integer / negative_integer) { return ['literal', n]; }
 
 float "float"
-  = l:integer "." r:integer+ { return parseFloat(l + "." + r.join('')); }
+  = l:(integer / negative_integer) "." r:integer+ { return parseFloat(l + "." + r.join('')); }
 
 integer "integer"
   = digits:[0-9]+ { return parseInt(digits.join(""), 10); }
+
+negative_integer "negative_integer"
+  = sign:'-' digits:[0-9]+ { return parseInt(sign + digits.join(''), 10)}
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
   path is defined as matching a key plus one or more characters of key preceded by a dot
