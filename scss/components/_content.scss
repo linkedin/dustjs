@@ -6,7 +6,7 @@
   padding: $content-padding;
   margin-top: $content-margin-top;
 
-  h1, h2, p, pre {
+  h1, h2, p, pre, ul {
     margin-bottom: $content-h1-margin-bottom;
   }
 
@@ -46,6 +46,13 @@
     @include sub-section-headline();
     color: $brand-graphite;
     padding-bottom: $content-sub-section-padding;
+  }
+
+  ul {
+    margin-left: 20px;
+  }
+  li {
+    margin-bottom: 1em;
   }
 
   code {

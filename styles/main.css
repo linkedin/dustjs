@@ -126,7 +126,7 @@ header h2.tagline {
   margin-top: 122px;
 }
 /* line 9, ../scss/components/_content.scss */
-#content h1, #content h2, #content p, #content pre {
+#content h1, #content h2, #content p, #content pre, #content ul {
   margin-bottom: 32px;
 }
 /* line 13, ../scss/components/_content.scss */
@@ -190,10 +190,18 @@ header h2.tagline {
   padding-bottom: 15px;
 }
 /* line 51, ../scss/components/_content.scss */
+#content ul {
+  margin-left: 20px;
+}
+/* line 54, ../scss/components/_content.scss */
+#content li {
+  margin-bottom: 1em;
+}
+/* line 58, ../scss/components/_content.scss */
 #content code {
   color: #00698c;
 }
-/* line 55, ../scss/components/_content.scss */
+/* line 62, ../scss/components/_content.scss */
 #content p code,
 #content li code {
   background-color: #dddddd;
@@ -203,12 +211,12 @@ header h2.tagline {
   -webkit-box-shadow: inset 0 0 3px #939393;
   box-shadow: inset 0 0 3px #939393;
 }
-/* line 63, ../scss/components/_content.scss */
+/* line 70, ../scss/components/_content.scss */
 #content a {
   color: #267f9d;
   text-decoration: none;
 }
-/* line 68, ../scss/components/_content.scss */
+/* line 75, ../scss/components/_content.scss */
 #content pre {
   -moz-box-shadow: inset 0 0 3px #939393;
   -webkit-box-shadow: inset 0 0 3px #939393;
@@ -218,7 +226,7 @@ header h2.tagline {
   color: #00698c;
   padding: 15px;
 }
-/* line 76, ../scss/components/_content.scss */
+/* line 83, ../scss/components/_content.scss */
 #content #parameters + ul > li > ul {
   -moz-box-shadow: inset 0 0 3px #939393;
   -webkit-box-shadow: inset 0 0 3px #939393;
@@ -228,17 +236,17 @@ header h2.tagline {
   margin-bottom: 32px;
   margin-top: 32px;
 }
-/* line 83, ../scss/components/_content.scss */
+/* line 90, ../scss/components/_content.scss */
 #content #parameters + ul > li > ul > li > ul {
   margin: 32px 0px 32px 0px;
 }
-/* line 85, ../scss/components/_content.scss */
+/* line 92, ../scss/components/_content.scss */
 #content #parameters + ul > li > ul > li > ul > li {
   margin: 16px 0px 32px 0px;
   color: #323232;
   font-size: 16px;
 }
-/* line 89, ../scss/components/_content.scss */
+/* line 96, ../scss/components/_content.scss */
 #content #parameters + ul > li > ul > li > ul > li > ul {
   padding: 15px;
   margin-top: 15px;
@@ -246,16 +254,16 @@ header h2.tagline {
   color: #323232;
   font-size: 14px;
 }
-/* line 95, ../scss/components/_content.scss */
+/* line 102, ../scss/components/_content.scss */
 #content #parameters + ul > li > ul > li > ul > li > ul > li {
   color: #7f7f7f;
   margin-top: 10px;
 }
-/* line 98, ../scss/components/_content.scss */
+/* line 105, ../scss/components/_content.scss */
 #content #parameters + ul > li > ul > li > ul > li > ul > li:first-child {
   margin-top: 0px;
 }
-/* line 101, ../scss/components/_content.scss */
+/* line 108, ../scss/components/_content.scss */
 #content #parameters + ul > li > ul > li > ul > li > ul > li > ul {
   padding-left: 15px;
   color: #323232;
@@ -296,12 +304,8 @@ body {
   background: #dddddd;
   font-family: 'Roboto', sans-serif;
 }
-/* line 33, ../scss/main.scss */
-body ul {
-  list-style: none;
-}
 
-/* line 39, ../scss/main.scss */
+/* line 34, ../scss/main.scss */
 #body {
   overflow: hidden;
 }

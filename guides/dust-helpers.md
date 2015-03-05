@@ -100,8 +100,8 @@ When a true logic helper condition is found in the `@select`, Dust executes the 
   {@select key=testEnabled}
     {@any}test-enabled {/any}
     {@none}test-disabled {/none}
-    {@eq="puppies"}test-puppies{/eq}
-    {@eq="bunnies"}test-bunnies{/eq}
+    {@eq value="puppies"}test-puppies{/eq}
+    {@eq value="bunnies"}test-bunnies{/eq}
   {/select}
 "&gt;
 </dust-demo-template>

@@ -13,9 +13,9 @@ Filters are used to transform a variable before outputting it. You can attach on
 Filters are attached to a Dust reference by adding a pipe `|` and the filter name after the reference name. You can chain filters by adding multiple pipes. The filters will be run from left-to-right.
 
 <dust-demo templatename="filters">
-<dust-demo-template showtemplatename="true">{title}
-{title|s}
-{title|j}</dust-demo-template>
+<dust-demo-template showtemplatename="true">{title}{~n}
+{title|s}{~n}
+{title|js|s}</dust-demo-template>
 <dust-demo-json>{
   "title": '"All is &lt;Fair&gt; in Love & War"'
 }</dust-demo-json>
@@ -23,13 +23,13 @@ Filters are attached to a Dust reference by adding a pipe `|` and the filter nam
 
 ## Built-In Filters
 
-* `h`: HTML-encode
-* `s`: turn off automatic HTML encoding
-* `j`: Javascript string encode
-* `u`: encodeURI
-* `uc`: encodeURIComponent
-* `js`: JSON.stringify
-* `jp`: JSON.parse
+* `h` &ndash; HTML-encode
+* `s` &ndash; turn off automatic HTML encoding
+* `j` &ndash; Javascript string encode
+* `u` &ndash; encodeURI
+* `uc` &ndash; encodeURIComponent
+* `js` &ndash; JSON.stringify
+* `jp` &ndash; JSON.parse
 
 Dust applies the `h` filter to all references by default, ensuring that variables are HTML-escaped. You can undo this autoescaping by appending the `s` filter.
 

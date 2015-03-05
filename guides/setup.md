@@ -49,7 +49,7 @@ Include `dust-core.min.js` or `dust-full.min.js` on your page. If you will be co
 
 ## AMD
 
-As of Dust 2.5.2, you can load Dust using an AMD-compatible loader such as require.js.
+As of Dust 2.6.0, you can load Dust using an AMD-compatible loader such as require.js.
 
 To maintain backwards compatibility, you must enable a config flag to tell Dust to register itself as a named AMD module ([in the same way jQuery works](http://requirejs.org/docs/jquery.html)).
 
@@ -67,7 +67,7 @@ After you've done this, you can load `dust-core.js` or `dust-full.js` as a modul
 
 ### Helpers
 
-If you are using `dustjs-helpers` 1.5.1 or newer, the helpers also register themselves as an anonymous AMD module. It seems to work best if you require the helpers after Dust has already been loaded.
+If you are using `dustjs-helpers` 1.6.0 or newer, the helpers also register themselves as an anonymous AMD module. It seems to work best if you require the helpers after Dust has already been loaded.
 
 ```js
 define.amd.dust = true;
