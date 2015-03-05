@@ -1,8 +1,8 @@
-<polymer-element name="dust-demo-header" attributes="type text templateName showTemplateName">
+<polymer-element name="dust-demo-header" attributes="type templateName showTemplateName">
   <template>
     <div class="header">
       <h3 id="name-header">{{templateName}}</h3>
-      <h3 id="{{type}}-header" on-click="{{collapseContainer}}">{{text}}</h3>
+      <h3 id="{{type}}-header" on-click="{{collapseContainer}}"><content></content></h3>
     </div>
 
     <style>

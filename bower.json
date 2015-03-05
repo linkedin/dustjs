@@ -16,7 +16,7 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#~0.5.2",
-    "dust-demo": "~0.1.11",
+    "dust-demo": "~0.1.12",
     "webcomponentsjs": "~0.5.2"
   }
 }

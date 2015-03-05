@@ -1,41 +1,22 @@
-<polymer-element name="dust-demo-json">
-  <template id="dust-json-template">
-    <div id="data-container" class="container">
-      <dust-demo-header type="data" text="Data"></dust-demo-header>
-      <textarea id="workspace"></textarea>
-    </div>
+<link rel="import" href="dust-demo-workspace.html">
 
-    <style>
-      #workspace {
-        display: block;
-        padding: 15px 20px;
-        margin-bottom: 10px;
-        min-height: 60px;
-        border: none;
-        background-color: #222;
-        color: #72CC72;
-        font-family: Consolas, Courier, monospace;
-        font-size: 15px;
-        width: calc(100% - 40px);
-        resize: vertical;
-      }
-    </style>
+<polymer-element name="dust-demo-json" extends="dust-demo-workspace">
+  <template id="dust-json-template">
+    <shadow></shadow>
   </template>
 
   <script>
     Polymer({
-      ready: function() {
-        // This element was selected from dust-demo, so get the selected content and
-        // insert it into into the textarea
-        this.$.workspace.value = this.textContent.trim();
-        this.setupEventListeners();
+      handleInput: function() {
+        this.super();
+        this.innerHTML = this.$.workspace.value.replace(/\n/g, '');
       },
-      setupEventListeners: function() {
-        this.$.workspace.addEventListener('input', function(evt) {
-          var newEvt = new Event('dust-update');
-          this.innerHTML = this.$.workspace.value.replace(/\n/g, '');
-          this.dispatchEvent(newEvt);
-        }.bind(this));
+      insertHeader: function() {
+        var header = document.createElement('dust-demo-header');
+        header.setAttribute('id', 'header');
+        header.setAttribute('type', 'data');
+        header.appendChild(document.createTextNode('Data'));
+        this.$['container'].insertBefore(header, this.$.workspace);
       }
     });
   </script>

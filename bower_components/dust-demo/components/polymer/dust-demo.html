@@ -227,7 +227,7 @@
         this.checkAnswer();
       },
       checkAnswer: function() {
-        if (this.$.output.innerHTML === this.answer) {
+        if (this.$.output.innerHTML.trim() === this.answer.trim()) {
           this.success();
         } else {
           this.fail();
