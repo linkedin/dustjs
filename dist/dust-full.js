@@ -1,8 +1,10 @@
-/*! Dust - Asynchronous Templating - v2.5.1
+/*! Dust - Asynchronous Templating - v2.6.0
 * http://linkedin.github.io/dustjs/
-* Copyright (c) 2014 Aleksander Williams; Released under the MIT License */
+* Copyright (c) 2015 Aleksander Williams; Released under the MIT License */
 (function(root) {
-  var dust = {},
+  var dust = {
+        "version": "2.6.0"
+      },
       NONE = 'NONE',
       ERROR = 'ERROR',
       WARN = 'WARN',
@@ -18,6 +20,7 @@
 
   dust.config = {
     whitespace: false,
+    amd: false
   };
 
   // Directive aliases to minify code
@@ -73,7 +76,7 @@
         dust.logQueue = [];
       }
       dust.logQueue.push({message: message, type: type});
-      logger.log('[DUST ' + type + ']: ' + message);
+      logger.log('[DUST:' + type + ']', message);
     }
   };
 
@@ -245,14 +248,7 @@
     j: function(value) { return dust.escapeJs(value); },
     u: encodeURI,
     uc: encodeURIComponent,
-    js: function(value) {
-      if (!JSON) {
-        dust.log('JSON is undefined.  JSON stringify has not been used on [' + value + ']', WARN);
-        return value;
-      } else {
-        return JSON.stringify(value);
-      }
-    },
+    js: function(value) { return dust.escapeJSON(value); },
     jp: function(value) {
       if (!JSON) {dust.log('JSON is undefined.  JSON parse has not been used on [' + value + ']', WARN);
         return value;
@@ -851,7 +847,10 @@
       SQUOT  = /\'/g;
 
   dust.escapeHtml = function(s) {
-    if (typeof s === 'string') {
+    if (typeof s === "string" || (s && typeof s.toString === "function")) {
+      if (typeof s !== "string") {
+        s = s.toString();
+      }
       if (!HCHARS.test(s)) {
         return s;
       }
@@ -888,8 +887,23 @@
     return s;
   };
 
+  dust.escapeJSON = function(o) {
+    if (!JSON) {
+      dust.log('JSON is undefined.  JSON stringify has not been used on [' + o + ']', WARN);
+      return o;
+    } else {
+      return JSON.stringify(o)
+        .replace(LS, '\\u2028')
+        .replace(PS, '\\u2029')
+        .replace(LT, '\\u003c');
+    }
+  };
 
-  if (typeof exports === 'object') {
+  if (typeof define === "function" && define.amd && define.amd.dust === true) {
+    define("dust.core", function() {
+      return dust;
+    });
+  } else if (typeof exports === 'object') {
     module.exports = dust;
   } else {
     root.dust = dust;
@@ -898,7 +912,11 @@
 })((function(){return this;})());
 
 (function(root, factory) {
-  if (typeof exports === 'object') {
+  if (typeof define === "function" && define.amd && define.amd.dust === true) {
+    define("dust.parse", ["dust.core"], function(dust) {
+      return factory(dust).parse;
+    });
+  } else if (typeof exports === 'object') {
     // in Node, require this file if we want to use the parser as a standalone module
     module.exports = factory(require('./dust'));
     // @see server file for parser methods exposed in node
@@ -3558,11 +3576,13 @@
 
   return parser;
 }));
-  
-
 
 (function(root, factory) {
-  if (typeof exports === 'object') {
+  if (typeof define === "function" && define.amd && define.amd.dust === true) {
+    define("dust.compile", ["dust.core", "dust.parse"], function(dust, parse) {
+      return factory(parse, dust).compile;
+    });
+  } else if (typeof exports === 'object') {
     // in Node, require this file if we want to use the compiler as a standalone module
     module.exports = factory(require('./parser').parse, require('./dust'));
   } else {
@@ -3703,7 +3723,14 @@
   function nullify(){}
 
   function format(context, node) {
-    return dust.config.whitespace ? node : null;
+    if(dust.config.whitespace) {
+      // Format nodes are in the form ['format', eol, whitespace, line, col],
+      // which is unlike other nodes in that there are two pieces of content
+      // Join eol and whitespace together to normalize the node format
+      node.splice(1, 2, node.slice(1, -2).join(''));
+      return node;
+    }
+    return null;
   }
 
   function compile(ast, name) {
@@ -3713,16 +3740,21 @@
       blocks: {},
       index: 0,
       auto: 'h'
-    };
-
-    return '(function(){dust.register(' +
-        (name ? '"' + name + '"' : 'null') + ',' +
+    },
+    escapedName = dust.escapeJs(name),
+    body_0 = 'function(dust){dust.register(' +
+        (name ? '"' + escapedName + '"' : 'null') + ',' +
         compiler.compileNode(context, ast) +
         ');' +
         compileBlocks(context) +
         compileBodies(context) +
-        'return body_0;' +
-        '})();';
+        'return body_0;}';
+
+    if(dust.config.amd) {
+      return 'define("' + escapedName + '",["dust.core"],' + body_0 + ');';
+    } else {
+      return '(' + body_0 + ')(dust);';
+    }
   }
 
   function compileBlocks(context) {
@@ -3982,3 +4014,14 @@
   return compiler;
 
 }));
+
+if (typeof define === "function" && define.amd && define.amd.dust === true) {
+    define(["require", "dust.core", "dust.compile"], function(require, dust) {
+        dust.onLoad = function(name, cb) {
+            require([name], function() {
+                cb();
+            });
+        };
+        return dust;
+    });
+}

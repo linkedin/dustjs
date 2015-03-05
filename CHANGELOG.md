@@ -1,5 +1,17 @@
 ## Change Log
 
+### v2.6.0 (2015/03/05 18:00 +00:00)
+- [#545](https://github.com/linkedin/dustjs/pull/545) New dust command-line compiler (@sethkinast)
+- [#536](https://github.com/linkedin/dustjs/pull/536) Add AMD (require.js) compatibility (@sethkinast)
+- [#543](https://github.com/linkedin/dustjs/pull/543) Replaced util.print/util.puts with console.log (@hunterchristian)
+- [#541](https://github.com/linkedin/dustjs/pull/541) Escape template names (@aredridel)
+- [#540](https://github.com/linkedin/dustjs/pull/540) Escape values when using json filter (@jimmyhchan)
+- [#531](https://github.com/linkedin/dustjs/pull/531) Fix whitespace in partials not being preserved (@BradEstey)
+- [#534](https://github.com/linkedin/dustjs/pull/534) Stringify things before calling escapeHtml on them (@sethkinast)
+- [#533](https://github.com/linkedin/dustjs/pull/533) Add dust.version (@sethkinast)
+- [#529](https://github.com/linkedin/dustjs/pull/529) Fix IE7 by removing trailing comma (@jrrbru)
+- [#526](https://github.com/linkedin/dustjs/pull/526) Don't stringify dust.log messages (@sethkinast)
+
 ### v2.5.1 (2014/11/20 00:58 +00:00)
 - [#522](https://github.com/linkedin/dustjs/pull/522) Fix the use of a multi-level object key (e.g. foo.bar) as the key for an index lookup inside non-self-closing tags. (@sethkinast)
 
