@@ -1275,6 +1275,20 @@ var coreTests = [
         message: "Block handlers syntax should support decimal number parameters"
       },
       {
+        name:     "inline params as negative integer",
+        source:   "{#foo bar=-1}{bar}{/foo}",
+        context:  {"foo": true},
+        expected: "-1",
+        message:  "should print negative integer"
+      },
+      {
+        name:     "inline params as negative float",
+        source:   "{#foo bar=-1.1}{bar}{/foo}",
+        context:  {"foo": true},
+        expected: "-1.1",
+        message:  "should print negative float"
+      },
+      {
         name:     "inline params with dashes",
         source:   "{#helper data-foo=\"dashes\" /}",
         context:  { helper: function(chunk, context, bodies, params) { return chunk.write(params['data-foo']); } },
