@@ -305,6 +305,20 @@ var coreTests = [
         message: "should test for numeric zero in the context, prints the numeric zero"
       },
       {
+        name:     "negative integers are supported",
+        source:   "{#foo bar=-1}{bar}{/foo}",
+        context:  {"foo": true},
+        expected: "-1",
+        message:  "should print negative integer"
+      },
+      {
+        name:     "negative floats are supported",
+        source:   "{#foo bar=-1.1}{bar}{/foo}",
+        context:  {"foo": true},
+        expected: "-1.1",
+        message:  "should print negative float"
+      },
+      {
         name:     "empty string context is treated as empty",
         source:   "{emptyString}",
         context:  { "emptyString": "" },

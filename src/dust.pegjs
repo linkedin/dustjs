@@ -118,10 +118,16 @@ number "number"
   = n:(float / integer) { return ['literal', n]; }
 
 float "float"
-  = l:integer "." r:integer+ { return parseFloat(l + "." + r.join('')); }
+  = l:integer "." r:unsigned_integer { return parseFloat(l + "." + r); }
+
+unsigned_integer "unsigned_integer"
+  = digits:[0-9]+ { return parseInt(digits.join(""), 10); }
+
+signed_integer "signed_integer"
+  = sign:'-' n:unsigned_integer { return n*-1; }
 
 integer "integer"
-  = digits:[0-9]+ { return parseInt(digits.join(""), 10); }
+  = signed_integer / unsigned_integer
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
   path is defined as matching a key plus one or more characters of key preceded by a dot
