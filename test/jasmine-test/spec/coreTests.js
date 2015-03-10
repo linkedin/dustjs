@@ -1776,7 +1776,39 @@ var coreTests = [
   {
     name: "whitespace test",
     tests: [
-      {
+	  {
+		name: "whitespace on: whitespace-only template",
+		source: "\n     ",
+		context: {},
+		expected: "\n     ",
+		message: "whitespace on: whitespace-only template is preserved",
+		config: { whitespace: true }
+	  },
+	  {
+		name: "whitespace off: whitespace-only template",
+		source: "\n     ",
+		context: {},
+		expected: "",
+		message: "whitespace off: whitespace-only template is removed",
+		config: { whitespace: false }
+	  },
+	  {
+		name: "whitespace on: whitespace-only block",
+		source: "{<foo}\n{/foo}{+foo/}",
+		context: {},
+		expected: "\n",
+		message: "whitespace on: whitespace-only block is preserved",
+		config: { whitespace: true }
+	  },
+	  {
+		name: "whitespace off: whitespace-only block",
+		source: "{<foo}\n{/foo}{+foo/}",
+		context: {},
+		expected: "",
+		message: "whitespace off: whitespace-only block is removed",
+		config: { whitespace: false }
+	  },
+	  {
         name: "whitespace off: multiline text block runs together",
         source: ["<p>",
                  "    foo bar baz",
