@@ -3,6 +3,19 @@ title: DustJS by LinkedIn
 layout: default
 ---
 
+<dust-demo templateName="welcome">
+<dust-demo-template showTemplateName="true">Dust does {#features}{name}{@sep}, {/sep}{/features}!</dust-demo-template>
+<dust-demo-json>{
+  features: [
+    {name: "async"},
+    {name: "helpers"},
+    {name: "filters"},
+    {name: "a little bit of logic"},
+    {name: "and more"}
+  ]
+}</dust-demo-json>
+</dust-demo>
+
 # What is Dust?
 
 Dust is a Javascript templating engine. It inherits its look from the [ctemplate](https://code.google.com/p/ctemplate/) family of languages, and is designed to run asynchronously on both the server and the browser.
