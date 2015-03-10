@@ -1056,11 +1056,18 @@ var coreTests = [
     tests : [
       {
         name:     "partials",
-        source:   '{>partial/} {>"hello_world"/} {>"{ref}"/}',
+        source:   '{>partial foo=0 /} {>"hello_world" foo=1 /} {>"{ref}" foo=2 /}',
         context:  { name: "Jim", count: 42, ref: "hello_world" },
         expected: "Hello Jim! You have 42 new messages. Hello World! Hello World!",
         message:  "should test partials"
       },
+	  {
+		name:	  "partial with async ref as name",
+		source:   '{>"{ref}" /}',
+		context:  { ref: function(chunk, context) { return chunk.map(function(chunk) { setTimeout(function() { chunk.end('hello_world'); }) }); }},
+		expected: "Hello World!",
+		message:  "should test partial with an asynchronously-resolved template name"
+	  },
       {
         name:     "partial with context",
         source:   "{>partial:.profile/}",

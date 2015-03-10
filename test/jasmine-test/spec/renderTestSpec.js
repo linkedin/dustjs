@@ -28,7 +28,9 @@ function render(test) {
           err = err.message || err;
           expect(err).toContain(test.error);
         } else {
-          expect(err).toBeNull();
+          if(err) {
+            expect(err.message).toBeNull();
+          }
         }
         if (test.log) {
           for(var i=0; i<log.length; i++) {
