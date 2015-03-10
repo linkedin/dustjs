@@ -3,6 +3,7 @@ describe ('Test the basic functionality of dust', function() {
     for (var i = 0; i < coreTests[index].tests.length; i++) {
       var test = coreTests[index].tests[i];
       it ('RENDER: ' + test.message, render(test));
+      it ('RENDERSYNC: ' + test.message, render(test));
       it ('STREAM: ' + test.message, stream(test));
       it ('PIPE: ' + test.message, pipe(test));
     }
@@ -43,6 +44,40 @@ function render(test) {
           expect(test.expected).toEqual(output);
         }
       });
+    }
+    catch (error) {
+      expect(test.error || {} ).toEqual(error.message);
+    }
+  };
+}
+
+function renderSync(test) {
+  var messageInLog = false;
+  return function() {
+    var context, output;
+    try {
+      dust.isDebug = !!(test.error || test.log);
+      dust.debugLevel = 'DEBUG';
+      dust.loadSource(dust.compile(test.source, test.name, test.strip));
+      context = test.context;
+      if (test.base) {
+        context = dust.makeBase(test.base).push(context);
+      }
+      output = dust.render(test.name, context);
+
+      var log = dust.logQueue;
+      if (test.log) {
+        for(var i=0; i<log.length; i++) {
+          if(log[i].message === test.log) {
+            messageInLog = true;
+            break;
+          }
+        }
+        dust.logQueue = [];
+        expect(messageInLog).toEqual(true);
+      } else {
+        expect(test.expected).toEqual(output);
+      }
     }
     catch (error) {
       expect(test.error || {} ).toEqual(error.message);
