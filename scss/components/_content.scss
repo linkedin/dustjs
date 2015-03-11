@@ -6,7 +6,7 @@
   padding: $content-padding;
   margin-top: $content-margin-top;
 
-  h1, h2, p, pre, ul {
+  > h1, > h2, > p, > pre, > ul {
     margin-bottom: $content-h1-margin-bottom;
   }
 
@@ -18,31 +18,31 @@
     margin-bottom: $content-h1-margin-bottom + 15px;
   }
 
-  h1 {
+  > h1 {
     @include styleguide(xlarge headline);
     font-size: $headline-font-size;
   }
 
-  h2 {
+  > h2 {
     @include styleguide(large headline);
     font-size: $subheadline-font-size;
   }
 
-  h3 {
+  > h3 {
     font-size: $subheadline-font-size - 2;
     margin-bottom: $content-h1-margin-bottom;
     margin-top: $content-h1-margin-bottom/2;
     color: $brand-light-graphite;
   }
 
-  h4 {
+  > h4 {
     font-size: $subheadline-font-size - 4;
     margin-bottom: $content-h1-margin-bottom - 8;
     margin-top: $content-h1-margin-bottom/2;
     color: $brand-light-graphite;
   }
 
-  h1, h2 {
+  > h1, > h2 {
     @include sub-section-headline();
     color: $brand-graphite;
     padding-bottom: $content-sub-section-padding;
@@ -72,7 +72,7 @@
     text-decoration: none;
   }
 
-  pre {
+  > pre {
     @include interior-shadow($light-shadow, $shadow-small-size);
     overflow-x: auto;
     background: $brand-neutral;

@@ -1,8 +1,8 @@
 <polymer-element name="dust-demo-header" attributes="type templateName showTemplateName">
   <template>
-    <div class="header">
+    <div class="header" on-click="{{collapseContainer}}">
       <h3 id="name-header">{{templateName}}</h3>
-      <h3 id="{{type}}-header" on-click="{{collapseContainer}}"><content></content></h3>
+      <h3 id="{{type}}-header"><content></content></h3>
     </div>
 
     <style>
@@ -55,6 +55,7 @@
         background-color: #CFB757;
         color: #222;
       }
+
       #name-header::before {
         content: '';
         position: relative;
@@ -75,6 +76,14 @@
       },
       showTemplateNameChanged: function() {
         this.$['name-header'].classList.toggle('show', this.showTemplateName === 'true');
+      },
+      collapseContainer: function(evt) {
+        var parent = this.parentElement;
+        if (parent.classList.contains('collapsed')) {
+          parent.classList.remove('collapsed');
+        } else {
+          parent.classList.add('collapsed');
+        }
       }
     });
   </script>

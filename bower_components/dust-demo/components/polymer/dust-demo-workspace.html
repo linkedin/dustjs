@@ -1,14 +1,17 @@
 <polymer-element name="dust-demo-workspace">
   <template id="dust-demo-workspace-template">
     <div id="container" class="container">
-      <textarea id="workspace"></textarea>
+      <textarea id="workspace" class="body"></textarea>
     </div>
 
     <style>
-      #workspace {
+      .container {
+        margin-bottom: 10px;
+      }
+
+      .body {
         display: block;
         padding: 15px 20px;
-        margin-bottom: 10px;
         min-height: 60px;
         border: none;
         background-color: #222;
@@ -17,6 +20,10 @@
         font-size: 15px;
         width: calc(100% - 40px);
         transition: height 100ms ease;
+      }
+
+      .collapsed .body {
+        display: none;
       }
     </style>
   </template>
@@ -35,7 +42,7 @@
         this.$.workspace.addEventListener('input', this.handleInput.bind(this));
       },
       handleInput: function() {
-        var newEvt = new Event('dust-update');
+        var newEvt = new Event('dust-update', {bubbles: true, cancelable: false});
         this.innerText = this.$.workspace.value;
         this.dispatchEvent(newEvt);
         this.resizeTextarea();

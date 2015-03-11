@@ -1,21 +1,15 @@
-<polymer-element name="dust-tutorial-answer">
+<link rel="import" href="dust-demo-output.html">
+
+<polymer-element name="dust-tutorial-answer" extends="dust-demo-output">
   <template whitespace="preserve">
-    <content></content>
-    <style>
-      :host {
-        display: block;
-        padding: 15px 20px;
-        margin-bottom: 10px;
-        min-height: 60px;
-        border: none;
-        background-color: #222;
-        color: #72CC72;
-        font-family: Consolas, Courier, monospace;
-        font-size: 15px;
-      }
-    </style>
+    <shadow></shadow>
   </template>
   <script>
-    Polymer({});
+    Polymer({
+      ready: function() {
+        this.super();
+        this.setAttribute('headerName', 'Expected output');
+      }
+    });
   </script>
 </polymer-element>

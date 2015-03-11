@@ -5,6 +5,7 @@
 <link rel="import" href="dust-demo-header.html">
 <link rel="import" href="dust-demo-template.html">
 <link rel="import" href="dust-demo-json.html">
+<link rel="import" href="dust-demo-output.html">
 <link rel="import" href="dust-tutorial-answer.html">
 
 <!-- HTML -->
@@ -12,14 +13,8 @@
   <template>
     <content id="template" select="dust-demo-template"></content>
     <content select="dust-demo-json"></content>
-    <div id="compiled-container" class="container">
-      <dust-demo-header type="compiled" text="Compiled Dust"></dust-demo-header>
-      <pre id="compiled"></pre>
-    </div>
-    <div id="output-container" class="container">
-      <dust-demo-header type="output" text="Output"></dust-demo-header>
-      <pre id="output"></pre>
-    </div>
+    <dust-demo-output id="compiled-container" headerName="Compiled Dust"></dust-demo-output>
+    <dust-demo-output id="output-container" headerName="Output"></dust-demo-output>
     <button id="devToggle" on-click="{{toggleDev}}">Dev Mode</button>
 
     <!-- component styling -->
@@ -30,10 +25,13 @@
         padding: 15px;
       }
 
-      pre {
+      .container {
+        margin-bottom: 10px;
+      }
+
+      .body {
         padding: 15px 20px;
         margin: 0;
-        margin-bottom: 10px;
         min-height: 60px;
         border: none;
         background-color: #222;
@@ -52,6 +50,10 @@
       }
 
       :host([hideOutput]) #output-container {
+        display: none;
+      }
+
+      :host /deep/ .collapsed .body {
         display: none;
       }
 
@@ -80,11 +82,11 @@
   <!-- Interaction -->
   <script>
     Polymer({
-      attached: function() {
+      ready: function() {
         this.setupListeners();
         this.onMutation(this, function() {
-          this.setupEditorListeners();
           this.renderDust();
+          this.setupEditorListeners();
         }.bind(this));
         this.templateName = this.templateName || 'default' + (new Date()).getTime();
       },
@@ -93,17 +95,15 @@
       },
       setupEditorListeners: function() {
         if (!this.editorListenersInitialized) {
-          var editors = this.querySelectorAll('dust-demo-template, dust-demo-json');
-          var editor;
-
-          for (var i=0; (editor = editors[i]); i++) {
-            editor.addEventListener('dust-update', this.handleEditorUpdate.bind(this));
-          }
+          this.addEventListener('dust-update', this.handleEditorUpdate.bind(this));
           this.editorListenersInitialized = true;
         }
       },
       handleEditorUpdate: function() {
-        this.renderDust();
+        // Make sure the template and data are ready before rendering.
+        setTimeout(function() {
+          this.renderDust();
+        }.bind(this), 0);
       },
       renderDust: function() {
         var templateEditorEl, jsonEl,
@@ -134,14 +134,15 @@
           data = {};
         }
 
-        compiledBox = this.$['compiled'];
-        outputBox = this.$.output;
+        compiledBox = this.$['compiled-container'];
+        outputBox = this.$['output-container'];
         compiledDust = dust.compile(template, this.templateName);
         dust.loadSource(compiledDust);
         dust.render(this.templateName, data, function(err, out) {
           if (err) {
             console.log('render error');
           }
+
           compiledBox.innerHTML = compiledDust;
           outputBox.innerHTML = dust.escapeHtml(out);
         })
@@ -157,14 +158,6 @@
         } else {
           this.setAttribute('dev', '');
         }
-      },
-      collapseContainer: function(evt) {
-        var parent = evt.target.parentElement;
-        if (parent.classList.contains('collapsed')) {
-          parent.classList.remove('collapsed');
-        } else {
-          parent.classList.add('collapsed');
-        }
       }
     });
   </script>
@@ -173,10 +166,7 @@
 <polymer-element name="dust-tutorial" extends="dust-demo">
   <template>
     <shadow></shadow>
-    <div id="expected-output-container" class="container">
-      <dust-demo-header type="expected-output" text="Expected Output"></dust-demo-header>
-      <content select="dust-tutorial-answer"></content>
-    </div>
+    <content select="dust-tutorial-answer"></content>
     <div id="congrats">You're right!</div>
     <style>
       :host {
@@ -224,10 +214,14 @@
       },
       handleEditorUpdate: function() {
         this.super();
-        this.checkAnswer();
+
+        // Make sure the output is updated before checking the answer
+        setTimeout(function() {
+          this.checkAnswer();
+        }.bind(this), 0);
       },
       checkAnswer: function() {
-        if (this.$.output.innerHTML.trim() === this.answer.trim()) {
+        if (this.$['output-container'].innerHTML.trim() === this.answer.trim()) {
           this.success();
         } else {
           this.fail();
