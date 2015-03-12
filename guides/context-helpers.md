@@ -1,6 +1,6 @@
 ---
 layout: guides
-title: Context Helpers
+title: Dust.js | Context Helpers
 permalink: /guides/context-helpers/
 ---
 
