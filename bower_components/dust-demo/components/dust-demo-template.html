@@ -1,0 +1,49 @@
+<template id="dust-demo-tl-template">
+  <textarea id="workspace"></textarea>
+  <style>
+    #workspace {
+      display: block;
+      padding: 10px;
+      margin-bottom: 10px;
+      min-height: 120px;
+      background-color: #222;
+      color: #72CC72;
+      font-family: Consolas, Courier, monospace;
+      font-size: 15px;
+      width: calc(100% - 23px);
+      resize: vertical;
+    }
+  </style>
+</template>
+<script>
+  (function(dom) {
+    var DustDemoTemplateController = function(context) {
+      this.context = context;
+
+      this.shadow = this.context.createShadowRoot();
+
+      // stamp out our template in the shadow dom
+      var template = dom.querySelector("#dust-demo-tl-template").content.cloneNode(true);
+      this.shadow.appendChild(template);
+      this.textarea = this.shadow.querySelector('#workspace');
+      this.textarea.innerHTML = this.context.innerHTML;
+
+      this.setupListeners();
+    }
+
+    DustDemoTemplateController.prototype.setupListeners = function() {
+      this.textarea.addEventListener('input', function(evt) {
+        var newEvt = new Event('dust-update');
+        this.context.innerText = this.textarea.value;
+        this.context.dispatchEvent(newEvt);
+      }.bind(this));
+    }
+
+
+    var DustDemoTemplate = Object.create(HTMLTextAreaElement.prototype);
+    DustDemoTemplate.createdCallback = function() {
+      this.controller = new DustDemoTemplateController(this);
+    };
+    document.registerElement('dust-demo-template', {prototype: DustDemoTemplate});
+  })((document._currentScript || document.currentScript).ownerDocument);
+</script>

@@ -1,0 +1,9 @@
+hr {
+  margin-top: $content-padding;
+}
+
+footer {
+  @include grid($content-columns, $offset: grid-offset($nav-columns + 1));
+  @include Dosis-light();
+  padding: $content-padding/2 $content-padding $content-padding $content-padding;
+}

@@ -1,2 +1,7 @@
 node_modules
 tmp
+_site/
+*.sass-cache/
+.rbenv-version
+.rvmrc
+*.lock

@@ -1,0 +1,45 @@
+<polymer-element name="dust-demo-output" attributes="headerName">
+  <template id="dust-demo-output-template">
+    <div id="container" class="container">
+      <dust-demo-header id="header">{{headerName}}</dust-demo-header>
+      <pre id="workspace" class="body"><content></content></pre>
+    </div>
+
+    <style>
+      .container {
+        margin-bottom: 10px;
+      }
+
+      #workspace {
+        display: block;
+        margin: 0;
+        padding: 15px 20px;
+        min-height: 60px;
+        border: none;
+        background-color: #222;
+        color: #72CC72;
+        font-family: Consolas, Courier, monospace;
+        font-size: 15px;
+        width: calc(100% - 40px);
+        transition: height 100ms ease;
+        white-space: pre-wrap;
+      }
+
+      .collapsed .body {
+        display: none;
+      }
+    </style>
+  </template>
+
+  <script>
+    Polymer({
+      insertHeader: function() {
+        var header = document.createElement('dust-demo-header');
+        header.setAttribute('id', 'header');
+        header.setAttribute('type', 'template');
+        header.appendChild(document.createTextNode(this.getAttribute('name')));
+        this.$['container'].insertBefore(header, this.$.workspace);
+      }
+    });
+  </script>
+</polymer-element>

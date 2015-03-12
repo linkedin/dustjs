@@ -1,0 +1,23 @@
+<link rel="import" href="dust-demo-workspace.html">
+
+<polymer-element name="dust-demo-json" extends="dust-demo-workspace">
+  <template id="dust-json-template">
+    <shadow></shadow>
+  </template>
+
+  <script>
+    Polymer({
+      handleInput: function() {
+        this.super();
+        this.innerHTML = this.$.workspace.value.replace(/\n/g, '');
+      },
+      insertHeader: function() {
+        var header = document.createElement('dust-demo-header');
+        header.setAttribute('id', 'header');
+        header.setAttribute('type', 'data');
+        header.appendChild(document.createTextNode('Data'));
+        this.$['container'].insertBefore(header, this.$.workspace);
+      }
+    });
+  </script>
+</polymer-element>

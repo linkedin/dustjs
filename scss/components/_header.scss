@@ -1,0 +1,24 @@
+header {
+  h1 {
+    @include Dosis-light();
+    font-size: 48px;
+    line-height: 50px;
+    margin: $header-margin-bottom 0px;
+    padding: 0;
+    a, a:visited {
+      color: #FFF;
+      text-decoration: none;
+    }
+  }
+
+  h2.tagline {
+    @include Dosis-light();
+    position: absolute;
+    width: $tagline-width;
+    top: $tagline-position-top;
+    left: $tagline-position-left;
+    font-size: $tagline-font-size;
+    line-height: $tagline-font-size * 1.5;
+    color: $brand-graphite;
+  }
+}

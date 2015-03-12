@@ -1,0 +1,247 @@
+<!-- Dependencies -->
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/dustjs-linkedin/2.6.0/dust-full.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/dustjs-helpers/1.6.0/dust-helpers.min.js"></script>
+<link rel="import" href="/bower_components/polymer/polymer.html">
+<link rel="import" href="dust-demo-header.html">
+<link rel="import" href="dust-demo-template.html">
+<link rel="import" href="dust-demo-json.html">
+<link rel="import" href="dust-demo-output.html">
+<link rel="import" href="dust-tutorial-answer.html">
+
+<!-- HTML -->
+<polymer-element name="dust-demo" attributes="templateName hideOutput">
+  <template>
+    <content id="template" select="dust-demo-template"></content>
+    <content select="dust-demo-json"></content>
+    <dust-demo-output id="compiled-container" headerName="Compiled Dust"></dust-demo-output>
+    <dust-demo-output id="output-container" headerName="Output"></dust-demo-output>
+    <button id="devToggle" on-click="{{toggleDev}}">Dev Mode</button>
+
+    <!-- component styling -->
+    <style>
+      :host {
+        position: relative;
+        display: block;
+        padding: 15px;
+      }
+
+      .container {
+        margin-bottom: 10px;
+      }
+
+      .body {
+        padding: 15px 20px;
+        margin: 0;
+        min-height: 60px;
+        border: none;
+        background-color: #222;
+        color: #72CC72;
+        font-family: Consolas, Courier, monospace;
+        font-size: 15px;
+        white-space: pre-wrap;
+      }
+
+      #compiled-container {
+        display: none;
+      }
+
+      :host([dev]) #compiled-container {
+        display: block;
+      }
+
+      :host([hideOutput]) #output-container {
+        display: none;
+      }
+
+      :host /deep/ .collapsed .body {
+        display: none;
+      }
+
+      #devToggle {
+        position: absolute;
+        top: 50px;
+        right: 20px;
+        opacity: 0;
+      }
+
+      #devToggle:focus,
+      :host(:hover) #devToggle:focus,
+      #devToggle:active,
+      :host(:hover) #devToggle:active,
+      #devToggle:hover,
+      :host(:hover) #devToggle:hover {
+        opacity: 1;
+      }
+
+      :host(:hover) #devToggle {
+        opacity: 0.7;
+      }
+    </style>
+  </template>
+
+  <!-- Interaction -->
+  <script>
+    Polymer({
+      ready: function() {
+        this.setupListeners();
+        this.onMutation(this, function() {
+          this.renderDust();
+          this.setupEditorListeners();
+        }.bind(this));
+        this.templateName = this.templateName || 'default' + (new Date()).getTime();
+      },
+      setupListeners: function() {
+        this.setupEditorListeners();
+      },
+      setupEditorListeners: function() {
+        if (!this.editorListenersInitialized) {
+          this.addEventListener('dust-update', this.handleEditorUpdate.bind(this));
+          this.editorListenersInitialized = true;
+        }
+      },
+      handleEditorUpdate: function() {
+        // Make sure the template and data are ready before rendering.
+        setTimeout(function() {
+          this.renderDust();
+        }.bind(this), 0);
+      },
+      renderDust: function() {
+        var templateEditorEl, jsonEl,
+            template, data,
+            compiledBox, outputBox,
+            compiledDust;
+
+        if (this.$.template.getDistributedNodes()) {
+          templateEditorEl = this.$.template.getDistributedNodes()[0].$.workspace;
+        }
+        if (!templateEditorEl) {
+          return;
+        }
+        // Unescape '>' and '<' to read Dust's include syntax correctly
+        var template = templateEditorEl.value.replace(/&gt;/g, '>').replace(/&lt;/g, '<');
+        if (!template) {
+          return;
+        }
+
+        // JSON container is optional
+        jsonEl = this.querySelector('dust-demo-json');
+        if (jsonEl) {
+          data = jsonEl.textContent;
+        }
+        if (data) {
+          eval('data = ' + data + ';');
+        } else {
+          data = {};
+        }
+
+        compiledBox = this.$['compiled-container'];
+        outputBox = this.$['output-container'];
+        compiledDust = dust.compile(template, this.templateName);
+        dust.loadSource(compiledDust);
+        dust.render(this.templateName, data, function(err, out) {
+          if (err) {
+            console.log('render error');
+          }
+
+          compiledBox.innerHTML = compiledDust;
+          outputBox.innerHTML = dust.escapeHtml(out);
+        })
+      },
+      templateNameChanged: function() {
+        var template = this.$.template.getDistributedNodes()[0];
+        template.setAttribute('templateName', this.templateName);
+        this.handleEditorUpdate();
+      },
+      toggleDev: function(evt) {
+        if (this.hasAttribute('dev')) {
+          this.removeAttribute('dev');
+        } else {
+          this.setAttribute('dev', '');
+        }
+      }
+    });
+  </script>
+</polymer-element>
+
+<polymer-element name="dust-tutorial" extends="dust-demo">
+  <template>
+    <shadow></shadow>
+    <content select="dust-tutorial-answer"></content>
+    <div id="congrats">You're right!</div>
+    <style>
+      :host {
+        transition: background-color 700ms ease;
+      }
+
+      :host([correct]),
+      :host([was-correct]) {
+        background-color: #6BA96B;
+      }
+
+      #congrats {
+        display: none;
+        opacity: 0;
+        position: absolute;
+        top: 175px;
+        left: 45px;
+        padding: 15px;
+        font-size: 36px;
+        background-color: #FFF;
+        font-family: "Arial", sans-serif;
+        transition: all 700ms ease;
+      }
+      :host([will-congrats]) #congrats {
+        display: block;
+      }
+      :host([correct]) #congrats {
+        opacity: 0.8;
+        left: 100px;
+      }
+
+      :host([was-correct]) #congrats {
+        opacity: 0;
+        left: 115px;
+      }
+    </style>
+  </template>
+  <script>
+    Polymer({
+      ready: function() {
+        this.super();
+        this.$.devToggle.remove();
+        this.answer = this.querySelector('dust-tutorial-answer').innerHTML;
+        this.checkAnswer();
+      },
+      handleEditorUpdate: function() {
+        this.super();
+
+        // Make sure the output is updated before checking the answer
+        setTimeout(function() {
+          this.checkAnswer();
+        }.bind(this), 0);
+      },
+      checkAnswer: function() {
+        if (this.$['output-container'].innerHTML.trim() === this.answer.trim()) {
+          this.success();
+        } else {
+          this.fail();
+        }
+      },
+      success: function() {
+        this.setAttribute('will-congrats', '');
+        setTimeout(function() {
+          this.setAttribute('correct', '');
+        }.bind(this), 0);
+        setTimeout(function() {
+          this.removeAttribute('correct');
+          this.setAttribute('was-correct', '');
+        }.bind(this), 1000);
+      },
+      fail: function() {
+        this.removeAttribute('correct');
+        this.removeAttribute('was-correct');
+      },
+      toggleDev: function() {/* Don't toggle dev for tutorials */ }
+    });
+  </script>
+</polymer-element>

@@ -1,0 +1,53 @@
+////////////
+//Columns //
+////////////
+$nav-columns: 6;
+$content-columns: 18;
+
+///////////
+//Widths //
+///////////
+$nav-width: 205px;
+
+////////////
+//Indents //
+////////////
+$nav-indent: 24px;
+$nav-sub-indent: 10px;
+$content-indent: 65px;
+
+////////////
+//Margins //
+////////////
+$header-margin-bottom: 34px;
+$content-margin-top: 122px;
+$content-h1-margin-bottom: 32px;
+$nested-api-list-margin-top: 15px;
+
+//////////////
+//Positions //
+//////////////
+$tagline-position-top: 36px;
+$tagline-position-left: 300px;
+
+/////////////
+//Paddings //
+/////////////
+$brand-button-padding: 20px;
+$content-padding: 34px;
+$pre-padding: 15px;
+$content-sub-section-padding: 15px;
+
+//////////
+//Sizes //
+//////////
+$shadow-small-size: 3px;
+$shadow-large-size: 5px;
+$tagline-width: 796px;
+
+//////////////
+//Functions //
+//////////////
+@function calc-totalColumns($nav, $content) {
+  @return ($nav + $content);
+}
