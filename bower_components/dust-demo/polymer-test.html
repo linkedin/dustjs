@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dust Demo... Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="import" href="components/polymer/dust-demo.html">
+  <script src="/bower_components/webcomponentsjs/webcomponents.js"></script>
+</head>
+<body>
+  <dust-demo templateName="ref">
+    <dust-demo-template showTemplateName="true">Hello {name}</dust-demo-template>
+<dust-demo-json>{
+  "name": "Steven"
+}</dust-demo-json>
+  </dust-demo>
+  <dust-tutorial templateName="ref">
+    <dust-demo-template showTemplateName="true">Hello {name}</dust-demo-template>
+<dust-demo-json>{
+  "name": "Steve"
+}</dust-demo-json>
+  <dust-tutorial-answer>Hello Steven</dust-tutorial-answer>
+  </dust-tutorial>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<link rel="import" href="dust-demo-workspace.html">
+
+<polymer-element name="dust-demo-template" extends="dust-demo-workspace" attributes="templateName showTemplateName">
+  <template id="dust-demo-tl-template">
+    <shadow></shadow>
+  </template>
+
+  <script>
+    Polymer({
+      insertHeader: function() {
+        var header = document.createElement('dust-demo-header');
+        header.setAttribute('id', 'header');
+        header.setAttribute('type', 'template');
+        header.appendChild(document.createTextNode('Dust Template'));
+        this.$['container'].insertBefore(header, this.$.workspace);
+      },
+      templateNameChanged: function() {
+        this.$.container.querySelector('#header').setAttribute('templateName', this.templateName);
+      },
+      showTemplateNameChanged: function() {
+        this.$.container.querySelector('#header').setAttribute('showTemplateName', this.showTemplateName);
+      }
+    });
+  </script>
+</polymer-element>

@@ -1,0 +1,15 @@
+<link rel="import" href="dust-demo-output.html">
+
+<polymer-element name="dust-tutorial-answer" extends="dust-demo-output">
+  <template whitespace="preserve">
+    <shadow></shadow>
+  </template>
+  <script>
+    Polymer({
+      ready: function() {
+        this.super();
+        this.setAttribute('headerName', 'Expected output');
+      }
+    });
+  </script>
+</polymer-element>

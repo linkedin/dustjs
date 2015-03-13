@@ -1,0 +1,8 @@
+relative_permalinks: false
+
+markdown: kramdown
+kramdown:
+    input: GFM
+    
+exclude:
+    - node_modules

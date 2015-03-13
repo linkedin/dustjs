@@ -1,0 +1,49 @@
+<template id="dust-json-template" whitespace="preserve">
+  <textarea id="workspace"></textarea>
+  <style>
+  #workspace {
+    display: block;
+    padding: 10px;
+    margin-bottom: 10px;
+    min-height: 120px;
+    background-color: #222;
+    color: #72CC72;
+    font-family: Consolas, Courier, monospace;
+    font-size: 15px;
+    width: calc(100% - 23px);
+    resize: vertical;
+  }
+  </style>
+</template>
+<script>
+  (function(dom) {
+    var DustDemoJSONController = function(context) {
+      this.context = context;
+
+      this.shadow = this.context.createShadowRoot();
+
+      // stamp out our template in the shadow dom
+      var template = dom.querySelector("#dust-json-template").content.cloneNode(true);
+      this.shadow.appendChild(template);
+      this.textarea = this.shadow.querySelector('#workspace');
+      this.textarea.innerHTML = this.context.innerHTML;
+
+      this.setupListeners();
+    }
+
+    DustDemoJSONController.prototype.setupListeners = function() {
+      this.textarea.addEventListener('input', function(evt) {
+        var newEvt = new Event('dust-update');
+        this.context.innerHTML = this.textarea.value.replace(/\n/g, '');
+        this.context.dispatchEvent(newEvt);
+      }.bind(this));
+    }
+
+
+    var DustDemoJSON = Object.create(HTMLTextAreaElement.prototype);
+    DustDemoJSON.createdCallback = function() {
+      this.controller = new DustDemoJSONController(this);
+    };
+    document.registerElement('dust-demo-json', {prototype: DustDemoJSON});
+  })((document._currentScript || document.currentScript).ownerDocument);
+</script>
