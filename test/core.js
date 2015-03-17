@@ -126,7 +126,6 @@ function testRender(unit, source, context, expected, options, baseContext, error
       messageInLog = '';
    try {
      dust.isDebug = !!(error || logMessage);
-     dust.debugLevel = 'DEBUG';
      dust.config = config || { whitespace: false };
      dust.loadSource(dust.compile(source, name));
      if (baseContext){

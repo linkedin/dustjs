@@ -9,9 +9,11 @@ var dust = require('../lib/server');
 require('./jasmine-test/spec/testHelpers');
 
 // Absorb all logs into a log queue for testing purposes
+var dustLog = dust.log;
 dust.logQueue = [];
 dust.log = function(msg, type) {
   dust.logQueue.push({ message: msg, type: type });
+  dustLog.call(this, msg, type);
 };
 
 function dumpError(err) {

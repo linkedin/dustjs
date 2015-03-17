@@ -11,9 +11,11 @@ describe ('Test the basic functionality of dust', function() {
 });
 
 // Absorb all logs into a log queue for testing purposes
+var dustLog = dust.log;
 dust.logQueue = [];
 dust.log = function(msg, type) {
   dust.logQueue.push({ message: msg, type: type });
+  dustLog.call(this, msg, type);
 };
 
 function render(test) {
@@ -21,7 +23,6 @@ function render(test) {
     var messageInLog = false;
     var context;
     try {
-      dust.debugLevel = 'DEBUG';
       dust.config = test.config || { whitespace: false };
       dust.loadSource(dust.compile(test.source, test.name, test.strip));
       context = test.context;
@@ -69,7 +70,6 @@ function stream(test) {
       output = '';
       log = [];
       try {
-        dust.debugLevel = 'DEBUG';
         dust.config = test.config || { whitespace: false };
         dust.loadSource(dust.compile(test.source, test.name));
         context = test.context;
@@ -158,7 +158,6 @@ function pipe(test) {
       messageInLog = false;
       messageInLogTwo = false;
       try {
-        dust.debugLevel = 'DEBUG';
         dust.config = test.config || { whitespace: false };
         dust.loadSource(dust.compile(test.source, test.name));
         context = test.context;
