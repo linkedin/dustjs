@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="/styles/main.css">
   <script>
     if (window.location && window.location.host && window.location.host === 'linkedin.github.io') {
-      window.location = 'http://www.dustjs.com' + window.location.pathname + window.location.search + window.location.hash;
+      window.location = 'http://www.dustjs.com' + window.location.pathname.replace('/dustjs', '') + window.location.search + window.location.hash;
     }
   </script>
   <script src="/bower_components/webcomponentsjs/webcomponents.min.js"></script>
