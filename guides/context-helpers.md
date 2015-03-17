@@ -4,6 +4,8 @@ title: Dust.js | Context Helpers
 permalink: /guides/context-helpers/
 ---
 
+# Context Helpers
+
 ## Why use context helpers at all?
 
 One of the central tenets of Dust's philosophy is the idea that your template should be as logic-free as possible. Following this guideline makes your templates lightweight and increases their understandability.
