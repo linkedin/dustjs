@@ -10,8 +10,8 @@ describe ('Test the basic functionality of dust', function() {
 });
 
 function render(test) {
-  var messageInLog = false;
   return function() {
+    var messageInLog = false;
     var context;
     try {
       dust.isDebug = !!(test.error || test.log);

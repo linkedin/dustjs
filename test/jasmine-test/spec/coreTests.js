@@ -1,3 +1,27 @@
+/**
+ * A naive fake-Promise that simply waits for callbacks
+ * to be bound by calling `.then` and then invokes
+ * one of the callbacks asynchronously.
+ * @param err {*} Invokes the `error` callback with this value
+ * @param data {*} Invokes the `success` callback with this value, if `err` is not set
+ * @return {Object} a fake Promise with a `then` method
+ */
+function FakePromise(err, data) {
+  function then(success, failure) {
+	setTimeout(function() {
+	  if(err) {
+		failure(err);
+	  } else {
+		success(data);
+	  }
+	}, 0);
+  }
+
+  return {
+	"then": then
+  };
+}
+
 var coreTests = [
 /**
  * CORE TESTS
@@ -747,8 +771,43 @@ var coreTests = [
         context:  { foo: {bar: "Hello!"} },
         expected: "Hello!",
         message: "should test an object path"
-      }
-    ]
+      },
+	  {
+		name:     "thenable reference",
+		source:   "Eventually {magic}!",
+		context:  { "magic": new FakePromise(null, "magic") },
+		expected: "Eventually magic!",
+		message: "should reserve an async chunk for a thenable reference"
+	  },
+	  {
+		name:     "thenable section",
+		source:   "{#promise}Eventually {magic}!{/promise}",
+		context:  { "promise": new FakePromise(null, {"magic": "magic"}) },
+		expected: "Eventually magic!",
+		message: "should reserve an async section for a thenable"
+	  },
+	  {
+		name:     "thenable section from function",
+		source:   "{#promise}Eventually {magic}!{/promise}",
+		context:  { "promise": function() { return new FakePromise(null, {"magic": "magic"}); } },
+		expected: "Eventually magic!",
+		message: "should reserve an async section for a thenable returned from a function"
+	  },
+	  {
+		name:     "thenable error",
+		source:   "{promise}",
+		context:  { "promise": new FakePromise("promise error") },
+		log: "Unhandled promise rejection in `thenable error`",
+		message: "rejected thenable reference logs"
+	  },
+	  {
+		name:     "thenable error with error block",
+		source:   "{#promise}No magic{:error}{message}{/promise}",
+		context:  { "promise": new FakePromise(new Error("promise error")) },
+		expected: "promise error",
+		message: "rejected thenable renders error block"
+	  }
+	]
   },
 /**
  * CONDITINOAL TESTS
