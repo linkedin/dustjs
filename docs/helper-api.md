@@ -63,6 +63,19 @@ permalink: /docs/helper-api/
         * getTemplateName - Get the name of the template that this context was used for
             * **Return Value**
                 * {String} the name of the template
+        * push - Add a new value to the Context stack
+            * **Parameters**
+                * val {*} a value to push onto the top of the stack
+            * **Return Value**
+                * {Context} a new Context with `val` on the top of its stack
+        * pop - Remove the top of the stack
+            * **Return Value**
+                * {*} The value on top of the stack
+        * resolve - Evaluate a Dust template string using this context
+            * **Parameters**
+                * body {Function} a compiled Dust reference to evaluate
+            * **Return Value**
+                * {String} the resolved reference
     * **Instance Attributes**
         * stack {Stack} - A filtered view of the json context passed to dust.render, dust.stream, or dust.renderSource
         * global {Object} - Contains any data that you want to access on this instance
