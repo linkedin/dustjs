@@ -126,6 +126,13 @@ var coreTests = [
         message: "should test escape_pragma"
       },
       {
+      	name: "filter extend brace",
+      	source: "{message|eb}",
+      	context: { message: "Hello, {name}", name: "World" },
+      	expected: "Hello, World",
+      	message: "should test extending braces"
+      },
+      {
          name:   "use . for creating a block and set params",
          source: "{#. test=\"you\"}{name} {test}{/.}",
          context: { name: "me"},
