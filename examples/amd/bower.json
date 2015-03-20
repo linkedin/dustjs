@@ -1,0 +1,8 @@
+{
+  "name": "dustjs-example-amd",
+  "dependencies": {
+    "dustjs-linkedin": "*",
+    "dustjs-helpers": "*",
+    "requirejs": "*"
+  }
+}
