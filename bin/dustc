@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 var cli = require('cli').enable('glob', 'version'),
+    watchr = require('watchr'),
     dust = require('../lib/server.js'),
     fs = cli.native.fs,
     path = cli.native.path,
@@ -20,7 +21,8 @@ cli.parse({
     split:      ['s',   'create one output file per input file instead of concatenating them to --output'                   ],
     pwd:        [false, 'generate template names starting from this directory',                                     'string'],
     whitespace: ['w',   'preserve whitespace in templates',                                                                 ],
-    amd:        ['a',   'register templates as AMD modules'                                                                 ]
+    amd:        ['a',   'register templates as AMD modules'                                                                 ],
+    watch:      [false, 'watch files for changes and recompile'                                                             ]
 });
 
 /**
@@ -36,47 +38,74 @@ if (!cli.argc) {
     });
 }
 
+var paths = glob(cli.args),
+    streams;
+
 /**
  * Handle a list of paths passed as args
  * Each path gets globbed in case the OS doesn't support it
  */
-cli.args
-.map(function(arg) { return cli.glob.sync(arg); })
-.reduce(function(a, b) { return a.concat(b); }, [])
-.forEach(function(inputFile, index, filesToProcess) {
-    read(inputFile, function(err, data) {
-        if (err) {
-            cli.info('Couldn\'t open ' + inputFile + ' for reading');
-            return;
-        }
+function handle() {
+    streams = {};
+    paths.forEach(function(inputFile, index, filesToProcess) {
+        read(inputFile, function(err, data) {
+            if (err) {
+                cli.info('Couldn\'t open ' + inputFile + ' for reading');
+                return;
+            }
 
-        var outputFile = cli.options.output,
-            templateName = path.join(path.dirname(inputFile),
-                                     path.basename(inputFile, path.extname(inputFile))),
-            compiledData;
+            var outputFile = cli.options.output,
+                templateName = path.join(path.dirname(inputFile),
+                                         path.basename(inputFile, path.extname(inputFile))),
+                compiledData;
 
-        // Use the template's path as the output path if split-files is turned on
-        if (cli.options.split) {
-            outputFile = templateName + '.js';
-        }
+            // Use the template's path as the output path if split-files is turned on
+            if (cli.options.split) {
+                outputFile = templateName + '.js';
+            }
 
-        // Allow override of template name as long as there's only one template
-        if (cli.options.name && filesToProcess.length === 1) {
-            templateName = cli.options.name;
-        }
+            // Allow override of template name as long as there's only one template
+            if (cli.options.name && filesToProcess.length === 1) {
+                templateName = cli.options.name;
+            }
 
-        // Optionally strip leading directories from a template name
-        // For example, if --pwd=tmpl, `tmpl/foo/a` becomes `foo/a`
-        if (cli.options.pwd) {
-            templateName = path.relative(cli.options.pwd, templateName);
-        }
+            // Optionally strip leading directories from a template name
+            // For example, if --pwd=tmpl, `tmpl/foo/a` becomes `foo/a`
+            if (cli.options.pwd) {
+                templateName = path.relative(cli.options.pwd, templateName);
+            }
 
-        compiledData = compile(data, templateName);
-        output(compiledData, outputFile);
+            compiledData = compile(data, templateName);
+            output(compiledData, outputFile);
+        });
     });
-});
+}
+
+/**
+ * Turn on watching if --watch is enabled
+ * Watching runs the compilation again if any file changes or is deleted.
+ * However, adding new files means, for now, that you need to restart the watch.
+ */
+if(cli.options.watch) {
+    cli.info('Watching for changes... ^C to quit');
+    watchr.watch({
+        paths: paths,
+        listeners: {
+            change: function(method, file) {
+                cli.info(method + ' ' + file);
+                handle();
+            }
+        }
+    });
+} else {
+    handle();
+}
 
 /*** helper functions ***/
+function glob(globPaths) {
+    return globPaths.map(function(arg) { return cli.glob.sync(arg); })
+                    .reduce(function(a, b) { return a.concat(b); }, []);
+}
 
 function read(filename, cb) {
     var data = '',
@@ -105,7 +134,6 @@ function compile(data, name) {
     return compiled;
 }
 
-var streams = {};
 function output(data, file) {
     var output_stream;
     try {
