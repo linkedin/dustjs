@@ -33,12 +33,12 @@ nav ul.main-nav > li a {
   /* [archetype:styleguide:end] --- `medium muted headline in a module, link in a module` --- */
   color: #FFF;
 }
-/* line 193, ../../../../../Library/Ruby/Gems/2.0.0/gems/archetype-1.0.0.alpha.4/stylesheets/archetype/util/_targeting.scss */
+/* line 193, ../vendor/ruby/2.0.0/gems/archetype-1.0.0.alpha.4/stylesheets/archetype/util/_targeting.scss */
 nav ul.main-nav > li a {
   /* [archetype:target-os:begin] --- default --- */
   /* [archetype:target-os:end]   --- default --- */
 }
-/* line 263, ../../../../../Library/Ruby/Gems/2.0.0/gems/archetype-1.0.0.alpha.4/stylesheets/archetype/util/_styles.scss */
+/* line 263, ../vendor/ruby/2.0.0/gems/archetype-1.0.0.alpha.4/stylesheets/archetype/util/_styles.scss */
 nav ul.main-nav > li a.hover, nav ul.main-nav > li a:hover, nav ul.main-nav > li a.focus, nav ul.main-nav > li a:focus {
   text-decoration: underline;
 }
@@ -66,7 +66,7 @@ nav ul.main-nav > li.sub input {
   /* [archetype:target:browser:end]   --- ie lte 7 --- */
   clip: rect(1px, 1px, 1px, 1px);
 }
-/* line 157, ../../../../../Library/Ruby/Gems/2.0.0/gems/archetype-1.0.0.alpha.4/stylesheets/archetype/util/_targeting.scss */
+/* line 157, ../vendor/ruby/2.0.0/gems/archetype-1.0.0.alpha.4/stylesheets/archetype/util/_targeting.scss */
 .ie.lte7 nav ul.main-nav > li.sub input {
   /* [archetype:target:browser:begin] --- ie lte 7 --- */
   /* [archetype:target:browser:end]   --- ie lte 7 --- */
@@ -147,7 +147,7 @@ header h2.tagline {
   /* [archetype:styleguide:end] --- `xlarge headline` --- */
   font-size: 28px;
 }
-/* line 193, ../../../../../Library/Ruby/Gems/2.0.0/gems/archetype-1.0.0.alpha.4/stylesheets/archetype/util/_targeting.scss */
+/* line 193, ../vendor/ruby/2.0.0/gems/archetype-1.0.0.alpha.4/stylesheets/archetype/util/_targeting.scss */
 #content > h1 {
   /* [archetype:target-os:begin] --- default --- */
   /* [archetype:target-os:end]   --- default --- */
@@ -162,7 +162,7 @@ header h2.tagline {
   /* [archetype:styleguide:end] --- `large headline` --- */
   font-size: 20px;
 }
-/* line 193, ../../../../../Library/Ruby/Gems/2.0.0/gems/archetype-1.0.0.alpha.4/stylesheets/archetype/util/_targeting.scss */
+/* line 193, ../vendor/ruby/2.0.0/gems/archetype-1.0.0.alpha.4/stylesheets/archetype/util/_targeting.scss */
 #content > h2 {
   /* [archetype:target-os:begin] --- default --- */
   /* [archetype:target-os:end]   --- default --- */
@@ -287,6 +287,48 @@ footer {
   padding: 17px 34px 34px 34px;
 }
 
+/* line 12, ../scss/components/_footer.scss */
+#forkongithub {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 200px;
+  overflow: hidden;
+  height: 200px;
+  z-index: 9999;
+}
+
+/* line 21, ../scss/components/_footer.scss */
+#forkongithub a {
+  background: #323232;
+  color: #fff;
+  text-decoration: none;
+  font-family: arial,sans-serif;
+  text-align: center;
+  font-weight: bold;
+  padding: 5px 40px;
+  font-size: 1rem;
+  line-height: 2rem;
+  width: 200px;
+  position: absolute;
+  top: 60px;
+  right: -60px;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg);
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.8);
+  border-top: 1px solid #FFF;
+  border-bottom: 1px solid #FFF;
+}
+
+@media screen and (max-width: 800px) {
+  /* line 46, ../scss/components/_footer.scss */
+  #forkongithub {
+    display: none;
+  }
+}
 /* line 23, ../scss/main.scss */
 html {
   height: 100%;
