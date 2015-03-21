@@ -2,6 +2,10 @@
 
 To get set up to contribute to this page:
 
+### Set up Gems and running Jekyll
+`bundle install --path=vendor/bundle`
+`bundle exec jekyll serve`
+
 ### For CSS changes
 We use SCSS/Compass/archetype.
 
@@ -9,7 +13,7 @@ We use SCSS/Compass/archetype.
 2. Install [Compass](http://compass-style.org/install/)
 3. Install [archetype](http://www.archetypecss.com/documentation/getting-started/)
 
-After making chages to a file in the scss directory, run `compass compile` from the project's root directory. If you are planning on making lots of changes to scss files, you can run `compass watch` and the CSS compilation will happen as you save the scss files.
+After making chages to a file in the scss directory, run `bundle exec compass compile` or `compass compile` from the project's root directory. If you are planning on making lots of changes to scss files, you can run `compass watch` and the CSS compilation will happen as you save the scss files.
 
 // TODO: Make this a grunt task
 
