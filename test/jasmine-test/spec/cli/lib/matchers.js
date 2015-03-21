@@ -3,34 +3,44 @@ var fs = require('fs'),
 
 var matchers = {};
 
-matchers.toHaveTemplate = function(expected) {
-  var dustTemplateRegex = /dust\.register\("([A-z0-9\-_\/\\]+)",body_0\)/g,
-      matches = [];
+matchers.toHaveTemplate = function(util) {
+  var dustTemplateRegex = /dust\.register\("([A-z0-9\-_\/\\]+)",body_0\)/g;
 
-  this.actual.replace(dustTemplateRegex, function(whole, match) {
-    matches.push(match);
-  });
-
-  return matches.indexOf(dust.escapeJs(expected)) > -1;
+  return {
+    compare: function(actual, expected) {
+      var matches = [];
+      actual.replace(dustTemplateRegex, function(whole, match) {
+        matches.push(match);
+      });
+      return { pass: matches.indexOf(dust.escapeJs(expected)) > -1 };
+    }
+  };
 };
 
-matchers.toHaveAMDTemplate = function(expected) {
-  var dustAMDTemplateRegex = /define\("([A-z0-9\-_\/\\]+)",\["dust\.core"\]/g,
-      matches = [];
+matchers.toHaveAMDTemplate = function(util) {
+  var dustAMDTemplateRegex = /define\("([A-z0-9\-_\/\\]+)",\["dust\.core"\]/g;
 
-  this.actual.replace(dustAMDTemplateRegex, function(whole, match) {
-    matches.push(match);
-  });
-
-  return matches.indexOf(dust.escapeJs(expected)) > -1 &&
-         matchers.toHaveTemplate.call(this, expected);
+  return {
+    compare: function(actual, expected) {
+      var matches = [];
+      actual.replace(dustAMDTemplateRegex, function(whole, match) {
+        matches.push(match);
+      });
+      return { pass: matches.indexOf(dust.escapeJs(expected)) > -1 &&
+                     matchers.toHaveTemplate().compare.call(this, actual, expected) };
+    }
+  };
 };
 
-matchers.toBeFileWithTemplate = function(expected) {
-  this.actual = fs.readFileSync(this.actual, "utf8");
-  return matchers.toHaveTemplate.call(this, expected);
+matchers.toBeFileWithTemplate = function(util) {
+  return {
+    compare: function(actual, expected) {
+      actual = fs.readFileSync(actual, "utf8");
+      return { pass: matchers.toHaveTemplate().compare.call(this, actual, expected) };
+    }
+  };
 };
 
 beforeEach(function() {
-  this.addMatchers(matchers);
+  jasmine.addMatchers(matchers);
 });

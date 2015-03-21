@@ -2076,7 +2076,21 @@ var coreTests = [
         log: "Section without corresponding key in template `Section not found`",
         message: "test the log messages for an unhandled section."
       },
-      {
+	  {
+		name: "Exists without body",
+		source: "{?foo/}",
+		context: {"foo": "foo"},
+		log: "No block for exists check in template `Exists without body`",
+		message: "test the log message for an exists block with no body"
+	  },
+	  {
+		name: "Not exists without body",
+		source: "{^foo/}",
+		context: {},
+		log: "No block for not-exists check in template `Not exists without body`",
+		message: "test the log message for a not-exists block with no body"
+	  },
+	  {
         name: "Errors should be throwable from helpers and consumed in the render callback/stream onerror",
         source: "{@error errorMessage=\"helper error\"}{/error}",
         context: { },
