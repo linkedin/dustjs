@@ -65,6 +65,7 @@
     padding: 4px 8px;
     border-radius: 2px;
     @include interior-shadow($light-shadow, $shadow-small-size);
+    white-space: nowrap;
   }
 
   a {
