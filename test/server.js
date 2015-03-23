@@ -3,7 +3,7 @@ var uutest    = require('./uutest'),
     coreTests     = require('./jasmine-test/spec/coreTests'),
     coreSetup = require('./core').coreSetup;
 
-var dust = require('../lib/server');
+var dust = require('..');
 
 // load additional helpers used in testing
 require('./jasmine-test/spec/testHelpers');

@@ -44,6 +44,7 @@
     "src",
     "test",
     "tmp",
+    "index.js",
     "Gruntfile.js",
     "package.json"
   ]
