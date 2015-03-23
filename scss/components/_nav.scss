@@ -1,9 +1,9 @@
 nav {
   @include even-shadow($dark-shadow, $shadow-large-size);
-  width: $nav-width;
+  position: absolute;
   height: 100%;
+  width: $nav-width;
   background: $brand-graphite;
-  position: fixed;
   padding: 0 $nav-indent;
 
   ul.main-nav {

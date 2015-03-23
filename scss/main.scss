@@ -20,17 +20,13 @@
 @import "components/content";
 @import "components/footer";
 
-html {
-  height: 100%;
-}
-
 body {
   @include styleguide(large copy);
-  height: 100%;
   background: $brand-neutral;
   font-family: 'Roboto', sans-serif;
 }
 
 #body {
+  position: relative;
   overflow: hidden;
 }
