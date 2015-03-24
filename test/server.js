@@ -3,10 +3,16 @@ var uutest    = require('./uutest'),
     coreTests     = require('./jasmine-test/spec/coreTests'),
     coreSetup = require('./core').coreSetup;
 
-//make dust a global
-dust = require('../lib/server');
-//load additional helpers used in testing
+var dust = require('../lib/server');
+
+// load additional helpers used in testing
 require('./jasmine-test/spec/testHelpers');
+
+// Absorb all logs into a log queue for testing purposes
+dust.logQueue = [];
+dust.log = function(msg, type) {
+  dust.logQueue.push({ message: msg, type: type });
+};
 
 function dumpError(err) {
   var out = err.testName + ' -> ';
@@ -26,8 +32,6 @@ for (var i=0; i<coreTests.length; i++) {
       process.stdout.write("F");
     },
     done: function(passed, failed, elapsed) {
-      process.stdout.write('\n');
-      console.log(passed + ' passed ' + failed + ' failed ' + '(' + elapsed + 'ms)');
       this.errors.forEach(function(err) {
         console.log(dumpError(err));
         process.exit(1);

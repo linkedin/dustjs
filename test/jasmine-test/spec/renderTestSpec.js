@@ -1,3 +1,4 @@
+/*global dust*/
 describe ('Test the basic functionality of dust', function() {
   for (var index = 0; index < coreTests.length; index++) {
     for (var i = 0; i < coreTests[index].tests.length; i++) {
@@ -6,15 +7,20 @@ describe ('Test the basic functionality of dust', function() {
       it ('STREAM: ' + test.message, stream(test));
       it ('PIPE: ' + test.message, pipe(test));
     }
-  };
+  }
 });
+
+// Absorb all logs into a log queue for testing purposes
+dust.logQueue = [];
+dust.log = function(msg, type) {
+  dust.logQueue.push({ message: msg, type: type });
+};
 
 function render(test) {
   return function() {
     var messageInLog = false;
     var context;
     try {
-      dust.isDebug = !!(test.error || test.log);
       dust.debugLevel = 'DEBUG';
       dust.config = test.config || { whitespace: false };
       dust.loadSource(dust.compile(test.source, test.name, test.strip));
@@ -39,7 +45,6 @@ function render(test) {
               break;
             }
           }
-          dust.logQueue = [];
           expect(messageInLog).toEqual(true);
         } else {
           expect(test.expected).toEqual(output);
@@ -64,7 +69,6 @@ function stream(test) {
       output = '';
       log = [];
       try {
-        dust.isDebug = !!(test.error || test.log);
         dust.debugLevel = 'DEBUG';
         dust.config = test.config || { whitespace: false };
         dust.loadSource(dust.compile(test.source, test.name));
@@ -154,7 +158,6 @@ function pipe(test) {
       messageInLog = false;
       messageInLogTwo = false;
       try {
-        dust.isDebug = !!(test.error || test.log);
         dust.debugLevel = 'DEBUG';
         dust.config = test.config || { whitespace: false };
         dust.loadSource(dust.compile(test.source, test.name));
