@@ -6,3 +6,4 @@ kramdown:
     
 exclude:
     - node_modules
+    - vendor

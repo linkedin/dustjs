@@ -5,3 +5,5 @@ _site/
 .rbenv-version
 .rvmrc
 *.lock
+/.bundle/
+/vendor/bundle
