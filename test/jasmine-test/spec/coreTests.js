@@ -49,9 +49,8 @@ var coreTests = [
       {
         name:     "global_template",
         source:   '{#helper foo="bar" boo="boo"} {/helper}',
-        context:  { "helper": function(chunk, context, bodies, params)
-                     {
-                      currentTemplateName = context.getTemplateName();
+        context:  { "helper": function(chunk, context, bodies, params) {
+                      var currentTemplateName = context.getTemplateName();
                       return chunk.write(currentTemplateName);
                      }
                   },
@@ -247,7 +246,31 @@ var coreTests = [
         expected: "Hello",
         message: "should test comments"
       },
-      {
+	  {
+		name: "context.resolve",
+		source: "{#foo bar=\"{baz} is baz \" literal=\"literal \" func=func chunkFunc=\"{chunkFunc}\" ref=ref}Fail{/foo}",
+		context: {
+		  foo: function(chunk, context, bodies, params) {
+			chunk.write(context.resolve(params.bar));
+			chunk.write(context.resolve(params.literal));
+			chunk.write(context.resolve(params.func));
+			chunk.write(context.resolve(params.chunkFunc));
+			chunk.write(context.resolve(params.ref));
+			return chunk;
+		  },
+		  baz: "baz",
+		  ref: "ref",
+		  func: function() {
+			return "func ";
+		  },
+		  chunkFunc: function(chunk) {
+			return chunk.write('chunk ');
+		  }
+		},
+		expected: "baz is baz literal func chunk ref",
+		message: "context.resolve() taps parameters from the context"
+	  },
+	  {
         name:     "context",
         source:   "{#list:projects}{name}{:else}No Projects!{/list}",
         context:  {
