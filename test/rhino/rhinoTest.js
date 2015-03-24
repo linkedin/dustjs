@@ -71,7 +71,7 @@ reporter.reportSuiteResults = function (suite) {
   print('Passed ' + passed + ' Failed ' + failed.length + '\n');
 
   if(failed.length > 0) {
-    throw 'There are failing tests.';
+    java.lang.System.exit(1);
   } else {
     quit();
   }

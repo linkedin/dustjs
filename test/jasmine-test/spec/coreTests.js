@@ -1146,7 +1146,7 @@ var coreTests = [
 	  {
 		name:	  "partial with async ref as name",
 		source:   '{>"{ref}" /}',
-		context:  { ref: function(chunk, context) { return chunk.map(function(chunk) { setTimeout(function() { chunk.end('hello_world'); }) }); }},
+		context:  { ref: function(chunk, context) { return chunk.map(function(chunk) { setTimeout(function() { chunk.end('hello_world'); }, 0) }); }},
 		expected: "Hello World!",
 		message:  "should test partial with an asynchronously-resolved template name"
 	  },
