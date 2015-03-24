@@ -38,6 +38,7 @@
     "benchmark",
     "bin",
     "docs",
+    "examples",
     "lib",
     "node_modules",
     "src",

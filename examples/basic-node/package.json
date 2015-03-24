@@ -1,0 +1,13 @@
+{
+  "name": "dustjs-example-simple",
+  "version": "1.0.0",
+  "description": "Simple example of Dust in Node",
+  "main": "app.js",
+  "dependencies": {
+    "dustjs-linkedin": "^2.6.1"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

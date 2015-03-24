@@ -3,3 +3,6 @@ node_modules
 .grunt
 _SpecRunner.html
 tmp
+examples/*/views/*.js
+examples/*/lib/*
+!examples/*/lib/main.js

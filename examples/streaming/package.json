@@ -1,0 +1,15 @@
+{
+  "name": "dustjs-example-streaming",
+  "version": "1.0.0",
+  "description": "Simple example of the Dust streaming API",
+  "main": "app.js",
+  "dependencies": {
+    "dustjs-linkedin": "^2.6.1",
+    "express": "^4.12.3",
+    "request": "^2.53.0"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
