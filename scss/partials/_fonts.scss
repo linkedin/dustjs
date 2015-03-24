@@ -4,10 +4,10 @@
 //Font-face Includes //
 ///////////////////////
 @include font-face("Dosis Light",
-                   font-files("../../fonts/dosis-light-webfont.woff",
-                              "../../fonts/dosis-light-webfont.ttf",
-                              "../../fonts/dosis-light-webfont.svg"),
-                   "../../fonts/dosis-light-webgont.eot");
+                   font-files("dosis-light-webfont.woff",
+                              "dosis-light-webfont.ttf",
+                              "dosis-light-webfont.svg"),
+                              "dosis-light-webfont.eot");
 
 ////////////////
 //Font Mixins //
