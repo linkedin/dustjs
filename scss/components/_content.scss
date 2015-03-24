@@ -80,34 +80,60 @@
     padding: $pre-padding;
   }
 
-  #parameters + ul > li > ul {
-    @include interior-shadow($light-shadow, $shadow-small-size);
-    background: $brand-neutral;
-    padding: $content-sub-section-padding;
+  > .highlighter-coderay {
     margin-bottom: $content-h1-margin-bottom;
-    margin-top: $content-h1-margin-bottom;
+    > .CodeRay > .code {
+    @include interior-shadow($light-shadow, $shadow-small-size);
+    overflow-x: auto;
+    padding: $pre-padding;
+    background: $brand-neutral;
+      > pre > span.line-numbers > a {
+        margin-right: $coderay-line-number-margin;
+        color: shade($brand-light-graphite, 5);
+      }
+    }
+  }
 
-    & > li > ul {
-      margin: $content-h1-margin-bottom 0px $content-h1-margin-bottom 0px;
-      & > li {
-        margin: $content-h1-margin-bottom/2 0px $content-h1-margin-bottom 0px;
-        color: $brand-graphite;
-        font-size: 16px;
-        & > ul {
-          padding: $content-sub-section-padding;
-          margin-top: $nested-api-list-margin-top;
-          background: tint($brand-neutral, 50%);
-          color: $brand-graphite;
-          font-size: 14px;
+
+
+  #parameters + ul {
+    list-style: none;
+    margin-left: 0;
+    ul {
+      list-style: none;
+      margin-left: 0;
+    }
+    > li {
+      > ul {
+        @include interior-shadow($light-shadow, $shadow-small-size);
+        list-style: none;
+        background: $brand-neutral;
+        padding: $content-sub-section-padding;
+        margin-bottom: $content-h1-margin-bottom;
+        margin-top: $content-h1-margin-bottom;
+        & > li > ul {
+          margin: $content-h1-margin-bottom 0px $content-h1-margin-bottom 0px;
           & > li {
-            color: $brand-light-graphite;
-            margin-top: 10px;
-            &:first-child {
-              margin-top: 0px;
-            }
+            margin: $content-h1-margin-bottom/2 0px $content-h1-margin-bottom 0px;
+            color: $brand-graphite;
+            font-size: 16px;
             & > ul {
-              padding-left: $content-sub-section-padding;
+              padding: $content-sub-section-padding;
+              margin-top: $nested-api-list-margin-top;
+              background: tint($brand-neutral, 50%);
               color: $brand-graphite;
+              font-size: 14px;
+              & > li {
+                color: $brand-light-graphite;
+                margin-top: 10px;
+                &:first-child {
+                  margin-top: 0px;
+                }
+                & > ul {
+                  padding-left: $content-sub-section-padding;
+                  color: $brand-graphite;
+                }
+              }
             }
           }
         }
