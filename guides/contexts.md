@@ -96,3 +96,16 @@ As of Dust 2.6.2, when Dust encounters a Promise in the context, it waits for th
 If the Promise is a reference, it is output directly. If the Promise is rejected, the reference does not output.
 
 If the Promise is a section, its return value is pushed onto the context stack. If the Promise is rejected, Dust looks for an `{:error}` block in the section and renders that instead.
+
+You can even refer directly to keys in the eventual return value of a Promise, even if the Promise has yet to resolve.
+
+<dust-demo templateName="promise">
+  <dust-demo-template showTemplateName="true">
+    Your IP address is {jsonTest.ip}
+  </dust-demo-template>
+  <dust-demo-json>
+{
+  "jsonTest": $.getJSON("http://ip.jsontest.com/")
+}
+  </dust-demo-json>
+</dust-demo>
