@@ -152,7 +152,11 @@ function testRender(unit, source, context, expected, options, baseContext, error
        }
      });
     } catch(err) {
-      unit.contains(error, err.message || err);
+      if(error) {
+        unit.contains(error, err.message || err);
+      } else {
+        throw err;
+      }
     }
     unit.pass();
 };

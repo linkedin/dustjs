@@ -24,9 +24,9 @@ module.exports = function(grunt) {
           var commandList = [],
             fs = require('fs'),
             rhinoFolder = 'test/rhino/';
-          fs.readdirSync(__dirname  + '/' + rhinoFolder + '/lib').forEach( function(rhinoJar) {
+          fs.readdirSync(__dirname  + '/' + rhinoFolder + 'lib').forEach( function(rhinoJar) {
             if(rhinoJar.indexOf('.jar') >= 0) {
-              commandList.push('java -jar ' + rhinoFolder + '/lib/' + rhinoJar + ' -f ' + rhinoFolder + '/rhinoTest.js');
+              commandList.push('java -jar ' + rhinoFolder + 'lib/' + rhinoJar + ' -f ' + rhinoFolder + 'rhinoTest.js');
             }
           });
           return commandList.join(' && ');
@@ -137,7 +137,9 @@ module.exports = function(grunt) {
         src: 'tmp/dust-full.min.js',
         options: {
           keepRunner: false,
-          specs: ['test/jasmine-test/spec/*.js']
+          display: 'short',
+          helpers: ['test/jasmine-test/spec/coreTests.js'],
+          specs: ['test/jasmine-test/spec/testHelpers.js', 'test/jasmine-test/spec/renderTestSpec.js']
         }
       },
       /*tests unminified code, mostly used for debugging by `grunt dev` task*/
@@ -145,6 +147,7 @@ module.exports = function(grunt) {
         src: 'tmp/dust-full.js',
         options: {
           keepRunner: false,
+          helpers: '<%=jasmine.testProd.options.helpers%>',
           specs : '<%=jasmine.testProd.options.specs%>'
         }
       },
@@ -157,6 +160,8 @@ module.exports = function(grunt) {
         src: 'tmp/dust-full.js',
         options: {
           keepRunner: false,
+          display: 'none',
+          helpers: '<%=jasmine.testProd.options.helpers%>',
           specs : '<%=jasmine.testProd.options.specs%>',
           template: require('grunt-template-jasmine-istanbul'),
           templateOptions: {
