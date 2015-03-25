@@ -1,11 +1,25 @@
 /*global dust*/
-describe ('Test the basic functionality of dust', function() {
+describe ('Render', function() {
   for (var index = 0; index < coreTests.length; index++) {
     for (var i = 0; i < coreTests[index].tests.length; i++) {
       var test = coreTests[index].tests[i];
-      it ('RENDER: ' + test.message, render(test));
-      it ('STREAM: ' + test.message, stream(test));
-      it ('PIPE: ' + test.message, pipe(test));
+      it (test.message, render(test));
+    }
+  }
+});
+describe ('Stream', function() {
+  for (var index = 0; index < coreTests.length; index++) {
+    for (var i = 0; i < coreTests[index].tests.length; i++) {
+      var test = coreTests[index].tests[i];
+      it (test.message, stream(test));
+    }
+  }
+});
+describe ('Pipe', function() {
+  for (var index = 0; index < coreTests.length; index++) {
+    for (var i = 0; i < coreTests[index].tests.length; i++) {
+      var test = coreTests[index].tests[i];
+      it (test.message, pipe(test));
     }
   }
 });

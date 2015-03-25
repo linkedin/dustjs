@@ -3,16 +3,16 @@ node_js:
   - "0.12"
   - "0.10"
   - "0.8"
-  - "iojs-v1.4"
+  - "iojs"
 env:
   - TEST="all"
   - TEST="node"
 matrix:
   exclude:
-    - node_js: "iojs-v1.4"
-      env: TEST="node"
+    - node_js: "iojs"
+      env: TEST="all"
     - node_js: "0.12"
-      env: TEST="node"
+      env: TEST="all"
     - node_js: "0.10"
       env: TEST="node"
     - node_js: "0.8"

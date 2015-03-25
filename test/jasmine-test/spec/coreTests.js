@@ -1,25 +1,20 @@
+if (typeof require !== 'undefined') {
+  ayepromise = require('ayepromise');
+}
 /**
- * A naive fake-Promise that simply waits for callbacks
- * to be bound by calling `.then` and then invokes
- * one of the callbacks asynchronously.
+ * A naive Promise constructor that simply resolves or rejects its Promise based on what's passed
  * @param err {*} Invokes the `error` callback with this value
  * @param data {*} Invokes the `success` callback with this value, if `err` is not set
  * @return {Object} a fake Promise with a `then` method
  */
-function FakePromise(err, data) {
-  function then(success, failure) {
-	setTimeout(function() {
-	  if(err) {
-		failure(err);
-	  } else {
-		success(data);
-	  }
-	}, 0);
+function FalsePromise(err, data) {
+  var defer = ayepromise.defer();
+  if (err) {
+	defer.reject(new Error(err));
+  } else {
+	defer.resolve(data);
   }
-
-  return {
-	"then": then
-  };
+  return defer.promise;
 }
 
 var coreTests = [
@@ -775,35 +770,84 @@ var coreTests = [
 	  {
 		name:     "thenable reference",
 		source:   "Eventually {magic}!",
-		context:  { "magic": new FakePromise(null, "magic") },
+		context:  { "magic": new FalsePromise(null, "magic") },
 		expected: "Eventually magic!",
 		message: "should reserve an async chunk for a thenable reference"
 	  },
 	  {
+		name:     "thenable deep reference",
+		source:   "Eventually {magic.ally.delicious}!",
+		context:  { "magic": new FalsePromise(null, {"ally": {"delicious": "Lucky Charms"} }) },
+		expected: "Eventually Lucky Charms!",
+		message: "should deep-inspect a thenable reference"
+	  },
+	  {
+		name:     "thenable deep reference that doesn't exist",
+		source:   "Eventually {magic.ally.disappeared}!",
+		context:  { "magic": new FalsePromise(null, {"ally": {"delicious": "Lucky Charms"} }) },
+		expected: "Eventually !",
+		message: "should deep-inspect a thenable reference but move on if it isn't there"
+	  },
+	  {
+		name:     "thenable deep reference... this is just getting silly",
+		source:   "Eventually {magic.ally.delicious}!",
+		context:  { "magic": new FalsePromise(null, {"ally": {"delicious": new FalsePromise(null, "Lucky Charms")} }) },
+		expected: "Eventually Lucky Charms!",
+		message: "should deep-inspect a thenable reference recursively"
+	  },
+	  {
+		name:     "thenable reference that fails",
+		source:   "Eventually {magic.ally.delicious}!",
+		context:  { "magic": new FalsePromise("cereal gone") },
+		expected: "Eventually !",
+		message: "should inspect a thenable reference but move on if it fails"
+	  },
+	  {
+		name:     "thenable deep reference that fails",
+		source:   "Eventually {magic.ally.delicious}!",
+		context:  { "magic": new FalsePromise(null, {"ally": {"delicious": new FalsePromise("cereal gone")} }) },
+		expected: "Eventually !",
+		message: "should deep-inspect a thenable reference but move on if it fails"
+	  },
+	  {
 		name:     "thenable section",
 		source:   "{#promise}Eventually {magic}!{/promise}",
-		context:  { "promise": new FakePromise(null, {"magic": "magic"}) },
+		context:  { "promise": new FalsePromise(null, {"magic": "magic"}) },
 		expected: "Eventually magic!",
 		message: "should reserve an async section for a thenable"
 	  },
 	  {
 		name:     "thenable section from function",
 		source:   "{#promise}Eventually {magic}!{/promise}",
-		context:  { "promise": function() { return new FakePromise(null, {"magic": "magic"}); } },
+		context:  { "promise": function() { return new FalsePromise(null, {"magic": "magic"}); } },
 		expected: "Eventually magic!",
 		message: "should reserve an async section for a thenable returned from a function"
 	  },
 	  {
+		name:     "thenable deep section",
+		source:   "Eventually my {#magic.ally}{delicious}{/magic.ally} will come",
+		context:  { "magic": new FalsePromise(null, {"ally": {"delicious": new FalsePromise(null, "Lucky Charms")} }) },
+		expected: "Eventually my Lucky Charms will come",
+		message: "should reserve an async section for a deep-reference thenable"
+	  },
+	  {
+		name:     "thenable deep section, traverse outside",
+		source:   "Eventually my {#magic.ally}{prince} {delicious}{/magic.ally} will come",
+		context:  { "prince": "Prince", "magic": new FalsePromise(null, {"ally": {"delicious": new FalsePromise(null, "Lucky Charms")} }) },
+		expected: "Eventually my Prince Lucky Charms will come",
+		message: "should reserve an async section for a deep-reference thenable and not blow the stack"
+	  },
+	  {
 		name:     "thenable error",
 		source:   "{promise}",
-		context:  { "promise": new FakePromise("promise error") },
+		context:  { "promise": new FalsePromise("promise error") },
 		log: "Unhandled promise rejection in `thenable error`",
 		message: "rejected thenable reference logs"
 	  },
 	  {
 		name:     "thenable error with error block",
 		source:   "{#promise}No magic{:error}{message}{/promise}",
-		context:  { "promise": new FakePromise(new Error("promise error")) },
+		context:  { "promise": new FalsePromise("promise error") },
 		expected: "promise error",
 		message: "rejected thenable renders error block"
 	  }
