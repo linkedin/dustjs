@@ -3,8 +3,6 @@
 .travis.yml
 _SpecRunner.html
 Gruntfile.js
-benchmark
-docs
 src
 tmp
 test
