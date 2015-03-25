@@ -25,7 +25,7 @@
   "bin": {
     "dustc": "./bin/dustc"
   },
-  "main": "lib/server.js",
+  "main": "index.js",
   "browser": "./lib/dust.js",
   "repository": {
     "type": "git",

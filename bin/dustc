@@ -2,7 +2,7 @@
 
 var cli = require('cli').enable('glob', 'version'),
     watcher = require('chokidar'),
-    dust = require('../lib/server.js'),
+    dust = require('..'),
     fs = cli.native.fs,
     path = cli.native.path,
     eol = cli.native.os.EOL;
