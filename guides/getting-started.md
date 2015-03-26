@@ -1,10 +1,8 @@
 ---
-title: Dust.js | Getting Started
+title: Getting Started
 layout: guides
 permalink: /guides/getting-started/
 ---
-
-# Getting Started
 
 Welcome to Dust! The exercises in this tutorial will help you get familiar with Dust's core features and syntax. To complete the exercises, edit the "Dust Template" or "Data" so that the "Output" matches the "Expected Output".
 

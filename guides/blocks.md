@@ -1,10 +1,8 @@
 ---
-title: Dust.js | Blocks and Inline Partials
+title: Blocks and Inline Partials
 layout: guides
 permalink: /guides/blocks/
 ---
-
-# Blocks and Inline Partials
 
 An important need in developing a multi-page web application is to have common elements of the pages defined just once and shared by all pages (<a href="http://en.wikipedia.org/wiki/Don%27t_repeat_yourself\" target="_blank">DRY - Don't repeat yourself</a>). Dust provides this with the concept of blocks and inline partials. Consider a common case where several pages share a header and footer but have different body content.
 

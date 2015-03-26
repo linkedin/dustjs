@@ -1,6 +1,6 @@
 ---
 layout: docs
-title: Dust.js | Syntax
+title: Syntax
 permalink: /docs/api/
 ---
 
