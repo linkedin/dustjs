@@ -1,6 +1,6 @@
 ---
 layout: docs
-title: Dust.js | dustc
+title: dustc
 permalink: /docs/dustc-api/
 ---
 

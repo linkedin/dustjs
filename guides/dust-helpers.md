@@ -1,5 +1,5 @@
 ---
-title: Dust.js | Dust Core Helpers
+title: Dust Core Helpers
 layout: guides
 permalink: /guides/dust-helpers/
 ---

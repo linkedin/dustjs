@@ -1,10 +1,8 @@
 ---
 layout: guides
-title: Dust.js | Context Helpers
+title: Context Helpers
 permalink: /guides/context-helpers/
 ---
-
-# Context Helpers
 
 ## Why use context helpers at all?
 
