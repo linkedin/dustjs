@@ -154,7 +154,7 @@ describe('--version', function() {
 
 function dustc(args, cb) {
   var loc = path.join(BIN_DIR, 'dustc');
-  exec(loc + ' ' + args, { cwd: FIXTURE_DIR }, cb);
+  exec('node ' + loc + ' ' + args, { cwd: FIXTURE_DIR }, cb);
 }
 
 function fixture(file) {

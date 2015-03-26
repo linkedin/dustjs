@@ -1,11 +1,25 @@
 /*global dust*/
-describe ('Test the basic functionality of dust', function() {
+describe ('Render', function() {
   for (var index = 0; index < coreTests.length; index++) {
     for (var i = 0; i < coreTests[index].tests.length; i++) {
       var test = coreTests[index].tests[i];
-      it ('RENDER: ' + test.message, render(test));
-      it ('STREAM: ' + test.message, stream(test));
-      it ('PIPE: ' + test.message, pipe(test));
+      it (test.message, render(test));
+    }
+  }
+});
+describe ('Stream', function() {
+  for (var index = 0; index < coreTests.length; index++) {
+    for (var i = 0; i < coreTests[index].tests.length; i++) {
+      var test = coreTests[index].tests[i];
+      it (test.message, stream(test));
+    }
+  }
+});
+describe ('Pipe', function() {
+  for (var index = 0; index < coreTests.length; index++) {
+    for (var i = 0; i < coreTests[index].tests.length; i++) {
+      var test = coreTests[index].tests[i];
+      it (test.message, pipe(test));
     }
   }
 });
@@ -19,7 +33,7 @@ dust.log = function(msg, type) {
 };
 
 function render(test) {
-  return function() {
+  return function(done) {
     var messageInLog = false;
     var context;
     try {
@@ -50,25 +64,43 @@ function render(test) {
         } else {
           expect(test.expected).toEqual(output);
         }
+        done();
       });
     }
     catch (error) {
       expect(test.error || {} ).toEqual(error.message);
+      done();
     }
   };
 }
 
 function stream(test) {
-  return function() {
+  return function(done) {
     var output = '',
         messageInLog = false,
         log,
-        flag,
         context;
-    runs(function(){
-      flag = false;
       output = '';
       log = [];
+
+      function check() {
+        if (test.error) {
+          expect(output).toContain(test.error);
+        } else if(test.log) {
+          for(var i=0; i<log.length; i++) {
+            if(log[i].message === test.log) {
+              messageInLog = true;
+              break;
+            }
+          }
+          dust.logQueue = [];
+          expect(messageInLog).toEqual(true);
+        } else {
+          expect(test.expected).toEqual(output);
+        }
+        done();
+      }
+
       try {
         dust.config = test.config || { whitespace: false };
         dust.loadSource(dust.compile(test.source, test.name));
@@ -101,62 +133,80 @@ function stream(test) {
               },0);
             };
           }
-        } )();
+        }());
         dust.stream(test.name, context)
         .on('data', function(data) {
           output += data;
           log = dust.logQueue;
         })
         .on('end', function() {
-          flag = true;
           log = dust.logQueue;
+          check();
         })
         .on('error', function(err) {
-          flag = true;
           output = err.message || err;
           log = dust.logQueue;
-        })
+          check();
+        });
       } catch(error) {
         output = error.message;
-        flag= true;
+        check();
       }
-    });
 
-    waitsFor(function(){
-      return flag;
-    }, 'the output', 500);
 
-    runs(function(){
-      if (test.error) {
-        expect(output).toContain(test.error);
-      } else if(test.log) {
-        for(var i=0; i<log.length; i++) {
-          if(log[i].message === test.log) {
-            messageInLog = true;
-            break;
-          }
-        }
-        dust.logQueue = [];
-        expect(messageInLog).toEqual(true);
-      } else {
-        expect(test.expected).toEqual(output);
-      }
-    });
   }
 };
 
 function pipe(test) {
-  return function() {
-    var output, outputTwo, flag, flagTwo, context, log, logTwo, messageInLog, messageInLogTwo;
-    runs(function() {
-      flag = false;
+  return function(done) {
+    var output, outputTwo, flagOne, flagTwo, complete, context, log, logTwo, messageInLog, messageInLogTwo;
+      flagOne = false;
       flagTwo = false;
+      complete = false;
       output = '';
       outputTwo = '';
       log = [];
       logTwo = [];
       messageInLog = false;
       messageInLogTwo = false;
+
+      function check(flagNum) {
+        if (flagNum === 1) {
+          flagOne = true;
+        }
+        if (flagNum === 2) {
+          flagTwo = true;
+        }
+        if (flagOne && flagTwo && !complete) {
+          complete = true;
+          if (test.error) {
+            expect(output).toContain(test.error);
+            expect(outputTwo).toContain(test.error);
+          } else if (test.log) {
+            for(var i=0; i<log.length; i++) {
+              if(log[i].message === test.log) {
+                messageInLog = true;
+                break;
+              }
+            }
+            dust.logQueue = [];
+            expect(messageInLog).toEqual(true);
+            for(var i=0; i<logTwo.length; i++) {
+              if(logTwo[i].message === test.log) {
+                messageInLogTwo = true;
+                break;
+              }
+            }
+            dust.logQueue = [];
+            expect(messageInLogTwo).toEqual(true);
+          } else {
+            expect(test.expected).toEqual(output);
+            expect(test.expected).toEqual(outputTwo);
+          }
+          done();
+        }
+      }
+
       try {
         dust.config = test.config || { whitespace: false };
         dust.loadSource(dust.compile(test.source, test.name));
@@ -174,8 +224,8 @@ function pipe(test) {
                 } catch(error) {
                   output = error.message;
                   outputTwo = error.message;
-                  flag = true;
-                  flagTwo = true;
+                  check(1);
+                  check(2);
                 }
               });
             };
@@ -187,13 +237,13 @@ function pipe(test) {
                 } catch(error) {
                   output = error.message;
                   outputTwo = error.message;
-                  flag = true;
-                  flagTwo = true;
+                  check(1);
+                  check(2);
                 }
               }, 0);
             };
           }
-        } )();
+        }());
         var tpl = dust.stream(test.name, context);
         tpl.pipe({
           write: function (data) {
@@ -201,13 +251,13 @@ function pipe(test) {
             log = dust.logQueue;
           },
           end: function () {
-            flag = true;
             log = dust.logQueue;
+            check(1);
           },
           error: function (err) {
-            flag = true;
             output = err.message || err;
             log = dust.logQueue;
+            check(1);
           }
         });
         // Pipe to a second stream to test multiple event-listeners
@@ -217,52 +267,20 @@ function pipe(test) {
             logTwo = logTwo.concat(dust.logQueue);
           },
           end: function () {
-            flagTwo = true;
             logTwo = logTwo.concat(dust.logQueue);
+            check(2);
           },
           error: function (err) {
-            flagTwo = true;
             outputTwo = err.message || err;
             logTwo = logTwo.concat(dust.logQueue);
+            check(2);
           }
         });
       } catch(error) {
         output = error.message;
         outputTwo = error.message;
-        flag= true;
-        flagTwo= true;
+        check(1);
+        check(2);
       }
-    });
-
-    waitsFor(function(){
-      return flag && flagTwo;
-    }, 'the output', 500);
-
-    runs(function(){
-      if (test.error) {
-        expect(output).toContain(test.error);
-        expect(outputTwo).toContain(test.error);
-      } else if (test.log) {
-        for(var i=0; i<log.length; i++) {
-          if(log[i].message === test.log) {
-            messageInLog = true;
-            break;
-          }
-        }
-        dust.logQueue = [];
-        expect(messageInLog).toEqual(true);
-        for(var i=0; i<logTwo.length; i++) {
-          if(logTwo[i].message === test.log) {
-            messageInLogTwo = true;
-            break;
-          }
-        }
-        dust.logQueue = [];
-        expect(messageInLogTwo).toEqual(true);
-      } else {
-        expect(test.expected).toEqual(output);
-        expect(test.expected).toEqual(outputTwo);
-      }
-    });
   }
 };
