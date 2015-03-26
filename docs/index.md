@@ -1,6 +1,6 @@
 ---
 layout: docs
-title: Dust.js | Documentation
+title: Documentation
 ---
 
 - [Dust Syntax](/docs/syntax)

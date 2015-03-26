@@ -1,11 +1,8 @@
 ---
 layout: docs
-title: Dust.js | Template API
+title: Template API
 permalink: /docs/syntax/
 ---
-
-## Dust Template API
-
 
 <h3 id="reference"><code>{reference}</code></h3>
 

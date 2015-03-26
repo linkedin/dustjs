@@ -1,10 +1,8 @@
 ---
 layout: guides
-title: Dust.js | Contexts
+title: Contexts
 permalink: /guides/contexts/
 ---
-
-# Contexts
 
 Dust refers to the data used to render a template as a **context**. The context is modelled as a **stack** of Javascript objects, arrays, and literals. Dust can search multiple layers of the stack, popping off the top objects and looking below.
 
