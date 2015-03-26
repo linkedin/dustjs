@@ -832,10 +832,25 @@ var coreTests = [
 	  },
 	  {
 		name:     "thenable deep section, traverse outside",
-		source:   "Eventually my {#magic.ally}{prince} {delicious}{/magic.ally} will come",
-		context:  { "prince": "Prince", "magic": new FalsePromise(null, {"ally": {"delicious": new FalsePromise(null, "Lucky Charms")} }) },
+		source:   "Eventually my {#magic.ally}{prince} {delicious} {charms}{/magic.ally} will come",
+		base:     { charms: new FalsePromise(null, "Charms") },
+		context:  { "prince": "Prince", "magic": new FalsePromise(null, {"ally": {"delicious": new FalsePromise(null, "Lucky")} }) },
 		expected: "Eventually my Prince Lucky Charms will come",
 		message: "should reserve an async section for a deep-reference thenable and not blow the stack"
+	  },
+	  {
+		name:     "thenable resolved by global helper",
+		source:   '{@promise resolve="helper"}I am a big {.}!{/promise}',
+		context:  {},
+		expected: "I am a big helper!",
+		message:  "Dust helpers that return thenables are resolved in context"
+	  },
+	  {
+		name:     "thenable rejected by global helper",
+		source:   '{@promise reject="error"}I am a big helper!{:error}I am a big {.}!{/promise}',
+		context:  {},
+		expected: "I am a big error!",
+		message:  "Dust helpers that return thenables are rejected in context"
 	  },
 	  {
 		name:     "thenable error",
@@ -1329,8 +1344,8 @@ var coreTests = [
                    '{>"{parentTemplate}"/} | additional parent output'].join("\n"),
         context:  { "loadTemplate": function(chunk, context, bodies, params)
                     {
-                      var source = dust.testHelpers.tap(params.source, chunk, context),
-                          name = dust.testHelpers.tap(params.name, chunk, context);
+                      var source = context.resolve(params.source),
+                          name = context.resolve(params.name);
                       dust.loadSource(dust.compile(source, name));
                       return chunk.write('');
                     },
