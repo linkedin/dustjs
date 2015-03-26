@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Dust.js | Guides
+title: Guides
 ---
 
 - [Getting Started](/guides/getting-started)

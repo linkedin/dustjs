@@ -1,10 +1,8 @@
 ---
-title: Dust.js | Partials
+title: Partials
 layout: guides
 permalink: /guides/partials/
 ---
-
-# Partials
 
 Templates can include other templates by using partials. Rather than specifying the templates to include in a controller or configuration file, Dust allows you to write your partials inline as part of your template.
 

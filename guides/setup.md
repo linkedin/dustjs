@@ -1,5 +1,5 @@
 ---
-title: Dust.js | Setup
+title: Setup
 layout: guides
 permalink: /guides/setup/
 ---

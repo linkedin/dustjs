@@ -2,7 +2,7 @@
 <nav>
   <header>
     <h1><a href="/">Dust.js</a></h1>
-    <h2 class="tagline">Asynchronous templates for the browser and Node.js</h2>
+    <h2 class="tagline">{{ page.title }}</h2>
   </header>
   <ul class="main-nav">
     <li><a href="/guides/setup">Get Dust</a></li>

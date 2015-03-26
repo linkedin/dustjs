@@ -1,10 +1,8 @@
 ---
-title: Dust.js | Using Filters
+title: Using Filters
 layout: guides
 permalink: /guides/using-filters/
 ---
-
-# Filters
 
 Filters are used to transform a variable before outputting it. You can attach one or many filters to a variable, and you can add your own filters to augment the ones built-in to Dust.
 
