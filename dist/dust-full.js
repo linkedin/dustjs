@@ -1,22 +1,21 @@
-/*! Dust - Asynchronous Templating - v2.6.1
+/*! Dust - Asynchronous Templating - v2.6.2
 * http://linkedin.github.io/dustjs/
 * Copyright (c) 2015 Aleksander Williams; Released under the MIT License */
-(function(root) {
+(function (root, factory) {
+  /*global define*/
+  if (typeof define === 'function' && define.amd && define.amd.dust === true) {
+    define('dust.core', [], factory);
+  } else if (typeof exports === 'object') {
+    module.exports = factory();
+  } else {
+    root.dust = factory();
+  }
+}(this, function() {
   var dust = {
-        "version": "2.6.1"
+        "version": "2.6.2"
       },
-      NONE = 'NONE',
-      ERROR = 'ERROR',
-      WARN = 'WARN',
-      INFO = 'INFO',
-      DEBUG = 'DEBUG',
-      loggingLevels = [DEBUG, INFO, WARN, ERROR, NONE],
-      EMPTY_FUNC = function() {},
-      logger = {},
-      originalLog,
-      loggerContext;
-
-  dust.debugLevel = NONE;
+      NONE = 'NONE', ERROR = 'ERROR', WARN = 'WARN', INFO = 'INFO', DEBUG = 'DEBUG',
+      EMPTY_FUNC = function() {};
 
   dust.config = {
     whitespace: false,
@@ -38,47 +37,47 @@
     "helper": "h"
   };
 
-  // Try to find the console in global scope
-  if (root && root.console && root.console.log) {
-    loggerContext = root.console;
-    originalLog = root.console.log;
-  }
+  (function initLogging() {
+    /*global process, console*/
+    var loggingLevels = { DEBUG: 0, INFO: 1, WARN: 2, ERROR: 3, NONE: 4 },
+        consoleLog,
+        log;
 
-  // robust logger for node.js, modern browsers, and IE <= 9.
-  logger.log = loggerContext ? function() {
-      // Do this for normal browsers
-      if (typeof originalLog === 'function') {
-        logger.log = function() {
-          originalLog.apply(loggerContext, arguments);
+    if (typeof console !== 'undefined' && console.log) {
+      consoleLog = console.log;
+      if(typeof consoleLog === 'function') {
+        log = function() {
+          consoleLog.apply(console, arguments);
         };
       } else {
-        // Do this for IE <= 9
-        logger.log = function() {
-          var message = Array.prototype.slice.apply(arguments).join(' ');
-          originalLog(message);
+        log = function() {
+          consoleLog(Array.prototype.slice.apply(arguments).join(' '));
         };
       }
-      logger.log.apply(this, arguments);
-  } : function() { /* no op */ };
-
-  /**
-   * Log dust debug statements, info statements, warning statements, and errors.
-   * Filters out the messages based on the dust.debuglevel.
-   * This default implementation will print to the console if it exists.
-   * @param {String|Error} message the message to print/throw
-   * @param {String} type the severity of the message(ERROR, WARN, INFO, or DEBUG)
-   * @public
-   */
-  dust.log = function(message, type) {
-    type = type || INFO;
-    if (dust.debugLevel !== NONE && dust.indexInArray(loggingLevels, type) >= dust.indexInArray(loggingLevels, dust.debugLevel)) {
-      if(!dust.logQueue) {
-        dust.logQueue = [];
-      }
-      dust.logQueue.push({message: message, type: type});
-      logger.log('[DUST:' + type + ']', message);
+    } else {
+      log = EMPTY_FUNC;
     }
-  };
+
+    /**
+     * Filters messages based on `dust.debugLevel`.
+     * This default implementation will print to the console if it exists.
+     * @param {String|Error} message the message to print/throw
+     * @param {String} type the severity of the message(ERROR, WARN, INFO, or DEBUG)
+     * @public
+     */
+    dust.log = function(message, type) {
+      type = type || INFO;
+      if (loggingLevels[type] >= loggingLevels[dust.debugLevel]) {
+        log('[DUST:' + type + ']', message);
+      }
+    };
+
+    dust.debugLevel = NONE;
+    if(typeof process !== 'undefined' && process.env && /\bdust\b/.test(process.env.DEBUG)) {
+      dust.debugLevel = DEBUG;
+    }
+
+  }());
 
   dust.helpers = {};
 
@@ -117,9 +116,14 @@
     return dust.compileFn(source)(context, callback);
   };
 
+  /**
+   * Compile a template to an invokable function.
+   * If `name` is provided, also registers the template under `name`.
+   * @param source {String} template source
+   * @param [name] {String} template name
+   * @return {Function} has the signature `fn(context, cb)`
+   */
   dust.compileFn = function(source, name) {
-    // name is optional. When name is not provided the template can only be rendered using the callable returned by this function.
-    // If a name is provided the compiled template can also be rendered by name.
     name = name || null;
     var tmpl = dust.loadSource(dust.compile(source, name));
     return function(context, callback) {
@@ -127,9 +131,8 @@
       dust.nextTick(function() {
         if(typeof tmpl === 'function') {
           tmpl(master.head, Context.wrap(context, name)).end();
-        }
-        else {
-          dust.log(new Error('Template [' + name + '] cannot be resolved to a Dust function'), ERROR);
+        } else {
+          dust.log(new Error('Template `' + name + '` could not be loaded'), ERROR);
         }
       });
       return master;
@@ -159,6 +162,7 @@
   };
 
   dust.loadSource = function(source, path) {
+    /*jshint evil:true*/
     return eval(source);
   };
 
@@ -170,61 +174,62 @@
     };
   }
 
-  // indexOf shim for arrays for IE <= 8
-  // source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf
-  dust.indexInArray = function(arr, item, fromIndex) {
-    fromIndex = +fromIndex || 0;
-    if (Array.prototype.indexOf) {
-      return arr.indexOf(item, fromIndex);
-    } else {
-    if ( arr === undefined || arr === null ) {
-      throw new TypeError( 'cannot call method "indexOf" of null' );
-    }
-
-    var length = arr.length; // Hack to convert object.length to a UInt32
-
-    if (Math.abs(fromIndex) === Infinity) {
-      fromIndex = 0;
-    }
-
-    if (fromIndex < 0) {
-      fromIndex += length;
-      if (fromIndex < 0) {
-        fromIndex = 0;
-      }
-    }
-
-    for (;fromIndex < length; fromIndex++) {
-      if (arr[fromIndex] === item) {
-        return fromIndex;
-      }
-    }
-
-    return -1;
-    }
-  };
-
   dust.nextTick = (function() {
     return function(callback) {
       setTimeout(callback,0);
     };
   } )();
 
+  /**
+   * Dust has its own rules for what is "empty"-- which is not the same as falsy.
+   * Empty arrays, null, and undefined are empty
+   */
   dust.isEmpty = function(value) {
-    if (dust.isArray(value) && !value.length) {
-      return true;
-    }
     if (value === 0) {
       return false;
     }
-    return (!value);
+    if (dust.isArray(value) && !value.length) {
+      return true;
+    }
+    return !value;
+  };
+
+  dust.isEmptyObject = function(obj) {
+    var key;
+    if (obj === null) {
+      return false;
+    }
+    if (obj === undefined) {
+      return false;
+    }
+    if (obj.length > 0) {
+      return false;
+    }
+    for (key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  /**
+   * Decide somewhat-naively if something is a Thenable.
+   * @param elem {*} object to inspect
+   * @return {Boolean} is `elem` a Thenable?
+   */
+  dust.isThenable = function(elem) {
+    return elem &&
+           typeof elem === 'object' &&
+           typeof elem.then === 'function';
   };
 
   // apply the filter chain and return the output string
   dust.filter = function(string, auto, filters) {
+    var i, len, name;
     if (filters) {
-      for (var i=0, len=filters.length; i<len; i++) {
-        var name = filters[i];
+      for (i = 0, len = filters.length; i < len; i++) {
+        name = filters[i];
         if (name === 's') {
           auto = null;
         }
@@ -232,7 +237,7 @@
           string = dust.filters[name](string);
         }
         else {
-          dust.log('Invalid filter [' + name + ']', WARN);
+          dust.log('Invalid filter `' + name + '`', WARN);
         }
       }
     }
@@ -250,7 +255,7 @@
     uc: encodeURIComponent,
     js: function(value) { return dust.escapeJSON(value); },
     jp: function(value) {
-      if (!JSON) {dust.log('JSON is undefined.  JSON parse has not been used on [' + value + ']', WARN);
+      if (!JSON) {dust.log('JSON is undefined; could not parse `' + value + '`', WARN);
         return value;
       } else {
         return JSON.parse(value);
@@ -259,7 +264,7 @@
   };
 
   function Context(stack, global, blocks, templateName) {
-    this.stack  = stack;
+    this.stack = stack;
     this.global = global;
     this.blocks = blocks;
     this.templateName = templateName;
@@ -268,6 +273,18 @@
   dust.makeBase = function(global) {
     return new Context(new Stack(), global);
   };
+
+  /**
+   * Factory function that creates a closure scope around a Thenable-callback.
+   * Returns a function that can be passed to a Thenable that will resume a
+   * Context lookup once the Thenable resolves with new data, adding that new
+   * data to the lookup stack.
+   */
+  function getWithResolvedData(ctx, cur, down) {
+    return function(data) {
+      return ctx.push(data)._get(cur, down);
+    };
+  }
 
   Context.wrap = function(context, name) {
     if (context instanceof Context) {
@@ -310,9 +327,10 @@
    * @return {string | object}
    */
   Context.prototype._get = function(cur, down) {
-    var ctx = this.stack,
+    var ctx = this.stack || {},
         i = 1,
         value, first, len, ctxThis, fn;
+
     first = down[0];
     len = down.length;
 
@@ -343,19 +361,22 @@
         if(ctx.head) {
           ctx = ctx.head[first];
         } else {
-          //context's head is empty, value we are searching for is not defined
+          // context's head is empty, value we are searching for is not defined
           ctx = undefined;
         }
       }
 
       while (ctx && i < len) {
+        if (dust.isThenable(ctx)) {
+          // Bail early by returning a Thenable for the remainder of the search tree
+          return ctx.then(getWithResolvedData(this, cur, down.slice(i)));
+        }
         ctxThis = ctx;
         ctx = ctx[down[i]];
         i++;
       }
     }
 
-    // Return the ctx or a function wrapping the application of the context.
     if (typeof ctx === 'function') {
       fn = function() {
         try {
@@ -369,7 +390,7 @@
       return fn;
     } else {
       if (ctx === undefined) {
-        dust.log('Cannot find the value for reference [{' + down.join('.') + '}] in template [' + this.getTemplateName() + ']');
+        dust.log('Cannot find reference `{' + down.join('.') + '}` in template `' + this.getTemplateName() + '`', INFO);
       }
       return ctx;
     }
@@ -383,33 +404,50 @@
     return new Context(new Stack(head, this.stack, idx, len), this.global, this.blocks, this.getTemplateName());
   };
 
+  Context.prototype.pop = function() {
+    var head = this.current();
+    this.stack = this.stack && this.stack.tail;
+    return head;
+  };
+
   Context.prototype.rebase = function(head) {
     return new Context(new Stack(head), this.global, this.blocks, this.getTemplateName());
   };
 
+  Context.prototype.clone = function() {
+    var context = this.rebase();
+    context.stack = this.stack;
+    return context;
+  };
+
   Context.prototype.current = function() {
-    return this.stack.head;
+    return this.stack && this.stack.head;
   };
 
   Context.prototype.getBlock = function(key, chk, ctx) {
+    var blocks, len, fn;
+
     if (typeof key === 'function') {
-      var tempChk = new Chunk();
-      key = key(tempChk, this).data.join('');
+      key = key(new Chunk(), this).data.join('');
     }
 
-    var blocks = this.blocks;
+    blocks = this.blocks;
 
     if (!blocks) {
-      dust.log('No blocks for context[{' + key + '}] in template [' + this.getTemplateName() + ']', DEBUG);
-      return;
+      dust.log('No blocks for context `' + key + '` in template `' + this.getTemplateName() + '`', DEBUG);
+      return false;
     }
-    var len = blocks.length, fn;
+
+    len = blocks.length;
     while (len--) {
       fn = blocks[len][key];
       if (fn) {
         return fn;
       }
     }
+
+    dust.log('Malformed template `' + this.getTemplateName() + '` was missing one or more blocks.');
+    return false;
   };
 
   Context.prototype.shiftBlocks = function(locals) {
@@ -425,6 +463,19 @@
       return new Context(this.stack, this.global, newBlocks, this.getTemplateName());
     }
     return this;
+  };
+
+  Context.prototype.resolve = function(body) {
+    var chunk;
+
+    if(typeof body !== 'function') {
+      return body;
+    }
+    chunk = new Chunk().render(body, this);
+    if(!body.__dustBody) {
+      return chunk;
+    }
+    return chunk.data.join(''); // ie7 perf
   };
 
   Context.prototype.getTemplateName = function() {
@@ -453,7 +504,7 @@
         this.out += chunk.data.join(''); //ie7 perf
       } else if (chunk.error) {
         this.callback(chunk.error);
-        dust.log('Chunk error [' + chunk.error + '] thrown. Ceasing to render this template.', WARN);
+        dust.log('Rendering failed with error `' + chunk.error + '`', ERROR);
         this.flush = EMPTY_FUNC;
         return;
       } else {
@@ -477,7 +528,7 @@
         this.emit('data', chunk.data.join('')); //ie7 perf
       } else if (chunk.error) {
         this.emit('error', chunk.error);
-        dust.log('Chunk error [' + chunk.error + '] thrown. Ceasing to render this template.', WARN);
+        dust.log('Streaming failed with error `' + chunk.error + '`', ERROR);
         this.flush = EMPTY_FUNC;
         return;
       } else {
@@ -490,62 +541,52 @@
   };
 
   Stream.prototype.emit = function(type, data) {
-    if (!this.events) {
-      dust.log('No events to emit', INFO);
-      return false;
+    var events = this.events || {},
+        handlers = events[type] || [],
+        i, l;
+
+    if (!handlers.length) {
+      dust.log('Stream broadcasting, but no listeners for `' + type + '`', DEBUG);
+      return;
     }
-    var handler = this.events[type];
-    if (!handler) {
-      dust.log('Event type [' + type + '] does not exist', WARN);
-      return false;
-    }
-    if (typeof handler === 'function') {
-      handler(data);
-    } else if (dust.isArray(handler)) {
-      var listeners = handler.slice(0);
-      for (var i = 0, l = listeners.length; i < l; i++) {
-        listeners[i](data);
-      }
-    } else {
-      dust.log('Event Handler [' + handler + '] is not of a type that is handled by emit', WARN);
+
+    handlers = handlers.slice(0);
+    for (i = 0, l = handlers.length; i < l; i++) {
+      handlers[i](data);
     }
   };
 
   Stream.prototype.on = function(type, callback) {
-    if (!this.events) {
-      this.events = {};
-    }
-    if (!this.events[type]) {
-      if(callback) {
-        this.events[type] = callback;
-      } else {
-        dust.log('Callback for type [' + type + '] does not exist. Listener not registered.', WARN);
-      }
-    } else if(typeof this.events[type] === 'function') {
-      this.events[type] = [this.events[type], callback];
+    var events = this.events = this.events || {},
+        handlers = events[type] = events[type] || [];
+
+    if(typeof callback !== 'function') {
+      dust.log('No callback function provided for `' + type + '` event listener', WARN);
     } else {
-      this.events[type].push(callback);
+      handlers.push(callback);
     }
     return this;
   };
 
   Stream.prototype.pipe = function(stream) {
-    this.on('data', function(data) {
+    return this
+    .on('data', function(data) {
       try {
         stream.write(data, 'utf8');
       } catch (err) {
         dust.log(err, ERROR);
       }
-    }).on('end', function() {
+    })
+    .on('end', function() {
       try {
-        return stream.end();
+        stream.end();
       } catch (err) {
         dust.log(err, ERROR);
       }
-    }).on('error', function(err) {
+    })
+    .on('error', function(err) {
       stream.error(err);
     });
-    return this;
   };
 
   function Chunk(root, next, taps) {
@@ -557,7 +598,7 @@
   }
 
   Chunk.prototype.write = function(data) {
-    var taps  = this.taps;
+    var taps = this.taps;
 
     if (taps) {
       data = taps.go(data);
@@ -583,9 +624,9 @@
     this.flushable = true;
     try {
       callback(branch);
-    } catch(e) {
-      dust.log(e, ERROR);
-      branch.setError(e);
+    } catch(err) {
+      dust.log(err, ERROR);
+      branch.setError(err);
     }
     return cursor;
   };
@@ -612,14 +653,14 @@
 
   Chunk.prototype.reference = function(elem, context, auto, filters) {
     if (typeof elem === 'function') {
-      // Changed the function calling to use apply with the current context to make sure
-      // that "this" is wat we expect it to be inside the function
       elem = elem.apply(context.current(), [this, context, null, {auto: auto, filters: filters}]);
       if (elem instanceof Chunk) {
         return elem;
       }
     }
-    if (!dust.isEmpty(elem)) {
+    if (dust.isThenable(elem)) {
+      return this.await(elem, context);
+    } else if (!dust.isEmpty(elem)) {
       return this.write(dust.filter(elem, auto, filters));
     } else {
       return this;
@@ -627,25 +668,26 @@
   };
 
   Chunk.prototype.section = function(elem, context, bodies, params) {
-    // anonymous functions
+    var body = bodies.block,
+        skip = bodies['else'],
+        chunk = this,
+        i, len;
+
     if (typeof elem === 'function' && !elem.__dustBody) {
       try {
         elem = elem.apply(context.current(), [this, context, bodies, params]);
-      } catch(e) {
-        dust.log(e, ERROR);
-        return this.setError(e);
+      } catch(err) {
+        dust.log(err, ERROR);
+        return this.setError(err);
       }
-      // functions that return chunks are assumed to have handled the body and/or have modified the chunk
-      // use that return value as the current chunk and go to the next method in the chain
+      // Functions that return chunks are assumed to have handled the chunk manually.
+      // Make that chunk the current one and go to the next method in the chain.
       if (elem instanceof Chunk) {
         return elem;
       }
     }
-    var body = bodies.block,
-        skip = bodies['else'];
 
-    // a.k.a Inline parameters in the Dust documentations
-    if (params) {
+    if (!dust.isEmptyObject(params)) {
       context = context.push(params);
     }
 
@@ -654,17 +696,15 @@
     When elem resolves to a value or object instead of an array, Dust sets the current context to the value
     and renders the block one time.
     */
-    //non empty array is truthy, empty array is falsy
     if (dust.isArray(elem)) {
       if (body) {
-        var len = elem.length, chunk = this;
+        len = elem.length;
         if (len > 0) {
-          // any custom helper can blow up the stack
-          // and store a flattened context, guard defensively
+          // any custom helper can blow up the stack and store a flattened context, guard defensively
           if(context.stack.head) {
             context.stack.head['$len'] = len;
           }
-          for (var i=0; i<len; i++) {
+          for (i = 0; i < len; i++) {
             if(context.stack.head) {
               context.stack.head['$idx'] = i;
             }
@@ -680,7 +720,9 @@
           return skip(this, context);
         }
       }
-    } else if (elem  === true) {
+    } else if (dust.isThenable(elem)) {
+      return this.await(elem, context, bodies);
+    } else if (elem === true) {
      // true is truthy but does not change context
       if (body) {
         return body(this, context);
@@ -697,7 +739,7 @@
     } else if (skip) {
       return skip(this, context);
     }
-    dust.log('Not rendering section (#) block in template [' + context.getTemplateName() + '], because above key was not found', DEBUG);
+    dust.log('Section without corresponding key in template `' + context.getTemplateName() + '`', DEBUG);
     return this;
   };
 
@@ -709,10 +751,10 @@
       if (body) {
         return body(this, context);
       }
+      dust.log('No block for exists check in template `' + context.getTemplateName() + '`', DEBUG);
     } else if (skip) {
       return skip(this, context);
     }
-    dust.log('Not rendering exists (?) block in template [' + context.getTemplateName() + '], because above key was not found', DEBUG);
     return this;
   };
 
@@ -724,19 +766,15 @@
       if (body) {
         return body(this, context);
       }
+      dust.log('No block for not-exists check in template `' + context.getTemplateName() + '`', DEBUG);
     } else if (skip) {
       return skip(this, context);
     }
-    dust.log('Not rendering not exists (^) block check in template [' + context.getTemplateName() + '], because above key was found', DEBUG);
     return this;
   };
 
   Chunk.prototype.block = function(elem, context, bodies) {
-    var body = bodies.block;
-
-    if (elem) {
-      body = elem;
-    }
+    var body = elem || bodies.block;
 
     if (body) {
       return body(this, context);
@@ -745,53 +783,75 @@
   };
 
   Chunk.prototype.partial = function(elem, context, params) {
-    var partialContext;
-    //put the params context second to match what section does. {.} matches the current context without parameters
-    // start with an empty context
-    partialContext = dust.makeBase(context.global);
-    partialContext.blocks = context.blocks;
-    if (context.stack && context.stack.tail){
-      // grab the stack(tail) off of the previous context if we have it
-      partialContext.stack = context.stack.tail;
-    }
-    if (params){
-      //put params on
-      partialContext = partialContext.push(params);
+    var head;
+
+    if (!dust.isEmptyObject(params)) {
+      context = context.clone();
+      head = context.pop();
+      context = context.push(params)
+                       .push(head);
     }
 
-    if(typeof elem === 'string') {
-      partialContext.templateName = elem;
-    }
-
-    //reattach the head
-    partialContext = partialContext.push(context.stack.head);
-
-    var partialChunk;
-    if (typeof elem === 'function') {
-      partialChunk = this.capture(elem, partialContext, function(name, chunk) {
-        partialContext.templateName = partialContext.templateName || name;
-        dust.load(name, chunk, partialContext).end();
+    if (elem.__dustBody) {
+      // The eventual result of evaluating `elem` is a partial name
+      // Load the partial after getting its name and end the async chunk
+      return this.capture(elem, context, function(name, chunk) {
+        context.templateName = name;
+        dust.load(name, chunk, context).end();
       });
     } else {
-      partialChunk = dust.load(elem, this, partialContext);
+      context.templateName = elem;
+      return dust.load(elem, this, context);
     }
-    return partialChunk;
   };
 
   Chunk.prototype.helper = function(name, context, bodies, params) {
-    var chunk = this;
+    var chunk = this,
+        ret;
     // handle invalid helpers, similar to invalid filters
     if(dust.helpers[name]) {
       try {
-        return dust.helpers[name](chunk, context, bodies, params);
-      } catch(e) {
-        dust.log('Error in ' + name + ' helper: ' + e, ERROR);
-        return chunk.setError(e);
+        ret = dust.helpers[name](chunk, context, bodies, params);
+        if (dust.isThenable(ret)) {
+          return this.await(ret, context, bodies);
+        }
+        return ret;
+      } catch(err) {
+        dust.log('Error in helper `' + name + '`: ' + err.message, ERROR);
+        return chunk.setError(err);
       }
     } else {
-      dust.log('Invalid helper [' + name + ']', WARN);
+      dust.log('Helper `' + name + '` does not exist', WARN);
       return chunk;
     }
+  };
+
+  /**
+   * Reserve a chunk to be evaluated once a thenable is resolved or rejected
+   * @param thenable {Thenable} the target thenable to await
+   * @param context {Context} context to use to render the deferred chunk
+   * @param bodies {Object} must contain a "body", may contain an "error"
+   * @return {Chunk}
+   */
+  Chunk.prototype.await = function(thenable, context, bodies) {
+    var body = bodies && bodies.block,
+        errorBody = bodies && bodies.error;
+    return this.map(function(chunk) {
+      thenable.then(function(data) {
+        if(body) {
+          chunk.render(body, context.push(data)).end();
+        } else {
+          chunk.end(data);
+        }
+      }, function(err) {
+        if(errorBody) {
+          chunk.render(errorBody, context.push(err)).end();
+        } else {
+          dust.log('Unhandled promise rejection in `' + context.getTemplateName() + '`');
+          chunk.end();
+        }
+      });
+    });
   };
 
   Chunk.prototype.capture = function(body, context, callback) {
@@ -889,7 +949,7 @@
 
   dust.escapeJSON = function(o) {
     if (!JSON) {
-      dust.log('JSON is undefined.  JSON stringify has not been used on [' + o + ']', WARN);
+      dust.log('JSON is undefined; could not escape `' + o + '`', WARN);
       return o;
     } else {
       return JSON.stringify(o)
@@ -899,17 +959,9 @@
     }
   };
 
-  if (typeof define === "function" && define.amd && define.amd.dust === true) {
-    define("dust.core", function() {
-      return dust;
-    });
-  } else if (typeof exports === 'object') {
-    module.exports = dust;
-  } else {
-    root.dust = dust;
-  }
+  return dust;
 
-})((function(){return this;})());
+}));
 
 (function(root, factory) {
   if (typeof define === "function" && define.amd && define.amd.dust === true) {

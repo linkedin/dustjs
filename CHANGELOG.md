@@ -1,814 +1,234 @@
 ## Change Log
 
-### upcoming (2015/03/12 00:36 +00:00)
-- [4d69dd6](https://github.com/linkedin/dustjs/commit/4d69dd6d4c91b2d1bba930a0133eda3291f20766) update changelog for 2.6.1 changes
+### v2.6.2 (2015/03/26 20:27 +00:00)
+- [#593](https://github.com/linkedin/dustjs/pull/593) npm upgrade (@sethkinast)
+- [#590](https://github.com/linkedin/dustjs/pull/590) Add deep resolution of Thenables in context (@sethkinast)
+- [#583](https://github.com/linkedin/dustjs/pull/583) Move lib/server to index (@sethkinast)
+- [#587](https://github.com/linkedin/dustjs/pull/587) Allow Rhino test failures to break the build (and fix a test typo that broke Rhino) (@sethkinast)
+- [#582](https://github.com/linkedin/dustjs/pull/582) Refactor main Dust module's global context (@sethkinast)
+- [#579](https://github.com/linkedin/dustjs/pull/579) Clean up / refactor logging (@sethkinast)
+- [#569](https://github.com/linkedin/dustjs/pull/569) Thenable support (@sethkinast)
+- [#578](https://github.com/linkedin/dustjs/pull/578) Add --watch support to dustc (@sethkinast)
+- [#577](https://github.com/linkedin/dustjs/pull/577) Adding examples! (@sethkinast)
+- [#559](https://github.com/linkedin/dustjs/pull/559) Add `context.clone` and `context.pop` and simplify chunk.partial. (@sethkinast)
+- [#555](https://github.com/linkedin/dustjs/pull/555) Add Context#resolve (@sethkinast)
 
 ### v2.6.1 (2015/03/11 23:38 +00:00)
-- [1d10360](https://github.com/linkedin/dustjs/commit/1d103605e7c3f391ada12afdc254f21e272ad370) refactored tests to improve organization (+2 squashed commits)
-- [b4be340](https://github.com/linkedin/dustjs/commit/b4be3403f8506acab8db604533b08cde8c780c58) Update bower file and package.json (@sethkinast)
-- [#550](https://github.com/linkedin/dustjs/pull/550) Core grammar: support negative numbers passed as params (@jasonbelmonti)
-- [#552](https://github.com/linkedin/dustjs/pull/552) Update bower file (@sethkinast)
-- [#546](https://github.com/linkedin/dustjs/pull/546) Add Travis test targets for node 0.12 and iojs (@sethkinast)
-- [4cbe3a4](https://github.com/linkedin/dustjs/commit/4cbe3a409f66c8e8a640d5b0d490bdc173accc87) Fix the output of format (whitespace-only) blocks inside inline partials. (@sethkinast)
 - [#557](https://github.com/linkedin/dustjs/pull/557) Fix the output of format (whitespace-only) blocks inside inline partials (@sethkinast)
-- [2953151](https://github.com/linkedin/dustjs/commit/2953151fcf417deb8fef55b365bd2a12d5236ec0) Release v2.6.1
+- [#546](https://github.com/linkedin/dustjs/pull/546) Add Travis test targets for node 0.12 and iojs (@sethkinast)
+- [#552](https://github.com/linkedin/dustjs/pull/552) Update bower file (@sethkinast)
+- [#550](https://github.com/linkedin/dustjs/pull/550) Core grammar: support negative numbers passed as params (@jasonbelmonti)
 
 ### v2.6.0 (2015/03/05 01:30 +00:00)
-- [cbfd02b](https://github.com/linkedin/dustjs/commit/cbfd02b1ca26ac85d5517cdda1a56243cbfc0350) Don't stringify dust.log messages (@sethkinast)
-- [#526](https://github.com/linkedin/dustjs/pull/526) Don't stringify dust.log messages (@sethkinast)
-- [8a3258d](https://github.com/linkedin/dustjs/commit/8a3258dddcf90a64c9751a21ec128670a68d0b34) Removed hanging comma (@jrrbru)
-- [#529](https://github.com/linkedin/dustjs/pull/529) Fix hanging comma in dust.config. Fixes IE7. (@jrrbru)
-- [c20e70e](https://github.com/linkedin/dustjs/commit/c20e70edb2041a66067a010bdefbf9fe3267c7ab) Add dust.version and bump it during grunt-bump (@sethkinast)
-- [#533](https://github.com/linkedin/dustjs/pull/533) Add dust.version and bump it during grunt-bump (@sethkinast)
-- [884be3b](https://github.com/linkedin/dustjs/commit/884be3bb3a34a843e6fb411100088e9b02326bd4) Stringify things before calling escapeHtml on them in case their stringified representation contains HTML. (@sethkinast)
-- [f42f7f1](https://github.com/linkedin/dustjs/commit/f42f7f1d5998ffea6822ff1dca3de57b0c9a0b37) Stop archiving old releases (@sethkinast)
-- [#537](https://github.com/linkedin/dustjs/pull/537) Stop archiving old releases (@sethkinast)
-- [374bbdb](https://github.com/linkedin/dustjs/commit/374bbdb6c377307d67adea9377ad4c47f82984e5) Fix whitespace inside partials not being preserved. (@BradEstey)
-- [362490d](https://github.com/linkedin/dustjs/commit/362490d3cd10106e207adfafd48f6f0a88e361f2) Merge branch 'whitespace' (@sethkinast)
-- [#534](https://github.com/linkedin/dustjs/pull/534) Stringify things before calling escapeHtml on them in case their stringified representation contains HTML (@sethkinast)
-- [f2dc19c](https://github.com/linkedin/dustjs/commit/f2dc19c327c928ee172d55e94e68608a88617298) escape values when using json filter (@jimmyhchan)
-- [#540](https://github.com/linkedin/dustjs/pull/540) escape values (\u2028, \u2029 and <) when using json filter (@jimmyhchan)
-- [f7da460](https://github.com/linkedin/dustjs/commit/f7da4605c684924f5f365e57cb7c0438a209c8f0) Escape template names (@aredridel)
-- [#541](https://github.com/linkedin/dustjs/pull/541) Escape template names in case they contain non-JS-safe characters (@aredridel)
-- [6ee62da](https://github.com/linkedin/dustjs/commit/6ee62da3f9e875a783084e5af0abfdb8bb899c43) Replaced util.print/util.puts with console.log
-- [#543](https://github.com/linkedin/dustjs/pull/543) dustc: replace util.print/util.puts with console.log (@hunterchristian)
-- [34f17bd](https://github.com/linkedin/dustjs/commit/34f17bdbcdb5373a0a96eca8c684a1b4657c7152) Add AMD (require.js) compatibility. (@sethkinast)
-- [#536](https://github.com/linkedin/dustjs/pull/536) Add AMD (require.js) compatibility.  This includes the core, compiler, parser, and support for compiling templates as AMD modules.  Have to set define.amd.dust to true to allow dust to be loaded as an AMD module, and dust.config.amd to true to compile templates as AMD modules. (@sethkinast)
-- [6529be6](https://github.com/linkedin/dustjs/commit/6529be606a0104588a204599090d5256e9e42174) Add Travis test targets (@sethkinast)
-- [f5578b7](https://github.com/linkedin/dustjs/commit/f5578b7156a0ed308ab56c0c12b6fe1a639df36b) New dust command-line compiler (@sethkinast)
 - [#545](https://github.com/linkedin/dustjs/pull/545) New dustc compiler.  This breaks backward compat, but allows streaming output and a usage manual.  Also includes tests that were nonexistent previously. (@sethkinast)
-- [e179c8f](https://github.com/linkedin/dustjs/commit/e179c8ff600e0ee73be13ee9ded904321fcbcfc0) Release v2.6.0 (@sethkinast)
+- [#536](https://github.com/linkedin/dustjs/pull/536) Add AMD (require.js) compatibility.  This includes the core, compiler, parser, and support for compiling templates as AMD modules.  Have to set define.amd.dust to true to allow dust to be loaded as an AMD module, and dust.config.amd to true to compile templates as AMD modules. (@sethkinast)
+- [#543](https://github.com/linkedin/dustjs/pull/543) dustc: replace util.print/util.puts with console.log (@hunterchristian)
+- [#541](https://github.com/linkedin/dustjs/pull/541) Escape template names in case they contain non-JS-safe characters (@aredridel)
+- [#540](https://github.com/linkedin/dustjs/pull/540) escape values (\u2028, \u2029 and <) when using json filter (@jimmyhchan)
+- [#534](https://github.com/linkedin/dustjs/pull/534) Stringify things before calling escapeHtml on them in case their stringified representation contains HTML (@sethkinast)
+- [#537](https://github.com/linkedin/dustjs/pull/537) Stop archiving old releases (@sethkinast)
+- [#533](https://github.com/linkedin/dustjs/pull/533) Add dust.version and bump it during grunt-bump (@sethkinast)
+- [#529](https://github.com/linkedin/dustjs/pull/529) Fix hanging comma in dust.config. Fixes IE7. (@jrrbru)
+- [#526](https://github.com/linkedin/dustjs/pull/526) Don't stringify dust.log messages (@sethkinast)
 
 ### v2.5.1 (2014/11/20 01:08 +00:00)
-- [623270f](https://github.com/linkedin/dustjs/commit/623270fac1b6d816a4ec411e7d6f1138f7c36425) Update changelog to 2.5.0 (@sethkinast)
-- [#520](https://github.com/linkedin/dustjs/pull/520) Update changelog to 2.5.0 (@sethkinast)
-- [b139dd8](https://github.com/linkedin/dustjs/commit/b139dd811d49d952ba0a7a35fc208187c5ffef1a) Fix the use of a multi-level object key (e.g. foo.bar) as the key for an index lookup inside non-self-closing tags. (@sethkinast)
 - [#522](https://github.com/linkedin/dustjs/pull/522) Fix the use of a multi-level object key (e.g. foo.bar) as the key for an index lookup inside non-self-closing tags. (@sethkinast)
-- [073a4e2](https://github.com/linkedin/dustjs/commit/073a4e289a301e4798d46f9beb224fac1546bcd1) add more descriptive keywords to the package.json
-- [48f302b](https://github.com/linkedin/dustjs/commit/48f302b6aea63a5f7d5509200917d71e45a07d5b) Release v2.5.1 (@sethkinast)
+- [#520](https://github.com/linkedin/dustjs/pull/520) Update changelog to 2.5.0 (@sethkinast)
 
 ### v2.5.0 (2014/11/04 00:15 +00:00)
-- [9fbb56e](https://github.com/linkedin/dustjs/commit/9fbb56eaca36cc63b6460c10043878b890a2b673) it's silly to pass a regexp literal to the regexp constructor (@jimmyhchan)
-- [#502](https://github.com/linkedin/dustjs/pull/502) Don't use the regexp constructor since we are using a regexp literal anyway (@jimmyhchan)
-- [b9e05af](https://github.com/linkedin/dustjs/commit/b9e05af3f2932644ea6f4f2fd2d184c645ecf18f) Update contributors list (@sethkinast)
-- [#503](https://github.com/linkedin/dustjs/pull/503) Update contributors list (@sethkinast)
-- [e649dca](https://github.com/linkedin/dustjs/commit/e649dcaabd4d7063c358f9d8f5ddcaccac3ae19d) Update README punctuation lines 34, 55, 60 and 62 (@NickStefan)
-- [#504](https://github.com/linkedin/dustjs/pull/504) Update README formatting (@NickStefan)
-- [a3bd24b](https://github.com/linkedin/dustjs/commit/a3bd24b43bce33bdfc7ff505588e0ad5ad6e684d) Treat formats and buffers as interchangeable when they are mixed together. (@sethkinast)
-- [7a37953](https://github.com/linkedin/dustjs/commit/7a37953b13fbca48c654d8dc797cec38b698e7a7) Remove the warning log when you attach a new Stream event (@sethkinast)
-- [#511](https://github.com/linkedin/dustjs/pull/511) Treat formats and buffers as interchangeable when they are mixed together in order to prevent stack overflows with large templates and add a whitespace flag to dust.config (@sethkinast)
-- [31309dc](https://github.com/linkedin/dustjs/commit/31309dc3059c96fde6daa19466212f67d41392c1) Don't instaevaluate generated body_ functions. Instead, place them into the context and attempt to render their containing block. (@sethkinast)
-- [#513](https://github.com/linkedin/dustjs/pull/513) Treat compiled body functions as blocks to render instead of functions to evaluate.   Dust body functions are now flagged with .___dustBody to differentiate them from functions set in the context. (@sethkinast)
 - [#515](https://github.com/linkedin/dustjs/pull/515) Remove the warning log when you attach a new Stream event (@sethkinast)
-- [d92d5c3](https://github.com/linkedin/dustjs/commit/d92d5c3a0e546febfe258fc9c749e6824b1fe171) Release v2.5.0
+- [#513](https://github.com/linkedin/dustjs/pull/513) Treat compiled body functions as blocks to render instead of functions to evaluate.   Dust body functions are now flagged with .___dustBody to differentiate them from functions set in the context. (@sethkinast)
+- [#511](https://github.com/linkedin/dustjs/pull/511) Treat formats and buffers as interchangeable when they are mixed together in order to prevent stack overflows with large templates and add a whitespace flag to dust.config (@sethkinast)
+- [#504](https://github.com/linkedin/dustjs/pull/504) Update README formatting (@NickStefan)
+- [#503](https://github.com/linkedin/dustjs/pull/503) Update contributors list (@sethkinast)
+- [#502](https://github.com/linkedin/dustjs/pull/502) Don't use the regexp constructor since we are using a regexp literal anyway (@jimmyhchan)
 
 ### v2.4.2 (2014/09/09 23:11 +00:00)
-- [c89383a](https://github.com/linkedin/dustjs/commit/c89383a18d4763a687485b179ce6f2126ad867a9) Merge 2.3 changes (@sethkinast)
-- [#497](https://github.com/linkedin/dustjs/pull/497) Upgrade to pegJS 0.8
- - This change corresponds to a 90% reduction in template compile time. (@sethkinast)
-- [3c5f966](https://github.com/linkedin/dustjs/commit/3c5f96690040a662adcd5fae8595677648103df0) Release v2.4.2
+- [#497](https://github.com/linkedin/dustjs/pull/497) Upgrade to pegJS 0.8 - This change corresponds to a 90% reduction in template compile time. (@sethkinast)
 
 ### v2.3.6 (2014/09/09 22:33 +00:00)
-- [18696df](https://github.com/linkedin/dustjs/commit/18696dfe1ed1ec9bef56b15141dd233466d1a658) Don't swallow errors from helpers; output them to the chunk (@sethkinast)
-- [8097bcb](https://github.com/linkedin/dustjs/commit/8097bcbe69524da9678d7132c932a85285076815) Tests that test errors match substrings instead of testing equality of error messages. (@sethkinast)
-- [f6c9f55](https://github.com/linkedin/dustjs/commit/f6c9f55bfd43dde9c47a47f9fd1322119bb45a86) Pin NPM@1.4 for Travis (@sethkinast)
 - [#495](https://github.com/linkedin/dustjs/pull/495) Catch syntax errors in context and fail gracefully (@sethkinast)
-- [5cd74ca](https://github.com/linkedin/dustjs/commit/5cd74cab7bb015c140144c45026d24310c82a1ef) Grammar cleanup. Use new |error| grammar. (@sethkinast)
-- [7cdf1be](https://github.com/linkedin/dustjs/commit/7cdf1be916b450fde5e1821e8dac13e18b339661) Upgrade to pegJS 0.8 (@sethkinast)
-- [48171d9](https://github.com/linkedin/dustjs/commit/48171d98ea9fbc69fbe9759b51d4d53e17680a12) Release v2.3.6 (@sethkinast)
-- [3b39e05](https://github.com/linkedin/dustjs/commit/3b39e052413a49765f8209568dbf805603489c9f) Grammar cleanup. Use new |error| grammar. (@sethkinast)
-- [94f732d](https://github.com/linkedin/dustjs/commit/94f732d7b0b9317e57ad43996d6aea7cfd92a017) Upgrade pegJS to 0.8 (@sethkinast)
 
 ### v2.4.1 (2014/09/02 20:33 +00:00)
-- [642753d](https://github.com/linkedin/dustjs/commit/642753ddecf0ac6bf031866fd3ebc0d8261563b2) Update changelog to 2.4.0
-- [397ff7c](https://github.com/linkedin/dustjs/commit/397ff7cbfb8c1f9f781f991ee8846be8494aa5e5) Revert "Merge pull request #472 from jimmyhchan/OPP" (@sethkinast)
-- [#493](https://github.com/linkedin/dustjs/pull/493) Update changelog to 2.4.0 (@prashn64)
 - [#494](https://github.com/linkedin/dustjs/pull/494) Revert "Merge pull request #472 from jimmyhchan/OPP"  This will allow dust references to look up the object's prototype chain again. (@sethkinast)
-- [8bc0b85](https://github.com/linkedin/dustjs/commit/8bc0b854fb629a1107c525708b1dd2a4d7eeb84d) Release v2.4.1
+- [#493](https://github.com/linkedin/dustjs/pull/493) Update changelog to 2.4.0 (@prashn64)
 
 ### v2.4.0 (2014/06/11 01:32 +00:00)
-- [4451dd3](https://github.com/linkedin/dustjs/commit/4451dd303a72bdac4d24ab4e2959447931039ff4) Ensure client bundlers load only client-side code (@patrick-steele-idem)
-- [d1b39eb](https://github.com/linkedin/dustjs/commit/d1b39eb27e96142d0c753203e812127b1a643f17) set errors on the chunk when catching errors so that the proper callbacks are always invoked when rendering or streaming
-- [c5f2226](https://github.com/linkedin/dustjs/commit/c5f222679e729c55ef675743c87f04968418ef25) #469 add hasownproperty to prevent references from walking up the prototype chain (@jimmyhchan)
-- [#470](https://github.com/linkedin/dustjs/pull/470) Ensure client bundlers load only client-side code (@patrick-steele-idem)
-- [fe9b6b3](https://github.com/linkedin/dustjs/commit/fe9b6b34c281c14fda9eedf6789434a54cc1d600) travis build fix for minimatch grunt module
-- [0c159d3](https://github.com/linkedin/dustjs/commit/0c159d39a285fa427e1a3d7da6bc2cb451a346e6) remove config set on before install for travis build
-- [#474](https://github.com/linkedin/dustjs/pull/474) travis build fix for minimatch grunt module (@prashn64)
-- [#475](https://github.com/linkedin/dustjs/pull/475) remove config set on before install for travis build (@prashn64)
-- [3518bc2](https://github.com/linkedin/dustjs/commit/3518bc215dab58de3cd0e9ff9fc8eebd918c20a7) rename dust.onError to dust.throwError, stop returning a chunk from the same function, remove error throwing from dust.log, and set a chunk error when dust helper errors are caught
-- [0dea16b](https://github.com/linkedin/dustjs/commit/0dea16bc57250756ef338ca3d3476003f94c6920) remove dust.throwError/dust.onError
-- [2ff9ffe](https://github.com/linkedin/dustjs/commit/2ff9ffee18b1b7eb601f2430a7cf80bee1c539d0) remove dust.silenceErrors
-- [fb34880](https://github.com/linkedin/dustjs/commit/fb348809c63216d2a927a047d3d74be04685e45a) abstract getResult method influenced heavily by _.result (@jimmyhchan)
-- [#471](https://github.com/linkedin/dustjs/pull/471) Errors thrown from render will now call populate the error in the callback. Previously, thrown errors will immediately fail and not call the callback.  Issue #381, 
- 
- Address #468: Errors thrown from stream now will invoke the `error` listener with the error object. Previously, these errors could not be caught and the process will hang.
- 
- Deprecated/remove: `dust.onError`, `dust.silenceErrors`. To see runtime errors, look at the error in the callback. 
- breaking change: `dust.log` with an error no longer throws that error (@prashn64)
-- [a47fd27](https://github.com/linkedin/dustjs/commit/a47fd271c2bb24f00f0d775ee23f0d36a06e9a54) Merge branch 'master' into OPP (@jimmyhchan)
-- [#424](https://github.com/linkedin/dustjs/pull/424) Set up dev flow with grunt and fix coverage report (@kate2753)
+- [#472](https://github.com/linkedin/dustjs/pull/472) #469 Prevent references from looking in the prototype.    Previously, {arr.sort} was possible even if sort was not a function in the arr object, since it was looking in the Array prototype. (@jimmyhchan)
+- [#441](https://github.com/linkedin/dustjs/pull/441) Make default params type to an object instead of null (@prashn64)
 - [#447](https://github.com/linkedin/dustjs/pull/447) deprecate the internal property context.isFunction. this is no longer needed. (@prashn64)
-- [#441](https://github.com/linkedin/dustjs/pull/441) Make default params type to an object instead of github.com (@prashn64)
-- [9f351de](https://github.com/linkedin/dustjs/commit/9f351de532ad1adda36ecb30e1c7fd1140842e68) Merge branch 'master' into OPP (@jimmyhchan)
-- [#472](https://github.com/linkedin/dustjs/pull/472) #469 Prevent references from looking in the prototype.  
- 
- Previously, {arr.sort} was possible even if sort was not a function in the arr object, since it was looking in the Array prototype. (@jimmyhchan)
-- [fb83d8c](https://github.com/linkedin/dustjs/commit/fb83d8c45b3a2c6fc887a8193a2889ae52626d0c) Release v2.4.0
+- [#424](https://github.com/linkedin/dustjs/pull/424) Set up dev flow with grunt and fix coverage report (@kate2753)
+- [#471](https://github.com/linkedin/dustjs/pull/471) Errors thrown from render will now call populate the error in the callback. Previously, thrown errors will immediately fail and not call the callback.  Issue #381,   Address #468: Errors thrown from stream now will invoke the `error` listener with the error object. Previously, these errors could not be caught and the process will hang.  Deprecated/remove: `dust.onError`, `dust.silenceErrors`. To see runtime errors, look at the error in the callback.  breaking change: `dust.log` with an error no longer throws that error (@prashn64)
+- [#475](https://github.com/linkedin/dustjs/pull/475) remove config set on before install for travis build (@prashn64)
+- [#474](https://github.com/linkedin/dustjs/pull/474) travis build fix for minimatch grunt module (@prashn64)
+- [#470](https://github.com/linkedin/dustjs/pull/470) Ensure client bundlers load only client-side code (@patrick-steele-idem)
 
 ### v2.3.5 (2014/05/08 21:31 +00:00)
-- [61a8477](https://github.com/linkedin/dustjs/commit/61a84777bc5a1b950b5d4c39d9aadaabe1802f30) merge v2.1.5 perf fixes
-- [#463](https://github.com/linkedin/dustjs/pull/463) Rendering performance improvements by simplifying logging (@prashn64)
-- [72732df](https://github.com/linkedin/dustjs/commit/72732df44b9817947acccc5fa4898b4e65008458) Release v2.3.5
-
-### v2.1.5 (2014/05/08 01:12 +00:00)
-- [546659e](https://github.com/linkedin/dustjs/commit/546659e54f8887e4ed390e20782c28df6127663e) merge 2.2.10 perf improvements
-- [00ae90e](https://github.com/linkedin/dustjs/commit/00ae90ee2895d4f49b26a03752ee230fbc30caf9) Remove unnecessary logging statements in get, getPath, and filter to improve render performance
-- [f4a4bd3](https://github.com/linkedin/dustjs/commit/f4a4bd3fd75d679dfcaa3f120e9d823b8d0bd951) Release v2.1.5
+- [#463](https://github.com/linkedin/dustjs/pull/463) Rendering performance improvements by simplifying logging (@kate2753)
 
 ### v2.2.10 (2014/05/07 23:39 +00:00)
-- [98841c9](https://github.com/linkedin/dustjs/commit/98841c9578fe772d4087f43e01d6fc52a17d397e) Make default params type to an object instead of github.com
-- [99b5ced](https://github.com/linkedin/dustjs/commit/99b5cede91bbce196046910ce701a6eedd290f56) make console.log available for logging statements in node environment (@bgmort)
-- [6bb3b72](https://github.com/linkedin/dustjs/commit/6bb3b7216d58fabc64d110cbfda0e8f7e050f5cc) Set up development flow with grunt and fix coverage report (@kate2753)
 - [#444](https://github.com/linkedin/dustjs/pull/444) make console.log available for logging statements in node environment by passing the proper global (@bgmort)
-- [eb50668](https://github.com/linkedin/dustjs/commit/eb5066803a727348aa75b40707bdcb700b83a862) Remove support for context.isFunction which would flag a function as originating from the context when true and as a dust compiled function when false.
-- [312a05a](https://github.com/linkedin/dustjs/commit/312a05ab1aaf51073a3e43233121fa2dab34fd5e) Remove unnecessary logging statements from filter and _get and improve performance of the logging function
-- [2fb5ab6](https://github.com/linkedin/dustjs/commit/2fb5ab621a665f6c7ee5126fe34e4308f58afd54) Release v2.2.10
 
 ### v2.3.4 (2014/03/06 22:34 +00:00)
-- [573f462](https://github.com/linkedin/dustjs/commit/573f46250bae9b9d8f38266bf5166b798d9963ad) merge indexInArray fixes
-- [3cc27ce](https://github.com/linkedin/dustjs/commit/3cc27ce094a6a19809aaf76389a7fcd916e6c1d7) restore the native array indexOf function after testing its undefined state
-- [#435](https://github.com/linkedin/dustjs/pull/435) indexInArray fix. (@prashn64)
-- [5a4a236](https://github.com/linkedin/dustjs/commit/5a4a2364b5dc9681458467ad969f70690a389e19) Release v2.3.4
-
-### v2.2.9 (2014/03/06 00:35 +00:00)
-- [01af64d](https://github.com/linkedin/dustjs/commit/01af64d879701b17e537dfe6a92270fc441aca52) merge indexInArray fixes
-- [4ca3990](https://github.com/linkedin/dustjs/commit/4ca399032b9b9e06fc2f121aaf3ceb1930ccea68) release v2.2.9
+- [#435](https://github.com/linkedin/dustjs/pull/435) indexInArray fix. (@kate2753)
 
 ### v2.1.4 (2014/03/06 00:32 +00:00)
-- [ecb7ae8](https://github.com/linkedin/dustjs/commit/ecb7ae884267406f5ca0299d08fc580052eefbce) merge IE debugger fixes
-- [0fd4592](https://github.com/linkedin/dustjs/commit/0fd4592e06056b4f53ad2fc3f756a6f0eb35c6a9) fix logger.log for node
-- [#429](https://github.com/linkedin/dustjs/pull/429) Patch 2.1.X 2.2.X 2.3.X to fix IE9 and below issues when dust debugging is on. Added a cross-browser/node/rhino version of indexOf and logger.log. (@prashn64)
-- [3ed5197](https://github.com/linkedin/dustjs/commit/3ed51978ca939811e2afcf4709912fff20666c3f) only have the logger.log call once inside logger.log
-- [#430](https://github.com/linkedin/dustjs/pull/430) Only have the logger.log call once inside logger.log (@prashn64)
-- [7219dc2](https://github.com/linkedin/dustjs/commit/7219dc20e8b9b3a596ce9efda6599f1243b3716f) add temporary fix for ssl problems with npm until travis itself updates its npm version
 - [#432](https://github.com/linkedin/dustjs/pull/432) add temporary fix for ssl problems with npm until travis itself updates ... (@prashn64)
-- [3722b64](https://github.com/linkedin/dustjs/commit/3722b641607f298daf477577330824ee1a7b9ab4) Fix indexInArray for ie lte 8
-- [d7fded2](https://github.com/linkedin/dustjs/commit/d7fded24a911f85230f8026d21fc9be56994363b) release v2.1.4
-
-### v2.2.8 (2014/02/27 08:26 +00:00)
-- [69cd1e1](https://github.com/linkedin/dustjs/commit/69cd1e1abf183fc0afe481e5e59e3c2fa55b072d) merge IE debugger fixes
-- [c3e6e42](https://github.com/linkedin/dustjs/commit/c3e6e423d101e446c39d0e9327f34908c70735bc) Release v2.2.8
+- [#430](https://github.com/linkedin/dustjs/pull/430) Only have the logger.log call once inside logger.log (@prashn64)
+- [#429](https://github.com/linkedin/dustjs/pull/429) Patch 2.1.X 2.2.X 2.3.X to fix IE9 and below issues when dust debugging is on. Added a cross-browser/node/rhino version of indexOf and logger.log. (@kate2753)
 
 ### v2.1.3 (2014/02/27 08:18 +00:00)
-- [cba91de](https://github.com/linkedin/dustjs/commit/cba91de7ffaf45f0f158d5ce11970daa1a66df14) merge v2.2.7
-- [#427](https://github.com/linkedin/dustjs/pull/427) Add 2.2.7 which is identical to 2.2.6 for npm (@prashn64)
-- [6030185](https://github.com/linkedin/dustjs/commit/60301851741547be070aef889bcfe003184bf6b1) order by semver (@lalitkapoor)
 - [#426](https://github.com/linkedin/dustjs/pull/426) Add changelog (@lalitkapoor)
-- [a251453](https://github.com/linkedin/dustjs/commit/a251453c09815d8bf8dfecfa6699437252073bda) make a shim for Array.indexOf because of IE<=8
-- [938f60f](https://github.com/linkedin/dustjs/commit/938f60f07d86be3a00fe302e7eb5e08295dd75db) call console.log directly when its type is of object in order to support debugging for IE<=9
-- [df1009c](https://github.com/linkedin/dustjs/commit/df1009c1400bb22d154b35d3e22e3d97a3149407) Release v2.1.3
+- [#427](https://github.com/linkedin/dustjs/pull/427) Add 2.2.7 which is identical to 2.2.6 for npm (@prashn64)
 
 ### v2.2.7 (2014/02/24 23:06 +00:00)
-- [38f8ffa](https://github.com/linkedin/dustjs/commit/38f8ffa5d0449090c5039c1b1c73b9811c4a09ab) Fix _get issue with empty context head (@kate2753)
 - [#419](https://github.com/linkedin/dustjs/pull/419) Fix Context.prototype._get to work with context switching when calling partials and make the 2.2.x+ compiler fully backwards compatible. (@kate2753)
-- [b183198](https://github.com/linkedin/dustjs/commit/b183198f9c455213476454e1817630c1324516dc) initial changelog (@lalitkapoor)
-- [6624c07](https://github.com/linkedin/dustjs/commit/6624c073ae35b54c231fca8f25da542381ed8edd) make dist files for 2.2.7 which are identical to 2.2.6(npm issue)
 
 ### v2.2.6 (2014/02/13 00:18 +00:00)
-- [4459be9](https://github.com/linkedin/dustjs/commit/4459be92f95273fef922b05bdb053ac7e763476f) Merge branch 'master' of ssh://github.com/linkedin/dustjs into dust-lower-errors-v2.3.3
-- [9536151](https://github.com/linkedin/dustjs/commit/9536151a1394dcf2dd56cb441d22d135007f1288) Make compiled templates backward compatible with dust runtines prior to  2.2.0 (@kate2753)
-- [9320f86](https://github.com/linkedin/dustjs/commit/9320f865449f7ba33768ab3d1884592664a74043) Make compiled templates backward compatible with dust runtines prior to  2.2.0 (@kate2753)
-- [ad06d68](https://github.com/linkedin/dustjs/commit/ad06d6842e75b77f80b77e8bc2e116cac969e2ad) Adding unit test for partial stepping into undefined context (@kate2753)
 - [#420](https://github.com/linkedin/dustjs/pull/420) Make the compiler backwards compatible with runtime versions prior to 2.2.x (@kate2753)
-- [505c291](https://github.com/linkedin/dustjs/commit/505c291246ebe0f8b428f5b53e72eed1ba0f23fa) Make compiled templates backward compatible with dust runtines prior to  2.2.0 (@kate2753)
-- [53de113](https://github.com/linkedin/dustjs/commit/53de1133ab08443c114c914b3bc3b0701f0efcf0) Make compiled templates backward compatible with dust runtines prior to  2.2.0 (@kate2753)
-- [6026aab](https://github.com/linkedin/dustjs/commit/6026aab8b8dbc3bf6cc6ef642a8abc60f85a4f69) Adding unit test for partial stepping into undefined context (@kate2753)
-- [f7b91de](https://github.com/linkedin/dustjs/commit/f7b91de097723a3dbf83b0cc174857e4382e18dc) Adding unit test for partial stepping into undefined context (@kate2753)
-- [2981e4d](https://github.com/linkedin/dustjs/commit/2981e4d8527b3e9d6d9c17d094a889c8d4f284fd) Fix _get issue with empty context head;Generate 2.2.6 dist files (@kate2753)
 
 ### v2.3.3 (2014/01/31 21:29 +00:00)
-- [2632b50](https://github.com/linkedin/dustjs/commit/2632b505bcd66bca3293b95e73857674f7369188) Merge patchfix v2.2.5
 - [#416](https://github.com/linkedin/dustjs/pull/416) Lower most errors to warnings. (@prashn64)
-- [fd283f2](https://github.com/linkedin/dustjs/commit/fd283f2b551f2232ccb013c29a1c4682b611a38c) Release v2.3.3
-
-### v2.2.5 (2014/01/30 00:48 +00:00)
-- [4580160](https://github.com/linkedin/dustjs/commit/45801609d3dce9046645e3d9c54ba5d56fd949d8) merge patch fix v2.1.2 and add test for an error thrown from a helper
-- [6e3256c](https://github.com/linkedin/dustjs/commit/6e3256c304296175de628a68471d6bd43c625066) add dist files for v2.2.5
-
-### v2.1.2 (2014/01/30 00:36 +00:00)
-- [81b479f](https://github.com/linkedin/dustjs/commit/81b479f0ba70cf0188e2284f89b6e11eda698d1b) Lower several errors thrown by dust to warnings instead
 
 ### v2.3.2 (2014/01/28 01:12 +00:00)
-- [34f3b84](https://github.com/linkedin/dustjs/commit/34f3b84593537531a233905a1c7f46026bf3136c) Issue #413 point dustc to the correct version of server dust which has the compiler (@jimmyhchan)
 - [#414](https://github.com/linkedin/dustjs/pull/414) Point dustc to the correct version of server dust (@jimmyhchan)
-- [a58349c](https://github.com/linkedin/dustjs/commit/a58349cc9cb879c36d77cb9d257cca6f28741e9b) Release v2.3.2 (@jimmyhchan)
 
 ### v2.3.1 (2014/01/19 22:23 +00:00)
-- [6a156e1](https://github.com/linkedin/dustjs/commit/6a156e150e535a02a1544339265199153f65188f) update archive readme (@jimmyhchan)
-- [81ab590](https://github.com/linkedin/dustjs/commit/81ab590d95d9322d54cdd1eb8135bbc644d14d51) Issue #407, compileFn does not require a name. Add unit test as well (@jimmyhchan)
 - [#408](https://github.com/linkedin/dustjs/pull/408) dust.compileFn no longer requires the name to be defined. (@jimmyhchan)
-- [6af5a76](https://github.com/linkedin/dustjs/commit/6af5a7652901dcbb1b0f4169078baae002d733e1) Release v2.3.1 (@jimmyhchan)
 
 ### v2.3.0 (2014/01/17 00:26 +00:00)
-- [8e3de82](https://github.com/linkedin/dustjs/commit/8e3de823716a5253643781fa50731a6330795a04) Merge branch 'dust-v2.2.4' into dust-obesity-cure-final
-- [19fafd3](https://github.com/linkedin/dustjs/commit/19fafd30a5c117bd85878e6f1f71f57d8b79457a) remove min files for 2.1.1 and 2.2.4
-- [#399](https://github.com/linkedin/dustjs/pull/399) Don't swallow all errors by default (Issue #381).  Deprecate dust.isDebug and dust.onError. Instead, just use debugLevel and dust.log(message, 'ERROR'), respectively.    Add a dust.silenceErrors flag to swallow all errors. (@prashn64)
-- [e56338a](https://github.com/linkedin/dustjs/commit/e56338ad868aae14327bdde8e5f8c9a1732b9cef) Merge branch 'master' into empty-tl-name
-- [dfbcb95](https://github.com/linkedin/dustjs/commit/dfbcb95d62600897e7b7a99171fb31723b575066) use dust.log instead of dust.onError in dust.compile
-- [#395](https://github.com/linkedin/dustjs/pull/395) fail hard when a name is not explicitly defined in dust.compile (@prashn64)
-- [d263b7c](https://github.com/linkedin/dustjs/commit/d263b7cbb357bd0dedac017e8cb97013b3c56083) bump commit does not support tasks (@jimmyhchan)
-- [#403](https://github.com/linkedin/dustjs/pull/403) bump commit does not support tasks (@jimmyhchan)
-- [0631882](https://github.com/linkedin/dustjs/commit/06318826bb06b94ea911a07e415f0cceb1b18e59) Release v2.3.0 (@jimmyhchan)
-- [992552e](https://github.com/linkedin/dustjs/commit/992552eba6f10727f972aa0800a6372f81280ba2) revert 2.3 package.json (@jimmyhchan)
-- [8ea08e8](https://github.com/linkedin/dustjs/commit/8ea08e89af3aaba8e1cb9c44d70273cbcf4400c0) Release v2.3.0 (@jimmyhchan)
-- [548ecaa](https://github.com/linkedin/dustjs/commit/548ecaaa4aaf7e95f435d6113bdc670e961e4d5d) revert 2.3 package.json (@jimmyhchan)
-- [f6ab2cb](https://github.com/linkedin/dustjs/commit/f6ab2cb7b28662b0afe6d13ce6d33e2455dea0f9) Release v2.3.0 (@jimmyhchan)
-- [d10c31e](https://github.com/linkedin/dustjs/commit/d10c31ea4d1e8d4e83128a5ffe4c31cb6010caa8) revert package.json back to 2.2.3
-- [#404](https://github.com/linkedin/dustjs/pull/404) revert package.json back to 2.2.3 (@prashn64)
-- [#392](https://github.com/linkedin/dustjs/pull/392) Add Rhino and Rhino unit tests (@kate2753)
-- [e68e2b4](https://github.com/linkedin/dustjs/commit/e68e2b4003c9d344dbb25e72006d672031dac916) Fix grunt release to correctly commit the archives (@jimmyhchan)
-- [280e50a](https://github.com/linkedin/dustjs/commit/280e50af54c5a083fd7c8c1f507bf4da967502c5) turn off push, add all files on release and update release message with steps to push manually (@jimmyhchan)
-- [0073fc2](https://github.com/linkedin/dustjs/commit/0073fc286b80f8dd9b5044ca55cff85ff426422c) typo in grunt add task (@jimmyhchan)
 - [#405](https://github.com/linkedin/dustjs/pull/405) Fix Grunt release and don't push upstream by default (safer) (@jimmyhchan)
-- [fa63d2c](https://github.com/linkedin/dustjs/commit/fa63d2c21f03aa32663d1e42c6ae8dba4a111ef4) Release v2.3.0 (@jimmyhchan)
-
-### v2.2.4 (2014/01/16 01:10 +00:00)
-- [cbac036](https://github.com/linkedin/dustjs/commit/cbac0366df2670506b7930734b3206bfe5f9f1ca) Merge branch 'dust-obesity-cure-v2.1.1-backup' into dust-v2.2.4
-- [d1b57c3](https://github.com/linkedin/dustjs/commit/d1b57c3951f30e2e570b40d70e00f4fd4ed9963f) add min files for 2.2.4
+- [#392](https://github.com/linkedin/dustjs/pull/392) Add Rhino and Rhino unit tests (@kate2753)
+- [#404](https://github.com/linkedin/dustjs/pull/404) revert package.json back to 2.2.3 (@prashn64)
+- [#403](https://github.com/linkedin/dustjs/pull/403) bump commit does not support tasks (@jimmyhchan)
+- [#395](https://github.com/linkedin/dustjs/pull/395) fail hard when a name is not explicitly defined in dust.compile (@prashn64)
+- [#399](https://github.com/linkedin/dustjs/pull/399) Don't swallow all errors by default (Issue #381).  Deprecate dust.isDebug and dust.onError. Instead, just use debugLevel and dust.log(message, 'ERROR'), respectively.    Add a dust.silenceErrors flag to swallow all errors. (@prashn64)
 
 ### v2.1.1 (2014/01/16 01:09 +00:00)
-- [521a844](https://github.com/linkedin/dustjs/commit/521a84479d10e7edce3ed505a051dd72f23a4292) remove 2.2.3 from dist (@jimmyhchan)
-- [#371](https://github.com/linkedin/dustjs/pull/371) Fix our release process + add bower.json + jshint + cleanup master (@jimmyhchan)
-- [725e6bc](https://github.com/linkedin/dustjs/commit/725e6bc0558d6c7ee6f26d1ad151b809bc4d864d) merging from upstream (@jimmyhchan)
-- [0a2009b](https://github.com/linkedin/dustjs/commit/0a2009b5bb5ffaa990bf14c95f4e78652301b523) dist using grunt will only get updated when we release remove these 2.3 versions (@jimmyhchan)
-- [#334](https://github.com/linkedin/dustjs/pull/334) Issue #332 provide a raw input syntax similar to comments {!...!} where newlines, spaces and braces are kept. (@jimmyhchan)
-- [407594a](https://github.com/linkedin/dustjs/commit/407594a2d8e826c9c29a5b8e57b4158ee6b6e1b3) Update README.md (@jimmyhchan)
-- [4573e77](https://github.com/linkedin/dustjs/commit/4573e774ca1dfbb2c13d8abf0130a7a4a479668e) put parser before compiler, isolate parser and compiler, remove getGlobal and explicitly show where parser and compiler go in the global dust namespace (@jimmyhchan)
-- [79c79be](https://github.com/linkedin/dustjs/commit/79c79be5e7dd122f90030e71cd981c6c5a8f4aa8) no need to reference window (@jimmyhchan)
-- [cde8920](https://github.com/linkedin/dustjs/commit/cde8920ef6caf238d43f4c3025d74b9d2b525640) rename umdwrapper (@jimmyhchan)
-- [ba36127](https://github.com/linkedin/dustjs/commit/ba36127ed80cbb9ff770af4536d6c466567d2a8f) Merge branch 'master' into fixServer (@jimmyhchan)
-- [ee796db](https://github.com/linkedin/dustjs/commit/ee796dbf8ab9891f8f080502c42c14e17578fd7c) clearify umd pattern, clean up unnecessary stuff, explain the lib directory and comment that the parser file is generated (@jimmyhchan)
 - [#382](https://github.com/linkedin/dustjs/pull/382) remove the globals and isolate parser and compiler (@jimmyhchan)
-- [453fe6a](https://github.com/linkedin/dustjs/commit/453fe6a2c076fb9b5ef8345c991eff336728e900) Update notify list (@kate2753)
-- [33c33c2](https://github.com/linkedin/dustjs/commit/33c33c2adf07f904a23a797f76d1c9e02a3a2750) Add unit testing with Rhino 1.7R3 and 1.7R5 (@kate2753)
-- [8b7e565](https://github.com/linkedin/dustjs/commit/8b7e56527cfa1c5508737f4dc2bba5395a3e7894) Add additional logging to rhinoTest.js and revert changes to .travis.yml file (@kate2753)
-- [c0e92b7](https://github.com/linkedin/dustjs/commit/c0e92b70dc36c7e36bc600a7665bfa3e564210ce) Remove debug flag from rhino command and add comments (@kate2753)
-- [2622f79](https://github.com/linkedin/dustjs/commit/2622f79aade6dfe2846a5d5c6782c8352236e04c) Revert unnecessary change to package.json (@kate2753)
-- [e5ebff0](https://github.com/linkedin/dustjs/commit/e5ebff0f7b32f8ff0883be7f7924507b314eef1d) fail hard when a name is not explicitly defined in dust.compile
-- [d177326](https://github.com/linkedin/dustjs/commit/d17732696a4c2f8966da6934180749ecf1c6ab27) Add build matrix to travis (@kate2753)
-- [5441c40](https://github.com/linkedin/dustjs/commit/5441c405a5a4b5751b65007688512d44835bea1a) Update travis matrix and script (@kate2753)
-- [1f4ed23](https://github.com/linkedin/dustjs/commit/1f4ed234184d9f4817f446f2eaeab4a808edea02) Deprecate isDebug and just use debugLevel. Add a silenceErrors flag to swallow all errors.
-- [b7f22b6](https://github.com/linkedin/dustjs/commit/b7f22b6aa2865e615ef903f056b8ac85512869f8) fix merge conflicts
-- [7962c37](https://github.com/linkedin/dustjs/commit/7962c37e94a6552d857c8f520b5ca4424b7751e1) merge v2.1.1 fixes
-- [f653ab5](https://github.com/linkedin/dustjs/commit/f653ab570fa5afa4fe8bc21ca1c61bbeb0265c9b) fix merge conflicts with v2.2.4
-- [efaeefe](https://github.com/linkedin/dustjs/commit/efaeefea1bd07055ef60d49f2f45b940503f75be) give a more descriptive error description for dust.compile failure
-- [a194469](https://github.com/linkedin/dustjs/commit/a194469a4bb5876f68061a6466cc514ae5a114de) Deprecate dust.onError return value and throw errors from dust.log if not silenced
-- [393383b](https://github.com/linkedin/dustjs/commit/393383b838cac4e12ea568092acdd87a960c412a) merging 2.1.1 patch fix
-- [a1405d9](https://github.com/linkedin/dustjs/commit/a1405d91dbbd4e53106618d0142386e1f43d2b3c) type check for error in dust.log
-- [f287a0f](https://github.com/linkedin/dustjs/commit/f287a0f42e57ea509f1e5beb64a5d2d6c5d26d7c) merge fixes from v2.1.1
-- [8035c80](https://github.com/linkedin/dustjs/commit/8035c808cb8fd261ec375022faa275ebc846b8c2) merge v2.2.4 debug hotfixes
-- [45bbdc2](https://github.com/linkedin/dustjs/commit/45bbdc2bbd0cbf41c5ef99087d95d74344eaef61) add dist files for 2.1.1
-- [77b4968](https://github.com/linkedin/dustjs/commit/77b49684a2c6a562f35de6eda9f1720d8ebda791) add dist files for 2.2.4 and merge in dist files for 2.1.1
-- [e6b079d](https://github.com/linkedin/dustjs/commit/e6b079d2fcda6b19d06026fceab748f4e6e87cb2) remove dist files that were added for 2.1.1 and 2.2.4
-- [f7c7535](https://github.com/linkedin/dustjs/commit/f7c753512d33e63568976f41a861e176395958a0) add min files for 2.1.1
+- [#334](https://github.com/linkedin/dustjs/pull/334) Issue #332 provide a raw input syntax similar to comments {!...!} where newlines, spaces and braces are kept. (@jimmyhchan)
+- [#371](https://github.com/linkedin/dustjs/pull/371) Fix our release process + add bower.json + jshint + cleanup master (@jimmyhchan)
 
 ### v2.2.3 (2013/12/06 02:02 +00:00)
-- [b67fc4d](https://github.com/linkedin/dustjs/commit/b67fc4d5d0094bde6feb225128264cb738c814f9) merge upstream (@jimmyhchan)
-- [1b1295f](https://github.com/linkedin/dustjs/commit/1b1295f31f3bde1450e5cc22dedeff39df4c9d35) make 2.3 (@jimmyhchan)
-- [63d2f14](https://github.com/linkedin/dustjs/commit/63d2f141519c946f1c51f3d30a6f2fb78f1db7b1) fix a bunch of jshint issues and have grunt working hard (@jimmyhchan)
-- [1e456d1](https://github.com/linkedin/dustjs/commit/1e456d176a2ef26890d21119e62494bcc4ea29fd) move more stuff from the make file into grunt. modify the spechelper to be a UMD module and play nicely with require (@jimmyhchan)
-- [7c3f309](https://github.com/linkedin/dustjs/commit/7c3f309dd9f554f743174db9ba6711db74872ce8) testHelper does not return anything (@jimmyhchan)
-- [5d87caa](https://github.com/linkedin/dustjs/commit/5d87caa6089b9482fe80d00a12629fe5a861fdeb) add istanbul for code coverage it runs all the time jasmine runs (@jimmyhchan)
-- [72adc1d](https://github.com/linkedin/dustjs/commit/72adc1d9b356409e7cc92ad740feb615923b8b42) add git clean. move builds into a tmp directory that is ignored (@jimmyhchan)
-- [bcf8cf6](https://github.com/linkedin/dustjs/commit/bcf8cf6619c2ad0fb540e4573620cdd69f7b8729) convert make relase to use grunt-release add a nice copy to dist (@jimmyhchan)
-- [7a3e53c](https://github.com/linkedin/dustjs/commit/7a3e53c0a912a7b5563c3203bd6b5da7688f5c5e) remove that pesky Makefile (@jimmyhchan)
-- [2ec2aff](https://github.com/linkedin/dustjs/commit/2ec2aff04c505e957240b8fb8dacd23b4593b9a5) add a compress step to add zip and tarballs (@jimmyhchan)
-- [f7065d4](https://github.com/linkedin/dustjs/commit/f7065d405e867aba59cbd32fde2c0326f5685428) remove jasmine spec runners now that we are automatically grunt creating them on the fly (@jimmyhchan)
-- [8ba3f79](https://github.com/linkedin/dustjs/commit/8ba3f79da6ce60f2451696adc13d3977c39c7243) clean up benchmark and docs; benchmark works again (@jimmyhchan)
-- [c907582](https://github.com/linkedin/dustjs/commit/c907582771ee3eef6d57cef3429c30ce3194e9cc) move jshintrc from grunt to a real jshintrc file (@jimmyhchan)
-- [d93e3db](https://github.com/linkedin/dustjs/commit/d93e3db98baa7a7832e08174f6affbcd6d04edcf) remove old node coverage stuff add bower.json and clean up npmignore so it pulls down only what it needs (@jimmyhchan)
-- [4a7f9c2](https://github.com/linkedin/dustjs/commit/4a7f9c2feffccdeeb95a258288ec20be3a26a93f) fix chmod of lib/dust and allow readme to be included in bower (@jimmyhchan)
-- [8205f8a](https://github.com/linkedin/dustjs/commit/8205f8a3ffbdba5e13416dd20bb1f35e5bfbfadd) put npm back at lib/dust which does a silly require of server... the build full version does not work as a node module it is only usable on the browser. Give that to bower (@jimmyhchan)
-- [368e3ea](https://github.com/linkedin/dustjs/commit/368e3ea240743cc963f32165885def204c07b909) specrunner in the ignore needs was missing the extension (@jimmyhchan)
-- [657deb0](https://github.com/linkedin/dustjs/commit/657deb09b4cb9f2ae6db1ac933c630bea1991c04) add grunt to travis update readme to acutally point to our repo (@jimmyhchan)
-- [d51a8cb](https://github.com/linkedin/dustjs/commit/d51a8cb8e6c5bf8f8356d890d5c13d0b47eb3d96) whoops missing grunt dev dependencies (@jimmyhchan)
-- [c9d294b](https://github.com/linkedin/dustjs/commit/c9d294b48e60a59683842adf02b29208fb26d8c0) we are using grunt jasmine not jasmine-node... jasmine-node has 1.9.x has an issue with node 0.6 (@jimmyhchan)
-- [f7cf363](https://github.com/linkedin/dustjs/commit/f7cf3634033a9e138aae108856737c4c7777b3a1) stop travis testing 0.4 0.6 .... 0.4 passes but 0.6 has an issue when running tests (@jimmyhchan)
-- [765446f](https://github.com/linkedin/dustjs/commit/765446f025dc851fd6c05adad6b3f723228f8651) silly quotes (@jimmyhchan)
-- [2945ed3](https://github.com/linkedin/dustjs/commit/2945ed30a91af2f0d606e05fbf8d3367d5f1ec59) require node 0.8+ (@jimmyhchan)
-- [edf121e](https://github.com/linkedin/dustjs/commit/edf121e0c4be4cf307970c0ac2176ec6f303ae1d) rebuild with the double quotes back in. use grunt-bump instead to play nice with bower.json. allow archives to be pushed to github. bower does not need to know about grunt as a dev depedency (@jimmyhchan)
-- [542b33e](https://github.com/linkedin/dustjs/commit/542b33ee9dcbfb5b1f79e276cd3606a14bae870c) fix git compress (@jimmyhchan)
-- [de1b6cc](https://github.com/linkedin/dustjs/commit/de1b6cc6b222d9796a8ffcb8663f956f065d25fb) turn grunt bump on for reals for use with the next bump (@jimmyhchan)
-- [11a01b9](https://github.com/linkedin/dustjs/commit/11a01b9dd19763492d0a99f557d653da55e3e6da) no need for tmp directory in npm (@jimmyhchan)
-- [51714ca](https://github.com/linkedin/dustjs/commit/51714ca5295b99677bd2c0c78935f0d356206404) Regenerate 2.2.2 files because changes from 2.2.1 were not included in previously generated 2.2.2 dist files (@kate2753)
-- [4ccf654](https://github.com/linkedin/dustjs/commit/4ccf65429508e700a1d64f8461b8d3e9db4b2d88) Bump up the version and generate 2.2.3 dist files that include all latest changes (@kate2753)
-- [#372](https://github.com/linkedin/dustjs/pull/372) Regenerate dist files for v2.2.3 to include $idx fixes (@kate2753)
-- [dfef368](https://github.com/linkedin/dustjs/commit/dfef36808c688bcad93a8ff8188ef28ecda2ca81) merge from upstream (@jimmyhchan)
-- [698ae6d](https://github.com/linkedin/dustjs/commit/698ae6d6f7c208c1564e32471615d6059b3cf2cd) Properly generate .min files for 2.2.3 (@kate2753)
-- [d604122](https://github.com/linkedin/dustjs/commit/d604122c71c0dd111ede29b704afc8a9485c2a8e) turn push on when we release... mmmmm. fix grunt relaseMajor to work if uncommented (@jimmyhchan)
 - [#374](https://github.com/linkedin/dustjs/pull/374) Properly generate .min files for 2.2.3 (@kate2753)
+- [#372](https://github.com/linkedin/dustjs/pull/372) Regenerate dist files for v2.2.3 to include $idx fixes (@kate2753)
 
 ### v2.2.2 (2013/11/28 00:10 +00:00)
-- [4165127](https://github.com/linkedin/dustjs/commit/41651270361fc922c87c77088774d3445134b875) remove node_modules directory (@wizardzloy)
-- [#362](https://github.com/linkedin/dustjs/pull/362) remove node_modules directory (@wizardzloy)
-- [f317cbe](https://github.com/linkedin/dustjs/commit/f317cbe06536b84d9f5578614038469d4b2a5b28) Issue #340. Remove old optimization to avoid looking at arrays in get. We need to look for (@rragan)
-- [226d008](https://github.com/linkedin/dustjs/commit/226d008c5d1f6f768e91bd1054a3e8e7466eae89) change context.templateName to context.__templateName and fix github.com templateNames on directly loaded templates used as partials
-- [7fe493a](https://github.com/linkedin/dustjs/commit/7fe493af9a77f4a2a8bac09cf1e30cb7429c3b78) Add context.getTemplateName function, unit test for template names in partials, and dist files
-- [#363](https://github.com/linkedin/dustjs/pull/363) Issue #340. Remove old optimization to avoid looking at arrays in get. (@rragan)
-- [fa01f1b](https://github.com/linkedin/dustjs/commit/fa01f1bd2125d79429ef9a28f012fbb6b37899df) revert to not changing the internal templateName var, and use getTemplateName() internally
-- [1adbbe9](https://github.com/linkedin/dustjs/commit/1adbbe95b71434529ff075c726bc739ac1558f51) add dist files for 2.2.2
-- [ed32b4b](https://github.com/linkedin/dustjs/commit/ed32b4bc7abcd88aba3ed79f9846133fdd43b9fd) catch up to master
 - [#368](https://github.com/linkedin/dustjs/pull/368) Add context.getTemplateName. This method now correctly returns the template name even for directly loaded templates being used as partials. For end users please use this api for getting the template name instead of ctx.templatename (@prashn64)
+- [#363](https://github.com/linkedin/dustjs/pull/363) Issue #340. Remove old optimization to avoid looking at arrays in get. (@rragan)
+- [#362](https://github.com/linkedin/dustjs/pull/362) remove node_modules directory (@wizardzloy)
 
 ### v2.2.0 (2013/11/08 18:42 +00:00)
-- [d5b5f1a](https://github.com/linkedin/dustjs/commit/d5b5f1a78ee4af93976c4c570b32b4bf35690745) merge with 2.1 and bump raw format fix to 2.2 (@jimmyhchan)
-- [46dafc4](https://github.com/linkedin/dustjs/commit/46dafc423579108ac63565ca67ce312f520dfcc9) Use get for all Dust references (@smfoote)
-- [2b1ead7](https://github.com/linkedin/dustjs/commit/2b1ead7007e7ad171d605ce26980923a5796eaef) Conflicts: 	lib/dust.js (@smfoote)
-- [03a930b](https://github.com/linkedin/dustjs/commit/03a930bbaa6c9e05ed2a7c87c06add77355af0b2) Add tests from #357 (@smfoote)
-- [caf7820](https://github.com/linkedin/dustjs/commit/caf7820fd53c1b708f97d28b33c1bfea9f06c7ed) Improve the public API for Context.prototype.get (@smfoote)
-- [aaa0110](https://github.com/linkedin/dustjs/commit/aaa01101eac58f249811b5de0d031202f0f8377d) Improve efficiency of getPath fallback (@smfoote)
-- [fe13868](https://github.com/linkedin/dustjs/commit/fe1386856f54c188ceea8c97a6d4b546297f2d75) Update dist files (@smfoote)
-- [5400959](https://github.com/linkedin/dustjs/commit/54009592a2d37dab367ac28698542b4861d4383f) remove back compat from _get, because it's not needed anymore (@smfoote)
 - [#360](https://github.com/linkedin/dustjs/pull/360) Use get for all Dust references (@smfoote)
 
 ### v2.1.0 (2013/10/25 08:44 +00:00)
-- [170b3e2](https://github.com/linkedin/dustjs/commit/170b3e22f1710286a1a534a9687ff9fb28c900c1) initial commit
-- [ce48caf](https://github.com/linkedin/dustjs/commit/ce48caf79f41fb8928e3669788fd0eff2743b634) gracefully degrade compiler JSON.stringify
-- [952518e](https://github.com/linkedin/dustjs/commit/952518e05696f7a3ea00e9ae2d726627b5439d0e) added TODO
-- [dcc4ae4](https://github.com/linkedin/dustjs/commit/dcc4ae43be8a0cc49908d96735ab5c7b20dd0e52) added LICENSE
-- [c389956](https://github.com/linkedin/dustjs/commit/c389956d7bcbb5ba886977226357428dbc9f4c13) added package.json
-- [c51e4d7](https://github.com/linkedin/dustjs/commit/c51e4d7475fdb6e72985bd0199d6339a98c554e0) no reason to expose Stub and Context
-- [845ca31](https://github.com/linkedin/dustjs/commit/845ca311b7ffa6cb0d3c7f1bc81d0bffbe35792d) updated README, docs
-- [19ddd4b](https://github.com/linkedin/dustjs/commit/19ddd4bf28a94d9a5fc2a07db3e870ab4305d170) grammar
-- [3dbbea2](https://github.com/linkedin/dustjs/commit/3dbbea26f6259e6804868401d7b5845c3edf4ca7) simplified module loading a bit
-- [bdba5bd](https://github.com/linkedin/dustjs/commit/bdba5bd84dae11d02779bfdb35d2ba9baf1bfea8) don't rely on global dust in tests
-- [cb76206](https://github.com/linkedin/dustjs/commit/cb76206ee32c3a508852e5e847f9b708d4c57e0a) demo fixes for dumb browsers
-- [55fe615](https://github.com/linkedin/dustjs/commit/55fe6159324b051ae22f89815d0c5c684119030b) x-browser fixes and polish for the site
-- [64ba61c](https://github.com/linkedin/dustjs/commit/64ba61c75d192ef921e21667746c9eb6e2a208e4) explicit globals for server test/bench
-- [259b8b3](https://github.com/linkedin/dustjs/commit/259b8b3ca224510e0ca18e48d3c5ccfbbafd7fe1) created distribution
-- [c2310ba](https://github.com/linkedin/dustjs/commit/c2310ba6e95f0ee65b49189528f2b6341c15ce6a) updated docs
-- [f418f81](https://github.com/linkedin/dustjs/commit/f418f810d5ec8373d12946dd1fd07c3a59a46692) rebuilt docs
-- [6ead700](https://github.com/linkedin/dustjs/commit/6ead700b005b0684e8f501e873c023494ad3f20c) setTimeout needs explicit 2nd arg in node 0.3.1
-- [b1e0d77](https://github.com/linkedin/dustjs/commit/b1e0d77dea6e437e191674ad2c33d524dc953757) dust.Context.base -> dust.makeBase (closes #1)
-- [41c3aad](https://github.com/linkedin/dustjs/commit/41c3aad88b324bd4ebe45beb1bb94b621810ad44) rebuilt docs
-- [e4e589e](https://github.com/linkedin/dustjs/commit/e4e589e7f123a9444bae3de8e24db0db6e482dc9) bump target version
-- [e8872de](https://github.com/linkedin/dustjs/commit/e8872de3dfed27cd82df6407eb634be3ac02ea9b) added index.html to clean task
-- [0318bfb](https://github.com/linkedin/dustjs/commit/0318bfbf8c340be038331014a9c76bab40e952a5) removed extra block checks
-- [879e1cc](https://github.com/linkedin/dustjs/commit/879e1cc7f3b20efa725826b7deab96366e9ac1bc) improved parser build process
-- [6697f99](https://github.com/linkedin/dustjs/commit/6697f99d007869d3c62b955ef5e2d44aa3293bc2) handle valid JS identifiers (closes #3)
-- [b94ce62](https://github.com/linkedin/dustjs/commit/b94ce622976f9768b8446c9a0ca4621e43076926) added release task
-- [45624f2](https://github.com/linkedin/dustjs/commit/45624f2618b2c2362fb8ba815203ac00f2b16eba) release v0.1.0
-- [c5ff0a8](https://github.com/linkedin/dustjs/commit/c5ff0a8bd97410f8962e5f741c772e3d8b183976) use dust.nextTick internally
-- [449d0bf](https://github.com/linkedin/dustjs/commit/449d0bf5e059ec75bea81d540413c800a31b3a56) optimize consecutive buffer writes
-- [ee17d12](https://github.com/linkedin/dustjs/commit/ee17d121e4c2015a958ccb47941509c1fde563af) small setTimeout tweak - fixes odd behavior in node
-- [98d5931](https://github.com/linkedin/dustjs/commit/98d5931157cf47530a7e5ef40e0ceac4f16a3afd) updated TODO
-- [2540ce9](https://github.com/linkedin/dustjs/commit/2540ce90e8d7c7c87aa9da493e7c5027cfeff117) bump target version
-- [9a268e8](https://github.com/linkedin/dustjs/commit/9a268e8a7900060481672ea33a5e9b48bf24dfef) rollback handlebars version to fix recursive template benchmark
-- [e723e91](https://github.com/linkedin/dustjs/commit/e723e914099c184a93b1b353c6dc68b22d4c5890) release v0.2.0
-- [b5a4dff](https://github.com/linkedin/dustjs/commit/b5a4dffedded2581b2cef170d2fba8fd4f028e8b) add onLoad callback to simplify loading of external templates
-- [d7126e7](https://github.com/linkedin/dustjs/commit/d7126e7b8f125ddcd59ecc3326e2e2dcb429c4f0) bump target version
-- [c5302a1](https://github.com/linkedin/dustjs/commit/c5302a135aedd4be4e7876921af17bb6abb8dc3b) added dust.renderSource and dust.compileFn (closes #7)
-- [b116340](https://github.com/linkedin/dustjs/commit/b1163403c724c4e51aa29bf1dc75a7abd90b6001) updated TODO
-- [0c6d0cf](https://github.com/linkedin/dustjs/commit/0c6d0cf0f4c724cd8983024331ca52db6e8ffc22) fix global variable leak
-- [38ba064](https://github.com/linkedin/dustjs/commit/38ba06415db8ddb150adee08c2640094b366262c) update docs
-- [5306478](https://github.com/linkedin/dustjs/commit/53064783493ee8a4046c2b716866ad4b7da22b48) release v0.2.5
-- [4241d59](https://github.com/linkedin/dustjs/commit/4241d59c4fd6ec557d2214870350cacd08839be8) bump target version
-- [8ce7c76](https://github.com/linkedin/dustjs/commit/8ce7c7636629b2b5ac792858b053ca527fa81c90) export optimizers in commonsjs environment too (@caolan)
-- [915bd0c](https://github.com/linkedin/dustjs/commit/915bd0cde2c442ee6225005089c61c4b643b9f58) don't use literal RegExp syntax for HCHARS because couchdb doesn't like it for some reason (@caolan)
-- [ad0e64c](https://github.com/linkedin/dustjs/commit/ad0e64c7fc221a0499fdfe4cef00b61e5b444735) check for node.js not just commonjs environment when including server module (@caolan)
-- [1215dac](https://github.com/linkedin/dustjs/commit/1215dacdf3c21f07d3039dd2ad24a42096d99e93) update api docs
-- [17bc895](https://github.com/linkedin/dustjs/commit/17bc8953b14081c15e14f5eea397629db6d50c0d) update pegjs build
-- [98ce166](https://github.com/linkedin/dustjs/commit/98ce166ae555612942c23c0579b3569fd9d92518) experimental pragma support
-- [bb309c2](https://github.com/linkedin/dustjs/commit/bb309c223cb6af655ad9aadbd2422e73533fc718) update TODO
-- [42840ae](https://github.com/linkedin/dustjs/commit/42840ae90e18a9f9cf763612ec812db0c2163b1d) rebuild parser and add escape pragma example
-- [7469a94](https://github.com/linkedin/dustjs/commit/7469a94222b3ab40763121f85d3e1fc5772e9106) release v0.3.0
-- [8562d24](https://github.com/linkedin/dustjs/commit/8562d2471fe804c2fb4a85ab3280b2945ec79d7e) update to support evals moving to require('vm') (@stonecobra)
-- [#25](https://github.com/linkedin/dustjs/pull/25) process.binding('evals') is now require('vm') (@stonecobra)
-- [57c77c5](https://github.com/linkedin/dustjs/commit/57c77c5e04b807171117c030b1877552f96a6a42) add loop index support
-- [7198642](https://github.com/linkedin/dustjs/commit/71986425a2b86a29ee280963cce67998913074f4) remove console.logs
-- [f63110f](https://github.com/linkedin/dustjs/commit/f63110fbc0a4dbff217cbe91a6674a14e64d6b67) forking dustjs for LI
-- [22b64f0](https://github.com/linkedin/dustjs/commit/22b64f02a493fc04a48ff7d5eaf85fba2195ad0f) make dustjs compatible with node > 0.4
-- [c16d4e8](https://github.com/linkedin/dustjs/commit/c16d4e819a9912fb53398295c710207bd170b391) jasmine test framework added + original dust test migrated.
-- [300d32e](https://github.com/linkedin/dustjs/commit/300d32ea451e80de6bc56b42fbe56e3414fdf137) README updated and old test files deleted.
-- [4fa1d88](https://github.com/linkedin/dustjs/commit/4fa1d884a00b9f2b8fb2aea1d06c49bb082769e4) message added for all tests and try/catch block added on test.
-- [aa88a33](https://github.com/linkedin/dustjs/commit/aa88a337640cef315f955e56e8280e42fe42147b) tests for error object created, now the error object returned by the parser has this structure {name: xxx, message:xxx, line:0, column:0 }. The line and the column were added.
-- [89f087e](https://github.com/linkedin/dustjs/commit/89f087eeca156d265317db46ce4ef40d40eb125c) update the readme with examples to use @if (@vybs)
-- [fa507ea](https://github.com/linkedin/dustjs/commit/fa507ea74ed3ee022c5a6971fb01360ebbf6d8fd) fix error message bug, no it shows the line number and if and lookup helpers added
-- [554f962](https://github.com/linkedin/dustjs/commit/554f96257dfd02932a36fe8f3c35deb78aa6ee5b) Merge branch 'master' of github.com:vybs/dustjs
-- [1523ad6](https://github.com/linkedin/dustjs/commit/1523ad65085d7bcf577c0828d91f85ef5394b022) previous dustjs test recovered. make file working.
-- [df8f97d](https://github.com/linkedin/dustjs/commit/df8f97dff29a60c21a916f421527063700faf7ee) clean-up helpers (@vybs)
-- [e9198ba](https://github.com/linkedin/dustjs/commit/e9198ba669a08bcfa75c1ee61b99b421383ad389) Add loop index and len markers (@vybs)
-- [da9a89a](https://github.com/linkedin/dustjs/commit/da9a89abdddc6dc65c8d67ff083262c2a9f2779c) README file updated and README file for test created.
-- [fc6d9c7](https://github.com/linkedin/dustjs/commit/fc6d9c781e37a18a1134befb8450757da451c662) Merge branch 'master' of github.com:vybs/dustjs
-- [6bece9d](https://github.com/linkedin/dustjs/commit/6bece9d02841a891ca88d066a37e43b3ed87b3fe)  (@vybs)
-- [6e76423](https://github.com/linkedin/dustjs/commit/6e764238e6fcc956d543bcd1b11728c991cf495f) revert (@vybs)
-- [1763e4f](https://github.com/linkedin/dustjs/commit/1763e4fc6e230a69925696343a5de06142f2643f) testing testing (@vybs)
-- [5b763c1](https://github.com/linkedin/dustjs/commit/5b763c14269b779ca5af934fe493b418d8b280d1) now I know markdown (@vybs)
-- [9a7bc5d](https://github.com/linkedin/dustjs/commit/9a7bc5da824695b84ee54047af147a230a800479) now I know markdown a little more (@vybs)
-- [65aa881](https://github.com/linkedin/dustjs/commit/65aa88118d752b4bf41f3747005c454d835bcbd7) Add aliases documentation to the readme (@vybs)
-- [b8200a2](https://github.com/linkedin/dustjs/commit/b8200a27e997f5370c9559db0012fc3b07321e6a) fix typo (@vybs)
-- [6d5497a](https://github.com/linkedin/dustjs/commit/6d5497af078fbc91f11200f68e329abff1c31904) minor update to Readme (@vybs)
-- [4784a2d](https://github.com/linkedin/dustjs/commit/4784a2d861daad80b8dace4d4722f131dde11a90) update tests and if helper (@vybs)
-- [19eb302](https://github.com/linkedin/dustjs/commit/19eb30215c36f63a7f6f570710a7039162ba0c40) update the path to dust full from the spec runner (@vybs)
-- [641a6dd](https://github.com/linkedin/dustjs/commit/641a6dd5249fbae963a0b23f8a39fab878ac31b4) update jsperf link for if helper (@vybs)
-- [589bc1f](https://github.com/linkedin/dustjs/commit/589bc1f4396e8fed5cd2de3f82d0b18e2017f03c) package.json updated in order to create the npm package for linkedin dust version
-- [338785e](https://github.com/linkedin/dustjs/commit/338785e4c676d3328b017e508b980d6ba3a5b84e) update readme for @if usage (@vybs)
-- [fc7a5b8](https://github.com/linkedin/dustjs/commit/fc7a5b891953a16269a5da228d72fe61963196c7) add unit tests for loop index ans len (@vybs)
-- [335b3ca](https://github.com/linkedin/dustjs/commit/335b3ca4629b547640518aa692c0c0543356f6f8) travis CI integrated
-- [327a550](https://github.com/linkedin/dustjs/commit/327a5508d4e59deb818feab878a733dbd5380525) Merge branch 'master' of github.com:linkedin/dustjs
-- [b528eba](https://github.com/linkedin/dustjs/commit/b528ebaa614e6e55718cffdd5a3389e1f4e70229) travis config file change only to notify to Venna and me
-- [e01ce1e](https://github.com/linkedin/dustjs/commit/e01ce1ebe3a627a52b3407f7d5283c4287182eb7) added travis build status badge to the README file
-- [0f0f362](https://github.com/linkedin/dustjs/commit/0f0f36283849ad93f534ff8f98dd44d2209c7f4b) Gaurd against browsers (@Raynos)
-- [#3](https://github.com/linkedin/dustjs/pull/3) Gaurd against browsers (@Raynos)
-- [e1962b6](https://github.com/linkedin/dustjs/commit/e1962b6e7d41fcdcc8509514b4a5374bec4d19c1) Quote 'if' helper method, fixes mobile Safari 4.2.1> parse error (@kmiyashiro)
-- [#5](https://github.com/linkedin/dustjs/pull/5) Quote 'if' helper, fixes #4 (@kmiyashiro)
-- [693e5bc](https://github.com/linkedin/dustjs/commit/693e5bc1d74d43684695265d9c53510256642b9b) Update dist. Add test for  in @if cond. (@kmiyashiro)
-- [#9](https://github.com/linkedin/dustjs/pull/9) Update to 0.4.0 in dist so that docs are correct (@kmiyashiro)
-- [4e5b39f](https://github.com/linkedin/dustjs/commit/4e5b39f4ef89639152420bbac1dcf6b06551e788) add inheritance example (@vybs)
-- [ee5d228](https://github.com/linkedin/dustjs/commit/ee5d228bda73857991cc9d81237fb00ed4f6452e) Merge branch 'master' of https://github.com/linkedin/dustjs (@vybs)
-- [14ce00e](https://github.com/linkedin/dustjs/commit/14ce00ebb8aa407c63c52346fd713d9bcfcd98d1) add inheritance example 2 (@vybs)
-- [618cd86](https://github.com/linkedin/dustjs/commit/618cd865fe19f9837fe62b8c3744e10a2e1bf841) clean up doc (@vybs)
-- [d25a5fc](https://github.com/linkedin/dustjs/commit/d25a5fc8bb7cd48d341e3e3070c9d1e671292c6d) clean up doc again (@vybs)
-- [3b46ce9](https://github.com/linkedin/dustjs/commit/3b46ce907a51b810c6ff4a4388954267af76654f) add params to partials (@jimmyhchan)
-- [93de6a2](https://github.com/linkedin/dustjs/commit/93de6a27a7049eb294d40b4ee9ad20c6a332d755) typo in jasmine test (@jimmyhchan)
-- [b83c980](https://github.com/linkedin/dustjs/commit/b83c980ffc20d621a60b20043e953890884b3794) moved documentation to wiki pages (@vybs)
-- [b1ed7a9](https://github.com/linkedin/dustjs/commit/b1ed7a957673dfa5f5e2656804ad9dcd1d7949a7) fix current context for partial params (@jimmyhchan)
-- [a4d52e0](https://github.com/linkedin/dustjs/commit/a4d52e03f662277140acf6fb84ff187647153756) test/README updated with coverage tool info
-- [998d13e](https://github.com/linkedin/dustjs/commit/998d13eee5c613e08458d52c0aa21cfd2844c26a) Merge branch 'master' of github.com:linkedin/dustjs (@jimmyhchan)
-- [e3cb992](https://github.com/linkedin/dustjs/commit/e3cb9929eb215a297d6c14d383a12a532e57ccf1) pegjs 0.7 compatibility and parser variables removed from serction function on pegjs files, this makes the parser more independent.
-- [f131f2f](https://github.com/linkedin/dustjs/commit/f131f2f79a114933d1402e49c7a5d6f5e1a7a449) pull request 'dustc' command line tool merged.
-- [#25](https://github.com/linkedin/dustjs/pull/25) pegjs 0.7 compatibility and parser variables removed from section function on dustjs file (@jairodemorais)
-- [e20fdf8](https://github.com/linkedin/dustjs/commit/e20fdf8ba27b97200a119b0648c119fae28c272d) merging from upstream (@jimmyhchan)
-- [#13](https://github.com/linkedin/dustjs/pull/13) Issue #8 Support cleaner way to pass arguments to partials (@jimmyhchan)
-- [90a8049](https://github.com/linkedin/dustjs/commit/90a8049285b58c3dc5ba6fd211bea83af76ce8bb) switch to process.nextTick if exists (node.js) (@seriousManual)
-- [a6ac8ff](https://github.com/linkedin/dustjs/commit/a6ac8ff5095d9b9702ff357919e469ec329c025c) adding unit tests for partial parameters with context. This uses the same convention as sections where the context head is given priority followed by the parameter context. (@jimmyhchan)
-- [2b57a6c](https://github.com/linkedin/dustjs/commit/2b57a6ce7cdd9441192ea77ea24e6c3c2376dd36) Merge branch 'master' of github.com:linkedin/dustjs (@jimmyhchan)
-- [6f55a2d](https://github.com/linkedin/dustjs/commit/6f55a2d2632740caf0d4c9fdbe7eca8e3709e5d9) fixes #24 (@jleppert)
-- [a1caed0](https://github.com/linkedin/dustjs/commit/a1caed0870eaad9110688887c4bfcc72df6731d9) Forgot HCHARS regex for single quote (@jleppert)
-- [bbc92b3](https://github.com/linkedin/dustjs/commit/bbc92b36e7c40ff75f3c09c2759aecdd80c7e1f0) rhino compatible
-- [#36](https://github.com/linkedin/dustjs/pull/36) Rhino compatible (@jairodemorais)
-- [#34](https://github.com/linkedin/dustjs/pull/34) Escape a single quote apostrophe in escapeHtml (@iamleppert)
-- [#31](https://github.com/linkedin/dustjs/pull/31) process.nextTick instead of setTimeout (@zaphod1984)
-- [bdaa9b6](https://github.com/linkedin/dustjs/commit/bdaa9b6bf54dc4d164ea68ea17a22a193cb47266) bug fixed. process is not defined in rhino.
-- [f66bba7](https://github.com/linkedin/dustjs/commit/f66bba73fb76dc01f574222bb8b3185ff3f41e4a) Pull request https://github.com/linkedin/dustjs/pull/27 merged.
-- [8a8153f](https://github.com/linkedin/dustjs/commit/8a8153f242d3f3e2ec61a374f43fa06eeff9fcb4) Pull request https://github.com/linkedin/dustjs/pull/33 merged.
-- [f1d9756](https://github.com/linkedin/dustjs/commit/f1d9756b58069acc0f187d10c6ced4b49d69c6f4) Fixes #7, "Support numbers in the aliases" (@jleppert)
-- [7922f81](https://github.com/linkedin/dustjs/commit/7922f818b7c1c9d72f92e3ebe95401752b67a180) Fixes #28 (@jleppert)
-- [#39](https://github.com/linkedin/dustjs/pull/39) Fixes #28, better error tracking implemented. (@iamleppert)
-- [#37](https://github.com/linkedin/dustjs/pull/37) Fixes #7, "Support numbers in the aliases" (@iamleppert)
-- [b3053b0](https://github.com/linkedin/dustjs/commit/b3053b02b193bafd76be04689766cf8b60cd91d5) Rebuild parser (@jleppert)
-- [#40](https://github.com/linkedin/dustjs/pull/40) Rebuilding parser and merge to fix failed CI (@iamleppert)
-- [02dc6e6](https://github.com/linkedin/dustjs/commit/02dc6e6e99ef63c8cbd51a138f1afd467c90a9e0) jleppert@linkedin.com added to the travis files
-- [4b1557e](https://github.com/linkedin/dustjs/commit/4b1557e87c8564ac20944ff24dbf4c383be59c6b) issue #41 add JSON.stringify filter to dust-core
-- [89bdd6c](https://github.com/linkedin/dustjs/commit/89bdd6c03fbc87e6af629573d3bd0497e7b84988) Select helper and unit tests, fixes #16 (@jleppert)
-- [c6c3ce5](https://github.com/linkedin/dustjs/commit/c6c3ce5b648b1edd43d51a92d52fe845e42d02c1) Update README.md (@vybs)
-- [b8ecaf4](https://github.com/linkedin/dustjs/commit/b8ecaf438790b432400e950c0fb2281675b1ba63) dust tool included.
-- [#49](https://github.com/linkedin/dustjs/pull/49) dust tool included. (@jairodemorais)
-- [8ec4c6c](https://github.com/linkedin/dustjs/commit/8ec4c6c69ed925768da674bbfd60f0db1396a311) Merge branch 'master' of github.com:linkedin/dustjs (@jimmyhchan)
-- [#44](https://github.com/linkedin/dustjs/pull/44) Select helper and unit tests, fixes #16 (@iamleppert)
-- [6adc22a](https://github.com/linkedin/dustjs/commit/6adc22a895a4253fd775fe5bc82ec98d94b8544b) Added unit test code coverage report with node-coverage (@jleppert)
-- [be0487d](https://github.com/linkedin/dustjs/commit/be0487dd4c652cc60250757c2005b29c6d83f739) adding contextDump helper. check console since it might not be available in v8 by default (@jimmyhchan)
-- [b1988df](https://github.com/linkedin/dustjs/commit/b1988df1135b43b935fadee25f891aa4c94019cb) Merge branch 'master' of github.com:linkedin/dustjs (@jimmyhchan)
-- [#52](https://github.com/linkedin/dustjs/pull/52) Added unit test code coverage report with node-coverage (@iamleppert)
-- [c034210](https://github.com/linkedin/dustjs/commit/c03421073bb68e6678120954b4e4b1d3f0bbb4c6) Rebase jairodemorais/dustjs with linkedin/dustjs (@jleppert)
-- [de9f908](https://github.com/linkedin/dustjs/commit/de9f908e72a12b380377b56f0374dee1e81eeeec) added Stream.pipe :metal: (@kilianc)
-- [1ed45cb](https://github.com/linkedin/dustjs/commit/1ed45cb8aa1e5bee1ff51e004fc05a8b077c5451) preventing dust to crash on non existant condition or when running in node environment (@seriousManual)
-- [#54](https://github.com/linkedin/dustjs/pull/54) preventing dust to crash on non existant if-condition (@zaphod1984)
-- [199c993](https://github.com/linkedin/dustjs/commit/199c9930661e2257a1460c8dfa6c893d47a65dd9) commiting merge conflict (@jimmyhchan)
-- [67ba857](https://github.com/linkedin/dustjs/commit/67ba857c216966e2aebbbccaa1c38b61346c28f8) cleanup the console log code (@jimmyhchan)
-- [05bddbe](https://github.com/linkedin/dustjs/commit/05bddbe32b4ae65e23373006b9dd305176f6cab7) dust.html renamed to test.html. templates with errors removed from dust tool. (@jairodemorais)
-- [5e66ef1](https://github.com/linkedin/dustjs/commit/5e66ef127aea7e91b6085cced9d6ed2b5ab8ce92) ws relaxed to allow eol (@jairodemorais)
-- [9b9a754](https://github.com/linkedin/dustjs/commit/9b9a754c8fe4996e94ba8bf793dad16cb46e7a1f) tests updated (@jairodemorais)
-- [#59](https://github.com/linkedin/dustjs/pull/59) ws relaxed to allow eol (@jairodemorais)
-- [43e55dd](https://github.com/linkedin/dustjs/commit/43e55dd1c50248be2d3c5e73bf99985095d0b3e8) dust moved to 0.6.0 version (@jairodemorais)
-- [#60](https://github.com/linkedin/dustjs/pull/60) dust moved to 0.6.0 version (@jairodemorais)
-- [#56](https://github.com/linkedin/dustjs/pull/56) Fix for Issue #50: helper for debugging the context + console log wrapper (@jimmyhchan)
-- [c13e29b](https://github.com/linkedin/dustjs/commit/c13e29b8f4a447d56e2ca48a2341203ebe048f35) fixing travis CI. Jasmine-node package is not compatible with node 0.7 (@jairodemorais)
-- [43bc912](https://github.com/linkedin/dustjs/commit/43bc912faa2ac2c9740b7398dcdc9ce2a919872f) literal params relaxed to allow eol (@jairodemorais)
-- [3fe371b](https://github.com/linkedin/dustjs/commit/3fe371b1559c75645210a420ad763566c45ad915) commets updated (@jairodemorais)
-- [9d133f6](https://github.com/linkedin/dustjs/commit/9d133f60519ec9c1239cd7b410fbbe947152e9d5) Merge branch 'master' of https://github.com/kilianc/dustjs into kilianc-master (@jairodemorais)
-- [637066f](https://github.com/linkedin/dustjs/commit/637066f6260c71dda3c94970616e673c44ab11ca) fix issue https://github.com/linkedin/dustjs/issues/68 (@jairodemorais)
-- [8c0e05c](https://github.com/linkedin/dustjs/commit/8c0e05c0dadcf0ad29a13c4c3c8b8fbaaf924ea2) spec runner modified to run all the test with render, stream and pipe. (@jairodemorais)
-- [#71](https://github.com/linkedin/dustjs/pull/71) Test for pipe function added. (@jairodemorais)
-- [63d55c0](https://github.com/linkedin/dustjs/commit/63d55c0063543b44455fe832aed50a2b348ec53d) dust resolve reference helper created and refactor if to use it (@jairodemorais)
-- [#73](https://github.com/linkedin/dustjs/pull/73) dust resolve reference helper created and refactor if to use it (@jairodemorais)
-- [#70](https://github.com/linkedin/dustjs/pull/70) fix issue https://github.com/linkedin/dustjs/issues/68 (@jairodemorais)
-- [#65](https://github.com/linkedin/dustjs/pull/65) literal params relaxed to allow eol (@jairodemorais)
-- [769f27c](https://github.com/linkedin/dustjs/commit/769f27c805804c5573679f5644b72eb997c51fe3) minor formatting (@vybs)
-- [3e1b47a](https://github.com/linkedin/dustjs/commit/3e1b47ac8953b46065b96694261645f911f9e0fb) minor comment update (@vybs)
-- [bee98ff](https://github.com/linkedin/dustjs/commit/bee98ffa442578d22bb6187f655de58085f1953a) Use the tap method in the select helper (@jairodemorais)
-- [6b5b9b1](https://github.com/linkedin/dustjs/commit/6b5b9b1e932de05635ae93acefed969ae63aab68) jairodemorais-inline branch merged - Add/support dust grammar for dynamic inline partials. bug: https://github.com/linkedin/dustjs/issues/61 fixed (@jairodemorais)
-- [87ca22e](https://github.com/linkedin/dustjs/commit/87ca22e9277048cf9b765343bd9e5806db5b4e7d) tap added to select tag key and test created (@jairodemorais)
-- [27c4430](https://github.com/linkedin/dustjs/commit/27c44308c77ab74decba729a211d95338dbad245) test added (@jairodemorais)
-- [4441062](https://github.com/linkedin/dustjs/commit/4441062ac7dd405c7b716ade1abdd48ea3ebffac) error message updated (@jairodemorais)
-- [#78](https://github.com/linkedin/dustjs/pull/78) Use the tap method in the select helper (@jairodemorais)
-- [dbaee15](https://github.com/linkedin/dustjs/commit/dbaee15ce42fad4fd263f3d3e6144f3c40076f5b) updated readme for v1.0 release major contributions (@vybs)
-- [f9a1bbd](https://github.com/linkedin/dustjs/commit/f9a1bbd9444a70e1c052d1077ff15c8c0e3dbe9c) version 1.0.0 released (@jairodemorais)
-- [60491c7](https://github.com/linkedin/dustjs/commit/60491c7a014d22c60677f1709c2092a78dad9ef0) Merge branch 'master' of github.com:linkedin/dustjs (@jairodemorais)
-- [f636be1](https://github.com/linkedin/dustjs/commit/f636be1e371ed0f4debbfc2bc449f2d23abbed91) minor edit to the console message for helpers (@vybs)
-- [4a18265](https://github.com/linkedin/dustjs/commit/4a18265bb8934a377e13aebc8d95b686f55d022a) Update readme to reflect LI fork (@vybs)
-- [569e1ed](https://github.com/linkedin/dustjs/commit/569e1edea478a8592684bacd6574979925e544be) update the test readme for brevity (@vybs)
-- [777eb3e](https://github.com/linkedin/dustjs/commit/777eb3e1941da22caa6ca6017fe6b12975a26af0) minor readme update (@vybs)
-- [d9e0333](https://github.com/linkedin/dustjs/commit/d9e03331eb9cb8fc6d2ddc5cb82dcfcdbd08b35a) update test names (@vybs)
-- [2103e22](https://github.com/linkedin/dustjs/commit/2103e2210b2bf4692dd01ebb608a8c040a819943) minor update (@vybs)
-- [84addee](https://github.com/linkedin/dustjs/commit/84addeefeb643a25f1559566384927425fce8a8a) update test descriptions (@vybs)
-- [2a1da0e](https://github.com/linkedin/dustjs/commit/2a1da0ea32ab34d2044134e2b59a6223463f8fab) update comments in the grammar (@vybs)
-- [140ffcf](https://github.com/linkedin/dustjs/commit/140ffcf6af40628a25bbda8259448957f4f433a9) minor update to comments in the peg grammar (@vybs)
-- [6ed3db3](https://github.com/linkedin/dustjs/commit/6ed3db3ccb371bd50e38a44142d92cccc9f4c7c1) fix indentation, nitpick (@vybs)
-- [4e7e7f1](https://github.com/linkedin/dustjs/commit/4e7e7f121bd3655f4b8f00e86df1f806929adce3) update readme (@vybs)
-- [e1fa99f](https://github.com/linkedin/dustjs/commit/e1fa99f43e557acd73b32f3dd3bedcb5d5069a74) Update master (@vybs)
-- [5119cb4](https://github.com/linkedin/dustjs/commit/5119cb40c453f601e1911f85b3b4aeb05b8d4c67) Update master (@vybs)
-- [dd8142b](https://github.com/linkedin/dustjs/commit/dd8142b144497f57f4b471a211508b5d29d8c124) Update master (@vybs)
-- [079f716](https://github.com/linkedin/dustjs/commit/079f716a6045a66e3be88b5f8070ae6d4161983b) fix select helper to work inside a loop with primitive types (@jairodemorais)
-- [9d432dd](https://github.com/linkedin/dustjs/commit/9d432ddfa2bca35018c8851c865d2b49177e43fc) select helper consistent witht the semantics of if helper and dust chunk.tap (@vybs)
-- [caca4e5](https://github.com/linkedin/dustjs/commit/caca4e5da39ec7e29a038f1bcbdb7207d09cef20) select helper consistent with if semantics (@vybs)
-- [9fe8aad](https://github.com/linkedin/dustjs/commit/9fe8aad7b5d2bb76a7b042e634dcf6f1703186ba) Added support for multiple event-listeners on dust.Stream :golf: (@oleics)
-- [c8dfa7e](https://github.com/linkedin/dustjs/commit/c8dfa7ef7cf2fdb605ecc1847ee85fcc83b25941) Added tests for multiple event-listeners on dust.Stream (@oleics)
-- [446ad26](https://github.com/linkedin/dustjs/commit/446ad26b52bd8b4a0098b3456f79844408e95749) adding node 0.8 to the travis file. (@jairodemorais)
-- [8c7089d](https://github.com/linkedin/dustjs/commit/8c7089d3e8ab7606df1659f4052da571b73ddbae) helpers removed from Dust core. New npm package created for helpers. (@jairodemorais)
-- [28a771f](https://github.com/linkedin/dustjs/commit/28a771f3d61076120a1bf3835f0fe2caa4357702) useless param removed from jasmine target in the Makefile (@jairodemorais)
-- [c422d3d](https://github.com/linkedin/dustjs/commit/c422d3d227808b29d217276b72b1e2d50203fca4) ds_store files removed. (@jairodemorais)
-- [aee4f6e](https://github.com/linkedin/dustjs/commit/aee4f6ee3c375921c62bb9fc444f5408527e40d7) helpers included in dust core (@jairodemorais)
-- [#95](https://github.com/linkedin/dustjs/pull/95) helpers removed from Dust core. New npm package created for helpers. (@jairodemorais)
-- [811aef7](https://github.com/linkedin/dustjs/commit/811aef7c38a7aaee078c03a4f2127b8a404b7dab) Enhanced tests for pipe (pipe to several streams aka multiple event-listners) (@oleics)
-- [f1d9c41](https://github.com/linkedin/dustjs/commit/f1d9c4183e07ecef501f9037fa20969a48589494) modifying package, testing push (@sclatter)
-- [f13d36a](https://github.com/linkedin/dustjs/commit/f13d36adbc48859cf1134d1293639dc881045998) fixes #98, added math helper and unit tests (@sclatter)
-- [17353fb](https://github.com/linkedin/dustjs/commit/17353fbba57f16d72161a6f7025ee54c051ca573) test file fixed. it was using an inexistent file. the examples file was renamed to grammarTests in the last commit (@jairodemorais)
-- [58b13ac](https://github.com/linkedin/dustjs/commit/58b13aca403364943e54e40acf081947a278f82b) Merge branch 'streams' of https://github.com/oleics/dustjs into oleics-streams (@jairodemorais)
-- [3cbb0e2](https://github.com/linkedin/dustjs/commit/3cbb0e29db2125cb3966d6188d12d5874aea1a51) merge PR https://github.com/linkedin/dustjs/pull/93 (@jairodemorais)
-- [#105](https://github.com/linkedin/dustjs/pull/105) merge PR https://github.com/linkedin/dustjs/pull/93 (@jairodemorais)
-- [fa93709](https://github.com/linkedin/dustjs/commit/fa937091bcd1a73252ed183e81eeb2f1663d437e) adding a mod (modulus) helper and unit tests (@sclatter)
-- [856d46e](https://github.com/linkedin/dustjs/commit/856d46e9bd49c00896acce026b5103a3b1be3b79) issue 106, accessing array inside a loop using the current context (@jairodemorais)
-- [9ace431](https://github.com/linkedin/dustjs/commit/9ace431d460977114b06f404e9c6e3a900ba20f1) change nestedKey to nested_key to keep the grammar convetion consistent (@jairodemorais)
-- [87d1ad3](https://github.com/linkedin/dustjs/commit/87d1ad306cd11e422b022f97e271596745a80b42) little changes in the grammar file to make it consistent (@jairodemorais)
-- [479c3ee](https://github.com/linkedin/dustjs/commit/479c3ee160ce86e28e5d1fc9eaa1d9d155b87c57) making math helper specific and extensible per the discussion, adding new unit tests (@sclatter)
-- [917eb15](https://github.com/linkedin/dustjs/commit/917eb1518447a24fa5a5a2e5275fd1f83382471a) new math helper, which is more specific than original version, but more extensible than second version, unit tests (@sclatter)
-- [1209b40](https://github.com/linkedin/dustjs/commit/1209b407ba547d827fdcc7d71f770a757af4fb8e) trying again with last commit (@sclatter)
-- [329537d](https://github.com/linkedin/dustjs/commit/329537d723951cf3621375083ed594e10310d933) removing the eval no longer needed (@sclatter)
-- [5f472bc](https://github.com/linkedin/dustjs/commit/5f472bca31da89b2d90e36784a6fe50a8e7fe802) fixing typo in comment (@sclatter)
-- [6995032](https://github.com/linkedin/dustjs/commit/6995032b253418d094357e6746678bcf284c8006) adding tap to eq param (@sclatter)
-- [e42ff4d](https://github.com/linkedin/dustjs/commit/e42ff4da95668debdecf4b43bc90fabb74137314) Change where $idx and $len are set. Move it from the push method which is called by parts of the code that have nothing to do with secton iteration to the section method in the code explicitly for iteration. After iteration is done, remove $idx and $len so they won't pollute the context data after exiting the iteration. All tests pass after this change. No external doc change as end user behavior remains the same (except for $idx/$len no longer showing up in dumpContext after the iteration completes) (@rragan)
-- [4606d03](https://github.com/linkedin/dustjs/commit/4606d030f18a48300d71740b63e72723bd9e0270) Add tests for $idx and $len when iteration object contains simple values and not objects. This did not work with the previous way $idx/$len was implemented. All array objects should support $idx/$len now (@rragan)
-- [0bc5eb7](https://github.com/linkedin/dustjs/commit/0bc5eb7dfb16c4fea56664f49c25d810c33c6c2e) PR https://github.com/linkedin/dustjs/pull/96/files merged (@jairodemorais)
-- [6ef56bc](https://github.com/linkedin/dustjs/commit/6ef56bc49061356cd6212208c6337b6ae8463aa9) uglifyjs tool has been added to minify full & core dust files (@leojuliand)
-- [d0affe6](https://github.com/linkedin/dustjs/commit/d0affe66369a8ea45acf31930c08a8f3f43d1026) minifier file created to use uglifier locally. Uglifier-js Dependency added. Dust-helper src fixed in test.html. (@leojuliand)
-- [c6e46e3](https://github.com/linkedin/dustjs/commit/c6e46e32392152c6dc91fb062c3dbdf355560602) Revise idx/len changes to handle one element case; move tests to helpersTests from grammarTests; add more tests for idx/len cases (@rragan)
-- [dfc44de](https://github.com/linkedin/dustjs/commit/dfc44de67404043fb61f9c98e5c31086dc2bc4e0) Restore tapper tests that got lost (@rragan)
-- [54f29ae](https://github.com/linkedin/dustjs/commit/54f29ae23277404249707d5b4bf2f44c883e7bbd) Revert to loading dustjs way done originally. Add test for {#.} case (@rragan)
-- [0f0bdf9](https://github.com/linkedin/dustjs/commit/0f0bdf94ca7239b0b96ad301707951dadf3b8f4b) Add test for idx in nested loops (@rragan)
-- [#113](https://github.com/linkedin/dustjs/pull/113) Make $idx/$len work for all array  objects and not leave old values in contexts (@rragan)
-- [fd08ccc](https://github.com/linkedin/dustjs/commit/fd08ccc2621b65e59c424ee2bb581cf4484ee8ce) Update dustjs-helpers/lib/dust-helpers.js (@vybs)
-- [#99](https://github.com/linkedin/dustjs/pull/99) new math helper method (@sclatter)
-- [e332f3f](https://github.com/linkedin/dustjs/commit/e332f3f11c2328445af37c008fd3b5782cc01a1d) helpers folder moved to a new repo. size helper include in the helpers file. (@jairodemorais)
-- [f70dbf0](https://github.com/linkedin/dustjs/commit/f70dbf058efcd266c1197580d2fd4b1cbc89258b) remove useless require (@jairodemorais)
-- [5488ab2](https://github.com/linkedin/dustjs/commit/5488ab267df11ac3d7f8a5098fc4fade98687724) dust files regenerated (@jairodemorais)
-- [ed84669](https://github.com/linkedin/dustjs/commit/ed8466937ad96fb749c027986176c35a2a96b9cb) test tool fixed. the helpers file was linked bad. (@jairodemorais)
-- [8264284](https://github.com/linkedin/dustjs/commit/8264284592364b1362eda43bd5191c0a11633b46) Removed stray .DS_Store files (@zzen)
-- [693034a](https://github.com/linkedin/dustjs/commit/693034ad6c114f32fed470ac450bc8b85572c66d) Started ignoring DS_Store files (@zzen)
-- [#126](https://github.com/linkedin/dustjs/pull/126) Removed left-over .DS_Store files (@zzen)
-- [de0ce85](https://github.com/linkedin/dustjs/commit/de0ce854e27426cd641e6041d821a03da188706a) Fixed :else in section when iterating over empty array. (@zzen)
-- [1b7d9e6](https://github.com/linkedin/dustjs/commit/1b7d9e691f65c34684ac6755d85591688b07f267) Updated README for consistency and readability (@zzen)
-- [#128](https://github.com/linkedin/dustjs/pull/128) Updated README for consistency and readability (@zzen)
-- [#108](https://github.com/linkedin/dustjs/pull/108) issue 106, accessing array inside a loop using the current context (@jairodemorais)
-- [8e531d3](https://github.com/linkedin/dustjs/commit/8e531d3ce9cb9e657749b10594abc3cefd3b824c) Relaxing dust references/keys to support - (@jairodemorais)
-- [79fc3a0](https://github.com/linkedin/dustjs/commit/79fc3a018b81cdce57954ded539f709663ddf3f8) test added using dash in keys (@jairodemorais)
-- [6189128](https://github.com/linkedin/dustjs/commit/6189128cabf8caaa0891fe3d90dcfd80b3536d8a) Partial with parameters was not getting the correct context (@jimmyhchan)
-- [92c92a0](https://github.com/linkedin/dustjs/commit/92c92a0032af2ab81bc6629aabceb35ce5099303) test page missing helper (@jimmyhchan)
-- [#132](https://github.com/linkedin/dustjs/pull/132) Partial with parameters was not getting the correct context (@jimmyhchan)
-- [0e9ac64](https://github.com/linkedin/dustjs/commit/0e9ac641248bdc6b6eb7e89e529cf067ceca6e41) Update test/README.md (@vybs)
-- [e3b5f49](https://github.com/linkedin/dustjs/commit/e3b5f496f88276d8e76cb2148c7f401016806f0d) GH-112, fix the invalid filters case (@vybs)
-- [ff8ba78](https://github.com/linkedin/dustjs/commit/ff8ba78c3eb4e10dabe050d296e884e3298e9a77) add some basic reference evaluation tests (@vybs)
-- [b2ce50f](https://github.com/linkedin/dustjs/commit/b2ce50f5ab302597d9cc5b2b4f216d77b5bffc39) Merge branch 'master' of github.com:linkedin/dustjs (@vybs)
-- [c5983ac](https://github.com/linkedin/dustjs/commit/c5983ac1db66e6acfea7b3b976ff7d8e78af0c3a) GH-105 , call the function as isFunction, since reference is overloaded in dust (@vybs)
-- [#127](https://github.com/linkedin/dustjs/pull/127) Fixed :else in section when iterating over empty array. (@zzen)
-- [8bd9b14](https://github.com/linkedin/dustjs/commit/8bd9b147d71b826d7b1a393053181b1176375615) add more unit tests for exists and block evaluation (@vybs)
-- [a7ae9df](https://github.com/linkedin/dustjs/commit/a7ae9df15709f6c29e5e7ad338100eaec364b843) add more unit tests for exists and block evaluation (@vybs)
-- [#139](https://github.com/linkedin/dustjs/pull/139) GH-85, GH-127 improve test coverage (@linkedin)
-- [2760048](https://github.com/linkedin/dustjs/commit/27600481d68c21dee77f50e714d1a15c4cc50e27) GH-134 , remove support for scalar in the block # (@vybs)
-- [71037a5](https://github.com/linkedin/dustjs/commit/71037a548e0cd12363fc1eebfef88a53af703136) Merge branch 'master' of github.com:linkedin/dustjs into vybs-dustjs (@vybs)
-- [#140](https://github.com/linkedin/dustjs/pull/140) GH-134 , remove support for scalar in the block # (@linkedin)
-- [747a8fa](https://github.com/linkedin/dustjs/commit/747a8fa356947fdee93a9079f9e672326f083cae) fixes to the GH-134 (@vybs)
-- [#141](https://github.com/linkedin/dustjs/pull/141) Fixes for GH-134 (@linkedin)
-- [e9a4c69](https://github.com/linkedin/dustjs/commit/e9a4c69bb2c4dadb1e8a6b8339ace663b17e7c66) add another intersting test case with . and blocks (@vybs)
-- [#142](https://github.com/linkedin/dustjs/pull/142) add another intersting test case with . and blocks (@linkedin)
-- [fd20780](https://github.com/linkedin/dustjs/commit/fd207805fb273d1cccd4614e439054318eb34ae8) reverse the GH-134 since it is backward incompatible (@vybs)
-- [#143](https://github.com/linkedin/dustjs/pull/143) reverse the GH-134 since it is backward incompatible (@linkedin)
-- [dfc1d77](https://github.com/linkedin/dustjs/commit/dfc1d771515ca097fa9b0cfd7278e1d370837b27) minor: reorganized the section code and documented some more as to how the section # is evalauted (@vybs)
-- [#144](https://github.com/linkedin/dustjs/pull/144) minor: reorganized the section code and documented some more as to how t... (@linkedin)
-- [3ab0957](https://github.com/linkedin/dustjs/commit/3ab0957a598a444c48c9fc722e923cc32f511f87) rename grammar tests to core tests, fix the missing helper case (@vybs)
-- [#145](https://github.com/linkedin/dustjs/pull/145) rename grammar tests to core tests, since it testing dust.js core functionality, also has GH-133, fix the missing helper case (@linkedin)
-- [a74a2db](https://github.com/linkedin/dustjs/commit/a74a2dbf83fb53a0b253841c51637ac411322c09) guard against missing head in the section tag index and len (@vybs)
-- [8916110](https://github.com/linkedin/dustjs/commit/89161105829445ec18a82d07ee32d36520d65945) guard against missing head in the section tag index and len (@vybs)
-- [#146](https://github.com/linkedin/dustjs/pull/146) Remove the old grammartests file, since it renamed to coreTests now and guard against missing context head in section (@linkedin)
-- [184a270](https://github.com/linkedin/dustjs/commit/184a27053d18358056434cd8081d4a79ee120da6) Update package.json (@vybs)
-- [8146c15](https://github.com/linkedin/dustjs/commit/8146c15cc870f7bacff789861760ac31f0f37d32) Update package.json (@vybs)
-- [559f928](https://github.com/linkedin/dustjs/commit/559f9286ddc23e7a606afde236604502dd55fd55) Fix the missing Chunk in helpers (@vybs)
-- [6d42dc4](https://github.com/linkedin/dustjs/commit/6d42dc45771024619b5aaed08b54e161a6541d46) add v1.1 files (@vybs)
-- [#151](https://github.com/linkedin/dustjs/pull/151) add v1.1 files to the dist (@linkedin)
-- [267dfe1](https://github.com/linkedin/dustjs/commit/267dfe16d3940ef11686c808d40612c9aba61276) Really undo 2760048: wqremoving of scalar # support (@jimmyhchan)
-- [eb70850](https://github.com/linkedin/dustjs/commit/eb70850d3079ad3bc8d7e346c394d1b9599f92d0) add test cases for returning non chunks from function context (@jimmyhchan)
-- [#152](https://github.com/linkedin/dustjs/pull/152) Really undo 2760048: removing scalar block support (@jimmyhchan)
-- [ae3d034](https://github.com/linkedin/dustjs/commit/ae3d034f7b2e8557983fae6edbb44fefc607ea2d) partials with parameters context was missing blocks (@jimmyhchan)
-- [c00eca8](https://github.com/linkedin/dustjs/commit/c00eca8de452ff667dd5126ce7bdc3c4a4b74d82) Cleanup the helpers from the dust repo, fix the make test (@vybs)
-- [0ccef90](https://github.com/linkedin/dustjs/commit/0ccef90492932ca7bd055d5913d45bccb10ed296) update readme for the helpers (@vybs)
-- [#156](https://github.com/linkedin/dustjs/pull/156) Cleanup the helpers from the dust repo, fix the make test (@linkedin)
-- [2030f2f](https://github.com/linkedin/dustjs/commit/2030f2fd8cb8edb3f59d5906a688b45e49481759) Add unit tests for the pull/154 (@vybs)
-- [5fb7393](https://github.com/linkedin/dustjs/commit/5fb739379bdd4af87ae20fc8a50967176bcaaabd) fix the description in the tests (@vybs)
-- [#154](https://github.com/linkedin/dustjs/pull/154) partials with parameters context was missing blocks (@jimmyhchan)
-- [b227769](https://github.com/linkedin/dustjs/commit/b227769ebbc700e7669637ae61a393ec2b78a230) just add the tests, since Jimmy's pull committed the fix (@vybs)
-- [8339abd](https://github.com/linkedin/dustjs/commit/8339abd655f1b545c3c25e288ba782c4eeaaf4e7) just add the tests, since Jimmy's pull committed the fix (@vybs)
-- [#157](https://github.com/linkedin/dustjs/pull/157) Add unit tests for the pull/154 (@linkedin)
-- [6267802](https://github.com/linkedin/dustjs/commit/62678024216b5fba2fc9a1b8476047d486a94f5b) fix the bad merge (@vybs)
-- [#158](https://github.com/linkedin/dustjs/pull/158) fix the bad merge (@linkedin)
-- [92ca0e0](https://github.com/linkedin/dustjs/commit/92ca0e0d54e9e7b73b51c3877c05837c7b34a811) regenerate the dist files for v1.1.1 (@vybs)
-- [61e7c6a](https://github.com/linkedin/dustjs/commit/61e7c6a4e1ff52e29ea1f1282ed856479ffa6513) move the  and  tests to the core tests (@vybs)
-- [7a45615](https://github.com/linkedin/dustjs/commit/7a45615bc8b3db3954221934162630bfaa9a62bf) move the  and  tests to the core tests (@vybs)
-- [#159](https://github.com/linkedin/dustjs/pull/159) fix the description on the core tests for $idx and $len for scalar (@linkedin)
-- [48eeac6](https://github.com/linkedin/dustjs/commit/48eeac684c61ec1a53d52e31154b416b808b1358) Update package.json (@vybs)
-- [c69018a](https://github.com/linkedin/dustjs/commit/c69018a2d69e666d8880bfea2da50501fa7be96b) Update package.json (@vybs)
-- [320c3ff](https://github.com/linkedin/dustjs/commit/320c3ff73eb2b39ef439ee9c4a50b4157f4b86af) Update index.html (@vybs)
-- [2dd819b](https://github.com/linkedin/dustjs/commit/2dd819b1959926b2af3bef43ec1346a1f6805a51) Index page removed, test page refactored, client spec runner fixed. (@jairodemorais)
-- [facbe6b](https://github.com/linkedin/dustjs/commit/facbe6b44e21d77fd352b76a08cf4753b5c0d6a3) Update test/jasmine-test/spec/coreTests.js (@vybs)
-- [8e8e4c1](https://github.com/linkedin/dustjs/commit/8e8e4c14374b74d97638a1bd1f1a17d203b813eb) fixing the renaming of tests (@vybs)
-- [fc1214a](https://github.com/linkedin/dustjs/commit/fc1214a7e03f21e722cdcbd373946aa7d297ace9) rename some tests (@vybs)
-- [#165](https://github.com/linkedin/dustjs/pull/165) improve description in unit tests (@linkedin)
-- [b8614fb](https://github.com/linkedin/dustjs/commit/b8614fbc4c5c3203c152e65df25d53b0e95056ec) Add template minification to dust.compile (@smfoote)
-- [c677fba](https://github.com/linkedin/dustjs/commit/c677fbaa74f48895e8a5685493f10759678215ee) Fixing some punctuation and whitespace in the readme. (@sethmcl)
-- [#168](https://github.com/linkedin/dustjs/pull/168) Minor README update (@sethmcl)
-- [9da5638](https://github.com/linkedin/dustjs/commit/9da56388b2084af925b99d4cc632b808dbb4de77) Fix the array reference access with  GH-148 (@jairodemorais)
-- [1e8429e](https://github.com/linkedin/dustjs/commit/1e8429e6ea768b7fb5fa598f25ea3768972671fe) test for len added. (@jairodemorais)
-- [dca5ea4](https://github.com/linkedin/dustjs/commit/dca5ea47ac90e1c1c1ebe4bf1125b99d6b38c52e) Remove console.log (@smfoote)
-- [829ab0b](https://github.com/linkedin/dustjs/commit/829ab0b1c2f7f032df6fc216ce2e8e77f994483c) Change minify to strip (@smfoote)
-- [5c89610](https://github.com/linkedin/dustjs/commit/5c89610eb9d28066c12cfca77343fd29a8187eb8) group core tests (@jairodemorais)
-- [0a0942d](https://github.com/linkedin/dustjs/commit/0a0942d2a2e23933af96ab9fe70fc7a2ed32a7b9) fix the select's width in test  page (@jairodemorais)
-- [9121b36](https://github.com/linkedin/dustjs/commit/9121b36f35a2671769e28712f8d6aaa357962d88) dependecies moved to dev mode (@jairodemorais)
-- [#183](https://github.com/linkedin/dustjs/pull/183) cover, uglify and jasmine move to dev dependencies. GH-183 (@jairodemorais)
-- [193f83f](https://github.com/linkedin/dustjs/commit/193f83fc09432eefe815b8f4cd744db843811caf) Resolve merge conflict (@smfoote)
-- [#166](https://github.com/linkedin/dustjs/pull/166) Add template strip of white space to dust.compile (optional defaults to not strip) (@smfoote)
-- [67ba4d4](https://github.com/linkedin/dustjs/commit/67ba4d4382553378537fb19a251e5eb627d3bddf) issue GH=187 fixed. (@jairodemorais)
-- [949066e](https://github.com/linkedin/dustjs/commit/949066eb50a97cc38812e34443cdb149f3ce6b99) first buffer test added (@jairodemorais)
-- [#188](https://github.com/linkedin/dustjs/pull/188) The whitespace grammar rule for partial was a little inconsistent with other tags. issue GH=187 fixed. (@jairodemorais)
-- [c1ad904](https://github.com/linkedin/dustjs/commit/c1ad9049fbddea0644ef3ed6499084a8536d2c40) add semicolons to dust compiler GH=215 (@jairodemorais)
-- [#216](https://github.com/linkedin/dustjs/pull/216) add semicolons to dust compiler GH=215 (@jairodemorais)
-- [ef4267e](https://github.com/linkedin/dustjs/commit/ef4267e407f6daa801e7cf7a2be8f175ae236dfa) eol removed from buffer. (@jairodemorais)
-- [abbb849](https://github.com/linkedin/dustjs/commit/abbb8499f892032989f95d79ab18d86ebfc57d1a) Dust version moved to 2.0.0 Because the las commit breaks backward compatibility (@jairodemorais)
-- [b562bb0](https://github.com/linkedin/dustjs/commit/b562bb0aae95bacab64bfef303b8ccace8578a22) Fix Issue #222 so a section on an object does not change / values (@rragan)
-- [#223](https://github.com/linkedin/dustjs/pull/223) Fix for Issue #222. Code change + new test added to verify proper behavior (@rragan)
-- [29d66da](https://github.com/linkedin/dustjs/commit/29d66da6c5b63ad2fbedbfed2af464d4672910fe) downgrading dust version to 1.2.0 (@jairodemorais)
-- [32faf38](https://github.com/linkedin/dustjs/commit/32faf3837aa3258eecaf73b079ac4bb66641f049) eol added to buffer again. commit ef4267e407f6daa801e7cf7a2be8f175ae236dfa reverted (@jairodemorais)
-- [#236](https://github.com/linkedin/dustjs/pull/236) eol added to buffer again. (@jairodemorais)
-- [379c228](https://github.com/linkedin/dustjs/commit/379c228d4403030fb18c45a7279c90eb3ed2e560) update to new version 1.2.1 (@vybs)
-- [3b749d5](https://github.com/linkedin/dustjs/commit/3b749d56d83aa013ee149785c6aaad617bf9c643) preventing dust from crash on nonexistant helper, test added
-- [02d89f6](https://github.com/linkedin/dustjs/commit/02d89f6f881bc80fda56b40f92fa826bffe321ed) using dust.isArray in place of Array.isArray (@jairodemorais)
-- [0af65d1](https://github.com/linkedin/dustjs/commit/0af65d1aa2e5b37479a453609144321fffdca4b6) posible fix for dust error message (@jairodemorais)
-- [cd1f191](https://github.com/linkedin/dustjs/commit/cd1f191b42a7a297bfda3bf96b6271a27f1ffbb0) error message improved (@jairodemorais)
-- [#241](https://github.com/linkedin/dustjs/pull/241) using dust.isArray in place of Array.isArray (@jairodemorais)
-- [c15ffe8](https://github.com/linkedin/dustjs/commit/c15ffe83f9d4c827216c75eab9944423c8e6053c) compiler variable name changed to dustCompiler (@jairodemorais)
-- [92b78cc](https://github.com/linkedin/dustjs/commit/92b78cc033581885aeceaa1e17d3ae3329f1751c) name fixed (@jairodemorais)
-- [#243](https://github.com/linkedin/dustjs/pull/243) compiler variable name changed to dustCompiler (@jairodemorais)
-- [#245](https://github.com/linkedin/dustjs/pull/245) Gh-208 - solve the incorrect error line reported in peg (@jairodemorais)
-- [c111b76](https://github.com/linkedin/dustjs/commit/c111b7684757121be65b24260faf4154bb3d647d) moving dust version to 1.2.2 (@jairodemorais)
-- [d2ab5ce](https://github.com/linkedin/dustjs/commit/d2ab5ceff78f0b5fdb46a3e38854ae0cef136ac1) Remove leftover debugger statement (@sethkinast)
-- [#249](https://github.com/linkedin/dustjs/pull/249) Remove debugger in dust-full-1.2.1.js (@sethkinast)
-- [717accf](https://github.com/linkedin/dustjs/commit/717accf8e1fbb4c7e56b192447c6d7d0a89cd01d) 2-3000% performance enhancement in IE7 (@jlkonsultab)
-- [db7163f](https://github.com/linkedin/dustjs/commit/db7163fffeb22755815b7bf4f29dd85377e4a9e0) dynamic keys in getBlock fix
-- [933988c](https://github.com/linkedin/dustjs/commit/933988ce3f3373e09e5fe1b13f111eadf333c65f) fixed join() to join('')
-- [b7ed34b](https://github.com/linkedin/dustjs/commit/b7ed34bde8df2c159365cc07a7eee656d2fdb6fb) added filters (@vybs)
-- [5310786](https://github.com/linkedin/dustjs/commit/5310786216b4bba3aae2f2a8f9b265421a3a528b) Removed incorrect fix in unit tests (@jlkonsultab)
-- [#253](https://github.com/linkedin/dustjs/pull/253) 2-3000% performance enhancement in IE7 (@jlkonsultab)
-- [6638496](https://github.com/linkedin/dustjs/commit/66384965f11449ee97bc493d0c3609d74f845d01) updated dist/*.1.2.2.js
-- [ad686f4](https://github.com/linkedin/dustjs/commit/ad686f47fdf94fd70e546998b79e5bca331f00a5) updated to 1.2.3 (@vybs)
-- [2b5fcb4](https://github.com/linkedin/dustjs/commit/2b5fcb47e3aa1134013c8aa2fd47bb5dc0f72fd7) add 1.2.2 and 1.2.3 versioned files (@vybs)
-- [8cff127](https://github.com/linkedin/dustjs/commit/8cff1275cae71f20e272cd8f8bd97335bf6aeeda) remove mustache (@vybs)
-- [42d8c11](https://github.com/linkedin/dustjs/commit/42d8c11148fdd773f06699990573aa007aa082a1) Update index.html (@vybs)
-- [bb04711](https://github.com/linkedin/dustjs/commit/bb047113c57ee12156f883da79e21d160dc86dc5) update to more intuitive test names (@vybs)
-- [4da72f2](https://github.com/linkedin/dustjs/commit/4da72f21867e5273965269b52e4e8a4823c25ea4) Update coreTests.js (@vybs)
-- [1c2e055](https://github.com/linkedin/dustjs/commit/1c2e0550751d3491f2db7a7746171147079e98b3) Update coreTests.js (@vybs)
-- [4411c98](https://github.com/linkedin/dustjs/commit/4411c98f91f60e355fb7201bfe0e8244e09c208b) Merge branch 'master' of https://github.com/linkedin/dustjs
-- [4787669](https://github.com/linkedin/dustjs/commit/47876698c3687985cf1b7710d49838348c97e20c) Adding forward slash to escapeJs and unit tests for escapeJs
-- [e35fd01](https://github.com/linkedin/dustjs/commit/e35fd01dca939cb087dfc1ab162699391c2aee3f) updating 1.2.3 with escapeJs changes
-- [#263](https://github.com/linkedin/dustjs/pull/263) Add forward slash and unit tests for j filter (@prashn64)
-- [03574f7](https://github.com/linkedin/dustjs/commit/03574f708563dac2d6c58dc7ee69de3b63d6f29b) Update package.json (@vybs)
-- [01ade7b](https://github.com/linkedin/dustjs/commit/01ade7b3e36bd20cb7eddd2e805bcf46ffdf7c8b) fix for . path reference (@carchrae)
-- [62a4887](https://github.com/linkedin/dustjs/commit/62a4887bedf6acd0cd36b86ab9c15feb724b6f6d) fix for . path reference - removed blank line (@carchrae)
-- [65e754a](https://github.com/linkedin/dustjs/commit/65e754a944a96f8e41938087d3d2157d0acad025) backward compatible check for key with . in var name (@carchrae)
-- [2d71f2f](https://github.com/linkedin/dustjs/commit/2d71f2f9f382c706853651d1d45d286b58231257) store template name in the global context (@vybs)
-- [dd50b19](https://github.com/linkedin/dustjs/commit/dd50b198bc699389b25e29b35ef1e7652c1c840c) tests for _t (@vybs)
-- [f009944](https://github.com/linkedin/dustjs/commit/f009944d938284a0dbe159f0be7313cb952c8897) rename frac to float (@vybs)
-- [b5950af](https://github.com/linkedin/dustjs/commit/b5950af963347c23042fdca1f946df3b894fe2af) update the filename as per the review comments (@vybs)
-- [a35542c](https://github.com/linkedin/dustjs/commit/a35542c11375199a3f1772b824514f26e834f026) update tests for the global template name (@vybs)
-- [#274](https://github.com/linkedin/dustjs/pull/274) GH-266 store rendered template in global (@vybs)
-- [a73a929](https://github.com/linkedin/dustjs/commit/a73a9292d1c39e2972f0fad5a83687b5291eaa70) update minor version for GH-266 (@vybs)
-- [5f13011](https://github.com/linkedin/dustjs/commit/5f130115ac9fd913ddd0014197de5fd375436676) add versioned files (@vybs)
-- [8c081b5](https://github.com/linkedin/dustjs/commit/8c081b5de791ccdecf63b276aa2f7993a79f129a) fix force local for getPath (@carchrae)
-- [3087834](https://github.com/linkedin/dustjs/commit/3087834d3f1d3b85251f3036d1720326d505eaa9) adding client side debugging
-- [a23170c](https://github.com/linkedin/dustjs/commit/a23170cfa65dbbb5de7018ce2a0ba6139cc23d9d) removing unnecessary copyright comments
-- [c1a70e3](https://github.com/linkedin/dustjs/commit/c1a70e37ce9c0b4335a8224c68b9a3b5c824b5c8) Remove strip from dust.compile (@smfoote)
-- [3fc6322](https://github.com/linkedin/dustjs/commit/3fc632215f0311b7f36397e63e058f8d10482dda) fixes to debugging to pass tests
-- [a30725e](https://github.com/linkedin/dustjs/commit/a30725e3216ab1486e7facc37bdc0b7e83276866) adding documentation for the logger object
-- [#278](https://github.com/linkedin/dustjs/pull/278) Remove strip from dust.compile, since it wasn't really very good anyway (@smfoote)
-- [8022f84](https://github.com/linkedin/dustjs/commit/8022f84d6ec6ab0b488c8b3234fa220c0920cb10) GH-PR 278, revert the 1.2.1 addition of strip flag to compile method (@vybs)
-- [6760744](https://github.com/linkedin/dustjs/commit/6760744f664145e2dcd477bd61fd4c2c44ed9143) was using key rather than array keyPath (@carchrae)
-- [0005aa0](https://github.com/linkedin/dustjs/commit/0005aa0d7999f15bd412e54432a6143c9b63a980) added support for applying functions in dot path.  also check the (@carchrae)
-- [768c444](https://github.com/linkedin/dustjs/commit/768c4446c46e4e1cba617bee1538b13c79cdcdff) made getPath consistent with getDot - only evaluate while searching the (@carchrae)
-- [ba3dd07](https://github.com/linkedin/dustjs/commit/ba3dd0798474750b3be32bab2da073e109bc40cb) Merge branch 'master' of https://github.com/linkedin/dustjs (@carchrae)
-- [e0c1b8e](https://github.com/linkedin/dustjs/commit/e0c1b8eaa8d4ebae4b45d3162b6294fe460eecab) much cleaner version of changes (@carchrae)
-- [3fe5113](https://github.com/linkedin/dustjs/commit/3fe511384758a3d56d4b5213c6b6507a8b0aa1dd) tests of lambda path resolution (@carchrae)
-- [cddd073](https://github.com/linkedin/dustjs/commit/cddd073b00c08992d7c93919c4b7428d8d5c189e) github.com check (@carchrae)
-- [8257681](https://github.com/linkedin/dustjs/commit/8257681895569be42ff4daab10fbea56615c8487) need while loop to catch when current ctx=tail.head is github.com and we still (@carchrae)
-- [569cc9f](https://github.com/linkedin/dustjs/commit/569cc9fdecd601f2cb0fef959760835cd377921c) was not updating tail correctly (@carchrae)
-- [7dd9118](https://github.com/linkedin/dustjs/commit/7dd9118a8ec0d0de8a5244b014c20f00eb9cceaf) added method to switch to backward compatible getPath (@carchrae)
-- [5af2144](https://github.com/linkedin/dustjs/commit/5af21449e2063c28b68b10aad5b632ed5f8387cc) isEmpty should evaluate functions - otherwise, they always return true. (@carchrae)
-- [e2cae1c](https://github.com/linkedin/dustjs/commit/e2cae1cdbcfbaec46c85ddeec7d6d38b92106815) Merge branch 'master' of github.com:carchrae/dustjs into mine (@carchrae)
-- [d5af0e3](https://github.com/linkedin/dustjs/commit/d5af0e36ac48d172b602bf168ec8118fba3c5ff8) fixed bug with github.com in context.head - use !ctx instaed of ctx === (@carchrae)
-- [0910369](https://github.com/linkedin/dustjs/commit/0910369cb2bf08d0232a93d0607ca56d6bbd0747) changed to !ctx from ctx===undefined - since github.com/false/0 cause ctx loop (@carchrae)
-- [66d2405](https://github.com/linkedin/dustjs/commit/66d24051dec8a003ef630d56ae9b273de04ccd4f) Cache VM context across `dust.loadSource` calls. Should fix issue #288. (@totherik)
-- [a20b3e9](https://github.com/linkedin/dustjs/commit/a20b3e9dc43aaee63e6f080dfbd2bbf09b1e6ad3) upgrading jasmine-node to latest version. Fix compatibility issue (@jairodemorais)
-- [a009a6c](https://github.com/linkedin/dustjs/commit/a009a6cb1b5069075750a18aeb09e9c1ffa0427c) Add tests to carchrae fork (@rragan)
-- [10e6922](https://github.com/linkedin/dustjs/commit/10e6922c7e502bccbf868c9412f72c97d038178f) merged (@carchrae)
-- [a30af66](https://github.com/linkedin/dustjs/commit/a30af6665bc0e082091878d22a7291604a62163b) these changes were accidentally committed in the last commit.  removing (@carchrae)
-- [66b4bc2](https://github.com/linkedin/dustjs/commit/66b4bc2fc32160509417803dc705ac6589639a2e) removed function apply during path lookup (@carchrae)
-- [37d7c68](https://github.com/linkedin/dustjs/commit/37d7c6851393c7666dae593ff2a1334042e5a089) removed function in path test (@carchrae)
-- [b16e1f0](https://github.com/linkedin/dustjs/commit/b16e1f090cf95ec3ee9a0676eb191bbbd2e7185f) i believe this makes the default options clearer.  also, cleaned up test (@carchrae)
-- [4c43900](https://github.com/linkedin/dustjs/commit/4c43900cc3f0f9562f46e241bcee8dff459be1b0) Fix jasmine test runner to honor base and options properties (@rragan)
-- [#2](https://github.com/linkedin/dustjs/pull/2) Fixed jasmine testRunner to understand base and options properties (@rragan)
-- [0ee85f6](https://github.com/linkedin/dustjs/commit/0ee85f6fe2bf38ba23268446b91ed832b3db5df3) stop searching if partial match (@carchrae)
-- [c6bbea4](https://github.com/linkedin/dustjs/commit/c6bbea48aad81d8f60277a7b92bb042e8e92e723) another test from @rragan and code format of if condition (@carchrae)
-- [3d03ef7](https://github.com/linkedin/dustjs/commit/3d03ef757a15ea5bc328daab2de380a0ff4e6ab3) wrapping function result to preserve 'this'  see discussion in  #174 (@carchrae)
-- [#271](https://github.com/linkedin/dustjs/pull/271) adding support for . path resolution in context get (@carchrae)
-- [#289](https://github.com/linkedin/dustjs/pull/289) Cache VM context across `dust.loadSource` calls. (@totherik)
-- [d672e86](https://github.com/linkedin/dustjs/commit/d672e867fc43bfd024d04b8eaa7925e74cd147e1) rename frac to float (@vybs)
-- [1d67736](https://github.com/linkedin/dustjs/commit/1d67736c60eb7becea7f78b2d6d45870e5e8dbb6) add support for GH-292, support the template name in nested partials (@vybs)
-- [0dd23c1](https://github.com/linkedin/dustjs/commit/0dd23c11fb01bb030e464c4443d76e2deb4c7d1f) Remove option to control pathScope and remove tests for old getPath (@rragan)
-- [#304](https://github.com/linkedin/dustjs/pull/304) GH-292 support template name in nested partials, need a stack to store the current name (@vybs)
-- [#305](https://github.com/linkedin/dustjs/pull/305) Remove option to control pathScope and remove tests for old getPath (@rragan)
-- [e1a2b1b](https://github.com/linkedin/dustjs/commit/e1a2b1be3ce3efca30547bce0a9fc22a79cdc884) add support for GH-292, support the template name in nested partials (@vybs)
-- [88ab4d7](https://github.com/linkedin/dustjs/commit/88ab4d70f7a00992574ae748f1e6a50cf42912e4) add support for GH-292, support the template name in nested partials (@vybs)
-- [#306](https://github.com/linkedin/dustjs/pull/306) add support for GH-292, support the template name in nested partials (@vybs)
-- [6bef9fa](https://github.com/linkedin/dustjs/commit/6bef9fa1c94b4f4aed6bc14ebb55f41cd254fa34) Update package.json (@vybs)
-- [b1a8e09](https://github.com/linkedin/dustjs/commit/b1a8e093baea36502cd3db08824b7e1f72d5a5d0) add dist files for v1.2.6 and v2.0.0 (@vybs)
-- [b2109b0](https://github.com/linkedin/dustjs/commit/b2109b005bbe390f90327723c9ace8791f929dad) add dist minified files for v2.0.0 (@vybs)
-- [ead9feb](https://github.com/linkedin/dustjs/commit/ead9febd053a47829a57cc0e36b16ee338a80376) Add lines and columns to dust.pegjs (@smfoote)
-- [5e80205](https://github.com/linkedin/dustjs/commit/5e802055c48724e172e6da223ea7230a1aecd4c9) Update .gitignore (@smfoote)
-- [25a4d2b](https://github.com/linkedin/dustjs/commit/25a4d2b6c79e55cd906af2d3bc1fdda0b4f79c03) Remove node_modules/jasmine_node (@smfoote)
-- [#312](https://github.com/linkedin/dustjs/pull/312) Remove node_modules/jasmine_node (@smfoote)
-- [c00edc3](https://github.com/linkedin/dustjs/commit/c00edc3f567704012d12938f2218bb8f00e51375) Merge branch 'master' of https://github.com/linkedin/dustjs (@smfoote)
-- [f49763e](https://github.com/linkedin/dustjs/commit/f49763ea9c1ee632b98fb11c69242c84a9367744) Merge branch 'master' into lines-and-columns (@smfoote)
-- [1e5349f](https://github.com/linkedin/dustjs/commit/1e5349fa66f09b4ca71ee9a943afd3870a53b8b3) Update package.json and one more line in dust.pegjs (@smfoote)
-- [a23bc61](https://github.com/linkedin/dustjs/commit/a23bc61df337a03530879927577746e039dc7834) Make the items which include lin/col more consistent (@smfoote)
-- [d6a16c3](https://github.com/linkedin/dustjs/commit/d6a16c3c76cef86368a0da8c358eb65d125d46b5) removes console logging from dust core and instead populates a log object passed to a dust.render callback with debug information
-- [0cfc740](https://github.com/linkedin/dustjs/commit/0cfc74057e6913b386380fc4a71183b332a57e6c) fix merge conflicts
-- [0d70d34](https://github.com/linkedin/dustjs/commit/0d70d347d2bb2d093708f5915c03ad00ba94941e) add dust debug stripper and the built dust files
-- [ad609ef](https://github.com/linkedin/dustjs/commit/ad609ef59679746acb2dac4b364a820efeea2efb) Fix issue #317. Falsey value at end of path (@rragan)
-- [2b31725](https://github.com/linkedin/dustjs/commit/2b31725e780dd28dd380f7200d62c5f66353bbf0) Clean up the .gitignore file changes (@smfoote)
-- [#309](https://github.com/linkedin/dustjs/pull/309) Add lines and columns to dust.pegjs (@smfoote)
-- [#318](https://github.com/linkedin/dustjs/pull/318) Fix issue #317. Falsey value at end of path (@rragan)
-- [481696b](https://github.com/linkedin/dustjs/commit/481696b646b21ca936520fccc8e813810571259f) Clarify comments on path search (@rragan)
-- [#319](https://github.com/linkedin/dustjs/pull/319) Clarify comments on path search (@rragan)
-- [856d385](https://github.com/linkedin/dustjs/commit/856d385f6d75205664f2e190797efcccf2e3600d) Update package.json (@vybs)
-- [d634bed](https://github.com/linkedin/dustjs/commit/d634bed3c8d102b7d481bb4bed670076c2fd2817) commit 2.0.1, that adds line and col to parse tree and fixes the #371 (@vybs)
-- [dad860c](https://github.com/linkedin/dustjs/commit/dad860ca23df24ad772da85ca618bf111f8f488d) Update parser.js to sync with latest dust.pegjs (@smfoote)
-- [6ee6f95](https://github.com/linkedin/dustjs/commit/6ee6f953d57377a4126f3251ee06258130311551) sync with latest from LinkedIn/dustjs (@smfoote)
-- [#320](https://github.com/linkedin/dustjs/pull/320) Update parser.js to sync with latest dust.pegjs (@smfoote)
-- [f938761](https://github.com/linkedin/dustjs/commit/f9387611e088bb82114af1ff72160c227ffe93d3) Merge branch 'master' of https://github.com/linkedin/dustjs
-- [3a52a58](https://github.com/linkedin/dustjs/commit/3a52a5860561b78994c7c1ff6b5ed1a490eaff62) fix the package number
-- [2d5ed4f](https://github.com/linkedin/dustjs/commit/2d5ed4fe383d6c88d15b00adb5fffdc3443aab5f) remove old debug version of dust-core that wont be used
-- [179c47e](https://github.com/linkedin/dustjs/commit/179c47e4e960a72ee49558f9cbe196b1a4cb4a91) Fix Issue #322. block name includes prev text by mistake (@rragan)
-- [ff6c725](https://github.com/linkedin/dustjs/commit/ff6c725fb2f7eaa958a1e90846b3ece50c78c147) fix some debugging comments and put the header in the minified files properly
-- [b2e9e24](https://github.com/linkedin/dustjs/commit/b2e9e24bf3ad871319610f8ecf2689867d0dcab1) Fix the regex for debug stripping
-- [2b27f71](https://github.com/linkedin/dustjs/commit/2b27f71b35b14259382121bab26986d3fd3af186) revert older dist files
-- [2cf0028](https://github.com/linkedin/dustjs/commit/2cf00285c19143715421138f010d7bc3ff668744) clean up positioning of DEBUG - ENDDEBUG
-- [3540b05](https://github.com/linkedin/dustjs/commit/3540b05584b90c3456632eec92f215091b928626) add global.__template_name__ back in for backwards compatability
-- [3281c98](https://github.com/linkedin/dustjs/commit/3281c98ed38460f378304d9e65ca6843ca7c91d7) add dist files for global.__template_name__ change
-- [708b5ed](https://github.com/linkedin/dustjs/commit/708b5ed606e9cb2eceade4591f70703d96db1027) fix regex for debug strip to include leading and trailing spaces and trailing newlines
-- [0929200](https://github.com/linkedin/dustjs/commit/0929200bac0d47a011ebf06f4da367f9fbca27de) remove __templates__ and __template_name__ and put the templateName on each context instance instead of on the context globals
-- [430c962](https://github.com/linkedin/dustjs/commit/430c9621b0ec7942d7feb66b00a19c49c0b51519) update dist with context.templateName changes
-- [3fa664e](https://github.com/linkedin/dustjs/commit/3fa664e204cfac9421e95571b675a88217194838) add renderSource to renderTestSpec
-- [3b42916](https://github.com/linkedin/dustjs/commit/3b42916cb5774f7e2d45558cb9c6a5594b8f7389) fix renderSource unit tests
-- [c2e9fd1](https://github.com/linkedin/dustjs/commit/c2e9fd1795eb5d01b5a2dee9cb06bb99d3293b28) Improve code for issue #322. (@rragan)
-- [#323](https://github.com/linkedin/dustjs/pull/323) Fix Issue #322. block name in template includes previous text by mistake (@rragan)
-- [5bd1afc](https://github.com/linkedin/dustjs/commit/5bd1afc0dfcb43d7d271dd59d4e5d058344d1770) Issue #332 provide a raw input syntax similar to comments {!...!} where newlines, spaces and braces are kept. should also address #238 and #265 (@jimmyhchan)
-- [cbd4750](https://github.com/linkedin/dustjs/commit/cbd4750debe44ab7b62a3b04b60ae5fa047bb845) remove name from renderSource and remove renderSource tests
-- [#328](https://github.com/linkedin/dustjs/pull/328) Put templateName on the context instance instead of the context's globals. (@prashn64)
-- [1f62976](https://github.com/linkedin/dustjs/commit/1f629760a795eac8aba9fc69f482d36842163d7e) make context.templateName change into version 2.0.3
-- [#335](https://github.com/linkedin/dustjs/pull/335) make context.templateName change into version 2.0.3 (@prashn64)
-- [b76ff44](https://github.com/linkedin/dustjs/commit/b76ff445a4bd72c4292a9f95d036222b8bc26640) merge in master (@jimmyhchan)
-- [6c6ef4b](https://github.com/linkedin/dustjs/commit/6c6ef4bcfd69bbf26497c0b8a5c755549fc862b2) update 2.0.3 to most updated dustjs
-- [#338](https://github.com/linkedin/dustjs/pull/338) update to correct  2.0.3 (@prashn64)
-- [c83414b](https://github.com/linkedin/dustjs/commit/c83414b5e1efc3e03ab915228e34f10225471033) catch up to master
-- [cbcc030](https://github.com/linkedin/dustjs/commit/cbcc030d7c49d5221ac09016bd80ae980f104d8f) fix dustjs and re generate dist files
-- [#279](https://github.com/linkedin/dustjs/pull/279) Client Side Debugging (@prashn64)
-- [7f9aeac](https://github.com/linkedin/dustjs/commit/7f9aeac9268b4e9431b49cdd857765b219149528) Revert "Merge pull request #279 from prashn64/master"
-- [#344](https://github.com/linkedin/dustjs/pull/344) Per discussions, this may be a bit premature. Revert "Merge pull request #279 from prashn64/master" until the api for debugging is more settled. (@prashn64)
-- [743ab85](https://github.com/linkedin/dustjs/commit/743ab85736061d85a45e3ec3c336ce8bef2abef2) Merge branch 'master' into raw (@jimmyhchan)
-- [137515f](https://github.com/linkedin/dustjs/commit/137515fa56ff09b019b3fdaaee4b6ff44d0685cf) pull in upstream master and regenerating dist (@jimmyhchan)
-- [83bf9f1](https://github.com/linkedin/dustjs/commit/83bf9f1b7880e90e1295561bc2125db5a33bd0cc) i can haz spel grammerz (@jimmyhchan)
-- [9109650](https://github.com/linkedin/dustjs/commit/9109650d9acc3f3a9a4713c5c9e7bb126175fc45) - Bump the package number to 2.1.0
-- [6a6d936](https://github.com/linkedin/dustjs/commit/6a6d936f06004efeb3b4eeee79e7cbac59fc67f3) Implement Dust Debugging
-- [7485782](https://github.com/linkedin/dustjs/commit/74857820ebbac59f2df0793f8a6e51b82e2e0989) remove unnecessary debug statements and clean up existing ones
-- [5f1e8d3](https://github.com/linkedin/dustjs/commit/5f1e8d30fd2f78758cd8f1cba6144ec4758cce5f) log reference lookups with dots
-- [#347](https://github.com/linkedin/dustjs/pull/347) Dust error logging (@prashn64)
-- [4d2d0e0](https://github.com/linkedin/dustjs/commit/4d2d0e0e13229d96ac9b59623e10635d0481cc3e) add a unit test for inline params with dashes
-- [#355](https://github.com/linkedin/dustjs/pull/355) add a unit test for inline params with dashes (@prashn64)
-- [9db650d](https://github.com/linkedin/dustjs/commit/9db650d1833bddd408219e9e038ae1b7f46ea058) Add unit test in coreTests.js for dynamic template name
 - [#350](https://github.com/linkedin/dustjs/pull/350) Support dynamic template names for the context's template name. (@johnsonlei)
+- [#355](https://github.com/linkedin/dustjs/pull/355) add a unit test for inline params with dashes (@prashn64)
+- [#347](https://github.com/linkedin/dustjs/pull/347) Dust error logging (@prashn64)
+- [#344](https://github.com/linkedin/dustjs/pull/344) Per discussions, this may be a bit premature. Revert "Merge pull request #279 from prashn64/master" until the api for debugging is more settled. (@prashn64)
+- [#279](https://github.com/linkedin/dustjs/pull/279) Client Side Debugging (@prashn64)
+
+### v2.0.3 (2013/09/06 23:23 +00:00)
+- [#338](https://github.com/linkedin/dustjs/pull/338) update to correct  2.0.3 (@prashn64)
+- [#335](https://github.com/linkedin/dustjs/pull/335) make context.templateName change into version 2.0.3 (@prashn64)
+- [#328](https://github.com/linkedin/dustjs/pull/328) Put templateName on the context instance instead of the context's globals. (@prashn64)
+- [#323](https://github.com/linkedin/dustjs/pull/323) Fix Issue #322. block name in template includes previous text by mistake (@rragan)
+
+### v2.0.2 (2013/08/01 20:57 +00:00)
+- [#320](https://github.com/linkedin/dustjs/pull/320) Update parser.js to sync with latest dust.pegjs (@smfoote)
+- [#319](https://github.com/linkedin/dustjs/pull/319) Clarify comments on path search (@rragan)
+- [#318](https://github.com/linkedin/dustjs/pull/318) Fix issue #317. Falsey value at end of path (@rragan)
+
+### v2.0.1 (2013/07/24 17:34 +00:00)
+- [#309](https://github.com/linkedin/dustjs/pull/309) Add lines and columns to dust.pegjs (@smfoote)
+- [#312](https://github.com/linkedin/dustjs/pull/312) Remove node_modules/jasmine_node (@smfoote)
+
+### v2.0.0 (2013/07/17 02:18 +00:00)
+- [#306](https://github.com/linkedin/dustjs/pull/306) add support for GH-292, support the template name in nested partials (@vybs)
+- [#305](https://github.com/linkedin/dustjs/pull/305) Remove option to control pathScope and remove tests for old getPath (@rragan)
+- [#304](https://github.com/linkedin/dustjs/pull/304) GH-292 support template name in nested partials, need a stack to store the current name (@vybs)
+- [#289](https://github.com/linkedin/dustjs/pull/289) Cache VM context across `dust.loadSource` calls. (@totherik)
+- [#271](https://github.com/linkedin/dustjs/pull/271) adding support for . path resolution in context get (@carchrae, @rragan)
+- [#2](https://github.com/linkedin/dustjs/pull/2) Fixed jasmine testRunner to understand base and options properties (@rragan)
+
+### v1.2.6 (2013/06/06 15:54 +00:00)
+- [#278](https://github.com/linkedin/dustjs/pull/278) Remove strip from dust.compile, since it wasn't really very good anyway (@smfoote)
+
+### v1.2.5 (2013/06/02 21:25 +00:00)
+- [#274](https://github.com/linkedin/dustjs/pull/274) GH-266 store rendered template in global (@vybs)
+- [#263](https://github.com/linkedin/dustjs/pull/263) Add forward slash and unit tests for j filter (@prashn64)
+
+### v1.2.3 (2013/04/11 17:47 +00:00)
+- [#253](https://github.com/linkedin/dustjs/pull/253) 2-3000% performance enhancement in IE7 (@jlkonsultab)
+- [#249](https://github.com/linkedin/dustjs/pull/249) Remove debugger in dust-full-1.2.1.js (@sethkinast)
+
+### v1.2.2 (2013/03/19 20:07 +00:00)
+- [#245](https://github.com/linkedin/dustjs/pull/245) Gh-208 - solve the incorrect error line reported in peg (@jairodemorais)
+- [#243](https://github.com/linkedin/dustjs/pull/243) compiler variable name changed to dustCompiler (@jairodemorais)
+- [#241](https://github.com/linkedin/dustjs/pull/241) using dust.isArray in place of Array.isArray (@jairodemorais)
+
+### v1.2.1 (2013/02/19 17:55 +00:00)
+- [#236](https://github.com/linkedin/dustjs/pull/236) eol added to buffer again. (@jairodemorais)
+
+### v1.2.0 (2013/02/08 17:56 +00:00)
+- [#223](https://github.com/linkedin/dustjs/pull/223) Fix for Issue #222. Code change + new test added to verify proper behavior (@rragan)
+- [#216](https://github.com/linkedin/dustjs/pull/216) add semicolons to dust compiler GH=215 (@jairodemorais)
+- [#188](https://github.com/linkedin/dustjs/pull/188) The whitespace grammar rule for partial was a little inconsistent with other tags. issue GH=187 fixed. (@jairodemorais)
+- [#166](https://github.com/linkedin/dustjs/pull/166) Add template strip of white space to dust.compile (optional defaults to not strip) (@smfoote)
+- [#183](https://github.com/linkedin/dustjs/pull/183) cover, uglify and jasmine move to dev dependencies. GH-183 (@jairodemorais)
+- [#168](https://github.com/linkedin/dustjs/pull/168) Minor README update (@sethmcl)
+- [#165](https://github.com/linkedin/dustjs/pull/165) improve description in unit tests (@vybs)
+- [#159](https://github.com/linkedin/dustjs/pull/159) fix the description on the core tests for $idx and $len for scalar (@vybs)
+- [#158](https://github.com/linkedin/dustjs/pull/158) fix the bad merge (@vybs)
+
+### v1.1.1 (2012/09/30 22:43 +00:00)
+- [#157](https://github.com/linkedin/dustjs/pull/157) Add unit tests for the pull/154 (@vybs)
+- [#154](https://github.com/linkedin/dustjs/pull/154) partials with parameters context was missing blocks (@jimmyhchan)
+- [#156](https://github.com/linkedin/dustjs/pull/156) Cleanup the helpers from the dust repo, fix the make test (@vybs)
+
+### v1.1.0 (2012/09/20 22:06 +00:00)
+- [#152](https://github.com/linkedin/dustjs/pull/152) Really undo 2760048: removing scalar block support (@jimmyhchan)
+- [#151](https://github.com/linkedin/dustjs/pull/151) add v1.1 files to the dist (@vybs)
+- [#146](https://github.com/linkedin/dustjs/pull/146) Remove the old grammartests file, since it renamed to coreTests now and guard against missing context head in section (@vybs)
+- [#145](https://github.com/linkedin/dustjs/pull/145) rename grammar tests to core tests, since it testing dust.js core functionality, also has GH-133, fix the missing helper case (@vybs)
+- [#144](https://github.com/linkedin/dustjs/pull/144) minor: reorganized the section code and documented some more as to how t... (@vybs)
+- [#143](https://github.com/linkedin/dustjs/pull/143) reverse the GH-134 since it is backward incompatible (@vybs)
+- [#142](https://github.com/linkedin/dustjs/pull/142) add another intersting test case with . and blocks (@vybs)
+- [#141](https://github.com/linkedin/dustjs/pull/141) Fixes for GH-134 (@vybs)
+- [#140](https://github.com/linkedin/dustjs/pull/140) GH-134 , remove support for scalar in the block # (@vybs)
+- [#139](https://github.com/linkedin/dustjs/pull/139) GH-85, GH-127 improve test coverage (@vybs)
+- [#127](https://github.com/linkedin/dustjs/pull/127) Fixed :else in section when iterating over empty array. (@zzen)
+- [#132](https://github.com/linkedin/dustjs/pull/132) Partial with parameters was not getting the correct context (@jimmyhchan)
+- [#108](https://github.com/linkedin/dustjs/pull/108) issue 106, accessing array inside a loop using the current context (@jairodemorais)
+- [#128](https://github.com/linkedin/dustjs/pull/128) Updated README for consistency and readability (@zzen)
+- [#126](https://github.com/linkedin/dustjs/pull/126) Removed left-over .DS_Store files (@zzen)
+- [#99](https://github.com/linkedin/dustjs/pull/99) new math helper method (@sclatter)
+- [#113](https://github.com/linkedin/dustjs/pull/113) Make $idx/$len work for all array  objects and not leave old values in contexts (@rragan)
+- [#105](https://github.com/linkedin/dustjs/pull/105) merge PR https://github.com/linkedin/dustjs/pull/93 (@jairodemorais)
+- [#95](https://github.com/linkedin/dustjs/pull/95) helpers removed from Dust core. New npm package created for helpers. (@jairodemorais)
+
+### v1.0.0 (2012/07/04 19:08 +00:00)
+- [#78](https://github.com/linkedin/dustjs/pull/78) Use the tap method in the select helper (@jairodemorais)
+- [#65](https://github.com/linkedin/dustjs/pull/65) literal params relaxed to allow eol (@jairodemorais)
+- [#70](https://github.com/linkedin/dustjs/pull/70) fix issue https://github.com/linkedin/dustjs/issues/68 (@jairodemorais)
+- [#73](https://github.com/linkedin/dustjs/pull/73) dust resolve reference helper created and refactor if to use it (@jairodemorais)
+- [#71](https://github.com/linkedin/dustjs/pull/71) Test for pipe function added. (@jairodemorais, @kilianc)
+- [#56](https://github.com/linkedin/dustjs/pull/56) Fix for Issue #50: helper for debugging the context + console log wrapper (@jimmyhchan)
+- [#60](https://github.com/linkedin/dustjs/pull/60) dust moved to 0.6.0 version (@jairodemorais)
+- [#59](https://github.com/linkedin/dustjs/pull/59) ws relaxed to allow eol (@jairodemorais)
+- [#54](https://github.com/linkedin/dustjs/pull/54) preventing dust to crash on non existant if-condition (@seriousManual)
+- [#52](https://github.com/linkedin/dustjs/pull/52) Added unit test code coverage report with node-coverage (@jleppert)
+- [#44](https://github.com/linkedin/dustjs/pull/44) Select helper and unit tests, fixes #16 (@jleppert)
+- [#49](https://github.com/linkedin/dustjs/pull/49) dust tool included. (@jairodemorais)
+- [#40](https://github.com/linkedin/dustjs/pull/40) Rebuilding parser and merge to fix failed CI (@jleppert)
+- [#37](https://github.com/linkedin/dustjs/pull/37) Fixes #7, "Support numbers in the aliases" (@jleppert)
+- [#39](https://github.com/linkedin/dustjs/pull/39) Fixes #28, better error tracking implemented. (@jleppert)
+- [#31](https://github.com/linkedin/dustjs/pull/31) process.nextTick instead of setTimeout (@seriousManual)
+- [#34](https://github.com/linkedin/dustjs/pull/34) Escape a single quote apostrophe in escapeHtml (@jleppert)
+- [#36](https://github.com/linkedin/dustjs/pull/36) Rhino compatible (@jairodemorais)
+- [#13](https://github.com/linkedin/dustjs/pull/13) Issue #8 Support cleaner way to pass arguments to partials (@jimmyhchan)
+- [#25](https://github.com/linkedin/dustjs/pull/25) pegjs 0.7 compatibility and parser variables removed from section function on dustjs file (@jairodemorais)
+- [#9](https://github.com/linkedin/dustjs/pull/9) Update to 0.4.0 in dist so that docs are correct (@kmiyashiro)
+- [#5](https://github.com/linkedin/dustjs/pull/5) Quote 'if' helper, fixes #4 (@kmiyashiro)
+- [#3](https://github.com/linkedin/dustjs/pull/3) Gaurd against browsers (@Raynos)
+- [#25](https://github.com/linkedin/dustjs/pull/25) process.binding('evals') is now require('vm') (@stonecobra)
