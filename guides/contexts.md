@@ -97,6 +97,8 @@ If the Promise is a section, its return value is pushed onto the context stack. 
 
 You can even refer directly to keys in the eventual return value of a Promise, even if the Promise has yet to resolve.
 
+**Note:** Dust requires Promises you provide in your context to be [Promises/A+-compliant](https://github.com/promises-aplus/promises-spec/blob/master/implementations.md) with respect to their `.then` method. For example, versions of jQuery prior to 1.8 do not provide compliant Promises and cannot be used properly with Dust.
+
 <dust-demo templateName="promise">
   <dust-demo-template showTemplateName="true">
     Your IP address is {jsonTest.ip}
