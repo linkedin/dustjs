@@ -32,6 +32,17 @@ NOTE: The first character of a reference cannot be `0-9` or `-`.
 }</dust-demo-json>
 </dust-demo>
 
+<h3 id="comment"><code>{! comments !}</code></h3>
+A Dust comment is used in a template to include text that will be ignored when the template is rendered.
+
+<pre><code>{! All Dust comments are
+multiline comments !}</code></pre>
+
+<dust-demo templatename="comments">
+<dust-demo-template showtemplatename="true">Comments {! in Dust !}can be used for documentation.{~n}
+Comments can also be used {! &lt;button&gt;Click me!&lt;/button&gt; !}to test or remove features.</dust-demo-template>
+</dust-demo>
+
 <h3 id="section"><code>{#section/}</code></h3>
 A standard section is used to change what level of the context Dust uses to look up values. If the new context is an array, the standard section automatically loops through the array. If an `{:else}` body is used, its contents are output if the new context does not exist.
 
