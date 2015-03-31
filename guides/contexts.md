@@ -1,10 +1,8 @@
 ---
 layout: guides
-title: Dust.js | Contexts
+title: Contexts
 permalink: /guides/contexts/
 ---
-
-# Contexts
 
 Dust refers to the data used to render a template as a **context**. The context is modelled as a **stack** of Javascript objects, arrays, and literals. Dust can search multiple layers of the stack, popping off the top objects and looking below.
 
@@ -81,10 +79,33 @@ return context.push({
 
 ## Special Values in Context
 
-Objects, Arrays, strings, numbers, and other literals are retrieved from the context as-is. Contexts have special behavior when returning functions.
+Objects, Arrays, strings, numbers, and other literals are retrieved from the context as-is. Contexts have special behavior when returning functions and Promises.
 
 ### Functions
 
 Instead of returning a function to be rendered by the template, Dust first executes the function and passes its return value to the template. The function is invoked with some special Dust parameters to give it great control over the rendering process.
 
 These special functions are collectively referred to as **context helpers**. For information on how to write context helpers, see the [Context Helpers guide](/guides/context-helpers).
+
+### Promises
+
+As of Dust 2.6.2, when Dust encounters a Promise in the context, it waits for the Promise to be resolved or rejected before providing the value to the template.
+
+If the Promise is a reference, it is output directly. If the Promise is rejected, the reference does not output.
+
+If the Promise is a section, its return value is pushed onto the context stack. If the Promise is rejected, Dust looks for an `{:error}` block in the section and renders that instead.
+
+You can even refer directly to keys in the eventual return value of a Promise, even if the Promise has yet to resolve.
+
+**Note:** Dust requires Promises you provide in your context to be [Promises/A+-compliant](https://github.com/promises-aplus/promises-spec/blob/master/implementations.md) with respect to their `.then` method. For example, versions of jQuery prior to 1.8 do not provide compliant Promises and cannot be used properly with Dust.
+
+<dust-demo templateName="promise">
+  <dust-demo-template showTemplateName="true">
+    Your IP address is {jsonTest.ip}
+  </dust-demo-template>
+  <dust-demo-json>
+{
+  "jsonTest": $.getJSON("http://ip.jsontest.com/")
+}
+  </dust-demo-json>
+</dust-demo>

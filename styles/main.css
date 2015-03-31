@@ -1,377 +1,61 @@
-@font-face {
-  font-family: "Dosis Light";
-  src: url('/fonts/../../fonts/dosis-light-webgont.eot');
-  src: url('/fonts/../../fonts/dosis-light-webgont.eot?#iefix') format('embedded-opentype'), url('/fonts/../../fonts/dosis-light-webfont.woff') format('woff'), url('/fonts/../../fonts/dosis-light-webfont.ttf') format('truetype'), url('/fonts/../../fonts/dosis-light-webfont.svg') format('svg');
-}
-/* line 1, ../scss/components/_nav.scss */
-nav {
-  -moz-box-shadow: #343434 0 0 5px;
-  -webkit-box-shadow: #343434 0 0 5px;
-  box-shadow: #343434 0 0 5px;
-  position: absolute;
-  height: 100%;
-  width: 205px;
-  background: #323232;
-  padding: 0 24px;
-}
-/* line 10, ../scss/components/_nav.scss */
-nav ul.main-nav > li {
-  line-height: 26px;
-  margin-bottom: 1em;
-  padding: 0;
-  color: #999;
-  cursor: default;
-}
-/* line 17, ../scss/components/_nav.scss */
-nav ul.main-nav > li a {
-  /* [archetype:styleguide:begin] --- `medium muted headline in a module, link in a module` --- */
-  font-size: 16px;
-  font-weight: normal;
-  line-height: 18px;
-  color: #0088CC;
-  text-decoration: none;
-  /* [archetype:styleguide:end] --- `medium muted headline in a module, link in a module` --- */
-  color: #FFF;
-}
-/* line 193, ../../../../../../../Library/Ruby/Gems/2.0.0/gems/archetype-1.0.0.alpha.4/stylesheets/archetype/util/_targeting.scss */
-nav ul.main-nav > li a {
-  /* [archetype:target-os:begin] --- default --- */
-  /* [archetype:target-os:end]   --- default --- */
-}
-/* line 263, ../../../../../../../Library/Ruby/Gems/2.0.0/gems/archetype-1.0.0.alpha.4/stylesheets/archetype/util/_styles.scss */
-nav ul.main-nav > li a.hover, nav ul.main-nav > li a:hover, nav ul.main-nav > li a.focus, nav ul.main-nav > li a:focus {
-  text-decoration: underline;
-}
-/* line 22, ../scss/components/_nav.scss */
-nav ul.main-nav > li li {
-  padding-left: 10px;
-}
-/* line 26, ../scss/components/_nav.scss */
-nav ul.main-nav > li label {
-  color: #a5a5a5;
-  cursor: pointer;
-}
-/* line 30, ../scss/components/_nav.scss */
-nav ul.main-nav > li label:hover {
-  text-decoration: underline;
-}
-/* line 38, ../scss/components/_nav.scss */
-nav ul.main-nav > li.sub input {
-  position: absolute !important;
-  height: 1px;
-  width: 1px;
-  overflow: hidden;
-  /* [archetype:target:browser:begin] --- ie lte 7 --- */
-  _clip: rect(1px 1px 1px 1px);
-  /* [archetype:target:browser:end]   --- ie lte 7 --- */
-  clip: rect(1px, 1px, 1px, 1px);
-}
-/* line 157, ../../../../../../../Library/Ruby/Gems/2.0.0/gems/archetype-1.0.0.alpha.4/stylesheets/archetype/util/_targeting.scss */
-.ie.lte7 nav ul.main-nav > li.sub input {
-  /* [archetype:target:browser:begin] --- ie lte 7 --- */
-  /* [archetype:target:browser:end]   --- ie lte 7 --- */
-}
-/* line 41, ../scss/components/_nav.scss */
-nav ul.main-nav > li.sub input:checked ~ ul {
-  display: block;
-}
-/* line 44, ../scss/components/_nav.scss */
-nav ul.main-nav > li.sub input:checked ~ ul li {
-  padding-left: 10px;
-}
-/* line 50, ../scss/components/_nav.scss */
-nav ul.main-nav > li.sub ul {
-  display: none;
-}
+@font-face { font-family: "Dosis Light"; src: url('/styles/fonts/dosis-light-webfont.eot?1427219900'); src: url('/styles/fonts/dosis-light-webfont.eot?&1427219900#iefix') format('embedded-opentype'), url('/styles/fonts/dosis-light-webfont.woff?1427219900') format('woff'), url('/styles/fonts/dosis-light-webfont.ttf?1427219900') format('truetype'), url('/styles/fonts/dosis-light-webfont.svg?1427219900') format('svg'); }
+nav { -moz-box-shadow: #343434 0 0 5px; -webkit-box-shadow: #343434 0 0 5px; box-shadow: #343434 0 0 5px; position: absolute; height: 100%; width: 205px; background: #323232; padding: 0 24px; }
+nav ul.main-nav > li { line-height: 26px; margin-bottom: 1em; padding: 0; color: #999; cursor: default; }
+nav ul.main-nav > li a { /* [archetype:styleguide:begin] --- `medium muted headline in a module, link in a module` --- */ font-size: 16px; font-weight: normal; line-height: 18px; color: #0088CC; text-decoration: none; /* [archetype:styleguide:end] --- `medium muted headline in a module, link in a module` --- */ color: #FFF; }
+nav ul.main-nav > li a { /* [archetype:target-os:begin] --- default --- */ /* [archetype:target-os:end]   --- default --- */ }
+nav ul.main-nav > li a.hover, nav ul.main-nav > li a:hover, nav ul.main-nav > li a.focus, nav ul.main-nav > li a:focus { text-decoration: underline; }
+nav ul.main-nav > li li { padding-left: 10px; }
+nav ul.main-nav > li label { color: #a5a5a5; cursor: pointer; }
+nav ul.main-nav > li label:hover { text-decoration: underline; }
+nav ul.main-nav > li.sub input { position: absolute !important; height: 1px; width: 1px; overflow: hidden; /* [archetype:target:browser:begin] --- ie lte 7 --- */ _clip: rect(1px 1px 1px 1px); /* [archetype:target:browser:end]   --- ie lte 7 --- */ clip: rect(1px, 1px, 1px, 1px); }
+.ie.lte7 nav ul.main-nav > li.sub input { /* [archetype:target:browser:begin] --- ie lte 7 --- */ /* [archetype:target:browser:end]   --- ie lte 7 --- */ }
+nav ul.main-nav > li.sub input:checked ~ ul { display: block; }
+nav ul.main-nav > li.sub input:checked ~ ul li { padding-left: 10px; }
+nav ul.main-nav > li.sub ul { display: none; }
 
-/* line 2, ../scss/components/_header.scss */
-header h1 {
-  font-family: "Dosis Light";
-  font-size: 48px;
-  line-height: 50px;
-  margin: 34px 0px;
-  padding: 0;
-}
-/* line 8, ../scss/components/_header.scss */
-header h1 a, header h1 a:visited {
-  color: #FFF;
-  text-decoration: none;
-}
-/* line 14, ../scss/components/_header.scss */
-header h2.tagline {
-  font-family: "Dosis Light";
-  position: absolute;
-  width: 796px;
-  top: 35px;
-  left: 300px;
-  font-size: 32px;
-  line-height: 48px;
-  color: #323232;
-}
+header h1 { font-family: "Dosis Light"; font-size: 48px; line-height: 50px; margin: 34px 0px; padding: 0; }
+header h1 a, header h1 a:visited { color: #FFF; text-decoration: none; }
+header h2.tagline { font-family: "Dosis Light"; position: absolute; width: 796px; top: 35px; left: 300px; font-size: 32px; line-height: 48px; color: #323232; }
 
-/* line 2, ../scss/components/_content.scss */
-#content {
-  margin-left: 10px;
-  float: left;
-  margin-left: 297px;
-  margin-right: 297px;
-  *zoom: 1;
-  position: relative;
-  width: 728px;
-  -moz-box-shadow: #939393 0 0 3px;
-  -webkit-box-shadow: #939393 0 0 3px;
-  box-shadow: #939393 0 0 3px;
-  background: #FFF;
-  padding: 34px;
-  margin-top: 122px;
-}
-/* line 9, ../scss/components/_content.scss */
-#content > h1, #content > h2, #content > p, #content > pre, #content > ul {
-  margin-bottom: 32px;
-}
-/* line 13, ../scss/components/_content.scss */
-#content p {
-  line-height: 26px;
-}
-/* line 17, ../scss/components/_content.scss */
-#content p:last-child {
-  margin-bottom: 47px;
-}
-/* line 21, ../scss/components/_content.scss */
-#content > h1 {
-  /* [archetype:styleguide:begin] --- `xlarge headline` --- */
-  font-size: 22px;
-  font-weight: bold;
-  line-height: 24px;
-  color: black;
-  /* [archetype:styleguide:end] --- `xlarge headline` --- */
-  font-size: 28px;
-}
-/* line 193, ../../../../../../../Library/Ruby/Gems/2.0.0/gems/archetype-1.0.0.alpha.4/stylesheets/archetype/util/_targeting.scss */
-#content > h1 {
-  /* [archetype:target-os:begin] --- default --- */
-  /* [archetype:target-os:end]   --- default --- */
-}
-/* line 26, ../scss/components/_content.scss */
-#content > h2 {
-  /* [archetype:styleguide:begin] --- `large headline` --- */
-  font-size: 18px;
-  font-weight: bold;
-  line-height: 22px;
-  color: black;
-  /* [archetype:styleguide:end] --- `large headline` --- */
-  font-size: 20px;
-}
-/* line 193, ../../../../../../../Library/Ruby/Gems/2.0.0/gems/archetype-1.0.0.alpha.4/stylesheets/archetype/util/_targeting.scss */
-#content > h2 {
-  /* [archetype:target-os:begin] --- default --- */
-  /* [archetype:target-os:end]   --- default --- */
-}
-/* line 31, ../scss/components/_content.scss */
-#content > h3 {
-  font-size: 18px;
-  margin-bottom: 32px;
-  margin-top: 16px;
-  color: #7f7f7f;
-}
-/* line 38, ../scss/components/_content.scss */
-#content > h4 {
-  font-size: 16px;
-  margin-bottom: 24px;
-  margin-top: 16px;
-  color: #7f7f7f;
-}
-/* line 45, ../scss/components/_content.scss */
-#content > h1, #content > h2 {
-  border-bottom-width: 3px;
-  border-style: solid;
-  border-color: #7f7f7f;
-  color: #323232;
-  padding-bottom: 15px;
-}
-/* line 51, ../scss/components/_content.scss */
-#content ul {
-  margin-left: 20px;
-}
-/* line 54, ../scss/components/_content.scss */
-#content li {
-  margin-bottom: 1em;
-}
-/* line 58, ../scss/components/_content.scss */
-#content code {
-  color: #00698c;
-}
-/* line 62, ../scss/components/_content.scss */
-#content p code,
-#content li code {
-  background-color: #dddddd;
-  padding: 4px 8px;
-  border-radius: 2px;
-  -moz-box-shadow: inset 0 0 3px #939393;
-  -webkit-box-shadow: inset 0 0 3px #939393;
-  box-shadow: inset 0 0 3px #939393;
-}
-/* line 70, ../scss/components/_content.scss */
-#content a {
-  color: #267f9d;
-  text-decoration: none;
-}
-/* line 75, ../scss/components/_content.scss */
-#content > pre {
-  -moz-box-shadow: inset 0 0 3px #939393;
-  -webkit-box-shadow: inset 0 0 3px #939393;
-  box-shadow: inset 0 0 3px #939393;
-  overflow-x: auto;
-  background: #dddddd;
-  color: #00698c;
-  padding: 15px;
-}
-/* line 83, ../scss/components/_content.scss */
-#content > .highlighter-coderay {
-  margin-bottom: 32px;
-}
-/* line 85, ../scss/components/_content.scss */
-#content > .highlighter-coderay > .CodeRay > .code {
-  -moz-box-shadow: inset 0 0 3px #939393;
-  -webkit-box-shadow: inset 0 0 3px #939393;
-  box-shadow: inset 0 0 3px #939393;
-  overflow-x: auto;
-  padding: 15px;
-  background: #dddddd;
-}
-/* line 90, ../scss/components/_content.scss */
-#content > .highlighter-coderay > .CodeRay > .code > pre > span.line-numbers > a {
-  margin-right: 10px;
-  color: #787878;
-}
-/* line 99, ../scss/components/_content.scss */
-#content #parameters + ul {
-  list-style: none;
-  margin-left: 0;
-}
-/* line 102, ../scss/components/_content.scss */
-#content #parameters + ul ul {
-  list-style: none;
-  margin-left: 0;
-}
-/* line 107, ../scss/components/_content.scss */
-#content #parameters + ul > li > ul {
-  -moz-box-shadow: inset 0 0 3px #939393;
-  -webkit-box-shadow: inset 0 0 3px #939393;
-  box-shadow: inset 0 0 3px #939393;
-  list-style: none;
-  background: #dddddd;
-  padding: 15px;
-  margin-bottom: 32px;
-  margin-top: 32px;
-}
-/* line 114, ../scss/components/_content.scss */
-#content #parameters + ul > li > ul > li > ul {
-  margin: 32px 0px 32px 0px;
-}
-/* line 116, ../scss/components/_content.scss */
-#content #parameters + ul > li > ul > li > ul > li {
-  margin: 16px 0px 32px 0px;
-  color: #323232;
-  font-size: 16px;
-}
-/* line 120, ../scss/components/_content.scss */
-#content #parameters + ul > li > ul > li > ul > li > ul {
-  padding: 15px;
-  margin-top: 15px;
-  background: #eeeeee;
-  color: #323232;
-  font-size: 14px;
-}
-/* line 126, ../scss/components/_content.scss */
-#content #parameters + ul > li > ul > li > ul > li > ul > li {
-  color: #7f7f7f;
-  margin-top: 10px;
-}
-/* line 129, ../scss/components/_content.scss */
-#content #parameters + ul > li > ul > li > ul > li > ul > li:first-child {
-  margin-top: 0px;
-}
-/* line 132, ../scss/components/_content.scss */
-#content #parameters + ul > li > ul > li > ul > li > ul > li > ul {
-  padding-left: 15px;
-  color: #323232;
-}
+#content { margin-left: 10px; float: left; margin-left: 297px; margin-right: 297px; *zoom: 1; position: relative; width: 728px; -moz-box-shadow: #939393 0 0 3px; -webkit-box-shadow: #939393 0 0 3px; box-shadow: #939393 0 0 3px; background: #FFF; padding: 34px; margin-top: 122px; }
+#content > h1, #content > h2, #content > p, #content > pre, #content > ul { margin-bottom: 32px; }
+#content p { line-height: 26px; }
+#content p:last-child { margin-bottom: 47px; }
+#content > h1 { /* [archetype:styleguide:begin] --- `xlarge headline` --- */ font-size: 22px; font-weight: bold; line-height: 24px; color: black; /* [archetype:styleguide:end] --- `xlarge headline` --- */ font-size: 28px; }
+#content > h1 { /* [archetype:target-os:begin] --- default --- */ /* [archetype:target-os:end]   --- default --- */ }
+#content > h2 { /* [archetype:styleguide:begin] --- `large headline` --- */ font-size: 18px; font-weight: bold; line-height: 22px; color: black; /* [archetype:styleguide:end] --- `large headline` --- */ font-size: 20px; }
+#content > h2 { /* [archetype:target-os:begin] --- default --- */ /* [archetype:target-os:end]   --- default --- */ }
+#content > h3 { font-size: 18px; margin-bottom: 32px; margin-top: 16px; color: #7f7f7f; }
+#content > h4 { font-size: 16px; margin-bottom: 24px; margin-top: 16px; color: #7f7f7f; }
+#content > h1, #content > h2 { border-bottom-width: 3px; border-style: solid; border-color: #7f7f7f; color: #323232; padding-bottom: 15px; }
+#content ul { margin-left: 20px; }
+#content li { margin-bottom: 1em; }
+#content code { color: #00698c; }
+#content p code, #content li code { background-color: #dddddd; padding: 4px 8px; border-radius: 2px; -moz-box-shadow: inset 0 0 3px #939393; -webkit-box-shadow: inset 0 0 3px #939393; box-shadow: inset 0 0 3px #939393; }
+#content a { color: #267f9d; text-decoration: none; }
+#content > pre { -moz-box-shadow: inset 0 0 3px #939393; -webkit-box-shadow: inset 0 0 3px #939393; box-shadow: inset 0 0 3px #939393; overflow-x: auto; background: #dddddd; color: #00698c; padding: 15px; }
+#content > .highlighter-coderay { margin-bottom: 32px; }
+#content > .highlighter-coderay > .CodeRay > .code { -moz-box-shadow: inset 0 0 3px #939393; -webkit-box-shadow: inset 0 0 3px #939393; box-shadow: inset 0 0 3px #939393; overflow-x: auto; padding: 15px; background: #dddddd; }
+#content > .highlighter-coderay > .CodeRay > .code > pre > span.line-numbers > a { margin-right: 10px; color: #787878; }
+#content #parameters + ul { list-style: none; margin-left: 0; }
+#content #parameters + ul ul { list-style: none; margin-left: 0; }
+#content #parameters + ul > li > ul { -moz-box-shadow: inset 0 0 3px #939393; -webkit-box-shadow: inset 0 0 3px #939393; box-shadow: inset 0 0 3px #939393; list-style: none; background: #dddddd; padding: 15px; margin-bottom: 32px; margin-top: 32px; }
+#content #parameters + ul > li > ul > li > ul { margin: 32px 0px 32px 0px; }
+#content #parameters + ul > li > ul > li > ul > li { margin: 16px 0px 32px 0px; color: #323232; font-size: 16px; }
+#content #parameters + ul > li > ul > li > ul > li > ul { padding: 15px; margin-top: 15px; background: #eeeeee; color: #323232; font-size: 14px; }
+#content #parameters + ul > li > ul > li > ul > li > ul > li { color: #7f7f7f; margin-top: 10px; }
+#content #parameters + ul > li > ul > li > ul > li > ul > li:first-child { margin-top: 0px; }
+#content #parameters + ul > li > ul > li > ul > li > ul > li > ul { padding-left: 15px; color: #323232; }
 
-/* line 1, ../scss/components/_footer.scss */
-hr {
-  margin-top: 34px;
-}
+hr { margin: 0; }
 
-/* line 5, ../scss/components/_footer.scss */
-footer {
-  margin-left: 10px;
-  float: left;
-  margin-left: 297px;
-  margin-right: 297px;
-  *zoom: 1;
-  position: relative;
-  width: 728px;
-  font-family: "Dosis Light";
-  padding: 17px 34px 34px 34px;
-}
+footer { font-family: "Dosis Light"; padding: 34px; text-align: center; }
 
-/* line 12, ../scss/components/_footer.scss */
-#forkongithub {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 200px;
-  overflow: hidden;
-  height: 200px;
-  z-index: 9999;
-}
+#forkongithub { position: fixed; top: 0; right: 0; width: 200px; overflow: hidden; height: 200px; z-index: 9999; }
 
-/* line 21, ../scss/components/_footer.scss */
-#forkongithub a {
-  background: #323232;
-  color: #fff;
-  text-decoration: none;
-  font-family: arial,sans-serif;
-  text-align: center;
-  font-weight: bold;
-  padding: 5px 40px;
-  font-size: 1rem;
-  line-height: 2rem;
-  width: 200px;
-  position: absolute;
-  top: 60px;
-  right: -60px;
-  -webkit-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  -moz-transform: rotate(45deg);
-  -o-transform: rotate(45deg);
-  transform: rotate(45deg);
-  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.8);
-  border-top: 1px solid #FFF;
-  border-bottom: 1px solid #FFF;
-}
+#forkongithub a { background: #323232; color: #fff; text-decoration: none; font-family: arial,sans-serif; text-align: center; font-weight: bold; padding: 5px 40px; font-size: 1rem; line-height: 2rem; width: 200px; position: absolute; top: 60px; right: -60px; -webkit-transform: rotate(45deg); -ms-transform: rotate(45deg); -moz-transform: rotate(45deg); -o-transform: rotate(45deg); transform: rotate(45deg); box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.8); border-top: 1px solid #FFF; border-bottom: 1px solid #FFF; }
 
-@media screen and (max-width: 800px) {
-  /* line 46, ../scss/components/_footer.scss */
-  #forkongithub {
-    display: none;
-  }
-}
-/* line 23, ../scss/main.scss */
-body {
-  /* [archetype:styleguide:begin] --- `large copy` --- */
-  font-size: 16px;
-  line-height: 20px;
-  color: #222222;
-  font-weight: normal;
-  /* [archetype:styleguide:end] --- `large copy` --- */
-  background: #dddddd;
-  font-family: 'Roboto', sans-serif;
-}
+@media screen and (max-width: 800px) { #forkongithub { display: none; } }
+body { /* [archetype:styleguide:begin] --- `large copy` --- */ font-size: 16px; line-height: 20px; color: #222222; font-weight: normal; /* [archetype:styleguide:end] --- `large copy` --- */ background: #dddddd; font-family: 'Roboto', sans-serif; }
 
-/* line 29, ../scss/main.scss */
-#body {
-  position: relative;
-  overflow: hidden;
-}
+#body { position: relative; overflow: hidden; }

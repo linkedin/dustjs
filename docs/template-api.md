@@ -1,11 +1,8 @@
 ---
 layout: docs
-title: Dust.js | Template API
+title: Template API
 permalink: /docs/syntax/
 ---
-
-## Dust Template API
-
 
 <h3 id="reference"><code>{reference}</code></h3>
 
@@ -33,6 +30,17 @@ NOTE: The first character of a reference cannot be `0-9` or `-`.
   "0name": "0name",
   "markup": "&lt;span class=\"highlight\"&gt;Markup allowed&lt;/span&gt;"
 }</dust-demo-json>
+</dust-demo>
+
+<h3 id="comment"><code>{! comments !}</code></h3>
+A Dust comment is used in a template to include text that will be ignored when the template is rendered.
+
+<pre><code>{! All Dust comments are
+multiline comments !}</code></pre>
+
+<dust-demo templatename="comments">
+<dust-demo-template showtemplatename="true">Comments {! in Dust !}can be used for documentation.{~n}
+Comments can also be used {! &lt;button&gt;Click me!&lt;/button&gt; !}to test or remove features.</dust-demo-template>
 </dust-demo>
 
 <h3 id="section"><code>{#section/}</code></h3>

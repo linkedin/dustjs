@@ -1,11 +1,11 @@
 hr {
-  margin-top: $content-padding;
+  margin: 0
 }
 
 footer {
-  @include grid($content-columns, $offset: grid-offset($nav-columns + 1));
   @include Dosis-light();
-  padding: $content-padding/2 $content-padding $content-padding $content-padding;
+  padding: $content-padding;
+  text-align: center;
 }
 
 

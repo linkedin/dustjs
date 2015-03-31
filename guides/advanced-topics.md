@@ -1,10 +1,8 @@
 ---
-title: Dust.js | Advanced Topics
+title: Advanced Topics
 layout: guides
 permalink: /guides/advanced-topics/
 ---
-
-# Advanced Topics
 
 ## Compiling on the server
 

@@ -1,6 +1,6 @@
 ---
 layout: docs
-title: Dust.js | Helper API
+title: Helper API
 permalink: /docs/helper-api/
 ---
 
