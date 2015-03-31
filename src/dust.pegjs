@@ -1,3 +1,12 @@
+{
+  function makeInteger(arr) {
+    return parseInt(arr.join(''), 10);
+  }
+  function withPosition(arr) {
+    return arr.concat([['line', line()], ['col', column()]]);
+  }
+}
+
 start
   = body
 
@@ -6,9 +15,8 @@ start
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 body
   = p:part* {
-    return ["body"]
-           .concat(p)
-           .concat([['line', line()], ['col', column()]]);
+    var body = ["body"].concat(p);
+    return withPosition(body);
   }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
@@ -22,7 +30,9 @@ part
    plus bodies plus end_tag or sec_tag_start followed by a slash and closing brace
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 section "section"
-  = t:sec_tag_start ws* rd b:body e:bodies n:end_tag? &{
+  = t:sec_tag_start ws* rd b:body e:bodies n:end_tag?
+  // non-self-closing format
+  &{
     if( (!n) || (t[1].text !== n.text) ) {
       error("Expected end tag for "+t[1].text+" but it was not found.");
     }
@@ -31,11 +41,13 @@ section "section"
   {
     e.push(["param", ["literal", "block"], b]);
     t.push(e);
-    return t.concat([['line', line()], ['col', column()]]);
+    return withPosition(t)
   }
-  / t:sec_tag_start ws* "/" rd {
+  // self-closing format
+  / t:sec_tag_start ws* "/" rd
+  {
     t.push(["bodies"]);
-    return t.concat([['line', line()], ['col', column()]]);
+    return withPosition(t)
   }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
@@ -80,7 +92,7 @@ bodies "bodies"
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 reference "reference"
   = ld n:identifier f:filters rd
-  { return ["reference", n, f].concat([['line', line()], ['col', column()]]) }
+  { return withPosition(["reference", n, f]) }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
   partial is defined as matching a opening brace followed by a > plus anything that matches with key or inline plus
@@ -90,7 +102,7 @@ partial "partial"
   = ld s:(">"/"+") ws* n:(k:key {return ["literal", k]} / inline) c:context p:params ws* "/" rd
   {
     var key = (s === ">") ? "partial" : s;
-    return [key, n, c, p].concat([['line', line()], ['col', column()]]);
+    return withPosition([key, n, c, p])
   }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
@@ -105,14 +117,24 @@ filters "filters"
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 special "special"
   = ld "~" k:key rd
-  { return ["special", k].concat([['line', line()], ['col', column()]]) }
+  { return withPosition(["special", k]) }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
    identifier is defined as matching a path or key
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 identifier "identifier"
-  = p:path     { var arr = ["path"].concat(p); arr.text = p[1].join('.').replace(/,line,\d+,col,\d+/g,''); return arr; }
-  / k:key      { var arr = ["key", k]; arr.text = k; return arr; }
+  = p:path
+  {
+    var arr = ["path"].concat(p);
+    arr.text = p[1].join('.').replace(/,line,\d+,col,\d+/g,'');
+    return arr;
+  }
+  / k:key
+  {
+    var arr = ["key", k];
+    arr.text = k;
+    return arr;
+  }
 
 number "number"
   = n:(float / integer) { return ['literal', n]; }
@@ -121,10 +143,10 @@ float "float"
   = l:integer "." r:unsigned_integer { return parseFloat(l + "." + r); }
 
 unsigned_integer "unsigned_integer"
-  = digits:[0-9]+ { return parseInt(digits.join(""), 10); }
+  = digits:[0-9]+ { return makeInteger(digits); }
 
 signed_integer "signed_integer"
-  = sign:'-' n:unsigned_integer { return n*-1; }
+  = sign:'-' n:unsigned_integer { return n * -1; }
 
 integer "integer"
   = signed_integer / unsigned_integer
@@ -133,19 +155,21 @@ integer "integer"
   path is defined as matching a key plus one or more characters of key preceded by a dot
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 path "path"
-  = k:key? d:(array_part / array)+ {
+  = k:key? d:(array_part / array)+
+  {
     d = d[0];
     if (k && d) {
       d.unshift(k);
-      return [false, d].concat([['line', line()], ['col', column()]]);
+      return withPosition([false, d])
     }
-    return [true, d].concat([['line', line()], ['col', column()]]);
+    return withPosition([true, d])
   }
-  / "." d:(array_part / array)* {
+  / "." d:(array_part / array)*
+  {
     if (d.length > 0) {
-      return [true, d[0]].concat([['line', line()], ['col', column()]]);
+      return withPosition([true, d[0]])
     }
-    return [true, []].concat([['line', line()], ['col', column()]]);
+    return withPosition([true, []])
   }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
@@ -166,9 +190,9 @@ array_part "array_part"
    double quotes plus inline_part followed by the closing double quotes
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 inline "inline"
-  = '"' '"'                 { return ["literal", ""].concat([['line', line()], ['col', column()]]) }
-  / '"' l:literal '"'       { return ["literal", l].concat([['line', line()], ['col', column()]]) }
-  / '"' p:inline_part+ '"'  { return ["body"].concat(p).concat([['line', line()], ['col', column()]]) }
+  = '"' '"'                 { return withPosition(["literal", ""]) }
+  / '"' l:literal '"'       { return withPosition(["literal", l]) }
+  / '"' p:inline_part+ '"'  { return withPosition(["body"].concat(p)) }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
   inline_part is defined as matching a special or reference or literal
@@ -178,9 +202,9 @@ inline_part
 
 buffer "buffer"
   = e:eol w:ws*
-  { return ["format", e, w.join('')].concat([['line', line()], ['col', column()]]) }
+  { return withPosition(["format", e, w.join('')]) }
   / b:(!tag !raw !comment !eol c:. {return c})+
-  { return ["buffer", b.join('')].concat([['line', line()], ['col', column()]]) }
+  { return withPosition(["buffer", b.join('')]) }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
    literal is defined as matching esc or any character except the double quotes and it cannot be a tag
@@ -194,10 +218,10 @@ esc
 
 raw "raw"
   = "{`" rawText:(!"`}" char:. {return char})* "`}"
-  { return ["raw", rawText.join('')].concat([['line', line()], ['col', column()]]) }
+  { return withPosition(["raw", rawText.join('')]) }
 comment "comment"
   = "{!" c:(!"!}" c:. {return c})* "!}"
-  { return ["comment", c.join('')].concat([['line', line()], ['col', column()]]) }
+  { return withPosition(["comment", c.join('')]) }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
    tag is defined as matching an opening brace plus any of #?^><+%:@/~% plus 0 or more whitespaces plus any character or characters that
