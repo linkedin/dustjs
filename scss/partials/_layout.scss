@@ -14,7 +14,6 @@ $nav-width: 205px;
 ////////////
 $nav-indent: 24px;
 $nav-sub-indent: 10px;
-$content-indent: 65px;
 
 ////////////
 //Margins //
@@ -34,7 +33,6 @@ $tagline-position-left: 300px;
 /////////////
 //Paddings //
 /////////////
-$brand-button-padding: 20px;
 $content-padding: 34px;
 $pre-padding: 15px;
 $content-sub-section-padding: 15px;
@@ -45,10 +43,3 @@ $content-sub-section-padding: 15px;
 $shadow-small-size: 3px;
 $shadow-large-size: 5px;
 $tagline-width: 796px;
-
-//////////////
-//Functions //
-//////////////
-@function calc-totalColumns($nav, $content) {
-  @return ($nav + $content);
-}
