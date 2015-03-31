@@ -32,17 +32,13 @@ footer {
   position:absolute;
   top:60px;
   right:-60px;
-  -webkit-transform:rotate(45deg);
-  -ms-transform:rotate(45deg);
-  -moz-transform:rotate(45deg);
-  -o-transform:rotate(45deg);
-  transform:rotate(45deg);
+  @include transform(rotate(45deg));
   box-shadow:4px 4px 10px rgba(0,0,0,0.8);
   border-top: 1px solid #FFF;
   border-bottom: 1px solid #FFF;
 }
 
-@media screen and (max-width:800px){
+@media screen and (max-width:$brk-sml){
   #forkongithub{
     display:none;
   }

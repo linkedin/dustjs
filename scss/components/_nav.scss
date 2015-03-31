@@ -1,11 +1,33 @@
 nav {
   @include even-shadow($dark-shadow, $shadow-large-size);
-  position: absolute;
-  height: 100%;
-  width: $nav-width;
-  background: $brand-graphite;
-  padding: 0 $nav-indent;
+  @include respond-to(screens) {
+    position: absolute;
+    height: 100%;
+    width: $nav-width;
+    background: $brand-graphite;
+    padding: 0 $nav-indent;
+  }
 
+  @include respond-to(handhelds) {
+    max-height: $nav-mobile-max-height;
+    overflow: hidden;
+    background: $brand-graphite;
+    padding: $nav-handheld-vertical-padding;
+    transition: max-height $nav-mobile-expand-time;
+    &.expanded {
+      max-height: $nav-mobile-max-height-expanded;
+    }
+  }
+
+  #expand-mobile {
+    @include respond-to(handhelds) {
+      float: right;
+      margin-top: $hamburger-margin-top;
+    }
+    @include respond-to(screens) {
+      display: none;
+    }
+  }
   ul.main-nav {
     > li {
       line-height: 26px;
