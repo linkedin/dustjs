@@ -1,12 +1,12 @@
 {
-  "name": "dustjs-example-hoffman",
+  "name": "dustjs-example-streaming-incremental",
   "version": "1.0.0",
-  "description": "Use Hoffman to enhance Dust streaming with Express",
+  "description": "Explicitly show how Dust streams a page incrementally",
   "main": "app.js",
   "dependencies": {
+    "dustjs-linkedin": "^2.6.1",
     "express": "^4.12.3",
-    "hoffman": "^0.1.4",
-    "request": "^2.53.0"
+    "q": "^1.2.0"
   },
   "scripts": {
     "start": "node app.js",

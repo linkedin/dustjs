@@ -1,6 +1,10 @@
-To run:
+To install:
 
-    bower install && ../../bin/dustc views/*.dust --output=lib/compiled.js
+    npm install && bower install
+
+To (re)compile templates:
+
+    ../../bin/dustc views/*.dust --output=lib/compiled.js
 
 Then load `index.html` in your browser.
 

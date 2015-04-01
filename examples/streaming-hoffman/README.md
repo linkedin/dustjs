@@ -8,4 +8,6 @@ The example proxies dustjs.com through your local server (after an artificial de
 
 Hoffman handles template loading and will reload and recompile templates each time they are loaded until you turn view caching on. For production, you'd want to turn caching on.
 
+Note that Hoffman doesn't always use the most up-to-date version of Dust, so you might need to manually upgrade it by editing its `package.json` file.
+
 More info on Hoffman: https://www.npmjs.com/package/hoffman

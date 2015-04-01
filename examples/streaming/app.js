@@ -6,6 +6,7 @@ var fs = require('fs'),
 
 dust.config.whitespace = true;
 
+// Define a custom `onLoad` function to tell Dust how to load templates
 dust.onLoad = function(tmpl, cb) {
   fs.readFile(path.join('./views', path.resolve('/', tmpl + '.dust')),
               { encoding: 'utf8' }, cb);
