@@ -32,7 +32,7 @@ describe ('Pipe', function() {
 });
 
 function prepare(test) {
-  dust.config = test.config || { whitespace: false };
+  dust.config = test.config || { whitespace: false, amd: false, cache: true };
   dust.loadSource(dust.compile(test.source, test.name));
   context = test.context;
   if (test.base) {

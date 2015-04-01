@@ -6,8 +6,8 @@ var vm = require('vm'),
 
 // use Node equivalents for some Dust methods
 var context = vm.createContext({dust: dust});
-dust.loadSource = function(source, path) {
-  return vm.runInContext(source, context, path);
+dust.loadSource = function(source) {
+  return vm.runInContext(source, context);
 };
 
 dust.nextTick = process.nextTick;
