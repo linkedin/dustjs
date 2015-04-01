@@ -40,13 +40,21 @@ The special reference `{.}` always refers to the current context.
 <dust-demo templateName="push">
 <dust-demo-template showTemplateName="true">
 Current context: {.}{~n}
-Other levels are available: {foo}
+Dust can search upwards: {foo}{~n}
+But, it can't search up and then down: {two}{~n}
+So you need to search up, and then start a new search: {#one}{two}{/one}{~n}
+Or, you can search up, and then do a dotted lookup: {one.two}
 </dust-demo-template>
 <dust-demo-json>(function() {
 
 var context = dust.makeBase();
-var newContext = context.push({ "foo": "bar" })
-                        .push("a string")
+var newContext = context.push({ "foo": "bar", "one": { "two": "Hello!" } })
+                        .push("level2")
+                        .push("level3")
+                        .push("level4")
+                        .push("this one gets popped off");
+
+newContext.pop();
 
 return newContext;
 
@@ -55,7 +63,7 @@ return newContext;
 
 ## Global Context
 
-When creating a context, you can provide a second "global" context that is always accessible, no matter where Dust is in the stack. To add a global context, pass a value to `dust.makeBase`, instead of passing a plain object to `dust.render`.
+When creating a context, you can provide a second "global" context that is always accessible, no matter where Dust is in the stack. To add a global context, pass a value to `dust.makeBase` to create a Context object. Then, pass that Context object to `dust.render`.
 
 The global context is the lowest level of the stack, so it will be shadowed by any references that are defined at a higher level.
 

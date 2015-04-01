@@ -11,10 +11,10 @@ permalink: /guides/setup/
 To install as a Node module:
 
 ```
-npm install --save dustjs-linkedin
+npm install --save --production dustjs-linkedin
 
 # If you want the core helpers addon
-npm install --save dustjs-helpers
+npm install --save --production dustjs-helpers
 ```
 
 Dust should work with any version of Node or io.js newer than 0.8.12.
