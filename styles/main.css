@@ -1,5 +1,26 @@
-@font-face { font-family: "Dosis Light"; src: url('/styles/fonts/dosis-light-webfont.eot?1427219900'); src: url('/styles/fonts/dosis-light-webfont.eot?&1427219900#iefix') format('embedded-opentype'), url('/styles/fonts/dosis-light-webfont.woff?1427219900') format('woff'), url('/styles/fonts/dosis-light-webfont.ttf?1427219900') format('truetype'), url('/styles/fonts/dosis-light-webfont.svg?1427219900') format('svg'); }
-nav { -moz-box-shadow: #343434 0 0 5px; -webkit-box-shadow: #343434 0 0 5px; box-shadow: #343434 0 0 5px; position: absolute; height: 100%; width: 205px; background: #323232; padding: 0 24px; }
+@font-face { font-family: "Dosis Light"; src: url('/styles/fonts/dosis-light-webfont.eot?1427825172'); src: url('/styles/fonts/dosis-light-webfont.eot?&1427825172#iefix') format('embedded-opentype'), url('/styles/fonts/dosis-light-webfont.woff?1427825172') format('woff'), url('/styles/fonts/dosis-light-webfont.ttf?1427825172') format('truetype'), url('/styles/fonts/dosis-light-webfont.svg?1427825172') format('svg'); }
+.cmn-toggle-switch { background: none; display: block; position: relative; overflow: hidden; margin: 0; padding: 0; width: 30px; height: 30px; font-size: 0; text-indent: -9999px; -moz-appearance: none; -webkit-appearance: none; -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none; -moz-border-radius: 0; -webkit-border-radius: 0; border-radius: 0; border: none; cursor: pointer; -moz-transition: background 0.2s; -o-transition: background 0.2s; -webkit-transition: background 0.2s; transition: background 0.2s; }
+.cmn-toggle-switch:focus { outline: none; }
+.cmn-toggle-switch > span { display: block; position: absolute; top: 10px; left: 1px; right: 1px; height: 2px; background: #fff; }
+.cmn-toggle-switch > span:after, .cmn-toggle-switch > span:before { position: absolute; display: block; left: 0; width: 100%; height: 2px; background-color: #fff; content: ""; }
+.cmn-toggle-switch > span:before { top: -10px; }
+.cmn-toggle-switch > span:after { bottom: -10px; }
+
+.cmn-toggle-switch__htx > span { -moz-transition: background 0.2s 0; -o-transition: background 0.2s 0; -webkit-transition: background 0.2s 0; transition: background 0.2s 0; }
+.cmn-toggle-switch__htx > span:before, .cmn-toggle-switch__htx > span:after { -moz-transition-duration: 0.2s, 0.2s; -o-transition-duration: 0.2s, 0.2s; -webkit-transition-duration: 0.2s, 0.2s; transition-duration: 0.2s, 0.2s; -moz-transition-delay: 0.2s, 0; -o-transition-delay: 0.2s, 0; -webkit-transition-delay: 0.2s, 0; transition-delay: 0.2s, 0; }
+.cmn-toggle-switch__htx > span:before { -moz-transition-property: top, -moz-transform; -o-transition-property: top, -o-transform; -webkit-transition-property: top, -webkit-transform; transition-property: top, transform; }
+.cmn-toggle-switch__htx > span:after { -moz-transition-property: bottom, -moz-transform; -o-transition-property: bottom, -o-transform; -webkit-transition-property: bottom, -webkit-transform; transition-property: bottom, transform; }
+.cmn-toggle-switch__htx.active > span { background: none; }
+.cmn-toggle-switch__htx.active > span:before, .cmn-toggle-switch__htx.active > span:after { -moz-transition-delay: 0, 0.2s; -o-transition-delay: 0, 0.2s; -webkit-transition-delay: 0, 0.2s; transition-delay: 0, 0.2s; }
+.cmn-toggle-switch__htx.active > span:before { top: 0; -moz-transform: rotate(45deg); -ms-transform: rotate(45deg); -webkit-transform: rotate(45deg); transform: rotate(45deg); }
+.cmn-toggle-switch__htx.active > span:after { bottom: 0; -moz-transform: rotate(-45deg); -ms-transform: rotate(-45deg); -webkit-transform: rotate(-45deg); transform: rotate(-45deg); }
+
+nav { -moz-box-shadow: #343434 0 0 5px; -webkit-box-shadow: #343434 0 0 5px; box-shadow: #343434 0 0 5px; }
+@media only screen and (min-width: 1024px) { nav { position: absolute; height: 100%; width: 205px; background: #323232; padding: 0 24px; } }
+@media only screen and (max-width: 1024px) { nav { max-height: 30px; overflow: hidden; background: #323232; padding: 15px; transition: max-height 0.2s; }
+  nav.expanded { max-height: 600px; } }
+@media only screen and (max-width: 1024px) { nav #expand-mobile { float: right; margin-top: 5px; } }
+@media only screen and (min-width: 1024px) { nav #expand-mobile { display: none; } }
 nav ul.main-nav > li { line-height: 26px; margin-bottom: 1em; padding: 0; color: #999; cursor: default; }
 nav ul.main-nav > li a { /* [archetype:styleguide:begin] --- `medium muted headline in a module, link in a module` --- */ font-size: 16px; font-weight: normal; line-height: 18px; color: #0088CC; text-decoration: none; /* [archetype:styleguide:end] --- `medium muted headline in a module, link in a module` --- */ color: #FFF; }
 nav ul.main-nav > li a { /* [archetype:target-os:begin] --- default --- */ /* [archetype:target-os:end]   --- default --- */ }
@@ -13,14 +34,21 @@ nav ul.main-nav > li.sub input:checked ~ ul { display: block; }
 nav ul.main-nav > li.sub input:checked ~ ul li { padding-left: 10px; }
 nav ul.main-nav > li.sub ul { display: none; }
 
-header h1 { font-family: "Dosis Light"; font-size: 48px; line-height: 50px; margin: 34px 0px; padding: 0; }
+header h1 { font-family: "Dosis Light"; font-size: 48px; line-height: 50px; }
+@media only screen and (min-width: 1024px) { header h1 { margin: 34px 0; padding: 0; } }
+@media only screen and (max-width: 1024px) { header h1 { display: none; } }
 header h1 a, header h1 a:visited { color: #FFF; text-decoration: none; }
-header h2.tagline { font-family: "Dosis Light"; position: absolute; width: 796px; top: 35px; left: 300px; font-size: 32px; line-height: 48px; color: #323232; }
+header h2.tagline { font-family: "Dosis Light"; font-size: 32px; }
+@media only screen and (min-width: 1024px) { header h2.tagline { position: absolute; width: 796px; top: 35px; left: 300px; line-height: 48px; color: #323232; } }
+@media only screen and (max-width: 1024px) { header h2.tagline { line-height: 32px; margin-bottom: 17px; color: white; } }
 
-#content { margin-left: 10px; float: left; margin-left: 297px; margin-right: 297px; *zoom: 1; position: relative; width: 728px; -moz-box-shadow: #939393 0 0 3px; -webkit-box-shadow: #939393 0 0 3px; box-shadow: #939393 0 0 3px; background: #FFF; padding: 34px; margin-top: 122px; }
+#content { -moz-box-shadow: #939393 0 0 3px; -webkit-box-shadow: #939393 0 0 3px; box-shadow: #939393 0 0 3px; background: #FFF; }
+@media only screen and (min-width: 1024px) { #content { margin-left: 10px; float: left; margin-left: 297px; margin-right: 297px; *zoom: 1; position: relative; width: 728px; padding: 34px; margin-top: 122px; } }
+@media only screen and (max-width: 1024px) { #content { padding: 17px; } }
 #content > h1, #content > h2, #content > p, #content > pre, #content > ul { margin-bottom: 32px; }
 #content p { line-height: 26px; }
-#content p:last-child { margin-bottom: 47px; }
+@media only screen and (min-width: 1024px) { #content p:last-child { margin-bottom: 47px; } }
+@media only screen and (max-width: 1024px) { #content p:last-child { margin-bottom: 32px; } }
 #content > h1 { /* [archetype:styleguide:begin] --- `xlarge headline` --- */ font-size: 22px; font-weight: bold; line-height: 24px; color: black; /* [archetype:styleguide:end] --- `xlarge headline` --- */ font-size: 28px; }
 #content > h1 { /* [archetype:target-os:begin] --- default --- */ /* [archetype:target-os:end]   --- default --- */ }
 #content > h2 { /* [archetype:styleguide:begin] --- `large headline` --- */ font-size: 18px; font-weight: bold; line-height: 22px; color: black; /* [archetype:styleguide:end] --- `large headline` --- */ font-size: 20px; }
@@ -31,7 +59,7 @@ header h2.tagline { font-family: "Dosis Light"; position: absolute; width: 796px
 #content ul { margin-left: 20px; }
 #content li { margin-bottom: 1em; }
 #content code { color: #00698c; }
-#content p code, #content li code { background-color: #dddddd; padding: 4px 8px; border-radius: 2px; -moz-box-shadow: inset 0 0 3px #939393; -webkit-box-shadow: inset 0 0 3px #939393; box-shadow: inset 0 0 3px #939393; }
+#content p code, #content li code { background-color: #dddddd; padding: 4px 8px; border-radius: 2px; -moz-box-shadow: inset 0 0 3px #939393; -webkit-box-shadow: inset 0 0 3px #939393; box-shadow: inset 0 0 3px #939393; white-space: nowrap; }
 #content a { color: #267f9d; text-decoration: none; }
 #content > pre { -moz-box-shadow: inset 0 0 3px #939393; -webkit-box-shadow: inset 0 0 3px #939393; box-shadow: inset 0 0 3px #939393; overflow-x: auto; background: #dddddd; color: #00698c; padding: 15px; }
 #content > .highlighter-coderay { margin-bottom: 32px; }
@@ -53,9 +81,9 @@ footer { font-family: "Dosis Light"; padding: 34px; text-align: center; }
 
 #forkongithub { position: fixed; top: 0; right: 0; width: 200px; overflow: hidden; height: 200px; z-index: 9999; }
 
-#forkongithub a { background: #323232; color: #fff; text-decoration: none; font-family: arial,sans-serif; text-align: center; font-weight: bold; padding: 5px 40px; font-size: 1rem; line-height: 2rem; width: 200px; position: absolute; top: 60px; right: -60px; -webkit-transform: rotate(45deg); -ms-transform: rotate(45deg); -moz-transform: rotate(45deg); -o-transform: rotate(45deg); transform: rotate(45deg); box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.8); border-top: 1px solid #FFF; border-bottom: 1px solid #FFF; }
+#forkongithub a { background: #323232; color: #fff; text-decoration: none; font-family: arial,sans-serif; text-align: center; font-weight: bold; padding: 5px 40px; font-size: 1rem; line-height: 2rem; width: 200px; position: absolute; top: 60px; right: -60px; -moz-transform: rotate(45deg); -ms-transform: rotate(45deg); -webkit-transform: rotate(45deg); transform: rotate(45deg); box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.8); border-top: 1px solid #FFF; border-bottom: 1px solid #FFF; }
 
-@media screen and (max-width: 800px) { #forkongithub { display: none; } }
+@media screen and (max-width: 1024px) { #forkongithub { display: none; } }
 body { /* [archetype:styleguide:begin] --- `large copy` --- */ font-size: 16px; line-height: 20px; color: #222222; font-weight: normal; /* [archetype:styleguide:end] --- `large copy` --- */ background: #dddddd; font-family: 'Roboto', sans-serif; }
 
 #body { position: relative; overflow: hidden; }

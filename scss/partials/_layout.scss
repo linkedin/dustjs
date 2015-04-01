@@ -8,13 +8,21 @@ $content-columns: 18;
 //Widths //
 ///////////
 $nav-width: 205px;
+$tagline-width: 796px;
+
+////////////
+//Heights //
+////////////
+$nav-mobile-max-height: 30px;
+$nav-mobile-max-height-expanded: 600px;
+$hamburger-height: 2px;
+
 
 ////////////
 //Indents //
 ////////////
 $nav-indent: 24px;
 $nav-sub-indent: 10px;
-$content-indent: 65px;
 
 ////////////
 //Margins //
@@ -24,31 +32,38 @@ $content-margin-top: 122px;
 $content-h1-margin-bottom: 32px;
 $nested-api-list-margin-top: 15px;
 $coderay-line-number-margin: 10px;
+$get-dust-mobile-margin-top: 15px;
+$hamburger-margin-top: 5px;
 
 //////////////
 //Positions //
 //////////////
 $tagline-position-top: 35px;
 $tagline-position-left: 300px;
+$hamburger-span-top: 10px;
 
 /////////////
 //Paddings //
 /////////////
-$brand-button-padding: 20px;
 $content-padding: 34px;
 $pre-padding: 15px;
 $content-sub-section-padding: 15px;
+$nav-handheld-vertical-padding: 15px;
+$get-dust-mobile-padding: 10px;
 
-//////////
-//Sizes //
-//////////
+////////////
+//Shadows //
+////////////
 $shadow-small-size: 3px;
 $shadow-large-size: 5px;
-$tagline-width: 796px;
 
-//////////////
-//Functions //
-//////////////
-@function calc-totalColumns($nav, $content) {
-  @return ($nav + $content);
-}
+///////////
+//Radius //
+///////////
+$get-dust-mobile-radius: 2px;
+
+//////////
+//Times //
+//////////
+$nav-mobile-expand-time: 0.2s;
+$hamburger-transition-time: 0.2s;

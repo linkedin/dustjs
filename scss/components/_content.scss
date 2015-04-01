@@ -1,10 +1,17 @@
 
 #content {
-  @include grid($content-columns, $offset: grid-offset($nav-columns + 1));
   @include even-shadow($light-shadow, $shadow-small-size);
   background: #FFF;
-  padding: $content-padding;
-  margin-top: $content-margin-top;
+
+  @include respond-to(screens) {
+    @include grid($content-columns, $offset: grid-offset($nav-columns + 1));
+    padding: $content-padding;
+    margin-top: $content-margin-top;
+  }
+  @include respond-to(handhelds) {
+    padding: $content-padding/2;
+  }
+
 
   > h1, > h2, > p, > pre, > ul {
     margin-bottom: $content-h1-margin-bottom;
@@ -15,7 +22,12 @@
   }
 
   p:last-child {
-    margin-bottom: $content-h1-margin-bottom + 15px;
+    @include respond-to(screens) {
+      margin-bottom: $content-h1-margin-bottom + 15px;
+    }
+    @include respond-to(handhelds) {
+      margin-bottom: $content-h1-margin-bottom;
+    }
   }
 
   > h1 {

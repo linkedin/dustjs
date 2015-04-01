@@ -1,0 +1,23 @@
+////////////////
+//Breakpoints //
+////////////////
+$brk-sml: 1024px;
+
+$query-only-screen: "only screen and ";
+
+$information-handhelds: "#{$query-only-screen} (max-width: #{$brk-sml})";
+$information-screens: "#{$query-only-screen}  (min-width: #{$brk-sml})";
+
+@mixin respond-to($media) {
+  @if $media == handhelds {
+    @media #{$information-handhelds} {
+      @content;
+    }
+  }
+
+  @if $media == screens {
+    @media #{$information-screens} {
+      @content;
+    }
+  }
+}

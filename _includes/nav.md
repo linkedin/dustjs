@@ -1,5 +1,7 @@
-
 <nav>
+  <button id="expand-mobile" class="cmn-toggle-switch cmn-toggle-switch__htx">
+    <span>toggle menu</span>
+  </button>
   <header>
     <h1><a href="/">Dust.js</a></h1>
     <h2 class="tagline">{{ page.title }}</h2>

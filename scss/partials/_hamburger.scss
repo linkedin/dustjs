@@ -1,0 +1,78 @@
+.cmn-toggle-switch {
+  background: none;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  width: $nav-mobile-max-height;
+  height: $nav-mobile-max-height;
+  font-size: 0;
+  text-indent: -9999px;
+  @include appearance(none);
+  @include box-shadow(none);
+  @include border-radius(0);
+  border: none;
+  cursor: pointer;
+  @include transition(background $hamburger-transition-time);
+  &:focus {
+    outline: none;
+  }
+  > span {
+    display: block;
+    position: absolute;
+    top: $hamburger-span-top;
+    left: 1px;
+    right: 1px;
+    height: $hamburger-height;
+    background: #fff;
+    &:after, &:before {
+      position: absolute;
+      display: block;
+      left: 0;
+      width: 100%;
+      height: $hamburger-height;
+      background-color: #fff;
+      content: "";
+    }
+    &:before {
+      top: -$nav-mobile-max-height/3;
+    }
+    &:after {
+      bottom: -$nav-mobile-max-height/3;
+
+    }
+  }
+}
+
+
+.cmn-toggle-switch__htx {
+  > span {
+    @include transition(background 0 $hamburger-transition-time);
+    &:before, &:after {
+      @include transition-duration($hamburger-transition-time, $hamburger-transition-time);
+      @include transition-delay($hamburger-transition-time, 0);
+
+    }
+    &:before {
+      @include transition-property(top, transform);
+    }
+    &:after {
+      @include transition-property(bottom, transform);
+    }
+  }
+  &.active > span {
+    background: none;
+    &:before, &:after {
+      @include transition-delay(0, $hamburger-transition-time);
+    }
+    &:before {
+      top: 0;
+      @include transform(rotate(45deg));
+    }
+    &:after {
+      bottom: 0;
+      @include transform(rotate(-45deg));
+    }
+  }
+}

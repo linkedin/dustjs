@@ -3,8 +3,13 @@ header {
     @include Dosis-light();
     font-size: 48px;
     line-height: 50px;
-    margin: $header-margin-bottom 0px;
-    padding: 0;
+    @include respond-to(screens) {
+      margin: $header-margin-bottom 0;
+      padding: 0;
+    }
+    @include respond-to(handhelds) {
+      display: none;
+    }
     a, a:visited {
       color: #FFF;
       text-decoration: none;
@@ -13,12 +18,19 @@ header {
 
   h2.tagline {
     @include Dosis-light();
-    position: absolute;
-    width: $tagline-width;
-    top: $tagline-position-top;
-    left: $tagline-position-left;
     font-size: $tagline-font-size;
-    line-height: $tagline-font-size * 1.5;
-    color: $brand-graphite;
+    @include respond-to(screens) {
+      position: absolute;
+      width: $tagline-width;
+      top: $tagline-position-top;
+      left: $tagline-position-left;
+      line-height: $tagline-font-size * 1.5;
+      color: $brand-graphite;
+    }
+    @include respond-to(handhelds) {
+      line-height: $tagline-font-size;
+      margin-bottom: $header-margin-bottom/2;
+      color: white;
+    }
   }
 }
