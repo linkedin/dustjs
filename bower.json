@@ -35,10 +35,9 @@
   "license": "MIT",
   "ignore": [
     "**/.*",
-    "benchmark",
     "bin",
-    "docs",
     "examples",
+    "index.js",
     "lib",
     "node_modules",
     "src",
