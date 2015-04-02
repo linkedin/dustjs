@@ -22,6 +22,7 @@ cli.parse({
     pwd:        [false, 'generate template names starting from this directory',                                     'string'],
     whitespace: ['w',   'preserve whitespace in templates',                                                                 ],
     amd:        ['a',   'register templates as AMD modules'                                                                 ],
+    cjs:        [false, 'register templates as CommonJS modules (automatically turns on --split)'                           ],
     watch:      [false, 'watch files for changes and recompile'                                                             ]
 });
 
@@ -30,7 +31,7 @@ cli.parse({
  */
 if (!cli.argc) {
     if (!cli.options.name) {
-        cli.getUsage();
+        cli.info('No template name provided. The compiled template will be anonymous.');
     }
     cli.info('No files to compile. Write template code and use ^D to exit');
     cli.withStdin(function(data) {
@@ -58,6 +59,14 @@ function handle() {
                 templateName = path.join(path.dirname(inputFile),
                                          path.basename(inputFile, path.extname(inputFile))),
                 compiledData;
+
+            // If CommonJS is turned on, you have to compile one per file.
+            if (cli.options.cjs && filesToProcess.length > 1) {
+                if(!cli.options.split) {
+                    cli.info('CommonJS modules are limited to one per file. Enabling --split');
+                }
+                cli.options.split = true;
+            }
 
             // Use the template's path as the output path if split-files is turned on
             if (cli.options.split) {
@@ -131,6 +140,7 @@ function compile(data, name) {
 
     dust.config.whitespace = (cli.options.whitespace === true);
     dust.config.amd = (cli.options.amd === true);
+    dust.config.cjs = (cli.options.cjs === true);
 
     try {
         compiled = dust.compile(data, name);
