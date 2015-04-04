@@ -774,6 +774,12 @@ var coreTests = [
 		expected: "Eventually magic!",
 		message: "should reserve an async chunk for a thenable reference"
 	  },
+    {
+    name:     "thenable escape reference",
+    source:   "{rice-krispies} {rice-krispies|s}",
+    context:  { "rice-krispies": new FalsePromise(null, "Snap, Crackle & Pop") },
+    expected: "Snap, Crackle &amp; Pop Snap, Crackle & Pop"
+    },
 	  {
 		name:     "thenable deep reference",
 		source:   "Eventually {magic.ally.delicious}!",
@@ -800,7 +806,8 @@ var coreTests = [
 		source:   "Eventually {magic.ally.delicious}!",
 		context:  { "magic": new FalsePromise("cereal gone") },
 		expected: "Eventually !",
-		message: "should inspect a thenable reference but move on if it fails"
+		message: "should inspect a thenable reference but move on if it fails",
+    log:      "Unhandled promise rejection in `thenable reference that fails`"
 	  },
 	  {
 		name:     "thenable deep reference that fails",
