@@ -1,5 +1,6 @@
 if (typeof require !== 'undefined') {
   ayepromise = require('ayepromise');
+  highland = require('highland');
 }
 /**
  * A naive Promise constructor that simply resolves or rejects its Promise based on what's passed
@@ -15,6 +16,29 @@ function FalsePromise(err, data) {
 	defer.resolve(data);
   }
   return defer.promise;
+}
+
+/**
+ * A naive Stream constructor that streams the provided array asynchronously
+ * @param arr {Array<Object|Error>|String} items to be streamed
+ * @return {Stream}
+ */
+function DreamStream(arr) {
+  if (typeof arr === 'string') {
+    arr = arr.split('');
+  }
+  return function() {
+    return highland(function(push) {
+      arr.forEach(function(item) {
+        if(item instanceof Error) {
+          push(item);
+        } else {
+          push(null, item);
+        }
+      });
+      push(null, highland.nil);
+    });
+  }
 }
 
 var coreTests = [
@@ -872,11 +896,69 @@ var coreTests = [
 		context:  { "promise": new FalsePromise("promise error") },
 		expected: "promise error",
 		message: "rejected thenable renders error block"
-	  }
-	]
+	  },
+      {
+        name:     "stream",
+        source:   "Stream of {stream}...",
+        context:  { "stream": new DreamStream("consciousness") },
+        expected: "Stream of consciousness...",
+        message:  "should reserve an async chunk for a stream reference"
+      },
+      {
+        name:     "stream escaping",
+        source:   "{polluted|s} {polluted}",
+        context:  { "polluted": new DreamStream("<&>") },
+        expected: "<&> &lt;&amp;&gt;",
+        message:  "should respect filters set on stream references"
+      },
+      {
+        name:     "stream error",
+        source:   "{stream}...",
+        context:  { "stream": new DreamStream(["Everything ", "is", new Error("horrible"), " awesome!"])},
+        expected: "Everything is...",
+        message:  "should abort the stream if it raises an error",
+        log:      "Unhandled stream error in `stream error`"
+      },
+      {
+        name:     "stream section",
+        source:   "Pour {#molecule}{atom}{num}{/molecule} in the glass",
+        context:  { "molecule": new DreamStream([
+          {atom: "H", num: 2},
+          {atom: "O"}
+        ])},
+        expected: "Pour H2O in the glass",
+        message:  "should reserve an async section for a stream"
+      },
+      {
+        name:     "stream section error",
+        source:   "Pour {#molecule}{atom}{num}{:error}{message}{/molecule} in the glass",
+        context:  { "molecule": new DreamStream([
+          {atom: "H", num: 2},
+          new Error("O... no!"),
+          {atom: "S"},
+          {atom: "O", num: 4}
+        ])},
+        expected: "Pour H2O... no! in the glass",
+        message:  "should reserve an async chunk for a stream reference and abort if the stream errors"
+      },
+      {
+        name:     "promise a stream and stream a promise",
+        source:   ["Little Bobby drank and drank, ",
+                   "and then he drank some more. ",
+                   "But what he thought was {water} was {sulfuric_acid}!"].join(''),
+        context:  {
+          "water": new FalsePromise(null, new DreamStream(["H","2","O"])),
+          "sulfuric_acid": new DreamStream([new FalsePromise(null, "H2"), "SO4"])
+        },
+        expected: ["Little Bobby drank and drank, ",
+                   "and then he drank some more. ",
+                   "But what he thought was H2O was H2SO4!"].join(''),
+        message:  "should seamlessly mix asynchronous data sources"
+      }
+    ]
   },
 /**
- * CONDITINOAL TESTS
+ * CONDITIONAL TESTS
  */
   {
     name: "conditional tests",

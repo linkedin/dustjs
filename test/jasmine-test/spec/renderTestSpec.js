@@ -61,7 +61,8 @@ function render(test) {
             }
           }
           expect(messageInLog).toEqual(true);
-        } else {
+        }
+        if (typeof test.expected !== "undefined") {
           expect(test.expected).toEqual(output);
         }
         done();
@@ -86,7 +87,8 @@ function stream(test) {
       function check() {
         if (test.error) {
           expect(output).toContain(test.error);
-        } else if(test.log) {
+        }
+        if (test.log) {
           for(var i=0; i<log.length; i++) {
             if(log[i].message === test.log) {
               messageInLog = true;
@@ -95,7 +97,8 @@ function stream(test) {
           }
           dust.logQueue = [];
           expect(messageInLog).toEqual(true);
-        } else {
+        }
+        if (typeof test.expected !== 'undefined') {
           expect(test.expected).toEqual(output);
         }
         done();
@@ -199,7 +202,8 @@ function pipe(test) {
             }
             dust.logQueue = [];
             expect(messageInLogTwo).toEqual(true);
-          } else {
+          }
+          if(typeof test.expected !== 'undefined'){
             expect(test.expected).toEqual(output);
             expect(test.expected).toEqual(outputTwo);
           }

@@ -140,7 +140,7 @@ module.exports = function(grunt) {
           display: 'short',
           helpers: ['test/jasmine-test/spec/coreTests.js'],
           specs: ['test/jasmine-test/spec/testHelpers.js', 'test/jasmine-test/spec/renderTestSpec.js'],
-          vendor: 'node_modules/ayepromise/ayepromise.js'
+          vendor: ['node_modules/ayepromise/ayepromise.js', 'test/lib/highland.js']
         }
       },
       /*tests unminified code, mostly used for debugging by `grunt dev` task*/
