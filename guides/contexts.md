@@ -87,7 +87,7 @@ return context.push({
 
 ## Special Values in Context
 
-Objects, Arrays, strings, numbers, and other literals are retrieved from the context as-is. Contexts have special behavior when returning functions and Promises.
+Objects, Arrays, strings, numbers, and other literals are retrieved from the context as-is. Dust treats other context values specially:
 
 ### Functions
 
@@ -95,7 +95,7 @@ Instead of returning a function to be rendered by the template, Dust first execu
 
 These special functions are collectively referred to as **context helpers**. For information on how to write context helpers, see the [Context Helpers guide](/guides/context-helpers).
 
-### Promises
+### Promises (Dust 2.6.2)
 
 As of Dust 2.6.2, when Dust encounters a Promise in the context, it waits for the Promise to be resolved or rejected before providing the value to the template.
 
@@ -117,3 +117,13 @@ You can even refer directly to keys in the eventual return value of a Promise, e
 }
   </dust-demo-json>
 </dust-demo>
+
+### Streams (Dust 2.7.0)
+
+As of Dust 2.7.0, Dust can read from Node-like Streams in the context. When Dust finds a Stream, it attaches `data`, `error`, and `end` listeners.
+
+A Buffer- or string-based Stream can be accessed in the template as a reference or a section. An Object-based Stream should only be accessed as a section.
+
+When a Stream is accessed as a section, Dust flushes each iteration immediately upon completion. This is useful if you are streaming out a large amount of data, since the browser can begin rendering the response immediately (in conjunction with `dust.stream`). Otherwise, Dust waits for the `end` event to fire before flushing the chunk.
+
+If a Stream never emits an `end` or `error` event, the template will never finish rendering. Depending on your Stream implementation, you may wish to safeguard against a poorly-written stream by forcefully ending the stream after a timeout.
