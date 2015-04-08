@@ -1,5 +1,7 @@
 var window = this;
 
+var isRhino = true;
+
 print('Running unit tests with ' + environment['java.class.path']);
 
 var requiredFiles = [

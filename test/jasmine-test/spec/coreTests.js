@@ -942,6 +942,7 @@ var coreTests = [
         message:  "should reserve an async chunk for a stream reference and abort if the stream errors"
       },
       {
+        disabled_in_rhino: "Rhino can't handle this nested asynchronisity.",
         name:     "promise a stream and stream a promise",
         source:   ["Little Bobby drank and drank, ",
                    "and then he drank some more. ",
