@@ -6,9 +6,7 @@ permalink: /guides/context-helpers/
 
 ## Why use context helpers at all?
 
-One of the central tenets of Dust's philosophy is the idea that your template should be as logic-free as possible. Following this guideline makes your templates lightweight and increases their understandability.
-
-For example, to monitor the state of your application, Dust doesn't want you to write templates like this:
+Let's say that you had a monitoring app. If you were doing logical tests in your template, you might write this:
 
 ```
 {! Don't do this !}
@@ -23,9 +21,11 @@ For example, to monitor the state of your application, Dust doesn't want you to 
 {/eq}
 ```
 
-If App 2.0 featured a `gyroscope` and you had to check that the `gyroscopeIsActive`, you would have to add yet another nested conditional. And what if you wanted to output different messages when your app is out of oil or when it is on fire? This template would grow to dozens of lines.
+But version 2.0 adds a new test, `gyroscopeIsActive`. You'll have to add yet another nested conditional.
 
-This is where **handlers**, or **context helpers** (they're the same thing by different names) can help. Your Dust context isn't limited to containing data like strings, numbers, and arrays. You can also include functions directly in the context that provide new data or transform existing data. This means Dust contexts act somewhat like **view models**.
+Version 3.0 features status messages for each error state. Your template is growing out of control!
+
+This is where **handlers**, or **context helpers** (they're the same thing by different names) can help. Your Dust context isn't limited to containing data like strings, numbers, and arrays. You can also include functions directly in the context that provide new data or transform existing data. This means Dust contexts act like **view models**.
 
 Using a handler, we could rewrite our template to something much simpler:
 
@@ -35,7 +35,7 @@ Using a handler, we could rewrite our template to something much simpler:
 {/appStatusOK}
 ```
 
-And move all the logic to Javascript, where it belongs:
+And move all the logic to a real Javascript function in your context:
 
 ```
 {
@@ -48,38 +48,47 @@ And move all the logic to Javascript, where it belongs:
 }
 ```
 
-Now, your template doesn't care about the precise details of what makes your app tick-- only if it's OK or not.
+Now, your template doesn't have to change, even if the conditions you're testing change.
 
 As a bonus, your handler can be much smarter than a template. Don't worry about all the syntax here; we'll go over it in more detail later.
 
-```
+<dust-demo templateName="monitor-app">
+<dust-demo-template showTemplateName="true">
 {#appStatusOK}
   Everything is awesome!
   {:gearsError}
-    Gears are stopped! Status code: {error}
+    Gears are stopped! Status code: {gears.error}
   {:engineError}
-    Engine is not running! Engine temperature: {engineTemp}
+    Engine is not running! Engine temperature: {engine.temperature}
   {:oilLevelError}
-    Oil level is too low! Current level: {oilLevel}
+    Oil level is too low! Current level: {engine.oilLevel}
 {/appStatusOK}
-```
-
-```
+</dust-demo-template>
+<dust-demo-json>
 {
+  "gears": {
+    "status": "OK",
+    "error": false
+  },
+  "engine": {
+    "status": "OK",
+    "error": false,
+    "oilLevel": 0.5,
+    "temperature": 80
+  },
   "appStatusOK": function(chunk, context, bodies, params) {
-     if(!gearsTurning) {
-       return chunk.render(bodies.gearsError,
-                           context.push({ error: gears.status });
-     } else if(!engineRunning) {
-       return chunk.render(bodies.engineError,
-                           context.push({ engineTemp: context.get("engine.temperature") });
-     } else if(oilLevel < 0.7) {
+     if(this.gears.error) {
+       return chunk.render(bodies.gearsError, context);
+     } else if(this.engine.error) {
+       return chunk.render(bodies.engineError, context);
+     } else if(this.engine.oilLevel < 0.7) {
        return chunk.render(bodies.oilLevelError, context);
      }
      return true;
   }
 }
-```
+</dust-demo-json>
+</dust-demo>
 
 ## Writing context helpers
 
@@ -144,7 +153,13 @@ Context helpers can read values out of any level of the Dust context passed to t
 
 Remember that Dust contexts are "stacks" of objects, and that Dust can read upwards through multiple levels. For a refresher on contexts, see [Helper API](/docs/helper-api/).
 
-```
+<dust-demo templateName="traverse-context">
+<dust-demo-template showTemplateName="true">
+{#status}
+  System Status: {#OK}OK!{:else}Horribly Wrong!{/OK}
+{/status}
+</dust-demo-template>
+<dust-demo-json>
 {
   "engine": {
     "temperature": 180,
@@ -154,8 +169,7 @@ Remember that Dust contexts are "stacks" of objects, and that Dust can read upwa
     "active": true
   },
   "status": {
-    "helper": function(chunk, context) {
-      // Access nested context paths via arrays or dotted notation
+    "OK": function(chunk, context) {
       var engineRPM = context.get(["engine", "rpm"]),
           flywheelActive = context.get("flywheel.active");
 
@@ -163,7 +177,8 @@ Remember that Dust contexts are "stacks" of objects, and that Dust can read upwa
     }
   }
 }
-```
+</dust-demo-json>
+</dust-demo>
 
 #### Bodies
 

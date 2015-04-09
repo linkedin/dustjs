@@ -6,7 +6,7 @@ permalink: /guides/dust-helpers/
 
 # Using Helpers
 
-Helpers are extensions to Dust that make it possible for anyone to extend the way Dust works. For example, you could write a helper to add internationalization support or to provide custom formatting for output.
+Dust helpers extend the templating language in the same way as context helpers. Unlike context helpers, however, Dust helpers are global and can be used in any template without including them in the context.
 
 Helpers look like `{@helper}`.
 
@@ -14,19 +14,18 @@ Helpers look like `{@helper}`.
 
 Officially supported helpers are bundled separately in the `dustjs-helpers` library. After the dustjs-linkedin library is loaded, follow the same instructions in the [Setup guide](/guides/setup/) to install `dustjs-helpers`.
 
-If you are using Node.js, then the following `require` statements will ensure you have the needed Dust modules available.
+If you are using Node.js, then you can require the helpers directly and get back a Dust instance with the helpers preloaded:
 
 ```
-require('dustjs-linkedin');
-require('dustjs-helpers');
+var dust = require('dustjs-helpers');
 ```
 
 ## Logic Helpers
 
 The helpers library comes with the following logic helpers:
 
-* `{@eq}`: equal to
-* `{@ne}`: not equal to
+* `{@eq}`: strictly equal to
+* `{@ne}`: not strictly equal to
 * `{@gt}`: greater than
 * `{@lt}`: less than
 * `{@gte}`: greater than or equal to
@@ -52,7 +51,7 @@ In the following example, the first helper looks for the value of `level` in the
 
 ### Else
 
-For all logic helpers, you can use an `{:else}` clause to do something if the comparison is false.
+For all logic helpers, you can create an `{:else}` block that will render if the test is false.
 
 <dust-demo templatename="helpers_else">
 <dust-demo-template showtemplatename="true">
@@ -71,7 +70,7 @@ For all logic helpers, you can use an `{:else}` clause to do something if the co
 
 ### Casting
 
-If you are comparing a literal value to one that you know is not a string (e.g. a number or a boolean), make sure to specify the `type` attribute so Dust knows how to cast the literal value. For `@lt`, `@gt`, `@lte`, and `@gte`, the type is automatically coerced to a number.
+If you are comparing a literal value to one that you know is not a string (e.g. a number or a boolean), make sure to specify the `type` attribute so Dust knows how to cast the literal value.
 
 <dust-demo templatename="helpers_casting">
 <dust-demo-template showtemplatename="true">
@@ -86,13 +85,37 @@ If you are comparing a literal value to one that you know is not a string (e.g. 
 </dust-demo-json>
 </dust-demo>
 
+## Separator Helper
+
+Iterating over lists sometimes requires slightly different treatment of the first or last items in the list. The `{@sep}` helper and its companions `{@first}` and `{@last}` provide this functionality.
+
+* `{@sep}`: Output for every loop iteration except the last
+* `{@first}`: Output only on the first loop iteration
+* `{@last}`: Only output on the last loop iteration
+
+<dust-demo templateName="grammatical-correctness">
+<dust-demo-template showTemplateName="true">
+{#guests}
+  {@first}Hello {/first}
+  {@last}and {/last}
+  {.}{@sep}, {/sep}
+  {@last}!{/last}
+{/guests}
+</dust-demo-template>
+<dust-demo-json>
+{
+  "guests": ["Alice", "Bob", "Charlie"]
+}
+</dust-demo-json>
+</dust-demo>
+
 ## Select Helper
 
 The `@select` helper can be nested around the other logic helpers to form a `switch`-like structure, allowing you to take one action based on multiple comparisons with a single key value. You move the `key` attribute into the `@select` helper and set only a `value` attribute for each logic helper inside the `@select`.
 
-You can specify what to do if none of the conditions are true using a `@none` helper in the `@select`. Its opposite, the `@any` helper, is run if any of the conditions are true, in addition to those true conditions. Dust evaluates `@any` and `@none` asynchronously, so there can be any number of them in any order.
+You can specify what to do if none of the conditions are true using a `@none` helper in the `@select`. Its opposite, the `@any` helper, is run if any of the conditions are true, in addition to those true conditions.
 
-When a true logic helper condition is found in the `@select`, Dust executes the condition's body and skips the rest of its sibling conditions, excepting any `@any` helpers.
+When a true logic helper condition is found in the `@select`, Dust executes the condition's body and skips the rest of the truth tests. `{@any}` and `{@none}` tests are always evaluated, no matter where they occur.
 
 <dust-demo templatename="helpers_select">
 <dust-demo-template showtemplatename="true">
@@ -112,7 +135,6 @@ When a true logic helper condition is found in the `@select`, Dust executes the 
 </dust-demo-json>
 </dust-demo>
 
-<!-- TODO update version number -->
 *Note that the `@default` helper has been* ***deprecated*** *as of Dust Helpers version 1.6.0.* This helper was similar to `@none`, except there could only be one instance per `@select`, and it needed to be placed after all logic helpers to ensure that all previous comparisons were false.
 
 ## Math Helper
@@ -191,3 +213,16 @@ Remove this helper when you are done debugging.
 }
 </dust-demo-json>
 </dust-demo>
+
+# Adding New Helpers
+
+Helpers are written in the same way as [context helpers](/guides/context-helpers). Once you've written your helper, attach it to the `dust.helpers` object.
+
+```js
+function yell(chunk, context, bodies, params) {
+  return chunk.tap(function(data) {
+    return data.toUpperCase();
+  }).render(bodies.block, context).untap();
+}
+dust.helpers.yell = yell;
+```
