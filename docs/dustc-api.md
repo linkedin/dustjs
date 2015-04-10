@@ -50,6 +50,10 @@ Toggles `dust.config.whitespace`. If true, the template will be compiled such th
 
 Compiles templates as AMD modules.
 
+### `--cjs`
+
+Compiles templates as CommonJS modules. (Dust >= 2.7.0)
+
 ### `--watch`
 
 Reruns the compilation if any of the watched files change. (If you add a new file, you must restart the watch.)

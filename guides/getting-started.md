@@ -141,33 +141,4 @@ You can use key value references when the array contains objects. Below is an ex
 <dust-tutorial-answer>&lt;ul&gt;&lt;li&gt;HTML by Tim Berners Lee&lt;/li&gt;&lt;li&gt;CSS by Håkon Wium Lie and Bert Bos&lt;/li&gt;&lt;li&gt;JavaScript by Brendan Eich&lt;/li&gt;&lt;li&gt;Dust by akdubya&lt;/li&gt;&lt;/ul&gt;</dust-tutorial-answer>
 </dust-tutorial>
 
-## Compiling Dust Templates
-Dust templates are compiled to JavaScript. A template is compiled using `dust.compile`. Templates can also be compiled from the command line using `dustc` (which calls `dust.compile` internally).
-
-Compiling with `dust.compile`:
-
-```javascript
-var compiledTemplateString = dust.compile('My {template}', 'myTemplate');
-```
-
-Compiling with [`dustc`](/docs/dustc-api/):
-
-```bash
-local-user $ dustc my-template.dust --output=myTemplate.js
-```
-
-## Serving Dust Templates
-Save your compiled Dust template as a JavaScript file, and serve it how you normally serve JavaScript files:
-
-```html
-<script src="/static/tl/myTemplate.js"></script>
-```
-
-## Rendering Dust Templates
-
-```javascript
-dust.render('myTemplate', {template: 'AWESOME'}, function(err, output) {
-  var el = document.getElementById('content-container');
-  el.innerHTML = output;
-});
-```
+Now that you know the basics of writing Dust templates, continue on to learn how to [compile and render your templates](/guides/rendering)!

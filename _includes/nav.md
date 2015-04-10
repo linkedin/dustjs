@@ -12,6 +12,7 @@
       Guides
       <ul>
       <li><a href="/guides/getting-started">Getting Started</a></li>
+      <li><a href="/guides/rendering">Compiling and Rendering</a></li>
       <li><a href="/guides/contexts">Contexts</a></li>
       <li><a href="/guides/context-helpers">Context Helpers</a></li>
       <li><a href="/guides/dust-helpers">Dust Helpers</a></li>

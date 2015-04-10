@@ -33,7 +33,7 @@ Dust is compatible with IE7+ and all modern browsers.
 
 ## Download
 
-The latest version of Dust is available on <a target="_blank" href="https://github.com/linkedin/dustjs/tree/master/dist">GitHub</a>.
+You can manually download current and past versions of Dust on the [GitHub releases page](https://github.com/linkedin/dustjs/releases).
 
 # Loading Dust
 
@@ -77,21 +77,3 @@ require(["lib/dust-full"], function(dust) {
   });
 });
 ```
-
-### Templates
-
-You can also compile your templates as AMD modules. Before compiling a template, set
-
-    dust.config.amd = true
-
-You can preload your templates using Require by including a template file as a dependency.
-
-```js
-define.amd.dust = true;
-require(["lib/dust-full", "tmpl/compiled"], function(dust) {
-    // tmpl/compiled contains several compiled templates
-    dust.render("hello", ...); // render one of the templates in tmpl/compiled
-});
-```
-
-If a template is not preloaded, Dust will attempt to `require` it by passing the template's name to `require`. To make use of this feature, templates should be compiled with names that an AMD loader would expect. For example, a template located at `tmpl/home/main.dust` must be named `tmpl/home/main` for Dust to load it correctly. If you use the `dustc` compiler this is handled for you.
