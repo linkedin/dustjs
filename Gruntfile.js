@@ -240,6 +240,17 @@ module.exports = function(grunt) {
                     '  * npm publish'].join('\n')
         }
       }
+    },
+    githubChanges: {
+      dist: {
+        options: {
+          owner: "linkedin",
+          repository: "dustjs",
+          onlyPulls: true,
+          useCommitBody: true,
+          auth: true
+        }
+      }
     }
   });
 
@@ -266,6 +277,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-bump');
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-jasmine-nodejs');
+  grunt.loadNpmTasks('grunt-github-changes');
 
   //--------------------------------------------------
   //------------Grunt task aliases -------------------
@@ -291,7 +303,7 @@ module.exports = function(grunt) {
 
   //release tasks
   grunt.registerTask('copyForRelease', ['clean:dist', 'copy:core', 'copy:coreMin', 'copy:full', 'copy:fullMin', 'copy:license', 'log:copyForRelease']);
-  grunt.registerTask('buildRelease',   ['test', 'copyForRelease']);
+  grunt.registerTask('buildRelease',   ['test', 'githubChanges', 'copyForRelease']);
   grunt.registerTask('releasePatch',   ['bump-only:patch', 'buildRelease', 'bump-commit', 'log:release']);
   grunt.registerTask('releaseMinor',   ['bump-only:minor', 'buildRelease', 'bump-commit', 'log:release']);
   // major release should probably be done with care
