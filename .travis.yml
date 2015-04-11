@@ -27,3 +27,4 @@ before_install:
   - npm install -g grunt-cli
 script:
   - "[ $TEST = 'all' ] && grunt test || grunt testNode"
+sudo: false
