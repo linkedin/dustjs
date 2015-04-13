@@ -1,6 +1,5 @@
-/*global dust*/
 (function(exports){
-
+/*global dust*/
 exports.coreSetup = function(suite, auto) {
   auto.forEach(function(test) {
     suite.test(test.name, function(){
@@ -10,9 +9,12 @@ exports.coreSetup = function(suite, auto) {
 
   suite.test("base context", function() {
     var base = dust.makeBase({
-      sayHello: function() { return "Hello!" }
+      sayHello: function() { return "Hello!"; }
     });
+    this.equals(base.push().push().push().push().stack, undefined);
     testRender(this, "{sayHello} {foo}", base.push({foo: "bar"}), "Hello! bar");
+    testRender(this, "{sayHello} {foo}", dust.makeBase().push({foo: "bar"}), " bar");
+    testRender(this, "{sayHello} {foo}", undefined, " ");
   });
 
   suite.test("valid keys", function() {
@@ -157,7 +159,7 @@ exports.coreSetup = function(suite, auto) {
       end: function () {
         unit.pass();
       }
-    })
+    });
   });
 
   suite.test("renderSource (multiple listeners)", function() {
@@ -183,7 +185,7 @@ exports.coreSetup = function(suite, auto) {
     });
   });
 
-}
+};
 
 function extend(target, donor) {
   donor = donor || {};
