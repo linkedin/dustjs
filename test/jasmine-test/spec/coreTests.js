@@ -267,26 +267,37 @@ var coreTests = [
       },
 	  {
 		name: "context.resolve",
-		source: "{#foo bar=\"{baz} is baz \" literal=\"literal \" func=func chunkFunc=\"{chunkFunc}\" ref=ref}Fail{/foo}",
+		source: ['{#foo',
+             'bar="{baz} is baz "',
+             'literal="literal "',
+             'func=func',
+             'chunkFunc="{chunkFunc}"',
+             'indirectChunkFunc=indirectChunkFunc',
+             'ref=ref',
+             '}Fail{/foo}'].join(' '),
 		context: {
 		  foo: function(chunk, context, bodies, params) {
-			chunk.write(context.resolve(params.bar));
-			chunk.write(context.resolve(params.literal));
-			chunk.write(context.resolve(params.func));
-			chunk.write(context.resolve(params.chunkFunc));
-			chunk.write(context.resolve(params.ref));
-			return chunk;
+  			chunk.write(context.resolve(params.bar));
+  			chunk.write(context.resolve(params.literal));
+  			chunk.write(context.resolve(params.func));
+        chunk.write(context.resolve(params.chunkFunc));
+        chunk.write(context.resolve(params.indirectChunkFunc));
+  			chunk.write(context.resolve(params.ref));
+  			return chunk;
 		  },
 		  baz: "baz",
 		  ref: "ref",
 		  func: function() {
-			return "func ";
+			  return "func ";
 		  },
 		  chunkFunc: function(chunk) {
-			return chunk.write('chunk ');
-		  }
+			  return chunk.write('chunk ');
+		  },
+      indirectChunkFunc: function(chunk) {
+        return chunk.write('indirect ');
+      }
 		},
-		expected: "baz is baz literal func chunk ref",
+		expected: "baz is baz literal func chunk indirect ref",
 		message: "context.resolve() taps parameters from the context"
 	  },
 	  {
