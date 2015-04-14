@@ -132,30 +132,35 @@ function testRender(unit, source, context, expected, options, baseContext, error
         context = dust.makeBase(baseContext).push(context);
      }
      dust.render(name, context, function(err, output) {
-      var log = dust.logQueue;
-       if(error) {
-        unit.contains(error, err.message || err);
-       } else {
-        unit.ifError(err);
-       }
-       if(logMessage) {
-        for(var i=0; i<log.length; i++) {
-          if(log[i].message === logMessage) {
-            messageInLog = true;
-            break;
+      try {
+        var log = dust.logQueue;
+         if(error) {
+          unit.contains(error, err.message || err);
+         } else {
+          unit.ifError(err);
+         }
+         if(logMessage) {
+          for(var i=0; i<log.length; i++) {
+            if(log[i].message === logMessage) {
+              messageInLog = true;
+              break;
+            }
           }
-        }
-        dust.logQueue = [];
-        unit.equals(messageInLog, true);
-       } else {
-        unit.equals(output, expected);
+          dust.logQueue = [];
+          unit.equals(messageInLog, true);
+         }
+         if(typeof expected !== 'undefined'){
+          unit.equals(output, expected);
+         }
+       } catch(err) {
+         unit.fail(err);
        }
      });
     } catch(err) {
       if(error) {
         unit.contains(error, err.message || err);
       } else {
-        throw err;
+        unit.fail(err);
       }
     }
     unit.pass();

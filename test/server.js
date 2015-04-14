@@ -31,13 +31,8 @@ for (var i=0; i<coreTests.length; i++) {
       process.stdout.write('.');
     },
     fail: function(err) {
-      process.stdout.write("F");
-    },
-    done: function(passed, failed, elapsed) {
-      this.errors.forEach(function(err) {
-        console.log(dumpError(err));
-        process.exit(1);
-      });
+      console.log(dumpError(err));
+      process.exit(1);
     }
   });
 
