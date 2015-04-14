@@ -75,6 +75,11 @@ function handle() {
                 templateName = path.relative(cli.options.pwd, templateName);
             }
 
+            // Windows creates template names with \ so normalize to / to allow AMD loaders
+            // to correctly load templates, and so you don't have to write templates differently
+            // depending on what OS you use
+            templateName = templateName.replace(/\\/g, '/');
+
             compiledData = compile(data, templateName);
             output(compiledData, outputFile);
         });
