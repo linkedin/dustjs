@@ -2,7 +2,6 @@ language: node_js
 node_js:
   - "0.12"
   - "0.10"
-  - "0.8"
   - "iojs"
 env:
   - TEST="all"
@@ -15,15 +14,11 @@ matrix:
       env: TEST="all"
     - node_js: "0.10"
       env: TEST="node"
-    - node_js: "0.8"
-      env: TEST="all"
 notifications:
   email:
     - jchan@linkedin.com
     - skinast@linkedin.com
 before_install:
-  - npm install -g npm@1.4
-  - npm --version
   - npm install -g grunt-cli
 script:
   - "[ $TEST = 'all' ] && grunt test || grunt testNode"
