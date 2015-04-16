@@ -1,12 +1,5 @@
 {
-  "name": "dustjs",
-  "version": "2.4.0",
-  "homepage": "https://github.com/smfoote/dustjs",
-  "authors": [
-    "Steven Foote <smfoote@gmail.com>"
-  ],
-  "license": "MIT",
-  "private": true,
+  "name": "dustjs.com",
   "ignore": [
     "**/.*",
     "node_modules",

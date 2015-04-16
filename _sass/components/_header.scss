@@ -1,6 +1,6 @@
 header {
   h1 {
-    @include Dosis-light();
+    @include font();
     font-size: 48px;
     line-height: 50px;
     @include respond-to(screens) {
@@ -17,7 +17,8 @@ header {
   }
 
   h2.tagline {
-    @include Dosis-light();
+    @include font();
+    margin: 0;
     font-size: $tagline-font-size;
     @include respond-to(screens) {
       position: absolute;

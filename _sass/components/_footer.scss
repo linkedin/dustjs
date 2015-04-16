@@ -3,7 +3,7 @@ hr {
 }
 
 footer {
-  @include Dosis-light();
+  @include font();
   padding: $content-padding;
   text-align: center;
 }
@@ -32,7 +32,9 @@ footer {
   position:absolute;
   top:60px;
   right:-60px;
-  @include transform(rotate(45deg));
+  -moz-transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
   box-shadow:4px 4px 10px rgba(0,0,0,0.8);
   border-top: 1px solid #FFF;
   border-bottom: 1px solid #FFF;

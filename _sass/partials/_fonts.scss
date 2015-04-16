@@ -1,0 +1,24 @@
+///////////////////////
+//Font-face Includes //
+///////////////////////
+@font-face {
+  font-family: 'Dosis Light';
+  src: url('/fonts/dosis-light-webfont.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/dosis-light-webfont.woff') format('woff'),
+       url('/fonts/dosis-light-webfont.ttf')  format('truetype'),
+       url('/fonts/dosis-light-webfont#Dosis Light') format('svg');
+}
+
+@mixin font() {
+  font-family: "Dosis Light";
+}
+
+@mixin sub-section-headline () {
+  border-bottom-width: 3px;
+  border-style: solid;
+  border-color: $brand-light-graphite;
+}
+
+$tagline-font-size: 32px;
+$headline-font-size: 28px;
+$subheadline-font-size: 20px;

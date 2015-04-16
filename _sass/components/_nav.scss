@@ -1,5 +1,5 @@
 nav {
-  @include even-shadow($dark-shadow, $shadow-large-size);
+  @include even-shadow($shadow-dark, $shadow-large-size);
   @include respond-to(screens) {
     position: absolute;
     height: 100%;
@@ -37,42 +37,17 @@ nav {
       cursor: default;
 
       a {
-        @include styleguide(medium muted headline in a module, link in a module);
         color: #FFF;
+        text-decoration: none;
+        &:hover {
+          text-decoration: underline;
+        }
       }
 
       li {
         padding-left: $nav-sub-indent;
       }
 
-      label {
-        color: tint($brand-light-graphite, 30%);
-        cursor: pointer;
-
-        &:hover {
-          text-decoration: underline;
-
-        }
-      }
-
-      &.sub {
-
-        input {
-          @include hide-element();
-
-          &:checked ~ ul {
-            display: block;
-
-            li {
-              padding-left: $nav-sub-indent;
-            }
-          }
-        }
-
-        ul {
-          display: none;
-        }
-      }
     }
   }
 }
