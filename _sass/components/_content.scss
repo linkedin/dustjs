@@ -90,6 +90,14 @@
     text-decoration: none;
   }
 
+  > pre {
+    @include interior-shadow($shadow-light, $shadow-small-size);
+    overflow-x: auto;
+    background: $brand-neutral;
+    color: $brand-blue;
+    padding: $pre-padding;
+  }
+
   [id^=parameters] + ul {
     list-style: none;
     margin-left: 0;
