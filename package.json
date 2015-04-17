@@ -1,13 +1,12 @@
 {
   "name": "dustjs-linkedin",
-  "title": "Dust - Asynchronous Templating",
   "version": "2.6.2",
   "author": {
     "name": "Aleksander Williams",
     "url": "http://akdubya.github.com/dustjs"
   },
-  "homepage": "http://linkedin.github.io/dustjs/",
-  "description": "Asynchronous templates for the browser and node.js ( LinkedIn fork )",
+  "homepage": "http://dustjs.com/",
+  "description": "Asynchronous templates for the browser and server (LinkedIn fork)",
   "contributors": [
     "Veena Basavaraj <vybs@users.noreply.github.com>",
     "Tom Carchrae",
@@ -65,6 +64,6 @@
   },
   "license": "MIT",
   "engine": {
-    "node": ">=0.8"
+    "node": ">=0.10"
   }
 }
