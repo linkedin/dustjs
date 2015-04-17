@@ -32,7 +32,7 @@ describe ('Pipe', function() {
 });
 
 function prepare(test) {
-  dust.config = test.config || { whitespace: false };
+  dust.config = extend({ whitespace: false, amd: false, cache: true }, test.config);
   dust.loadSource(dust.compile(test.source, test.name));
   context = test.context;
   if (test.base) {
@@ -63,6 +63,14 @@ dust.log = function(msg, type) {
   dust.logQueue.push({ message: msg, type: type });
   dustLog.call(this, msg, type);
 };
+
+function extend(target, donor) {
+  donor = donor || {};
+  for(var prop in donor) {
+    target[prop] = donor[prop];
+  }
+  return target;
+}
 
 function render(test) {
   function checkRender(done) {

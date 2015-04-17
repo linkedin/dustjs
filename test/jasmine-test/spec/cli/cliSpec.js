@@ -1,3 +1,4 @@
+/*global describe,expect,it,afterEach */
 var path = require('path'),
     fs = require('fs'),
     exec = require('child_process').exec;
@@ -13,18 +14,10 @@ require('./lib/matchers.js');
 
 describe('dustc', function() {
 
-it('outputs help text when run with no arguments', function(done) {
-  dustc('', function(err, stdout, stderr) {
-    expect(stderr).toMatch("Usage");
-    done();
-  });
-});
-
 describe('template piped from stdin', function() {
-  it('does not get compiled if no name is set', function(done) {
+  it('compiles anonymously if --name is not set', function(done) {
     dustc('< a.dust', function(err, stdout, stderr) {
-      expect(stdout).toBeFalsy();
-      expect(stderr).toMatch("Usage");
+      expect(stdout).toMatch(/function\(dust\)/g);
       done();
     });
   });
@@ -134,6 +127,26 @@ describe('--amd', function() {
       expect(stdout).toHaveAMDTemplate('a');
       expect(stdout).toHaveAMDTemplate('b');
       expect(stdout).toHaveAMDTemplate('two/2');
+      done();
+    });
+  });
+});
+
+describe('--cjs', function() {
+  it('compiles a single template as a CommonJS module', function(done) {
+    dustc('a.dust --cjs', function(err, stdout, stderr) {
+      expect(stdout).toHaveCJSTemplate('a');
+      done();
+    });
+  });
+  it('compiles several templates and splits', function(done) {
+    dustc('a.dust b.dust two/2.dust --cjs', function(err, stdout, stderr) {
+      expect(fixture('a.js')).toBeFileWithTemplate('a');
+      expect(fixture('b.js')).toBeFileWithTemplate('b');
+      expect(fixture('two/2.js')).toBeFileWithTemplate('two/2');
+      fs.unlinkSync(fixture('a.js'));
+      fs.unlinkSync(fixture('b.js'));
+      fs.unlinkSync(fixture('two/2.js'));
       done();
     });
   });

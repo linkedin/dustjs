@@ -32,6 +32,21 @@ matchers.toHaveAMDTemplate = function(util) {
   };
 };
 
+matchers.toHaveCJSTemplate = function(util) {
+  var dustCJSTemplateRegex = /module\.exports\=function\(dust\)\{/g;
+
+  return {
+    compare: function(actual, expected) {
+      var matches = [];
+      actual.replace(dustCJSTemplateRegex, function(whole, match) {
+        matches.push(match);
+      });
+      return { pass: matches.length &&
+                     matchers.toHaveTemplate().compare.call(this, actual, expected) };
+    }
+  };
+};
+
 matchers.toBeFileWithTemplate = function(util) {
   return {
     compare: function(actual, expected) {

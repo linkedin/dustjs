@@ -181,6 +181,17 @@ module.exports = function(grunt) {
       }
     },
     jasmine_nodejs: {
+      cjs: {
+        specs: ['test/jasmine-test/spec/cjsSpec.js'],
+        options: {
+          reporters: {
+            console: {
+              colors: false,
+              verbose: false
+            }
+          }
+        }
+      },
       dustc: {
         specs: ['test/jasmine-test/spec/cli/*'],
         options: {
@@ -286,11 +297,11 @@ module.exports = function(grunt) {
   grunt.registerTask('build',          ['clean:build', 'shell:buildParser', 'buildLib', 'uglify']);
 
   //test tasks
-  grunt.registerTask('testNode',       ['shell:oldTests']);
+  grunt.registerTask('testNode',       ['jasmine_nodejs:cjs', 'shell:oldTests']);
   grunt.registerTask('testRhino',      ['build', 'shell:testRhino']);
   grunt.registerTask('testPhantom',    ['build', 'jasmine:testProd']);
   grunt.registerTask('testCli',        ['build', 'jasmine_nodejs:dustc']);
-  grunt.registerTask('test',           ['build', 'jasmine:testProd', 'jasmine_nodejs:dustc', 'shell:oldTests', 'shell:testRhino', 'jasmine:coverage']);
+  grunt.registerTask('test',           ['build', 'jasmine:testProd', 'jasmine_nodejs:dustc', 'jasmine_nodejs:cjs', 'shell:oldTests', 'shell:testRhino', 'jasmine:coverage']);
 
   //task for debugging in browser
   grunt.registerTask('dev',            ['build', 'jasmine:testDev:build', 'connect:testServer','log:testClient', 'watch:lib']);

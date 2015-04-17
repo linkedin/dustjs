@@ -1,3 +1,4 @@
+/*global dust*/
 (function(exports){
 
 exports.coreSetup = function(suite, auto) {
@@ -34,6 +35,54 @@ exports.coreSetup = function(suite, auto) {
       unit.pass();
     });
   });
+  suite.test("disable cache", function() {
+    var unit = this,
+        template = "Version 1",
+        cache;
+    dust.onLoad = function(name, cb) {
+      cb(null, template);
+    };
+    // Store what's in the cache before we blow it all away
+    cache = dust.cache;
+    dust.config.cache = false;
+    dust.render("test", {}, function(err, out) {
+      try {
+        unit.equals(out, "Version 1");
+        template = "Version 2";
+        dust.render("test", {}, function(err, out) {
+          try {
+            unit.equals(out, "Version 2");
+          } catch(err) {
+            return unit.fail(err);
+          } finally {
+            // restore
+            dust.cache = cache;
+            dust.onLoad = null;
+            dust.config.cache = true;
+          }
+          unit.pass();
+        });
+      } catch(err) {
+        return unit.fail(err);
+      }
+    });
+  });
+
+  suite.test("render a template function", function() {
+    var unit = this;
+    var source = "Hello World",
+        compiledSource = dust.compile(source),
+        template = dust.loadSource(compiledSource);
+    dust.render(template, {}, function(err, out) {
+      try {
+        unit.ifError(err);
+        unit.equals(out, source);
+      } catch(err) {
+        unit.fail(err);
+      }
+      unit.pass();
+    });
+  });
 
   suite.test("renderSource (callback)", function() {
     var unit = this;
@@ -51,10 +100,25 @@ exports.coreSetup = function(suite, auto) {
 
   suite.test("compileFn", function() {
     var unit = this,
-        tmpl = dust.compileFn('Hello World');
-    tmpl({}, function(err, out) {
+        tmpl = dust.compileFn('Hello {world}');
+    tmpl({world: "World"}, function(err, out) {
       try {
         unit.ifError(err);
+        unit.equals(out, "Hello World");
+      } catch(err) {
+        unit.fail(err);
+        return;
+      }
+      unit.pass();
+    });
+  });
+
+  suite.test("compileFn stream", function() {
+    var unit = this,
+        tmpl = dust.compileFn('Hello {world}');
+    tmpl({world: "World"})
+    .on('data', function(out) {
+      try {
         unit.equals(out, "Hello World");
       } catch(err) {
         unit.fail(err);
@@ -96,7 +160,7 @@ exports.coreSetup = function(suite, auto) {
     })
   });
 
-  suite.test("renderSource (multipe listeners)", function() {
+  suite.test("renderSource (multiple listeners)", function() {
     var unit = this;
     dust.renderSource('Hello World', {}).on('data', function(data) {
       try {
@@ -121,12 +185,20 @@ exports.coreSetup = function(suite, auto) {
 
 }
 
+function extend(target, donor) {
+  donor = donor || {};
+  for(var prop in donor) {
+    target[prop] = donor[prop];
+  }
+  return target;
+}
+
 function testRender(unit, source, context, expected, options, baseContext, error, logMessage, config) {
   var name = unit.id,
       messageInLog = '';
    try {
      dust.isDebug = !!(error || logMessage);
-     dust.config = config || { whitespace: false };
+     dust.config = extend({ whitespace: false, amd: false, cache: true }, config);
      dust.loadSource(dust.compile(source, name));
      if (baseContext){
         context = dust.makeBase(baseContext).push(context);
@@ -155,15 +227,16 @@ function testRender(unit, source, context, expected, options, baseContext, error
        } catch(err) {
          unit.fail(err);
        }
+       unit.pass();
      });
     } catch(err) {
       if(error) {
         unit.contains(error, err.message || err);
+        unit.pass();
       } else {
         unit.fail(err);
       }
     }
-    unit.pass();
 };
 
 })(typeof exports !== "undefined" ? exports : window);
