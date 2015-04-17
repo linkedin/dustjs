@@ -1,0 +1,14 @@
+{
+  "name": "dustjs-example-commonjs",
+  "version": "1.0.0",
+  "description": "Simple example of using CommonJS modules with Dust in Node",
+  "main": "app.js",
+  "dependencies": {
+    "dustjs-linkedin": "^2.7.0"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "compile": "dustc --cjs **/*.dust --pwd=views",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
