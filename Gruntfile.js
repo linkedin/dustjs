@@ -257,6 +257,7 @@ module.exports = function(grunt) {
         options: {
           owner: "linkedin",
           repository: "dustjs",
+          tagName: "v<%= pkg.version %>",
           onlyPulls: true,
           useCommitBody: true,
           auth: true

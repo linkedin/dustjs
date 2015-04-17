@@ -1,5 +1,5 @@
-/*! Dust - Asynchronous Templating - v2.6.2
-* http://linkedin.github.io/dustjs/
+/*! dustjs-linkedin - v2.7.0
+* http://dustjs.com/
 * Copyright (c) 2015 Aleksander Williams; Released under the MIT License */
 (function (root, factory) {
   /*global define*/
@@ -12,14 +12,16 @@
   }
 }(this, function() {
   var dust = {
-        "version": "2.6.2"
+        "version": "2.7.0"
       },
       NONE = 'NONE', ERROR = 'ERROR', WARN = 'WARN', INFO = 'INFO', DEBUG = 'DEBUG',
       EMPTY_FUNC = function() {};
 
   dust.config = {
     whitespace: false,
-    amd: false
+    amd: false,
+    cjs: false,
+    cache: true
   };
 
   // Directive aliases to minify code
@@ -87,24 +89,25 @@
     if (!name) {
       return;
     }
+    tmpl.templateName = name;
     dust.cache[name] = tmpl;
   };
 
-  dust.render = function(name, context, callback) {
+  dust.render = function(nameOrTemplate, context, callback) {
     var chunk = new Stub(callback).head;
     try {
-      dust.load(name, chunk, Context.wrap(context, name)).end();
+      load(nameOrTemplate, chunk, context).end();
     } catch (err) {
       chunk.setError(err);
     }
   };
 
-  dust.stream = function(name, context) {
+  dust.stream = function(nameOrTemplate, context) {
     var stream = new Stream(),
         chunk = stream.head;
     dust.nextTick(function() {
       try {
-        dust.load(name, stream.head, Context.wrap(context, name)).end();
+        load(nameOrTemplate, chunk, context).end();
       } catch (err) {
         chunk.setError(err);
       }
@@ -112,56 +115,48 @@
     return stream;
   };
 
-  dust.renderSource = function(source, context, callback) {
-    return dust.compileFn(source)(context, callback);
-  };
+  function load(nameOrTemplate, chunk, context) {
+    if(!nameOrTemplate) {
+      return chunk.setError(new Error('No template or template name provided to render'));
+    }
 
-  /**
-   * Compile a template to an invokable function.
-   * If `name` is provided, also registers the template under `name`.
-   * @param source {String} template source
-   * @param [name] {String} template name
-   * @return {Function} has the signature `fn(context, cb)`
-   */
-  dust.compileFn = function(source, name) {
-    name = name || null;
-    var tmpl = dust.loadSource(dust.compile(source, name));
-    return function(context, callback) {
-      var master = callback ? new Stub(callback) : new Stream();
-      dust.nextTick(function() {
-        if(typeof tmpl === 'function') {
-          tmpl(master.head, Context.wrap(context, name)).end();
-        } else {
-          dust.log(new Error('Template `' + name + '` could not be loaded'), ERROR);
-        }
-      });
-      return master;
-    };
-  };
+    if(!dust.config.cache) {
+      dust.cache = {};
+    }
 
-  dust.load = function(name, chunk, context) {
-    var tmpl = dust.cache[name];
+    var tmpl;
+    if(typeof nameOrTemplate === 'function' && nameOrTemplate.template) {
+      // Sugar away CommonJS module templates
+      tmpl = nameOrTemplate.template;
+    } else if(dust.isTemplateFn(nameOrTemplate)) {
+      // Template functions passed directly
+      tmpl = nameOrTemplate;
+    } else {
+      // Load a template with this name from cache
+      tmpl = dust.cache[nameOrTemplate];
+    }
+
     if (tmpl) {
-      return tmpl(chunk, context);
+      return tmpl(chunk, Context.wrap(context, tmpl.templateName));
     } else {
       if (dust.onLoad) {
         return chunk.map(function(chunk) {
-          dust.onLoad(name, function(err, src) {
+          dust.onLoad(nameOrTemplate, function(err, src) {
             if (err) {
               return chunk.setError(err);
             }
-            if (!dust.cache[name]) {
-              dust.loadSource(dust.compile(src, name));
+            if (!dust.cache[nameOrTemplate]) {
+              dust.loadSource(dust.compile(src, nameOrTemplate));
             }
-            dust.cache[name](chunk, context).end();
+            dust.cache[nameOrTemplate](chunk, Context.wrap(context, nameOrTemplate)).end();
           });
         });
       }
-      return chunk.setError(new Error('Template Not Found: ' + name));
+      return chunk.setError(new Error('Template Not Found: ' + nameOrTemplate));
     }
-  };
+  }
 
-  dust.loadSource = function(source, path) {
+  dust.loadSource = function(source) {
     /*jshint evil:true*/
     return eval(source);
   };
@@ -176,9 +171,9 @@
 
   dust.nextTick = (function() {
     return function(callback) {
-      setTimeout(callback,0);
+      setTimeout(callback, 0);
     };
-  } )();
+  })();
 
   /**
    * Dust has its own rules for what is "empty"-- which is not the same as falsy.
@@ -213,6 +208,11 @@
     return true;
   };
 
+  dust.isTemplateFn = function(elem) {
+    return typeof elem === 'function' &&
+           elem.__dustBody;
+  };
+
   /**
    * Decide somewhat-naively if something is a Thenable.
    * @param elem {*} object to inspect
@@ -222,6 +222,16 @@
     return elem &&
            typeof elem === 'object' &&
            typeof elem.then === 'function';
+  };
+
+  /**
+   * Decide very naively if something is a Stream.
+   * @param elem {*} object to inspect
+   * @return {Boolean} is `elem` a Stream?
+   */
+  dust.isStreamable = function(elem) {
+    return elem &&
+           typeof elem.on === 'function';
   };
 
   // apply the filter chain and return the output string
@@ -264,6 +274,9 @@
   };
 
   function Context(stack, global, blocks, templateName) {
+    if(stack !== undefined && !(stack instanceof Stack)) {
+      stack = new Stack(stack);
+    }
     this.stack = stack;
     this.global = global;
     this.blocks = blocks;
@@ -271,7 +284,7 @@
   }
 
   dust.makeBase = function(global) {
-    return new Context(new Stack(), global);
+    return new Context(undefined, global);
   };
 
   /**
@@ -290,7 +303,7 @@
     if (context instanceof Context) {
       return context;
     }
-    return new Context(new Stack(context), {}, null, name);
+    return new Context(context, {}, null, name);
   };
 
   /**
@@ -351,10 +364,11 @@
           ctx = ctx.tail;
         }
 
+        // Try looking in the global context if we haven't found anything yet
         if (value !== undefined) {
           ctx = value;
         } else {
-          ctx = this.global ? this.global[first] : undefined;
+          ctx = this.global && this.global[first];
         }
       } else if (ctx) {
         // if scope is limited by a leading dot, don't search up the tree
@@ -401,7 +415,11 @@
   };
 
   Context.prototype.push = function(head, idx, len) {
-    return new Context(new Stack(head, this.stack, idx, len), this.global, this.blocks, this.getTemplateName());
+    if(head === undefined) {
+      dust.log("Not pushing an undefined variable onto the context", INFO);
+      return this;
+    }
+    return this.rebase(new Stack(head, this.stack, idx, len));
   };
 
   Context.prototype.pop = function() {
@@ -411,7 +429,7 @@
   };
 
   Context.prototype.rebase = function(head) {
-    return new Context(new Stack(head), this.global, this.blocks, this.getTemplateName());
+    return new Context(head, this.global, this.blocks, this.getTemplateName());
   };
 
   Context.prototype.clone = function() {
@@ -424,7 +442,7 @@
     return this.stack && this.stack.head;
   };
 
-  Context.prototype.getBlock = function(key, chk, ctx) {
+  Context.prototype.getBlock = function(key) {
     var blocks, len, fn;
 
     if (typeof key === 'function') {
@@ -472,10 +490,10 @@
       return body;
     }
     chunk = new Chunk().render(body, this);
-    if(!body.__dustBody) {
-      return chunk;
+    if(chunk instanceof Chunk) {
+      return chunk.data.join(''); // ie7 perf
     }
-    return chunk.data.join(''); // ie7 perf
+    return chunk;
   };
 
   Context.prototype.getTemplateName = function() {
@@ -516,6 +534,9 @@
     this.callback(null, this.out);
   };
 
+  /**
+   * Creates an interface sort of like a Streams2 ReadableStream.
+   */
   function Stream() {
     this.head = new Chunk(this);
   }
@@ -528,6 +549,7 @@
         this.emit('data', chunk.data.join('')); //ie7 perf
       } else if (chunk.error) {
         this.emit('error', chunk.error);
+        this.emit('end');
         dust.log('Streaming failed with error `' + chunk.error + '`', ERROR);
         this.flush = EMPTY_FUNC;
         return;
@@ -540,6 +562,11 @@
     this.emit('end');
   };
 
+  /**
+   * Executes listeners for `type` by passing data. Note that this is different from a
+   * Node stream, which can pass an arbitrary number of arguments
+   * @return `true` if event had listeners, `false` otherwise
+   */
   Stream.prototype.emit = function(type, data) {
     var events = this.events || {},
         handlers = events[type] || [],
@@ -547,13 +574,14 @@
 
     if (!handlers.length) {
       dust.log('Stream broadcasting, but no listeners for `' + type + '`', DEBUG);
-      return;
+      return false;
     }
 
     handlers = handlers.slice(0);
     for (i = 0, l = handlers.length; i < l; i++) {
       handlers[i](data);
     }
+    return true;
   };
 
   Stream.prototype.on = function(type, callback) {
@@ -568,9 +596,36 @@
     return this;
   };
 
+  /**
+   * Pipes to a WritableStream. Note that backpressure isn't implemented,
+   * so we just write as fast as we can.
+   * @param stream {WritableStream}
+   * @return self
+   */
   Stream.prototype.pipe = function(stream) {
+    if(typeof stream.write !== 'function' ||
+       typeof stream.end !== 'function') {
+      dust.log('Incompatible stream passed to `pipe`', WARN);
+      return this;
+    }
+
+    var destEnded = false;
+
+    if(typeof stream.emit === 'function') {
+      stream.emit('pipe', this);
+    }
+
+    if(typeof stream.on === 'function') {
+      stream.on('error', function() {
+        destEnded = true;
+      });
+    }
+
     return this
     .on('data', function(data) {
+      if(destEnded) {
+        return;
+      }
       try {
         stream.write(data, 'utf8');
       } catch (err) {
@@ -578,14 +633,15 @@
       }
     })
     .on('end', function() {
+      if(destEnded) {
+        return;
+      }
       try {
         stream.end();
+        destEnded = true;
       } catch (err) {
         dust.log(err, ERROR);
       }
-    })
-    .on('error', function(err) {
-      stream.error(err);
     });
   };
 
@@ -656,10 +712,14 @@
       elem = elem.apply(context.current(), [this, context, null, {auto: auto, filters: filters}]);
       if (elem instanceof Chunk) {
         return elem;
+      } else {
+        return this.reference(elem, context, auto, filters);
       }
     }
     if (dust.isThenable(elem)) {
-      return this.await(elem, context);
+      return this.await(elem, context, null, auto, filters);
+    } else if (dust.isStreamable(elem)) {
+      return this.stream(elem, context, null, auto, filters);
     } else if (!dust.isEmpty(elem)) {
       return this.write(dust.filter(elem, auto, filters));
     } else {
@@ -673,7 +733,7 @@
         chunk = this,
         i, len;
 
-    if (typeof elem === 'function' && !elem.__dustBody) {
+    if (typeof elem === 'function' && !dust.isTemplateFn(elem)) {
       try {
         elem = elem.apply(context.current(), [this, context, bodies, params]);
       } catch(err) {
@@ -702,17 +762,17 @@
         if (len > 0) {
           // any custom helper can blow up the stack and store a flattened context, guard defensively
           if(context.stack.head) {
-            context.stack.head['$len'] = len;
+            context.stack.head.$len = len;
           }
           for (i = 0; i < len; i++) {
             if(context.stack.head) {
-              context.stack.head['$idx'] = i;
+              context.stack.head.$idx = i;
             }
             chunk = body(chunk, context.push(elem[i], i, len));
           }
           if(context.stack.head) {
-            context.stack.head['$idx'] = undefined;
-            context.stack.head['$len'] = undefined;
+            context.stack.head.$idx = undefined;
+            context.stack.head.$len = undefined;
           }
           return chunk;
         }
@@ -722,6 +782,8 @@
       }
     } else if (dust.isThenable(elem)) {
       return this.await(elem, context, bodies);
+    } else if (dust.isStreamable(elem)) {
+      return this.stream(elem, context, bodies);
     } else if (elem === true) {
      // true is truthy but does not change context
       if (body) {
@@ -782,26 +844,26 @@
     return this;
   };
 
-  Chunk.prototype.partial = function(elem, context, params) {
+  Chunk.prototype.partial = function(elem, context, partialContext, params) {
     var head;
 
     if (!dust.isEmptyObject(params)) {
-      context = context.clone();
-      head = context.pop();
-      context = context.push(params)
-                       .push(head);
+      partialContext = partialContext.clone();
+      head = partialContext.pop();
+      partialContext = partialContext.push(params)
+                                     .push(head);
     }
 
-    if (elem.__dustBody) {
+    if (dust.isTemplateFn(elem)) {
       // The eventual result of evaluating `elem` is a partial name
       // Load the partial after getting its name and end the async chunk
       return this.capture(elem, context, function(name, chunk) {
-        context.templateName = name;
-        dust.load(name, chunk, context).end();
+        partialContext.templateName = name;
+        load(name, chunk, partialContext).end();
       });
     } else {
-      context.templateName = elem;
-      return dust.load(elem, this, context);
+      partialContext.templateName = elem;
+      return load(elem, this, partialContext);
     }
   };
 
@@ -833,7 +895,7 @@
    * @param bodies {Object} must contain a "body", may contain an "error"
    * @return {Chunk}
    */
-  Chunk.prototype.await = function(thenable, context, bodies) {
+  Chunk.prototype.await = function(thenable, context, bodies, auto, filters) {
     var body = bodies && bodies.block,
         errorBody = bodies && bodies.error;
     return this.map(function(chunk) {
@@ -841,7 +903,7 @@
         if(body) {
           chunk.render(body, context.push(data)).end();
         } else {
-          chunk.end(data);
+          chunk.reference(data, context, auto, filters).end();
         }
       }, function(err) {
         if(errorBody) {
@@ -851,6 +913,59 @@
           chunk.end();
         }
       });
+    });
+  };
+
+  /**
+   * Reserve a chunk to be evaluated with the contents of a streamable.
+   * Currently an error event will bomb out the stream. Once an error
+   * is received, we push it to an {:error} block if one exists, and log otherwise,
+   * then stop listening to the stream.
+   * @param streamable {Streamable} the target streamable that will emit events
+   * @param context {Context} context to use to render each thunk
+   * @param bodies {Object} must contain a "body", may contain an "error"
+   * @return {Chunk}
+   */
+  Chunk.prototype.stream = function(stream, context, bodies, auto, filters) {
+    var body = bodies && bodies.block,
+        errorBody = bodies && bodies.error;
+    return this.map(function(chunk) {
+      var ended = false;
+      stream
+        .on('data', function data(thunk) {
+          if(ended) {
+            return;
+          }
+          if(body) {
+            // Fork a new chunk out of the blockstream so that we can flush it independently
+            chunk = chunk.map(function(chunk) {
+              chunk.render(body, context.push(thunk)).end();
+            });
+          } else {
+            // Don't fork, just write into the master async chunk
+            chunk = chunk.reference(thunk, context, auto, filters);
+          }
+        })
+        .on('error', function error(err) {
+          if(ended) {
+            return;
+          }
+          if(errorBody) {
+            chunk.render(errorBody, context.push(err));
+          } else {
+            dust.log('Unhandled stream error in `' + context.getTemplateName() + '`');
+          }
+          if(!ended) {
+            ended = true;
+            chunk.end();
+          }
+        })
+        .on('end', function end() {
+          if(!ended) {
+            ended = true;
+            chunk.end();
+          }
+        });
     });
   };
 
@@ -1013,9 +1128,8 @@
 
         peg$c0 = [],
         peg$c1 = function(p) {
-            return ["body"]
-                   .concat(p)
-                   .concat([['line', line()], ['col', column()]]);
+            var body = ["body"].concat(p);
+            return withPosition(body);
           },
         peg$c2 = { type: "other", description: "section" },
         peg$c3 = peg$FAILED,
@@ -1030,13 +1144,13 @@
         peg$c7 = function(t, b, e, n) {
             e.push(["param", ["literal", "block"], b]);
             t.push(e);
-            return t.concat([['line', line()], ['col', column()]]);
+            return withPosition(t)
           },
         peg$c8 = "/",
         peg$c9 = { type: "literal", value: "/", description: "\"/\"" },
         peg$c10 = function(t) {
             t.push(["bodies"]);
-            return t.concat([['line', line()], ['col', column()]]);
+            return withPosition(t)
           },
         peg$c11 = /^[#?\^<+@%]/,
         peg$c12 = { type: "class", value: "[#?\\^<+@%]", description: "[#?\\^<+@%]" },
@@ -1055,7 +1169,7 @@
         peg$c25 = { type: "other", description: "bodies" },
         peg$c26 = function(p) { return ["bodies"].concat(p) },
         peg$c27 = { type: "other", description: "reference" },
-        peg$c28 = function(n, f) { return ["reference", n, f].concat([['line', line()], ['col', column()]]) },
+        peg$c28 = function(n, f) { return withPosition(["reference", n, f]) },
         peg$c29 = { type: "other", description: "partial" },
         peg$c30 = ">",
         peg$c31 = { type: "literal", value: ">", description: "\">\"" },
@@ -1064,7 +1178,7 @@
         peg$c34 = function(k) {return ["literal", k]},
         peg$c35 = function(s, n, c, p) {
             var key = (s === ">") ? "partial" : s;
-            return [key, n, c, p].concat([['line', line()], ['col', column()]]);
+            return withPosition([key, n, c, p])
           },
         peg$c36 = { type: "other", description: "filters" },
         peg$c37 = "|",
@@ -1073,10 +1187,18 @@
         peg$c40 = { type: "other", description: "special" },
         peg$c41 = "~",
         peg$c42 = { type: "literal", value: "~", description: "\"~\"" },
-        peg$c43 = function(k) { return ["special", k].concat([['line', line()], ['col', column()]]) },
+        peg$c43 = function(k) { return withPosition(["special", k]) },
         peg$c44 = { type: "other", description: "identifier" },
-        peg$c45 = function(p) { var arr = ["path"].concat(p); arr.text = p[1].join('.').replace(/,line,\d+,col,\d+/g,''); return arr; },
-        peg$c46 = function(k) { var arr = ["key", k]; arr.text = k; return arr; },
+        peg$c45 = function(p) {
+            var arr = ["path"].concat(p);
+            arr.text = p[1].join('.').replace(/,line,\d+,col,\d+/g,'');
+            return arr;
+          },
+        peg$c46 = function(k) {
+            var arr = ["key", k];
+            arr.text = k;
+            return arr;
+          },
         peg$c47 = { type: "other", description: "number" },
         peg$c48 = function(n) { return ['literal', n]; },
         peg$c49 = { type: "other", description: "float" },
@@ -1086,26 +1208,26 @@
         peg$c53 = { type: "other", description: "unsigned_integer" },
         peg$c54 = /^[0-9]/,
         peg$c55 = { type: "class", value: "[0-9]", description: "[0-9]" },
-        peg$c56 = function(digits) { return parseInt(digits.join(""), 10); },
+        peg$c56 = function(digits) { return makeInteger(digits); },
         peg$c57 = { type: "other", description: "signed_integer" },
         peg$c58 = "-",
         peg$c59 = { type: "literal", value: "-", description: "\"-\"" },
-        peg$c60 = function(sign, n) { return n*-1; },
+        peg$c60 = function(sign, n) { return n * -1; },
         peg$c61 = { type: "other", description: "integer" },
         peg$c62 = { type: "other", description: "path" },
         peg$c63 = function(k, d) {
             d = d[0];
             if (k && d) {
               d.unshift(k);
-              return [false, d].concat([['line', line()], ['col', column()]]);
+              return withPosition([false, d])
             }
-            return [true, d].concat([['line', line()], ['col', column()]]);
+            return withPosition([true, d])
           },
         peg$c64 = function(d) {
             if (d.length > 0) {
-              return [true, d[0]].concat([['line', line()], ['col', column()]]);
+              return withPosition([true, d[0]])
             }
-            return [true, []].concat([['line', line()], ['col', column()]]);
+            return withPosition([true, []])
           },
         peg$c65 = { type: "other", description: "key" },
         peg$c66 = /^[a-zA-Z_$]/,
@@ -1123,15 +1245,15 @@
         peg$c78 = { type: "other", description: "inline" },
         peg$c79 = "\"",
         peg$c80 = { type: "literal", value: "\"", description: "\"\\\"\"" },
-        peg$c81 = function() { return ["literal", ""].concat([['line', line()], ['col', column()]]) },
-        peg$c82 = function(l) { return ["literal", l].concat([['line', line()], ['col', column()]]) },
-        peg$c83 = function(p) { return ["body"].concat(p).concat([['line', line()], ['col', column()]]) },
+        peg$c81 = function() { return withPosition(["literal", ""]) },
+        peg$c82 = function(l) { return withPosition(["literal", l]) },
+        peg$c83 = function(p) { return withPosition(["body"].concat(p)) },
         peg$c84 = function(l) { return ["buffer", l] },
         peg$c85 = { type: "other", description: "buffer" },
-        peg$c86 = function(e, w) { return ["format", e, w.join('')].concat([['line', line()], ['col', column()]]) },
+        peg$c86 = function(e, w) { return withPosition(["format", e, w.join('')]) },
         peg$c87 = { type: "any", description: "any character" },
         peg$c88 = function(c) {return c},
-        peg$c89 = function(b) { return ["buffer", b.join('')].concat([['line', line()], ['col', column()]]) },
+        peg$c89 = function(b) { return withPosition(["buffer", b.join('')]) },
         peg$c90 = { type: "other", description: "literal" },
         peg$c91 = /^[^"]/,
         peg$c92 = { type: "class", value: "[^\"]", description: "[^\"]" },
@@ -1145,13 +1267,13 @@
         peg$c100 = "`}",
         peg$c101 = { type: "literal", value: "`}", description: "\"`}\"" },
         peg$c102 = function(char) {return char},
-        peg$c103 = function(rawText) { return ["raw", rawText.join('')].concat([['line', line()], ['col', column()]]) },
+        peg$c103 = function(rawText) { return withPosition(["raw", rawText.join('')]) },
         peg$c104 = { type: "other", description: "comment" },
         peg$c105 = "{!",
         peg$c106 = { type: "literal", value: "{!", description: "\"{!\"" },
         peg$c107 = "!}",
         peg$c108 = { type: "literal", value: "!}", description: "\"!}\"" },
-        peg$c109 = function(c) { return ["comment", c.join('')].concat([['line', line()], ['col', column()]]) },
+        peg$c109 = function(c) { return withPosition(["comment", c.join('')]) },
         peg$c110 = /^[#?\^><+%:@\/~%]/,
         peg$c111 = { type: "class", value: "[#?\\^><+%:@\\/~%]", description: "[#?\\^><+%:@\\/~%]" },
         peg$c112 = "{",
@@ -3652,6 +3774,15 @@
       return s0;
     }
 
+
+      function makeInteger(arr) {
+        return parseInt(arr.join(''), 10);
+      }
+      function withPosition(arr) {
+        return arr.concat([['line', line()], ['col', column()]]);
+      }
+
+
     peg$result = peg$startRuleFunction();
 
     if (peg$result !== peg$FAILED && peg$currPos === input.length) {
@@ -3700,9 +3831,6 @@
     // for templates that are compiled as a callable (compileFn)
     //
     // for the common case (using compile and render) a name is required so that templates will be cached by name and rendered later, by name.
-    if (!name && name !== null) {
-      throw new Error('Template name parameter cannot be undefined when calling dust.compile');
-    }
 
     try {
       var ast = filterAST(parse(source));
@@ -3755,7 +3883,7 @@
   };
 
   compiler.pragmas = {
-    esc: function(compiler, context, bodies, params) {
+    esc: function(compiler, context, bodies) {
       var old = compiler.auto,
           out;
       if (!context) {
@@ -3842,18 +3970,30 @@
       auto: 'h'
     },
     escapedName = dust.escapeJs(name),
-    body_0 = 'function(dust){dust.register(' +
-        (name ? '"' + escapedName + '"' : 'null') + ',' +
-        compiler.compileNode(context, ast) +
-        ');' +
-        compileBlocks(context) +
-        compileBodies(context) +
-        'return body_0;}';
+    AMDName = name? '"' + escapedName + '",' : '',
+    compiled = 'function(dust){',
+    entry = compiler.compileNode(context, ast),
+    iife;
+
+    if(name) {
+      compiled += 'dust.register("' + escapedName + '",' + entry + ');';
+    }
+
+    compiled += compileBlocks(context) +
+                compileBodies(context) +
+                'return ' + entry + '}';
+
+    iife = '(' + compiled + '(dust));';
 
     if(dust.config.amd) {
-      return 'define("' + escapedName + '",["dust.core"],' + body_0 + ');';
+      return 'define(' + AMDName + '["dust.core"],' + compiled + ');';
+    } else if(dust.config.cjs) {
+      return 'module.exports=function(dust){' +
+             'var tmpl=' + iife +
+             'var f=' + loaderFor().toString() + ';' +
+             'f.template=tmpl;return f}';
     } else {
-      return '(' + body_0 + ')(dust);';
+      return iife;
     }
   }
 
@@ -3868,8 +4008,10 @@
     if (out.length) {
       context.blocks = 'ctx=ctx.shiftBlocks(blocks);';
       return 'var blocks={' + out.join(',') + '};';
+    } else {
+      context.blocks = '';
     }
-    return context.blocks = '';
+    return context.blocks;
   }
 
   function compileBodies(context) {
@@ -3946,13 +4088,13 @@
 
     '+': function(context, node) {
       if (typeof(node[1].text) === 'undefined'  && typeof(node[4]) === 'undefined'){
-        return '.block(ctx.getBlock(' +
+        return '.b(ctx.getBlock(' +
               compiler.compileNode(context, node[1]) +
               ',chk, ctx),' + compiler.compileNode(context, node[2]) + ', {},' +
               compiler.compileNode(context, node[3]) +
               ')';
       } else {
-        return '.block(ctx.getBlock(' +
+        return '.b(ctx.getBlock(' +
             escape(node[1].text) +
             '),' + compiler.compileNode(context, node[2]) + ',' +
             compiler.compileNode(context, node[4]) + ',' +
@@ -4004,7 +4146,7 @@
     partial: function(context, node) {
       return '.p(' +
           compiler.compileNode(context, node[1]) +
-          ',' + compiler.compileNode(context, node[2]) +
+          ',ctx,' + compiler.compileNode(context, node[2]) +
           ',' + compiler.compileNode(context, node[3]) + ')';
     },
 
@@ -4103,8 +4245,30 @@
                   function(str) { return '"' + escapeToJsSafeString(str) + '"';} :
                   JSON.stringify;
 
+  function renderSource(source, context, callback) {
+    var tmpl = dust.loadSource(dust.compile(source));
+    return loaderFor(tmpl)(context, callback);
+  }
+
+  function compileFn(source, name) {
+    var tmpl = dust.loadSource(dust.compile(source, name));
+    return loaderFor(tmpl);
+  }
+
+  function loaderFor(tmpl) {
+    return function load(ctx, cb) {
+      var fn = cb ? 'render' : 'stream';
+      return dust[fn](tmpl, ctx, cb);
+    };
+  }
+
   // expose compiler methods
-  dust.compile = compiler.compile;
+  dust.compiler = compiler;
+  dust.compile = dust.compiler.compile;
+  dust.renderSource = renderSource;
+  dust.compileFn = compileFn;
+
+  // DEPRECATED legacy names. Removed in 2.8.0
   dust.filterNode = compiler.filterNode;
   dust.optimizers = compiler.optimizers;
   dust.pragmas = compiler.pragmas;

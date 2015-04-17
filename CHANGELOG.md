@@ -1,6 +1,22 @@
 ## Change Log
 
-### v2.6.2 (2015/03/26 20:27 +00:00)
+### v2.7.0 (2015/04/17 23:23 +00:00)
+- [#636](https://github.com/linkedin/dustjs/pull/636) Fix failing tests in IE8 (@sethkinast)
+- [#633](https://github.com/linkedin/dustjs/pull/633) Drop Node 0.8 (@sethkinast)
+- [#635](https://github.com/linkedin/dustjs/pull/635) Resolve dynamic partial names via original context (@sethkinast)
+- [#631](https://github.com/linkedin/dustjs/pull/631) Try to avoid creating Stacks with no content when possible (@sethkinast)
+- [#613](https://github.com/linkedin/dustjs/pull/613) Refactor template compilation  * `dust.render` and `dust.stream` now accept a compiled template function in addition to a template name. * `dust.compile` no longer requires a template name, and will compile an anonymous template without one (so `--name` is no longer required for dustc either) * `dust.load` is removed from the public API * `dust.renderSource` is moved to the compiler, so it's only included in dust-full now (Fixes #412) * `dust.compileFn` is moved to the compiler, so it's only included in dust-full now * add `dust.isTemplateFn` * add `dust.config.cache = true`, set to `false` to disable caching and load templates again every time (Fixes #451) * add `dust.config.cjs = false`, set to `true` to compile templates as CommonJS modules * add `--cjs` flag to `dustc` * Move a bunch of exposed compiler stuff under `dust.compiler` (but leave it exposed until 2.8) (@sethkinast)
+- [#624](https://github.com/linkedin/dustjs/pull/624) dustc always creates templates with forward slashes (@sethkinast)
+- [#617](https://github.com/linkedin/dustjs/pull/617) Add `chunk.stream` to allow streamables in context (@sethkinast)
+- [#610](https://github.com/linkedin/dustjs/pull/610) clean up PEG grammar a little bit (@sethkinast)
+- [#622](https://github.com/linkedin/dustjs/pull/622) Fix behavior of `Context#resolve` when resolving a context function that returns a Chunk (@sethkinast)
+- [#611](https://github.com/linkedin/dustjs/pull/611) Add grunt-github-changes plugin to automatically update changelog before releases (@sethkinast)
+- [#627](https://github.com/linkedin/dustjs/pull/627) Move to Travis CI Container builds (@sethkinast)
+- [#623](https://github.com/linkedin/dustjs/pull/623) Update to stable chokidar. (@paulmillr)
+- [#592](https://github.com/linkedin/dustjs/pull/592) Remove benchmark and old docs (@sethkinast)
+- [#609](https://github.com/linkedin/dustjs/pull/609) Clarify a few examples and add a new explicitly-incremental streaming example (@sethkinast)
+
+### v2.6.2 (2015/03/26 20:28 +00:00)
 - [#593](https://github.com/linkedin/dustjs/pull/593) npm upgrade (@sethkinast)
 - [#590](https://github.com/linkedin/dustjs/pull/590) Add deep resolution of Thenables in context (@sethkinast)
 - [#583](https://github.com/linkedin/dustjs/pull/583) Move lib/server to index (@sethkinast)
