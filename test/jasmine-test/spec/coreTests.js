@@ -352,6 +352,34 @@ var coreTests = [
                   "<li>Thunder</li>\n" +
                   "</ul>",
         message: "should test the context"
+      },
+      {
+        name: "context push / pop",
+        source: "{#helper}{greeting} {firstName} {lastName}{.}{/helper}",
+        context: {"helper": function(chunk, context, bodies) {
+          var ctx = dust.makeBase({ greeting: "Hello" })
+                        .push({ firstName: "Dusty" })
+                        .push({ lastName: "Dusterson" })
+                        .push("!")
+                        .push(".");
+          ctx.pop();
+          return chunk.render(bodies.block, ctx);
+        }},
+        expected: "Hello Dusty Dusterson!",
+        message: "should allow pushing and popping a context"
+      },
+      {
+        name: "context clone",
+        source: "{#helper}{greeting} {firstName} {lastName}{/helper}",
+        context: {"helper": function(chunk, context, bodies) {
+          var ctx = dust.makeBase({ greeting: "Hello" })
+                        .push({ firstName: "Dusty" })
+                        .push({ lastName: "Dusterson" })
+                        .clone();
+          return chunk.render(bodies.block, ctx);
+        }},
+        expected: "Hello Dusty Dusterson",
+        message: "should allow cloning a context"
       }
     ]
   },
