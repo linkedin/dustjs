@@ -1368,6 +1368,20 @@ var coreTests = [
         message: "should test partial with literal inline param and context. Fallback values for name or count are undefined"
       },
       {
+        name:     "partial with dynamic name and context",
+        source:   '{>"{partialName}":me /}',
+        context:  { partialName: "partial", me: { name: "Mick", count: 30 }},
+        expected: "Hello Mick! You have 30 new messages.",
+        message: "should test partial with dynamic name and a context"
+      },
+      {
+        name:     "partial with dynamic name and context and inline params",
+        source:   '{>"{partialName}" name=me.name count=me.count /}',
+        context:  { partialName: "partial", me: { name: "Mick", count: 30 }},
+        expected: "Hello Mick! You have 30 new messages.",
+        message: "should test partial with dynamic name and a context"
+      },
+      {
         name:     "partial with blocks and inline params",
         source:   '{>partial_with_blocks name=n count="{c}"/}',
         context:  { n: "Mick", c: 30 },
@@ -1462,8 +1476,8 @@ var coreTests = [
         source:   '{#helper template="partial"}{/helper}',
         context:  { "helper": function(chunk, context, bodies, params)
                     {
-                      var newContext = {};
-                      return chunk.partial(params.template, dust.makeBase(newContext));
+                      var newContext = dust.makeBase({});
+                      return chunk.partial(params.template, newContext, newContext, {});
                     }
                   },
         expected: "Hello ! You have  new messages.",
