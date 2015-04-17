@@ -77,7 +77,7 @@ var coreTests = [
         message: "should test basic text rendering"
       },
       {
-        name:     "confusing \" \n \' \u0000 \u2028 \u2029 template name\\",
+        name:     "confusing \" \n \' \u2028 \u2029 template name\\",
         source:   "Hello World!",
         context:  {},
         expected: "Hello World!",
@@ -1051,38 +1051,15 @@ var coreTests = [
              "age": "8 hours",
              "people": [
                { "name": "Alice" },
-               { "name": "Bob", "age": 42 },
+               { "name": "Bob", "age": 42 }
               ]
            },
         expected: "Alice is not telling us their age.Bob is 42 years old.",
         message: "should test the leading dot behavior in local mode"
       },
-      {
-        name: "check nested ref in global does not work in local mode",
-        source: "{glob.globChild}",
-        context: { },
-        expected: "",
-        message: "Should not find glob.globChild which is in context.global"
-      },
-      {
-        name:     "Verify leading dot path not affected in global mode",
-        source:   "{#people}{.name} is {?.age}{.age} years old.{:else}not telling us their age.{/age}{/people}",
-        options: {pathScope: "global"},
-        context:  {
-             "name": "List of people",
-             "age": "8 hours",
-             "people": [
-               { "name": "Alice" },
-               { "name": "Bob", "age": 42 },
-              ]
-        },
-        expected: "Alice is not telling us their age.Bob is 42 years old.",
-        message: "should test the leading dot behavior preserved"
-     },
      {
         name: "Standard dotted path with falsey value. Issue 317",
         source: "{foo.bar}",
-        options: {pathScope: "global"},
         context: { foo: {bar: 0} },
         expected: "0",
         message: "should work when value at end of path is falsey"
@@ -1090,7 +1067,6 @@ var coreTests = [
      {
         name: "dotted path resolution up context",
         source: "{#data.A.list}Aname{data.A.name}{/data.A.list}",
-        options: {pathScope: "global"},
         context: { "data":{"A":{"name":"Al","list":[{"name": "Joe"},{"name": "Mary"}],"B":{"name":"Bob","Blist":["BB1","BB2"]}}} },
         expected: "AnameAlAnameAl",
         message: "should test usage of dotted path resolution up context"
@@ -1098,7 +1074,6 @@ var coreTests = [
      {
         name: "dotted path resolution up context 2",
         source: "{#data.A.B.Blist}Aname{data.A.name}{/data.A.B.Blist}",
-        options: {pathScope: "global"},
         context: { "data":{"A":{"name":"Al","list":[{"name": "Joe"},{"name": "Mary"}],"B":{"name":"Bob","Blist":["BB1","BB2"]}}} },
         expected: "AnameAlAnameAl",
         message: "should test usage of dotted path resolution up context"
@@ -1106,7 +1081,6 @@ var coreTests = [
       {
         name: "dotted path resolution without explicit context",
         source: "{#data.A}Aname{name}{data.C.name}{/data.A}",
-        options: {pathScope: "global"},
         context: { "data":{"A":{"name":"Al","list":[{"name": "Joe"},{"name": "Mary"}],"B":{"name":"Bob","Blist":["BB1","BB2"]}},C:{name:"cname"}} },
         expected: "AnameAlcname",
         message: "should test usage of dotted path resolution up context"
@@ -1114,7 +1088,6 @@ var coreTests = [
       {
         name: "same as previous test but with explicit context",
         source: "{#data.A:B}Aname{name}{data.C.name}{/data.A}",
-        options: {pathScope: "global"},
         context: { "data":{"A":{"name":"Al","list":[{"name": "Joe"},{"name": "Mary"}],"B":{"name":"Bob","Blist":["BB1","BB2"]}},C:{name:"cname"}} },
         expected: "AnameAl",
         message: "should test explicit context blocks looking further up stack"
@@ -1122,7 +1095,6 @@ var coreTests = [
       {
         name: "explicit context but gets value from global",
         source: "{#data.A:B}Aname{name}{glob.globChild}{/data.A}",
-        options: {pathScope: "global"},
         base: { glob: { globChild: "testGlobal"} },
         context: { "data":{"A":{"name":"Al","list":[{"name": "Joe"},{"name": "Mary"}],"B":{"name":"Bob","Blist":["BB1","BB2"]}},C:{name:"cname"}} },
         expected: "AnameAltestGlobal",
@@ -1131,7 +1103,6 @@ var coreTests = [
       {
         name: "nested dotted path resolution",
         source: "{#data.A.list}{#data.A.B.Blist}{.}Aname{data.A.name}{/data.A.B.Blist}{/data.A.list}",
-        options: {pathScope: "global"},
         context: { "data":{"A":{"name":"Al","list":[{"name": "Joe"},{"name": "Mary"}],"B":{"name":"Bob","Blist":["BB1"]}}} },
         expected: "BB1AnameAlBB1AnameAl",
         message: "should test nested usage of dotted path resolution"
@@ -1139,7 +1110,6 @@ var coreTests = [
       {
         name: "check nested ref in global works in global mode",
         source: "{glob.globChild}",
-        options: {pathScope: "global"},
         base: { glob: { globChild: "testGlobal"} },
         context: { },
         expected: "testGlobal",
@@ -1148,7 +1118,6 @@ var coreTests = [
       {
           name: "dotted path resolution up context with partial match in current context",
           source: "{#data}{#A}{C.name}{/A}{/data}",
-          options: {pathScope: "global"},
           context: { "data":{ "A":{ "name":"Al", "B": "Ben", "C": { namex: "Charlie"} }, C: {name: "Charlie Sr."} } },
           expected: "",
           message: "should test usage of dotted path resolution up context"
@@ -1156,7 +1125,6 @@ var coreTests = [
        {
         name: "check nested ref not found in global if partial match",
         source: "{#data}{#A}{C.name}{/A}{/data}",
-        options: {pathScope: "global"},
         base: { C: {name: "Big Charlie"} },
         context: { "data":{ "A":{ "name":"Al", "B": "Ben", "C": { namex: "Charlie"} }, C: {namey: "Charlie Sr."} } },
         expected: "",
@@ -1165,7 +1133,6 @@ var coreTests = [
       {
         name:     "method invocation",
         source:   "Hello {person.fullName}",
-        options: {pathScope: "global"},
         context:  {
           person: {
             firstName: "Peter",
@@ -1181,7 +1148,6 @@ var coreTests = [
       {
         name: "check null values in section iteration don't break path resolution",
         source: "{#nulls}{names[0].name}{/nulls}",
-        options: {pathScope: "global"},
         context: { "nulls": [1, null, null, 2],"names": [{"name": "Moe"}, {"name": "Curly"}] },
         expected: "MoeMoeMoeMoe",
         message: "Should resolve path correctly"
@@ -1189,7 +1155,6 @@ var coreTests = [
       {
         name: "check falsey value in section iteration don't break path resolution",
         source: "{#list}{a.b}{/list}",
-        options: {pathScope: "global"},
         context: { "list": ['', 2, ''],"a": {"b": "B"} },
         expected: "BBB",
         message: "Should resolve path correctly"
@@ -1197,7 +1162,6 @@ var coreTests = [
       {
         name: "check true value in section iteration are also OK",
         source: "{#list}{a.b}{/list}",
-        options: {pathScope: "global"},
         context: { "list": [true, 2, true],"a": {"b": "B"} },
         expected: "BBB",
         message: "Should resolve path correctly"
