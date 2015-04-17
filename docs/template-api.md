@@ -1,6 +1,6 @@
 ---
 layout: docs
-title: Template API
+title: Template Syntax Reference
 permalink: /docs/syntax/
 ---
 

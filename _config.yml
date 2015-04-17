@@ -3,6 +3,11 @@ relative_permalinks: false
 markdown: kramdown
 kramdown:
     input: GFM
+    use_coderay: true
+    coderay:
+        coderay_line_numbers: nil
+        coderay_css: class
+        coderay_default_lang: js
 
 exclude:
     - node_modules

@@ -8,7 +8,7 @@ permalink: /guides/context-helpers/
 
 Let's say that you had a monitoring app. If you were doing logical tests in your template, you might write this:
 
-```
+```html
 {! Don't do this !}
 {@eq key="gearsTurning" value="true" type="boolean"}
   {@eq key="engineRunning" value="true" type="boolean"}
@@ -29,7 +29,7 @@ This is where **handlers**, or **context helpers** (they're the same thing by di
 
 Using a handler, we could rewrite our template to something much simpler:
 
-```
+```html
 {#appStatusOK}
   Everything is awesome!
 {/appStatusOK}

@@ -10,7 +10,7 @@ permalink: /guides/setup/
 
 To install as a Node module:
 
-```
+```bash
 npm install --save --production dustjs-linkedin
 
 # If you want the core helpers addon
@@ -25,7 +25,7 @@ The command-line compiler is located at `./node_modules/.bin/dustc`. To make the
 
 To install using Bower:
 
-```
+```bash
 bower install dustjs-linkedin
 ```
 
