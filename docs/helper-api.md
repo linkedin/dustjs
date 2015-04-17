@@ -7,11 +7,12 @@ permalink: /docs/helper-api/
 ## Dust Helpers
 
 ### Function definition
+
 ```
-    dust.helpers.myHelper = function(chunk, context, bodies, params) {
-       /* Crazy logic here */
-       return chunk;
-    }
+dust.helpers.myHelper = function(chunk, context, bodies, params) {
+   /* logic here */
+   return chunk;
+}
 ```
 
 ### Parameters
@@ -112,7 +113,7 @@ dust.helpers.period = function(chunk, context, bodies, params) {
 
 #### Helper call in the template:
 
-```
+```html
 {@period location="end"}
   Hello World
 {/period}

@@ -1,6 +1,6 @@
 ---
 layout: docs
-title: Syntax
+title: API
 permalink: /docs/api/
 ---
 
@@ -27,7 +27,7 @@ var compiledTemplate = dust.compile("Hello {name}!", "intro");
 
 If you include the "compiled" output as part of a script block of JS that you load, then the "intro" template will be defined and registered.
 
-```
+```html
 <script type="text/javascript">
 /* example compiled dust template output */
 (function() {
