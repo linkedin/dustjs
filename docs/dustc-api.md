@@ -38,6 +38,8 @@ Collect all compiled template output in this file. If you use AMD registration, 
 
 Create one output file for every input file. Output files will end in `.js` and have the same filename as the input file. Output files register themselves with Dust using their path. For example, compiling `tmpl/foo/bar.dust` would create `tmpl/foo/bar.js` that registers itself as `tmpl/foo/bar`.
 
+**Note:** Names are always created with forward slashes for compatibility with AMD loaders, even if you run dustc on Windows.
+
 ### `--pwd`
 
 Strips a prefix from all generated template names. For example, if you tried to compile all templates inside `app/lib/tmpl/` but you wanted to refer to them as `tmpl/foo`, you could pass `--pwd=app/lib`
