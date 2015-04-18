@@ -1374,6 +1374,18 @@ var coreTests = [
         message: "should test partial with dynamic name and a context"
       },
       {
+        name:     "backcompat (< 2.7.0) compiler with no partial context",
+        source:   '{#oldPartial/}',
+        context:  { "name": "Mick",
+                    "count": 30,
+                     oldPartial: function(chunk, context, bodies, params) {
+                        return chunk.partial("partial", context, params);
+                      }
+                  },
+        expected: "Hello Mick! You have 30 new messages.",
+        message:  "should preserve partials backwards compatibility with compilers pre-2.7"
+      },
+      {
         name:     "partial with blocks and inline params",
         source:   '{>partial_with_blocks name=n count="{c}"/}',
         context:  { n: "Mick", c: 30 },
