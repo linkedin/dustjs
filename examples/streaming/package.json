@@ -4,7 +4,7 @@
   "description": "Simple example of the Dust streaming API",
   "main": "app.js",
   "dependencies": {
-    "dustjs-linkedin": "^2.6.1",
+    "dustjs-linkedin": "^2.7.0",
     "express": "^4.12.3",
     "request": "^2.53.0"
   },
