@@ -1,8 +1,0 @@
-.grunt
-.jshintrc
-.travis.yml
-_SpecRunner.html
-Gruntfile.js
-src
-tmp
-test
