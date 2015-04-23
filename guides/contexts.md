@@ -61,9 +61,9 @@ return newContext;
 })()</dust-demo-json>
 </dust-demo>
 
-## Global Context
+## Context Globals
 
-When creating a context, you can provide a second "global" context that is always accessible, no matter where Dust is in the stack. To add a global context, pass a value to `dust.makeBase` to create a Context object. Then, pass that Context object to `dust.render`.
+When creating a context, you can provide a second "global" context that is always accessible, no matter where Dust is in the stack. To add a global context, call `dust.makeBase` (alias as of Dust 2.7.1: `dust.context`) to create a Context object. Then, pass that Context object to `dust.render`.
 
 The global context is the lowest level of the stack, so it will be shadowed by any references that are defined at a higher level.
 
@@ -82,8 +82,21 @@ return context.push({
   }
 });
 
-})()</dust-demo-json>
+}())</dust-demo-json>
 </dust-demo>
+
+## Context Options (Dust 2.7.1)
+
+Context options are not visible to a template. You can attach them to the context as a way to pass along request-scoped data for use in your application (think Express locals that aren't visible to a template).
+
+Dust will pass any context options to your [`dust.onLoad` function](/guides/onload/) when trying to load uncached templates.
+
+To add context options, pass an object as the second argument of `dust.makeBase` / `dust.context`.
+
+```js
+var context = dust.context(null, { lang: 'en' });
+context.options.lang === 'en'; // true
+```
 
 ## Special Values in Context
 
