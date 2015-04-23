@@ -65,7 +65,7 @@ describe('--name', function() {
 describe('--whitespace', function() {
   it('sets dust.config.whitespace to true', function(done) {
     dustc('a.dust --whitespace', function(err, stdout, stderr) {
-      expect(stdout).toMatch(/\\n\\n\\n\\n/);
+      expect(stdout).toMatch(/(\\r?\\n){4}/);
       done();
     });
   });
