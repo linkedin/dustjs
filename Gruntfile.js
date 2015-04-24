@@ -173,7 +173,7 @@ module.exports = function(grunt) {
           reporters: {
             console: {
               colors: false,
-              verbose: false
+              verbosity: 0
             }
           }
         }
@@ -183,8 +183,19 @@ module.exports = function(grunt) {
         options: {
           reporters: {
             console: {
-              colors: false,
-              verbose: false
+              colors: true,
+              verbosity: 0
+            }
+          }
+        }
+      },
+      templates: {
+        specs: ['test/jasmine-test/spec/renderTestSpec.js'],
+        options: {
+          reporters: {
+            console: {
+              colors: true,
+              verbosity: 0
             }
           }
         }
@@ -284,7 +295,7 @@ module.exports = function(grunt) {
   grunt.registerTask('build',          ['clean:build', 'shell:buildParser', 'buildLib', 'uglify']);
 
   //test tasks
-  grunt.registerTask('testNode',       ['jasmine_nodejs:cjs', 'shell:oldTests']);
+  grunt.registerTask('testNode',       ['jasmine_nodejs:cjs', 'jasmine_nodejs:templates', 'shell:oldTests']);
   grunt.registerTask('testRhino',      ['build', 'shell:testRhino']);
   grunt.registerTask('testPhantom',    ['build', 'jasmine:testProd']);
   grunt.registerTask('testCli',        ['jasmine_nodejs:dustc']);
