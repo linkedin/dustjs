@@ -1,4 +1,3 @@
-/*global module:false,__dirname:true*/
 module.exports = function(grunt) {
   //--------------------------------------------------
   //------------Project config------------------------
@@ -38,18 +37,6 @@ module.exports = function(grunt) {
       // these are old that should eventually be rewritten to take advantage of grunt and the current build process
       buildParser: {
         command: 'node src/build.js',
-        options: {
-          stdout: true
-        }
-      },
-      bench: {
-        command: 'node benchmark/server.js',
-        options: {
-          stdout: true
-        }
-      },
-      doc: {
-        command: 'node docs/build.js',
         options: {
           stdout: true
         }
