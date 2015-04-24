@@ -151,7 +151,7 @@ Context helpers can access the current section of their template to modify it. I
 
 Context helpers can read values out of any level of the Dust context passed to the template, not just the current scope.
 
-Remember that Dust contexts are "stacks" of objects, and that Dust can read upwards through multiple levels. For a refresher on contexts, see [Helper API](/docs/helper-api/).
+Remember that Dust contexts are "stacks" of objects, and that Dust can read upwards through multiple levels. For a refresher on contexts, see [Contexts](/guides/contexts/).
 
 <dust-demo templateName="traverse-context">
 <dust-demo-template showTemplateName="true">
@@ -268,9 +268,65 @@ If a parameter contains a Dust reference, you must evaluate the reference if you
 </dust-demo-json>
 </dust-demo>
 
+## Changing helper context
+
+You might want to invoke your helper with only a portion of your context. To do this, add a colon and the context key after your helper's name, like `{#helper:context}`.
+
+<dust-demo templateName="greeting-bot">
+<dust-demo-template showTemplateName="true">
+{#greet:friends/}{~n}
+{#greet:acquaintances/}
+</dust-demo-template>
+<dust-demo-json>
+{
+  "friends": ["Alice", "Bob", "Charlie"],
+  "acquaintances": ["Dusty", "Eggbert", "Fabrice"],
+  "greet": function(chunk, context) {
+    var people = context.current();
+    return chunk.write("Hello " + people.join(" and ") + "!");
+  }
+}
+</dust-demo-json>
+</dust-demo>
+
 ## Asynchronous context helpers
 
 Dust's asynchronous nature is one of its defining features. Writing context helpers in an async way lets you make HTTP requests or call services without blocking the rendering of your template.
+
+If you have a callback-based API, you can tell Dust to wait until the callback returns to render using `chunk.map`.
+
+<dust-demo templateName="database">
+<dust-demo-template showTemplateName="true">
+{#query}{data}{/query}
+</dust-demo-template>
+<dust-demo-json>
+(function() {
+  function query(query, cb) {
+    dust.nextTick(function() {
+      cb(null, {data: "Dust"});
+    });
+  }
+  return {
+    "query": function(chunk, context, bodies, params) {
+      return chunk.map(function(chunk) {
+        query("SELECT name FROM USERS", function(err, data) {
+          return chunk.render(bodies.block, context.push(data))
+                      .end();
+        });
+      });
+    }
+  };
+}())
+</dust-demo-json>
+</dust-demo>
+
+To start an asynchronous block, call `chunk.map`. Inside its callback function, you can perform any sync or async operations. The only difference is that when you're done, you must call `chunk.end` to signal that the async operations have completed.
+
+You can't return a value from an asynchronous helper like you can a normal one. You must return a chunk that has been `end`ed.
+
+### Promises (Dust 2.6.2)
+
+Your helper can return Promises as of Dust 2.6.2. Dust will unwrap the Promise and push its data onto your context when the Promise resolves, so you don't have to worry about manually mapping the `chunk`.
 
 <dust-demo templateName="ip">
 <dust-demo-template showTemplateName="true">
@@ -279,21 +335,11 @@ Dust's asynchronous nature is one of its defining features. Writing context help
 <dust-demo-json>
 {
   "ip": function(chunk, context, bodies, params) {
-    return chunk.map(function(chunk) {
-      $.get("//ip.jsontest.com/", function(data) {
-        // data contains { "ip": "123.45.67.89" }
-        return chunk.render(bodies.block, context.push(data))
-                    .end();
-      });
-    });
+    return $.get("//ip.jsontest.com/");
   }
 }
 </dust-demo-json>
 </dust-demo>
-
-To start an asynchronous block, call `chunk.map`. Inside its callback function, you can perform any sync or async operations. The only difference is that when you're done, you must call `chunk.end` to signal that the async operations have completed.
-
-You can't return a value from an asynchronous helper like you can a normal one. You must return a chunk that has been `end`ed.
 
 ## Try it out
 
