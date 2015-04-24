@@ -63,6 +63,8 @@
     "highland": "2.4.0",
     "jasmine": "~2.2.1",
     "pegjs": "0.8.0",
+    "rhino-1_7r3-bin": "~1.0.1",
+    "rhino-1_7r5-bin": "~1.0.1",
     "tmp": "0.0.25"
   },
   "license": "MIT",

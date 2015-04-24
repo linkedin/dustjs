@@ -3,9 +3,10 @@ module.exports = function(grunt) {
   //--------------------------------------------------
   //------------Project config------------------------
   //--------------------------------------------------
+  var pkg = grunt.file.readJSON('package.json');
   grunt.initConfig({
     // Metadata.
-    pkg: grunt.file.readJSON('package.json'),
+    pkg: pkg,
     banner: '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %>\n' +
       '<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
       '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
@@ -21,15 +22,13 @@ module.exports = function(grunt) {
       },
       testRhino : {
         command : function() {
-          var commandList = [],
-            fs = require('fs'),
-            rhinoFolder = 'test/rhino/';
-          fs.readdirSync(__dirname  + '/' + rhinoFolder + 'lib').forEach( function(rhinoJar) {
-            if(rhinoJar.indexOf('.jar') >= 0) {
-              commandList.push('java -jar ' + rhinoFolder + 'lib/' + rhinoJar + ' -f ' + rhinoFolder + 'rhinoTest.js');
-            }
-          });
-          return commandList.join(' && ');
+          var rhinoTest = 'test/rhino/rhinoSpec.js';
+          return Object.keys(pkg.devDependencies).filter(function(name) {
+            return name.match(/^rhino/);
+          }).map(function(name) {
+            name = name.replace('-bin', '').replace('-','');
+            return 'node node_modules/.bin/' + name + ' -f ' + rhinoTest;
+          }).join(' && ');
         },
         options : {
           stdout: true,
