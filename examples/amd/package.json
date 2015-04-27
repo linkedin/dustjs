@@ -1,0 +1,13 @@
+{
+  "name": "dustjs-example-amd",
+  "version": "1.0.0",
+  "description": "Simple example of loading Dust as an AMD module",
+  "dependencies": {
+    "dustjs-linkedin": "^2.6.1"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "compile": "dustc -as views/*.dust",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
