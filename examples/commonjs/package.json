@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "node app.js",
-    "compile": "dustc --cjs **/*.dust --pwd=views",
+    "compile": "dustc --cjs 'views/**/*.dust' --pwd=views",
     "test": "echo \"Error: no test specified\" && exit 1"
   }
 }
