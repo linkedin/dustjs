@@ -40,13 +40,13 @@ section "section"
   }
   {
     e.push(["param", ["literal", "block"], b]);
-    t.push(e);
+    t.push(e, ["filters"]);
     return withPosition(t)
   }
   // self-closing format
   / t:sec_tag_start ws* "/" rd
   {
-    t.push(["bodies"]);
+    t.push(["bodies"], ["filters"]);
     return withPosition(t)
   }
 
