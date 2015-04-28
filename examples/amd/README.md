@@ -1,6 +1,10 @@
 To run:
 
-    bower install && ../../bin/dustc -as views/*.dust
+    npm install && bower install
+
+To compile templates:
+
+    npm run compile
 
 Then load `index.html` in your browser.
 
