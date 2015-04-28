@@ -110,13 +110,10 @@ exports.coreSetup = function(suite, auto) {
 
   suite.test("disable cache", function() {
     var unit = this,
-        template = "Version 1",
-        cache;
+        template = "Version 1";
     dust.onLoad = function(name, cb) {
       cb(null, template);
     };
-    // Store what's in the cache before we blow it all away
-    cache = dust.cache;
     dust.config.cache = false;
     dust.render("test", {}, function(err, out) {
       try {
@@ -128,9 +125,6 @@ exports.coreSetup = function(suite, auto) {
           } catch(err) {
             return unit.fail(err);
           } finally {
-            // restore
-            dust.cache = cache;
-            dust.onLoad = null;
             dust.config.cache = true;
           }
           unit.pass();
