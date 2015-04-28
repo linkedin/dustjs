@@ -21,7 +21,7 @@ header {
     margin: 0;
     font-size: $tagline-font-size;
     @include respond-to(screens) {
-      position: absolute;
+      position: fixed;
       width: $tagline-width;
       top: $tagline-position-top;
       left: $tagline-position-left;
