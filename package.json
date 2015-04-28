@@ -19,7 +19,7 @@
     "Richard Ragan <rragan@ebay.com>"
   ],
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt travis"
   },
   "bin": {
     "dustc": "./bin/dustc"
@@ -61,7 +61,8 @@
     "grunt-template-jasmine-istanbul": "~0.3.3",
     "highland": "2.4.0",
     "jasmine": "~2.2.1",
-    "pegjs": "0.8.0"
+    "pegjs": "0.8.0",
+    "tmp": "0.0.25"
   },
   "license": "MIT",
   "engine": {
