@@ -226,3 +226,21 @@ function yell(chunk, context, bodies, params) {
 }
 dust.helpers.yell = yell;
 ```
+
+## Returning a Value (Dust 2.7.2)
+
+Helpers can return a value directly and act like a reference or a section. When a helper has no body, it acts like a reference. You can pass filters to the reference-like helper by adding a `filters` attribute.
+
+    {@myHelper value=name filters="|s|uc" /}
+
+If a helper has a body, it acts more like a section. Dust will iterate over the value that is returned from the helper.
+
+    {@myHelper value=name}Hello {foo}!{/myHelper}
+
+If you need more control over the default behavior (for example, if you want to render a named body or not HTML-sanitize by default), your helper needs to return the Chunk that was passed to it.
+
+## Returning a Chunk
+
+Write and render to the chunk directly, then return it from your helper. Dust will inject the Chunk as-is into the template without applying any filters. If you want your helper to respect filters, you can call `dust.filter` manually.
+
+Remember that `chunk.write` does not HTML-escape data passed to it, so be careful what you are writing.
