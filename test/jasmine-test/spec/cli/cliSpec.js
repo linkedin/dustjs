@@ -5,7 +5,7 @@ var path = require('path'),
 
 var ROOT_DIR = path.resolve(__dirname, '../../../../'),
     BIN_DIR = path.join(ROOT_DIR, 'bin'),
-    TMP_DIR = path.join(ROOT_DIR, 'tmp'),
+    TMP_DIR = require('tmp').dirSync().name,
     FIXTURE_DIR = path.join(__dirname, 'fixtures');
 
 var packageJson = require(path.join(ROOT_DIR, 'package.json'));
@@ -65,7 +65,7 @@ describe('--name', function() {
 describe('--whitespace', function() {
   it('sets dust.config.whitespace to true', function(done) {
     dustc('a.dust --whitespace', function(err, stdout, stderr) {
-      expect(stdout).toMatch(/(\\r?\\n){4}/);
+      expect(stdout).toMatch(/((\\r)?\\n){4}/);
       done();
     });
   });

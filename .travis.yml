@@ -1,25 +1,20 @@
 language: node_js
 node_js:
   - "0.12"
-  - "0.10"
   - "iojs"
-env:
-  - TEST="all"
-  - TEST="node"
 matrix:
-  exclude:
-    - node_js: "iojs"
-      env: TEST="all"
-    - node_js: "0.12"
-      env: TEST="all"
+  include:
     - node_js: "0.10"
-      env: TEST="node"
+      env: TEST="all"
 notifications:
   email:
     - jchan@linkedin.com
     - skinast@linkedin.com
 before_install:
-  - npm install -g grunt-cli
-script:
-  - "[ $TEST = 'all' ] && grunt test || grunt testNode"
+  - npm install -g npm
+before_script:
+  - npm update
 sudo: false
+cache:
+  directories:
+    - node_modules

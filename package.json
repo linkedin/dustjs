@@ -19,7 +19,7 @@
     "Richard Ragan <rragan@ebay.com>"
   ],
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt travis"
   },
   "bin": {
     "dustc": "./bin/dustc"
@@ -39,13 +39,14 @@
     "linkedin"
   ],
   "dependencies": {
-    "chokidar": "~1.0.0",
-    "cli": "~0.6.5"
+    "chokidar": "~1.0.1",
+    "cli": "~0.6.6"
   },
   "devDependencies": {
     "ayepromise": "~1.1.1",
     "grunt": "~0.4.2",
     "grunt-bump": "0.3.0",
+    "grunt-cli": "~0.1.13",
     "grunt-contrib-clean": "~0.6.0",
     "grunt-contrib-concat": "~0.5.1",
     "grunt-contrib-connect": "~0.9.0",
@@ -60,7 +61,9 @@
     "grunt-shell": "~1.1.2",
     "grunt-template-jasmine-istanbul": "~0.3.3",
     "highland": "2.4.0",
-    "pegjs": "0.8.0"
+    "jasmine": "~2.2.1",
+    "pegjs": "0.8.0",
+    "tmp": "0.0.25"
   },
   "license": "MIT",
   "engine": {
