@@ -11,5 +11,10 @@ notifications:
     - jchan@linkedin.com
     - skinast@linkedin.com
 before_install:
-  - npm install -g grunt-cli
+  - npm install -g npm
+before_script:
+  - npm update
 sudo: false
+cache:
+  directories:
+    - node_modules
