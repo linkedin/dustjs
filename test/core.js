@@ -9,12 +9,14 @@ exports.coreSetup = function(suite, auto) {
 
   suite.test("base context", function() {
     var base = dust.makeBase({
-      sayHello: function() { return "Hello!"; }
+      sayHello: function() { return "Hello!"; },
+      names: ["Alice", "Bob", "Dusty"]
     });
     this.equals(base.push().push().push().push().stack, undefined);
     testRender(this, "{sayHello} {foo}", base.push({foo: "bar"}), "Hello! bar");
     testRender(this, "{sayHello} {foo}", dust.makeBase().push({foo: "bar"}), " bar");
     testRender(this, "{sayHello} {foo}", undefined, " ");
+    testRender(this, "{sayHello} {#names}{.} {/names}", base, "Hello! Alice Bob Dusty ");
   });
 
   suite.test("valid keys", function() {
