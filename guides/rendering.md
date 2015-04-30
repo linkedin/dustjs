@@ -111,36 +111,31 @@ dust.render('hello', { world: "Venus" }, function(err, out) {
 });
 ```
 
-### Node: Using `onLoad`
-
-Dust doesn't care how you load your templates-- they could be stored on an entirely different server if you wanted. You can tell Dust how to load templates it doesn't know about by creating a function called `dust.onLoad`. When a template hasn't been registered yet, Dust will call this function and try to load it.
+### Node: Load Precompiled Templates
 
 ```js
-// Example 1: compiling on-demand
-// This is only slow for the first person to request the template since Dust caches it afterwards
-dust.onLoad = function(templateName, callback) {
-  // `templateName` will contain the name passed to `dust.render`
-  // Passing the template source to the callback will compile and register the template for you
-  fs.readFile('/views/' + templateName + '.dust', 'utf8', callback);
-}
-dust.render('hello', { world: "Mercury" }, function(err, out) {
-  // /views/hello.dust will get magically loaded and compiled for us!
+// Pre-2.7
+fs.readFile(templateName + '.js', { encoding: 'utf8' }, function(err, data) {
+  dust.loadSource(data);
+  dust.render(templateName, {}, function(err, out) {
+    console.log(out);
+  });
 });
 ```
 
 ```js
-// Example 2: fetching a precompiled template
-// Dust can compile to CommonJS modules as of Dust 2.7.0
-// Use `dustc --cjs`
-dust.onLoad = function(templateName, callback) {
-  require('/views/' + templateName + '.js')(dust);
-  // The precompiled template is ready to go! Just call the callback to tell Dust it's loaded
-  callback();
-}
-dust.render('hello', { world: "Neptune" }, function(err, out) {
-  // /views/hello.js will be loaded. It's already compiled and is ready to use.
+// Precompile as CommonJS modules-- as of Dust 2.7
+app.get('/hello', function(req, res) {
+  var tmpl = require('./views/hello.js')(dust);
+  tmpl({world: 'Neptune'}, function(err, out) {
+    res.send(out);
+  });
 });
 ```
+
+### Node: Dynamically Load Templates
+
+For a production application with more than a few templates, it's best to tell Dust how to load templates rather than loading them all manually. To do this, you must [configure a `dust.onLoad` function](/guides/onload/).
 
 ## Disable Caching
 
