@@ -16,6 +16,7 @@ describe('CommonJS template', function() {
 
   beforeEach(function() {
     tmpl = load(template);
+    dust.onLoad = undefined;
   });
 
   it('can be invoked to render', function() {
@@ -45,14 +46,30 @@ describe('CommonJS template', function() {
   });
 
   it('has a template property that can be passed to dust.render', function() {
-    expect(tmpl.template.templateName).toEqual(templateName);
     dust.render(tmpl.template, context, function(err, out) {
       expect(out).toEqual(rendered);
     });
   });
 
   it('has a name that can be passed to dust.render', function() {
-    dust.render(templateName, context, function(err, out) {
+    dust.render(tmpl.template.templateName, context, function(err, out) {
+      expect(out).toEqual(rendered);
+    });
+  });
+
+  it('can be passed to dust.render even if it is anonymous', function() {
+    tmpl = eval(dust.compile("Hello anonymous {world}!"))(dust);
+    dust.render(tmpl, context, function(err, out) {
+      expect(out).toEqual("Hello anonymous world!");
+    });
+  });
+
+  it('can be loaded via dust.onLoad', function() {
+    dust.onLoad = function(nameOrTemplate, callback) {
+      // Haha, you asked for some random template but we will always give you ours instead
+      callback(null, tmpl);
+    };
+    dust.render('foobar', context, function(err, out) {
       expect(out).toEqual(rendered);
     });
   });

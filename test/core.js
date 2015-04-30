@@ -17,19 +17,30 @@ exports.coreSetup = function(suite, auto) {
     testRender(this, "{sayHello} {foo}", undefined, " ");
   });
 
+  suite.test("context options", function() {
+    var opts = { lang: "fr" },
+        globals = { hello: "world" };
+    var base = dust.makeBase(globals, opts);
+    this.equals(base.options.lang, opts.lang);
+    base = base.rebase();
+    this.equals(base.options.lang, opts.lang);
+    this.pass();
+  });
+
   suite.test("valid keys", function() {
     testRender(this, "{_foo}{$bar}{baz1}", {_foo: 1, $bar: 2, baz1: 3}, "123");
   });
 
-  suite.test("onLoad callback", function() {
+  suite.test("onLoad that calls callback with source", function() {
     var unit = this;
+    dust.cache.onLoad = null;
     dust.onLoad = function(name, cb) {
-      cb(null, "Loaded: " + name);
+      cb(null, 'Loaded: ' + name + ', template name {templateName}');
     };
-    dust.render("onLoad", {}, function(err, out) {
+    dust.render("onLoad", { templateName: function(chunk, context) { return context.getTemplateName(); } }, function(err, out) {
       try {
         unit.ifError(err);
-        unit.equals(out, "Loaded: onLoad");
+        unit.equals(out, "Loaded: onLoad, template name onLoad");
       } catch(err) {
         unit.fail(err);
         return;
@@ -37,15 +48,72 @@ exports.coreSetup = function(suite, auto) {
       unit.pass();
     });
   });
+
+  suite.test('onLoad that returns a compiled template', function() {
+    var unit = this;
+    dust.cache.onLoad = null;
+    dust.onLoad = function(name, cb) {
+      var tmpl = dust.loadSource(dust.compile('Loaded: ' + name + ', template name {templateName}', 'foobar'));
+      cb(null, tmpl);
+    };
+    dust.render("onLoad", { templateName: function(chunk, context) { return context.getTemplateName(); } }, function(err, out) {
+      try {
+        unit.ifError(err);
+        unit.equals(out, "Loaded: onLoad, template name foobar");
+        unit.equals(dust.cache.onLoad, null);
+      } catch(err) {
+        unit.fail(err);
+        return;
+      }
+      unit.pass();
+    });
+  });
+
+  suite.test('onLoad that returns a compiled template; override template name', function() {
+    var unit = this;
+    dust.cache.onLoad = null;
+    dust.onLoad = function(name, cb) {
+      var tmpl = dust.loadSource(dust.compile('Loaded: ' + name + ', template name {templateName}', 'foobar'));
+      tmpl.templateName = 'override';
+      cb(null, dust.cache.foobar);
+    };
+    dust.render("onLoad", { templateName: function(chunk, context) { return context.getTemplateName(); } }, function(err, out) {
+      try {
+        unit.ifError(err);
+        unit.equals(out, "Loaded: onLoad, template name override");
+        unit.equals(dust.cache.onLoad, null);
+      } catch(err) {
+        unit.fail(err);
+        return;
+      }
+      unit.pass();
+    });
+  });
+
+  suite.test("onLoad receives context options", function() {
+    var unit = this;
+    dust.cache.onLoad = null;
+    dust.onLoad = function(name, opts, cb) {
+      cb(null, 'Loaded: ' + name + ', lang ' + opts.lang);
+    };
+    dust.render("onLoad", dust.makeBase(null, { lang: "fr" }), function(err, out) {
+      try {
+        unit.ifError(err);
+        unit.equals(out, "Loaded: onLoad, lang fr");
+      } catch(err) {
+        unit.fail(err);
+        return;
+      }
+      unit.pass();
+    });
+  });
+
   suite.test("disable cache", function() {
     var unit = this,
-        template = "Version 1",
-        cache;
+        template = "Version 1";
     dust.onLoad = function(name, cb) {
       cb(null, template);
     };
-    // Store what's in the cache before we blow it all away
-    cache = dust.cache;
     dust.config.cache = false;
     dust.render("test", {}, function(err, out) {
       try {
@@ -57,9 +125,6 @@ exports.coreSetup = function(suite, auto) {
           } catch(err) {
             return unit.fail(err);
           } finally {
-            // restore
-            dust.cache = cache;
-            dust.onLoad = null;
             dust.config.cache = true;
           }
           unit.pass();
