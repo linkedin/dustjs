@@ -1,5 +1,15 @@
 ## Change Log
 
+### v2.7.1 (2015/04/30 20:32 +00:00)
+- [#655](https://github.com/linkedin/dustjs/pull/655) Update CommonJS example to make use of new onLoad behavior (@sethkinast)
+- [#653](https://github.com/linkedin/dustjs/pull/653) Fix array iteration when context is undefined (@sethkinast)
+- [#641](https://github.com/linkedin/dustjs/pull/641) Add a `cb(null, compiledTemplate)` signature to `dust.onLoad`  Calling the `onLoad` callback with a compiled template function will use this template to satisfy the load request. The template is not automatically registered under any name when passed to the callback, so the `onLoad` function should handle registration as it needs.  `dust.cache` behavior has been changed slightly. Before, setting it to false would blow away the entire cache on every render. Now, setting it to false just prevents new templates from being added and cached templates from being used, but if it's set to true again previously-cached templates will be ready to use. (@sethkinast)
+- [#650](https://github.com/linkedin/dustjs/pull/650) Pin jasmine@2.2.x for grunt-jasmine-nodejs (@sethkinast)
+- [#646](https://github.com/linkedin/dustjs/pull/646) Update AMD and CommonJS examples (@sethkinast)
+- [#637](https://github.com/linkedin/dustjs/pull/637) CommonJS example (@sethkinast)
+- [#638](https://github.com/linkedin/dustjs/pull/638) Preserve compiler backwards compatibility with pre-2.7 versions (@sethkinast)
+- [#639](https://github.com/linkedin/dustjs/pull/639) Fix failing test on Windows (@sethkinast)
+
 ### v2.7.0 (2015/04/17 23:23 +00:00)
 - [#636](https://github.com/linkedin/dustjs/pull/636) Fix failing tests in IE8 (@sethkinast)
 - [#633](https://github.com/linkedin/dustjs/pull/633) Drop Node 0.8 (@sethkinast)

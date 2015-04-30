@@ -1,4 +1,4 @@
-/*! dustjs-linkedin - v2.7.0
+/*! dustjs-linkedin - v2.7.1
 * http://dustjs.com/
 * Copyright (c) 2015 Aleksander Williams; Released under the MIT License */
 (function (root, factory) {
@@ -12,7 +12,7 @@
   }
 }(this, function() {
   var dust = {
-        "version": "2.7.0"
+        "version": "2.7.1"
       },
       NONE = 'NONE', ERROR = 'ERROR', WARN = 'WARN', INFO = 'INFO', DEBUG = 'DEBUG',
       EMPTY_FUNC = function() {};
@@ -90,7 +90,9 @@
       return;
     }
     tmpl.templateName = name;
-    dust.cache[name] = tmpl;
+    if (dust.config.cache !== false) {
+      dust.cache[name] = tmpl;
+    }
   };
 
   dust.render = function(nameOrTemplate, context, callback) {
@@ -115,41 +117,74 @@
     return stream;
   };
 
+  /**
+   * Extracts a template function (body_0) from whatever is passed.
+   * @param nameOrTemplate {*} Could be:
+   *   - the name of a template to load from cache
+   *   - a CommonJS-compiled template (a function with a `template` property)
+   *   - a template function
+   * @param loadFromCache {Boolean} if false, don't look in the cache
+   * @return {Function} a template function, if found
+   */
+  function getTemplate(nameOrTemplate, loadFromCache/*=true*/) {
+    if(!nameOrTemplate) {
+      return;
+    }
+    if(typeof nameOrTemplate === 'function' && nameOrTemplate.template) {
+      // Sugar away CommonJS module templates
+      return nameOrTemplate.template;
+    }
+    if(dust.isTemplateFn(nameOrTemplate)) {
+      // Template functions passed directly
+      return nameOrTemplate;
+    }
+    if(loadFromCache !== false) {
+      // Try loading a template with this name from cache
+      return dust.cache[nameOrTemplate];
+    }
+  }
+
   function load(nameOrTemplate, chunk, context) {
     if(!nameOrTemplate) {
       return chunk.setError(new Error('No template or template name provided to render'));
     }
 
-    if(!dust.config.cache) {
-      dust.cache = {};
-    }
+    var template = getTemplate(nameOrTemplate, dust.config.cache);
 
-    var tmpl;
-    if(typeof nameOrTemplate === 'function' && nameOrTemplate.template) {
-      // Sugar away CommonJS module templates
-      tmpl = nameOrTemplate.template;
-    } else if(dust.isTemplateFn(nameOrTemplate)) {
-      // Template functions passed directly
-      tmpl = nameOrTemplate;
-    } else {
-      // Load a template with this name from cache
-      tmpl = dust.cache[nameOrTemplate];
-    }
-
-    if (tmpl) {
-      return tmpl(chunk, Context.wrap(context, tmpl.templateName));
+    if (template) {
+      return template(chunk, Context.wrap(context, template.templateName));
     } else {
       if (dust.onLoad) {
         return chunk.map(function(chunk) {
-          dust.onLoad(nameOrTemplate, function(err, src) {
+          // Alias just so it's easier to read that this would always be a name
+          var name = nameOrTemplate;
+          // Three possible scenarios for a successful callback:
+          //   - `require(nameOrTemplate)(dust); cb()`
+          //   - `src = readFile('src.dust'); cb(null, src)`
+          //   - `compiledTemplate = require(nameOrTemplate)(dust); cb(null, compiledTemplate)`
+          function done(err, srcOrTemplate) {
+            var template;
             if (err) {
               return chunk.setError(err);
             }
-            if (!dust.cache[nameOrTemplate]) {
-              dust.loadSource(dust.compile(src, nameOrTemplate));
+            // Prefer a template that is passed via callback over the cached version.
+            template = getTemplate(srcOrTemplate, false) || getTemplate(name, dust.config.cache);
+            if (!template) {
+              // It's a template string, compile it and register under `name`
+              if(dust.compile) {
+                template = dust.loadSource(dust.compile(srcOrTemplate, name));
+              } else {
+                return chunk.setError(new Error('Dust compiler not available'));
+              }
             }
-            dust.cache[nameOrTemplate](chunk, Context.wrap(context, nameOrTemplate)).end();
-          });
+            template(chunk, Context.wrap(context, template.templateName)).end();
+          }
+
+          if(dust.onLoad.length === 3) {
+            dust.onLoad(name, context.options, done);
+          } else {
+            dust.onLoad(name, done);
+          }
         });
       }
       return chunk.setError(new Error('Template Not Found: ' + nameOrTemplate));
@@ -273,18 +308,19 @@
     }
   };
 
-  function Context(stack, global, blocks, templateName) {
+  function Context(stack, global, options, blocks, templateName) {
     if(stack !== undefined && !(stack instanceof Stack)) {
       stack = new Stack(stack);
     }
     this.stack = stack;
     this.global = global;
+    this.options = options;
     this.blocks = blocks;
     this.templateName = templateName;
   }
 
-  dust.makeBase = function(global) {
-    return new Context(undefined, global);
+  dust.makeBase = dust.context = function(global, options) {
+    return new Context(undefined, global, options);
   };
 
   /**
@@ -303,7 +339,7 @@
     if (context instanceof Context) {
       return context;
     }
-    return new Context(context, {}, null, name);
+    return new Context(context, {}, {}, null, name);
   };
 
   /**
@@ -429,7 +465,7 @@
   };
 
   Context.prototype.rebase = function(head) {
-    return new Context(head, this.global, this.blocks, this.getTemplateName());
+    return new Context(head, this.global, this.options, this.blocks, this.getTemplateName());
   };
 
   Context.prototype.clone = function() {
@@ -478,7 +514,7 @@
       } else {
         newBlocks = blocks.concat([locals]);
       }
-      return new Context(this.stack, this.global, newBlocks, this.getTemplateName());
+      return new Context(this.stack, this.global, this.options, newBlocks, this.getTemplateName());
     }
     return this;
   };
@@ -731,7 +767,7 @@
     var body = bodies.block,
         skip = bodies['else'],
         chunk = this,
-        i, len;
+        i, len, head;
 
     if (typeof elem === 'function' && !dust.isTemplateFn(elem)) {
       try {
@@ -760,23 +796,16 @@
       if (body) {
         len = elem.length;
         if (len > 0) {
-          // any custom helper can blow up the stack and store a flattened context, guard defensively
-          if(context.stack.head) {
-            context.stack.head.$len = len;
-          }
+          head = context.stack && context.stack.head || {};
+          head.$len = len;
           for (i = 0; i < len; i++) {
-            if(context.stack.head) {
-              context.stack.head.$idx = i;
-            }
+            head.$idx = i;
             chunk = body(chunk, context.push(elem[i], i, len));
           }
-          if(context.stack.head) {
-            context.stack.head.$idx = undefined;
-            context.stack.head.$len = undefined;
-          }
+          head.$idx = undefined;
+          head.$len = undefined;
           return chunk;
-        }
-        else if (skip) {
+        } else if (skip) {
           return skip(this, context);
         }
       }
@@ -846,6 +875,12 @@
 
   Chunk.prototype.partial = function(elem, context, partialContext, params) {
     var head;
+
+    if(params === undefined) {
+      // Compatibility for < 2.7.0 where `partialContext` did not exist
+      params = partialContext;
+      partialContext = context;
+    }
 
     if (!dust.isEmptyObject(params)) {
       partialContext = partialContext.clone();
