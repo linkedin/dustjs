@@ -3,22 +3,28 @@ var path = require('path'),
 
 var dust = require('dustjs-linkedin');
 
-// Add any extra helpers, do dust config, etc...
+// Add any extra helpers, do dust config, etc., in a single location
+// This helper just uppercases anything inside its body
 dust.helpers.shout = function(chunk, context, bodies, params) {
   return chunk.tap(function(data) {
     return data.toUpperCase();
   }).render(bodies.block, context).untap();
 };
 
-// Adding an `onLoad` function lets us load partials
-dust.onLoad = function(templateName, callback) {
-  requireTemplate(templateName);
-  callback();
-};
-
-function requireTemplate(name) {
-  var tmpl = require(root(name));
-  return tmpl(dust);
+// Here's our app-specific logic
+function requireTemplate(name, callback) {
+  var tmpl;
+  try {
+    tmpl = require(root(name))(dust);
+  } catch(e) {
+    if (callback) { callback(e); } else { throw e; }
+  }
+  if (callback) {
+    callback(null, tmpl);
+  } else {
+    return tmpl;
+  }
 }
 
-module.exports = requireTemplate;
+// Adding an `onLoad` function lets us load partials
+module.exports = dust.onLoad = requireTemplate;
