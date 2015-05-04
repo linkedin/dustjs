@@ -1,6 +1,6 @@
-/*global describe,expect,it,beforeEach */
+/*global describe, expect, it, beforeEach, beforeAll */
 /*jshint evil:true*/
-var dust = require('../../../');
+var dust = require('../');
 
 function load(tmpl) {
   dust.config.cjs = true;
@@ -11,8 +11,11 @@ describe('CommonJS template', function() {
   var template = "Hello {world}!",
       context = { world: "world" },
       rendered = "Hello world!",
-      templateName = 'hello',
       tmpl;
+
+  beforeAll(function() {
+    dust.cache = {};
+  });
 
   beforeEach(function() {
     tmpl = load(template);

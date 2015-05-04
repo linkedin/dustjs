@@ -3,14 +3,12 @@ var path = require('path'),
     fs = require('fs'),
     exec = require('child_process').exec;
 
-var ROOT_DIR = path.resolve(__dirname, '../../../../'),
+var ROOT_DIR = path.resolve(__dirname, '../../'),
     BIN_DIR = path.join(ROOT_DIR, 'bin'),
     TMP_DIR = require('tmp').dirSync().name,
     FIXTURE_DIR = path.join(__dirname, 'fixtures');
 
 var packageJson = require(path.join(ROOT_DIR, 'package.json'));
-
-require('./lib/matchers.js');
 
 describe('dustc', function() {
 

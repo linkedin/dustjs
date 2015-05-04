@@ -1,9 +1,9 @@
 /*global dust*/
 var isRhino = typeof isRhino !== 'undefined';
 if(typeof require !== 'undefined') {
-  dust = require('../../../');
-  coreTests = require('./coreTests.js');
-  require('./testHelpers.js');
+  dust = require('../');
+  coreTests = require('./templates/all.js');
+  require('./helpers/template.helper.js');
 }
 describe ('Render', function() {
   for (var index = 0; index < coreTests.length; index++) {

@@ -1,8 +1,8 @@
 (function (root, factory) {
   if (typeof exports === 'object') {
-    factory(require('../../../lib/dust'), require('ayepromise'));
+    factory(require('../../'), require('ayepromise'));
   } else {
-    factory(root.dust, ayepromise);
+    factory(root.dust, root.ayepromise);
   }
 }(this, function(dust, ayepromise) {
   dust.helpers.error = function(chunk, context, bodies, params) {

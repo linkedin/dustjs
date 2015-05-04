@@ -12,16 +12,9 @@ module.exports = function(grunt) {
       ' Released under the <%= pkg.license %> License */\n',
     // Task configuration.
     shell: {
-      oldTests: {
-        command: 'node test/server.js',
-        options: {
-          stdout: true,
-          failOnError: true
-        }
-      },
       testRhino : {
         command : function() {
-          var rhinoTest = 'test/rhino/rhinoSpec.js';
+          var rhinoTest = 'test/rhino.spec.js';
           return Object.keys(pkg.devDependencies).filter(function(name) {
             return name.match(/^rhino/);
           }).map(function(name) {
@@ -124,8 +117,8 @@ module.exports = function(grunt) {
         options: {
           keepRunner: false,
           display: 'short',
-          helpers: ['test/jasmine-test/spec/coreTests.js'],
-          specs: ['test/jasmine-test/spec/testHelpers.js', 'test/jasmine-test/spec/renderTestSpec.js'],
+          helpers: ['test/templates/all.js'],
+          specs: ['test/helpers/template.helper.js', 'test/templates.spec.js'],
           vendor: ['node_modules/ayepromise/ayepromise.js', 'test/lib/highland.js']
         }
       },
@@ -167,38 +160,29 @@ module.exports = function(grunt) {
       }
     },
     jasmine_nodejs: {
-      cjs: {
-        specs: ['test/jasmine-test/spec/cjsSpec.js'],
-        options: {
-          reporters: {
-            console: {
-              colors: false,
-              verbosity: 0
-            }
+      options: {
+        reporters: {
+          console: {
+            colors: false,
+            verbosity: 0
           }
         }
+      },
+      core: {
+        specs: ['test/core.spec.js']
+      },
+      cjs: {
+        specs: ['test/commonJS.spec.js']
       },
       dustc: {
-        specs: ['test/jasmine-test/spec/cli/*'],
         options: {
-          reporters: {
-            console: {
-              colors: true,
-              verbosity: 0
-            }
-          }
-        }
+          useHelpers: true,
+        },
+        helpers: ['test/cli/matchers.helper.js'],
+        specs: ['test/cli/*']
       },
       templates: {
-        specs: ['test/jasmine-test/spec/renderTestSpec.js'],
-        options: {
-          reporters: {
-            console: {
-              colors: true,
-              verbosity: 0
-            }
-          }
-        }
+        specs: ['test/templates.spec.js']
       }
     },
     watch: {
@@ -295,7 +279,7 @@ module.exports = function(grunt) {
   grunt.registerTask('build',          ['clean:build', 'shell:buildParser', 'buildLib', 'uglify']);
 
   //test tasks
-  grunt.registerTask('testNode',       ['jasmine_nodejs:cjs', 'jasmine_nodejs:templates', 'shell:oldTests']);
+  grunt.registerTask('testNode',       ['jasmine_nodejs:templates', 'jasmine_nodejs:core', 'jasmine_nodejs:cjs']);
   grunt.registerTask('testRhino',      ['build', 'shell:testRhino']);
   grunt.registerTask('testPhantom',    ['build', 'jasmine:testProd']);
   grunt.registerTask('testCli',        ['jasmine_nodejs:dustc']);
