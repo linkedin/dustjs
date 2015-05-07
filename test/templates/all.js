@@ -1,7 +1,13 @@
-if (typeof require !== 'undefined') {
-  ayepromise = require('ayepromise');
-  highland = require('highland');
-}
+(function (root, factory) {
+  if (typeof exports === 'object') {
+    var dust = require('../../'),
+        ayepromise = require('ayepromise'),
+        highland = require('highland');
+    module.exports = factory(dust, ayepromise, highland);
+  } else {
+    root.coreTests = factory(root.dust, root.ayepromise, root.highland);
+  }
+}(this, function(dust, ayepromise, highland) {
 /**
  * A naive Promise constructor that simply resolves or rejects its Promise based on what's passed
  * @param err {*} Invokes the `error` callback with this value
@@ -41,7 +47,7 @@ function DreamStream(arr) {
   }
 }
 
-var coreTests = [
+return [
 /**
  * CORE TESTS
  */
@@ -2272,9 +2278,4 @@ var coreTests = [
     ]
   }
 ];
-
-if (typeof module !== "undefined" && typeof require !== "undefined") {
-    module.exports = coreTests; // We're on node.js
-} else {
-    this['coreTests'] = coreTests; // Set it up as global  - browser or rhino
-}
+}));

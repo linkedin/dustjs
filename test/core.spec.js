@@ -1,4 +1,3 @@
-/*global it, expect, describe, beforeAll, afterAll, beforeEach*/
 (function (root, factory) {
   if (typeof exports === 'object') {
     factory(require('../'));

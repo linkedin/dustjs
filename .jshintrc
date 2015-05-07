@@ -4,7 +4,7 @@
     "eqeqeq"        : true,
     "forin"         : false,
     "immed"         : true,
-    "latedef"       : true,
+    "latedef"       : "nofunc",
     "newcap"        : true,
     "noarg"         : true,
     "noempty"       : true,
@@ -58,7 +58,14 @@
     "passfail"      : false,
     "white"         : false,
 
-    "predef"       : [
-      "define"
-    ]
+    "globals"       : {
+      "define"      : false,
+      "describe"    : false,
+      "expect"      : false,
+      "it"          : false,
+      "beforeEach"  : false,
+      "afterEach"   : false,
+      "beforeAll"   : false,
+      "afterAll"    : false
+    }
 }

@@ -1,4 +1,4 @@
-/*global describe,expect,it,afterEach */
+/*jshint unused:false*/
 var path = require('path'),
     fs = require('fs'),
     exec = require('child_process').exec;
