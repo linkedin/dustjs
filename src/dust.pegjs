@@ -217,7 +217,7 @@ esc
   = '\\"' { return '"' }
 
 raw "raw"
-  = "{`" rawText:(!"`}" char:. {return char})* "`}"
+  = "{`" rawText:(!"`}" character:. {return character})* "`}"
   { return withPosition(["raw", rawText.join('')]) }
 comment "comment"
   = "{!" c:(!"!}" c:. {return c})* "!}"
