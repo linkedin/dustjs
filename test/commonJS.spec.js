@@ -1,21 +1,27 @@
-/*global describe,expect,it,beforeEach */
-/*jshint evil:true*/
-var dust = require('../../../');
+var dust = require('../');
 
-function load(tmpl) {
-  dust.config.cjs = true;
-  return eval(dust.compile(tmpl, 'hello'))(dust);
+function load(tmpl, name) {
+  /*jshint evil:true*/
+  return eval(dust.compile(tmpl, name))(dust);
 }
 
 describe('CommonJS template', function() {
   var template = "Hello {world}!",
       context = { world: "world" },
       rendered = "Hello world!",
-      templateName = 'hello',
       tmpl;
 
+  beforeAll(function() {
+    dust.config.cjs = true;
+    dust.cache = {};
+  });
+
+  afterAll(function() {
+    dust.config.cjs = false;
+  });
+
   beforeEach(function() {
-    tmpl = load(template);
+    tmpl = load(template, 'hello');
     dust.onLoad = undefined;
   });
 
@@ -58,7 +64,7 @@ describe('CommonJS template', function() {
   });
 
   it('can be passed to dust.render even if it is anonymous', function() {
-    tmpl = eval(dust.compile("Hello anonymous {world}!"))(dust);
+    tmpl = load("Hello anonymous {world}!");
     dust.render(tmpl, context, function(err, out) {
       expect(out).toEqual("Hello anonymous world!");
     });

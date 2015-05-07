@@ -1,3 +1,5 @@
+/*jshint rhino:true*/
+/*global jasmineRequire*/
 //set up functions missing in Rhino
 (function () {
 	var timers = [];
@@ -102,9 +104,9 @@ reporter.specDone = function(spec) {
     java.lang.System.out.print('X');
     failedSpecs.push(spec);
   }
-}
+};
 
-reporter.suiteDone = function (suite) {
+reporter.jasmineDone = function() {
   print('\n');
   for(var i = 0; i < failedSpecs.length; i++) {
     print('\tFailed: ' + failedSpecs[i].description);
@@ -114,8 +116,8 @@ reporter.suiteDone = function (suite) {
   if(failedSpecs.length > 0) {
     java.lang.System.exit(1);
   } else {
-    quit();
-  }
+		quit();
+	}
 };
 
 env.addReporter(reporter);

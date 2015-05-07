@@ -1,4 +1,4 @@
-/* BUILD_MESSAGE_HERE */
+/* @@build */
 (function(root, factory) {
   if (typeof define === "function" && define.amd && define.amd.dust === true) {
     define("dust.parse", ["dust.core"], function(dust) {
@@ -13,7 +13,7 @@
     factory(root.dust);
   }
 }(this, function(dust) {
-  var parser = 'PARSER_CODE_HERE';
+  var parser = @@parser;
 
   // expose parser methods
   dust.parse = parser.parse;

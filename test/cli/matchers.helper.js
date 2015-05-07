@@ -1,5 +1,5 @@
 var fs = require('fs'),
-  dust = require('../../../../../lib/dust');
+    dust = require('../../');
 
 var matchers = {};
 
