@@ -110,12 +110,35 @@ module.exports = function(grunt) {
        }
      }
     },
+    'saucelabs-jasmine': {
+      all: {
+        options: {
+          urls: ["http://localhost:3000/_SpecRunner.html"],
+          build: process.env.TRAVIS_JOB_ID,
+          throttled: 3,
+          testname: 'core',
+          browsers: [
+            {browserName: 'chrome'},
+            {browserName: 'firefox'},
+            {browserName: 'safari', version: 7, platform: 'OS X 10.9'},
+            {browserName: 'safari', version: 6, platform: 'OS X 10.8'},
+            {browserName: 'internet explorer', version: 11, platform: 'Windows 8.1'},
+            {browserName: 'internet explorer', version: 10, platform: 'Windows 8'},
+            {browserName: 'internet explorer', version: 9, platform: 'Windows 7'},
+            {browserName: 'internet explorer', version: 8, platform: 'Windows 7'}
+          ],
+          sauceConfig: {
+            'video-upload-on-pass': false
+          }
+        }
+      }
+    },
     jasmine: {
       options: {
         keepRunner: false,
         display: 'short',
         specs: ['test/templates/all.js', 'test/helpers/template.helper.js', 'test/templates.spec.js'],
-        vendor: ['node_modules/ayepromise/ayepromise.js', 'test/lib/highland.js']
+        vendor: ['node_modules/ayepromise/ayepromise.js', 'test/lib/highland.js', 'test/lib/jsreporter.js']
       },
       /*tests production (minified) code*/
       testProd: {
@@ -258,6 +281,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-peg');
   grunt.loadNpmTasks('grunt-jasmine-nodejs');
   grunt.loadNpmTasks('grunt-github-changes');
+  grunt.loadNpmTasks('grunt-saucelabs');
 
   //--------------------------------------------------
   //------------Grunt task aliases -------------------
@@ -272,8 +296,11 @@ module.exports = function(grunt) {
   grunt.registerTask('testCli',        ['jasmine_nodejs:dustc']);
   grunt.registerTask('test',           ['build', 'jasmine:testProd', 'testCli', 'testNode', 'execute:testRhino', 'jasmine:coverage']);
 
+  //sauce labs integration (browser testing)
+  grunt.registerTask('sauce',          process.env.SAUCE_ACCESS_KEY ? ['jasmine:testProd:build', 'connect:testServer', 'saucelabs-jasmine'] : []);
+
   //decide whether to run all tests or just the Node tests for Travis CI
-  grunt.registerTask('travis',         (process.env.TEST === 'all') ? ['test'] : ['testNode', 'testCli']);
+  grunt.registerTask('travis',         (process.env.TEST === 'all') ? ['test', 'sauce'] : ['testNode', 'testCli']);
 
   //task for debugging in browser
   grunt.registerTask('dev',            ['build', 'jasmine:testDev:build', 'connect:testServer','log:testClient', 'watch:lib']);

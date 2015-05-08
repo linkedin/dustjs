@@ -59,6 +59,7 @@
     "grunt-github-changes": "~0.0.6",
     "grunt-jasmine-nodejs": "~1.4.0",
     "grunt-peg": "~1.5.0",
+    "grunt-saucelabs": "~8.6.1",
     "grunt-shell": "~1.1.2",
     "grunt-template-jasmine-istanbul": "~0.3.3",
     "highland": "2.4.0",
