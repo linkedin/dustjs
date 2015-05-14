@@ -112,7 +112,7 @@ module.exports = function(grunt) {
     },
     jasmine: {
       options: {
-        keepRunner: false,
+        outfile: 'index.html',
         display: 'short',
         specs: ['test/templates/all.js', 'test/helpers/template.helper.js', 'test/templates.spec.js'],
         vendor: ['node_modules/ayepromise/ayepromise.js', 'test/lib/highland.js']
@@ -205,11 +205,6 @@ module.exports = function(grunt) {
           message: 'OK. Done copying version <%= pkg.version %> build from tmp to dist'
         }
       },
-      testClient: {
-        options: {
-        message: 'Open http://localhost:<%= connect.testServer.options.port %>/_SpecRunner.html in a browser\nCtrl + C to stop the server.'
-        }
-      },
       release: {
         options: {
           message: ['OK. Done bumping, adding, committing, tagging and pushing the new version',
@@ -276,10 +271,10 @@ module.exports = function(grunt) {
   grunt.registerTask('travis',         (process.env.TEST === 'all') ? ['test'] : ['testNode', 'testCli']);
 
   //task for debugging in browser
-  grunt.registerTask('dev',            ['build', 'jasmine:testDev:build', 'connect:testServer','log:testClient', 'watch:lib']);
+  grunt.registerTask('dev',            ['build', 'jasmine:testDev:build', 'connect:testServer', 'watch:lib']);
 
   //task to run unit tests on client against prod version of code
-  grunt.registerTask('testClient',     ['build', 'jasmine:testProd:build', 'connect:testServer', 'log:testClient', 'watch:lib_test']);
+  grunt.registerTask('testClient',     ['build', 'jasmine:testProd:build', 'connect:testServer', 'watch:lib_test']);
 
   //coverage report
   grunt.registerTask('coverage',       ['build', 'jasmine:coverage', 'log:coverage']);

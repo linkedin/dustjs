@@ -981,6 +981,19 @@ return [
         message:  "should reserve an async chunk for a stream reference and abort if the stream errors"
       },
       {
+        name: "array of streams",
+        source: "{#streams}{.} {/streams}",
+        context: {
+          streams: [
+            new DreamStream('Danube'),
+            new DreamStream('Rhine'),
+            new DreamStream('Seine')
+          ]
+        },
+        expected: "Danube Rhine Seine ",
+        message: "should render streams found while iterating over an array"
+      },
+      {
         disabled_in_rhino: "Rhino can't handle this nested asynchronisity.",
         name:     "promise a stream and stream a promise",
         source:   ["Little Bobby drank and drank, ",
@@ -994,6 +1007,18 @@ return [
                    "and then he drank some more. ",
                    "But what he thought was H2O was H2SO4!"].join(''),
         message:  "should seamlessly mix asynchronous data sources"
+      },
+      {
+        name: 'MongoDB-like Document is not a stream',
+        source: "{#mongo}{name}{/mongo}",
+        context: {
+          mongo: {
+            on: function() { throw new Error("Fooled you; I am not a stream!"); },
+            name: "Mongo"
+          }
+        },
+        expected: "Mongo",
+        message: "should not treat MongoDB documents as streams"
       }
     ]
   },

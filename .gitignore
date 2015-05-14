@@ -1,7 +1,7 @@
 node_modules
 *.DS_Store
 .grunt
-_SpecRunner.html
+index.html
 tmp
 examples/*/views/**/*.js
 examples/*/lib/*
