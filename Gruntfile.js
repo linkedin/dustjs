@@ -113,7 +113,7 @@ module.exports = function(grunt) {
     'saucelabs-jasmine': {
       all: {
         options: {
-          urls: ["http://localhost:3000/_SpecRunner.html"],
+          urls: ["http://localhost:3000/"],
           build: process.env.TRAVIS_JOB_ID,
           throttled: 3,
           testname: 'core',
