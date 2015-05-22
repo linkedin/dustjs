@@ -1,0 +1,38 @@
+{
+  "name": "dustjs-linkedin",
+  "version": "2.7.1",
+  "author": {
+    "name": "Aleksander Williams",
+    "url": "http://akdubya.github.com/dustjs"
+  },
+  "homepage": "http://dustjs.com/",
+  "description": "Asynchronous templates for the browser and server (LinkedIn fork)",
+  "contributors": [
+    "Veena Basavaraj <vybs@users.noreply.github.com>",
+    "Tom Carchrae",
+    "Jimmy Chan <jchan@linkedin.com>",
+    "Steven Foote <sfoote@linkedin.com>",
+    "Prayrit Prash Jain <prjain@linkedin.com>",
+    "Seth Kinast <skinast@linkedin.com>",
+    "Jairo de Morais <jairodemorais@users.noreply.github.com>",
+    "Kate Odnous <kodnous@linkedin.com>",
+    "Richard Ragan <rragan@ebay.com>"
+  ],
+  "module": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/linkedin/dustjs.git"
+  },
+  "keywords": [
+    "templates",
+    "views",
+    "dust",
+    "dustjs",
+    "dust.js",
+    "linkedin"
+  ],
+  "license": "MIT",
+  "exclude": [
+    ".*.\/bin\/.*"
+  ]
+}
