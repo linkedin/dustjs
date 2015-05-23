@@ -18,7 +18,7 @@
     "Kate Odnous <kodnous@linkedin.com>",
     "Richard Ragan <rragan@ebay.com>"
   ],
-  "module": "index.js",
+  "module": "index2.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/linkedin/dustjs.git"
