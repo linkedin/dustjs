@@ -145,6 +145,10 @@ function compile(data, name) {
     try {
         compiled = dust.compile(data, name);
     } catch(e) {
+        if (cli.options.watch) {
+            cli.error('[' + name + '] ' + e);
+            return;
+        }
         return cli.fatal('[' + name + '] ' + e);
     }
     return compiled;
@@ -159,7 +163,10 @@ function output(data, file) {
         } else {
             output_stream = process.stdout;
         }
-        output_stream.write(data + eol);
+        if (data) {
+            output_stream.write(data + eol);    
+        }
+        
     } catch (e) {
         cli.fatal('Could not write to output stream');
     }
