@@ -90,7 +90,9 @@ function handle() {
             templateName = templateName.replace(/\\/g, '/');
 
             compiledData = compile(data, templateName);
-            output(compiledData, outputFile);
+            if (compiledData) {
+              output(compiledData, outputFile);
+            }
         });
     });
 }
@@ -145,6 +147,9 @@ function compile(data, name) {
     try {
         compiled = dust.compile(data, name);
     } catch(e) {
+        if (cli.options.watch) {
+            return cli.error('[' + name + '] ' + e);
+        }
         return cli.fatal('[' + name + '] ' + e);
     }
     return compiled;
