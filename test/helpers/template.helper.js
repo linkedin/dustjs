@@ -17,4 +17,11 @@
     }
     return defer.promise;
   };
+  dust.helpers.return = function(chunk, context, bodies, params) {
+    var val = params.value;
+    if(dust.isTemplateFn(val)) {
+      return val(chunk, context);
+    }
+    return val;
+  };
 }));

@@ -886,6 +886,13 @@ return [
 		expected: "Eventually magic!",
 		message: "should reserve an async section for a thenable"
 	  },
+    {
+		name:     "thenable empty section",
+		source:   "{#promise/}",
+		context:  { "promise": new FalsePromise(null, "magic") },
+		expected: "",
+		message: "Should not render a thenable section with no body"
+	  },
 	  {
 		name:     "thenable section from function",
 		source:   "{#promise}Eventually {magic}!{/promise}",
@@ -935,7 +942,7 @@ return [
 		context:  { "promise": new FalsePromise("promise error") },
 		expected: "promise error",
 		message: "rejected thenable renders error block"
-	  },
+    },
       {
         name:     "stream",
         source:   "Stream of {stream}...",
@@ -1019,6 +1026,15 @@ return [
         },
         expected: "Mongo",
         message: "should not treat MongoDB documents as streams"
+      },
+      {
+        name: 'Stream section with no body should not render',
+        source: "{#stream/}",
+        context: {
+          stream: new DreamStream("hello")
+        },
+        expected: "",
+        message: "stream section with no body should not render"
       }
     ]
   },
@@ -2242,6 +2258,92 @@ return [
         context: {},
         expected: "<div data-fancy-json=\"{rawJsonKey: 'value'}\"></div>",
         message: "raw text should allow {"
+      }
+    ]
+  },
+  {
+    name: "helper tests",
+    tests: [
+      {
+        name:  "helper returns a primitive",
+        source: "{@return value=3/}",
+        context: {},
+        expected: "3",
+        message: "helper can return a primitive"
+      },
+      {
+        name: "helper returns a primitive and renders a body",
+        source: '{@return value="world"}Hello {.}{/return}',
+        context: {},
+        expected: "Hello world",
+        message: "helper can return a primitive and render a body"
+      },
+      {
+        name: "helper returns an array and iterates a body",
+        source: '{@return value=arr}Hello {name} {/return}',
+        context: { arr: [{name:"Alice"},{name:"Bob"},{name:"Charlie"}]},
+        expected: "Hello Alice Hello Bob Hello Charlie ",
+        message: "helper that returns an array iterates its body"
+      },
+      {
+        name:  "helper escapes a primitive",
+        source: '{@return value="You & I"/}',
+        context: {},
+        expected: "You &amp; I",
+        message: "helper escapes returned primitives"
+      },
+      {
+        name: "helper filters a primitive",
+        source: '{@return value="You & I" filters="|s"/} {@return value="& Tim" filters="|js|s"/}',
+        context: {},
+        expected: 'You & I "& Tim"',
+        message: "helper applies filters to returned primitives"
+      },
+      {
+        name: "helper filters a primitive using an array of filters",
+        source: '{@return value="You & I" filters=filters/}',
+        context: { filters: ['js','s']},
+        expected: '"You & I"',
+        message: "helper filters a primitive using an array of filters"
+      },
+      {
+        name:  "helper returns a chunk",
+        source: '{@return value="{hello} & world"/}',
+        context: {hello: '<Hello>'},
+        expected: "&lt;Hello&gt; & world",
+        message: "helper can return a Chunk"
+      },
+      {
+        name:  "helper doesn't filter a chunk",
+        source: '{@return value="{hello} & world" filters="|s"/}',
+        context: {hello: '<Hello>'},
+        expected: "&lt;Hello&gt; & world",
+        message: "helper doesn't apply filters to a Chunk"
+      },
+      {
+        name:  "helper filters are affected by pragma",
+        source: '{%esc:s}{@return value="You & I"/}{/esc}',
+        context: {},
+        expected: "You & I",
+        message: "helper applies filter from esc pragma"
+      },
+      {
+        name:  "helper filters supercede pragma",
+        source: '{%esc:s}{@return value="You & I" filters="|h" /}{/esc}',
+        context: {},
+        expected: "You &amp; I",
+        message: "helper filters supercede filter from esc pragma"
+      },
+      {
+        name:  "Dust < 2.7.1 compat: helpers escape references",
+        source: '{#returnLegacy value="You & I" /}',
+        context: {
+          returnLegacy: function(chunk, context, bodies, params) {
+            return chunk.helper('return', context, bodies, params);
+          }
+        },
+        expected: "You &amp; I",
+        message: "templates compiled with Dust < 2.7.1 escape values returned from helpers"
       }
     ]
   },
