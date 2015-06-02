@@ -2266,70 +2266,70 @@ return [
     tests: [
       {
         name:  "helper returns a primitive",
-        source: "{@return value=3/}",
+        source: "{@val value=3/}",
         context: {},
         expected: "3",
         message: "helper can return a primitive"
       },
       {
         name: "helper returns a primitive and renders a body",
-        source: '{@return value="world"}Hello {.}{/return}',
+        source: '{@val value="world"}Hello {.}{/val}',
         context: {},
         expected: "Hello world",
         message: "helper can return a primitive and render a body"
       },
       {
         name: "helper returns an array and iterates a body",
-        source: '{@return value=arr}Hello {name} {/return}',
+        source: '{@val value=arr}Hello {name} {/val}',
         context: { arr: [{name:"Alice"},{name:"Bob"},{name:"Charlie"}]},
         expected: "Hello Alice Hello Bob Hello Charlie ",
         message: "helper that returns an array iterates its body"
       },
       {
         name:  "helper escapes a primitive",
-        source: '{@return value="You & I"/}',
+        source: '{@val value="You & I"/}',
         context: {},
         expected: "You &amp; I",
         message: "helper escapes returned primitives"
       },
       {
         name: "helper filters a primitive",
-        source: '{@return value="You & I" filters="|s"/} {@return value="& Tim" filters="|js|s"/}',
+        source: '{@val value="You & I" filters="|s"/} {@val value="& Tim" filters="|js|s"/}',
         context: {},
         expected: 'You & I "& Tim"',
         message: "helper applies filters to returned primitives"
       },
       {
         name: "helper filters a primitive using an array of filters",
-        source: '{@return value="You & I" filters=filters/}',
+        source: '{@val value="You & I" filters=filters/}',
         context: { filters: ['js','s']},
         expected: '"You & I"',
         message: "helper filters a primitive using an array of filters"
       },
       {
         name:  "helper returns a chunk",
-        source: '{@return value="{hello} & world"/}',
+        source: '{@val value="{hello} & world"/}',
         context: {hello: '<Hello>'},
         expected: "&lt;Hello&gt; & world",
         message: "helper can return a Chunk"
       },
       {
         name:  "helper doesn't filter a chunk",
-        source: '{@return value="{hello} & world" filters="|s"/}',
+        source: '{@val value="{hello} & world" filters="|s"/}',
         context: {hello: '<Hello>'},
         expected: "&lt;Hello&gt; & world",
         message: "helper doesn't apply filters to a Chunk"
       },
       {
         name:  "helper filters are affected by pragma",
-        source: '{%esc:s}{@return value="You & I"/}{/esc}',
+        source: '{%esc:s}{@val value="You & I"/}{/esc}',
         context: {},
         expected: "You & I",
         message: "helper applies filter from esc pragma"
       },
       {
         name:  "helper filters supercede pragma",
-        source: '{%esc:s}{@return value="You & I" filters="|h" /}{/esc}',
+        source: '{%esc:s}{@val value="You & I" filters="|h" /}{/esc}',
         context: {},
         expected: "You &amp; I",
         message: "helper filters supercede filter from esc pragma"
@@ -2339,7 +2339,7 @@ return [
         source: '{#returnLegacy value="You & I" /}',
         context: {
           returnLegacy: function(chunk, context, bodies, params) {
-            return chunk.helper('return', context, bodies, params);
+            return chunk.helper('val', context, bodies, params);
           }
         },
         expected: "You &amp; I",
