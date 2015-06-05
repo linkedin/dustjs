@@ -887,6 +887,20 @@ return [
 		message: "should reserve an async section for a thenable"
 	  },
     {
+      name:   "thenable resolves with array into reference",
+      source: "{promise}",
+      context: { "promise": new FalsePromise(null, ['foo', 'bar', 'baz'])},
+      expected: 'foo,bar,baz',
+      message: "should iterate over an array resolved from a thenable"
+    },
+    {
+      name:   "thenable resolves with array into section",
+      source: "{#promise}{name}{/promise}",
+      context: { "promise": new FalsePromise(null, [{name: 'foo'}, {name: 'bar'}, {name: 'baz'}])},
+      expected: 'foobarbaz',
+      message: "should iterate over an array resolved from a thenable"
+    },
+    {
 		name:     "thenable empty section",
 		source:   "{#promise/}",
 		context:  { "promise": new FalsePromise(null, "magic") },
