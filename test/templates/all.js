@@ -1284,6 +1284,13 @@ return [
         context:  { obj: JSON.stringify({ id: 1, name: "bob", occupation: "construction" }) },
         expected: JSON.parse(JSON.stringify({ id: 1, name: "bob", occupation: "construction" })).toString(),
         message: "should objectify a JSON string when using the jp filter"
+      },
+      {
+        name:     "filter receives context",
+        source:   "{#dust}{name|woo}{/dust}",
+        context:  { woo: 0, name: "Boo", dust: { woo: 5, name: "Dust" } },
+        expected: "DUST!!!!!",
+        message:  "filters are passed the current context"
       }
     ]
   },
