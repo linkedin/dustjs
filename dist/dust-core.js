@@ -1,8 +1,7 @@
-/*! dustjs-linkedin - v2.7.1
+/*! dustjs-linkedin - v2.7.2
 * http://dustjs.com/
 * Copyright (c) 2015 Aleksander Williams; Released under the MIT License */
 (function (root, factory) {
-  /*global define*/
   if (typeof define === 'function' && define.amd && define.amd.dust === true) {
     define('dust.core', [], factory);
   } else if (typeof exports === 'object') {
@@ -12,7 +11,7 @@
   }
 }(this, function() {
   var dust = {
-        "version": "2.7.1"
+        "version": "2.7.2"
       },
       NONE = 'NONE', ERROR = 'ERROR', WARN = 'WARN', INFO = 'INFO', DEBUG = 'DEBUG',
       EMPTY_FUNC = function() {};
@@ -266,29 +265,32 @@
    */
   dust.isStreamable = function(elem) {
     return elem &&
-           typeof elem.on === 'function';
+           typeof elem.on === 'function' &&
+           typeof elem.pipe === 'function';
   };
 
   // apply the filter chain and return the output string
-  dust.filter = function(string, auto, filters) {
-    var i, len, name;
+  dust.filter = function(string, auto, filters, context) {
+    var i, len, name, filter;
     if (filters) {
       for (i = 0, len = filters.length; i < len; i++) {
         name = filters[i];
+        if (!name.length) {
+          continue;
+        }
+        filter = dust.filters[name];
         if (name === 's') {
           auto = null;
-        }
-        else if (typeof dust.filters[name] === 'function') {
-          string = dust.filters[name](string);
-        }
-        else {
+        } else if (typeof filter === 'function') {
+          string = filter(string, context);
+        } else {
           dust.log('Invalid filter `' + name + '`', WARN);
         }
       }
     }
     // by default always apply the h filter, unless asked to unescape with |s
     if (auto) {
-      string = dust.filters[auto](string);
+      string = dust.filters[auto](string, context);
     }
     return string;
   };
@@ -757,7 +759,7 @@
     } else if (dust.isStreamable(elem)) {
       return this.stream(elem, context, null, auto, filters);
     } else if (!dust.isEmpty(elem)) {
-      return this.write(dust.filter(elem, auto, filters));
+      return this.write(dust.filter(elem, auto, filters, context));
     } else {
       return this;
     }
@@ -781,6 +783,12 @@
       if (elem instanceof Chunk) {
         return elem;
       }
+    }
+
+    if (dust.isEmptyObject(bodies)) {
+      // No bodies to render, and we've already invoked any function that was available in
+      // hopes of returning a Chunk.
+      return chunk;
     }
 
     if (!dust.isEmptyObject(params)) {
@@ -902,17 +910,33 @@
     }
   };
 
-  Chunk.prototype.helper = function(name, context, bodies, params) {
+  Chunk.prototype.helper = function(name, context, bodies, params, auto) {
     var chunk = this,
+        filters = params.filters,
         ret;
+
+    // Pre-2.7.1 compat: if auto is undefined, it's an old template. Automatically escape
+    if (auto === undefined) {
+      auto = 'h';
+    }
+
     // handle invalid helpers, similar to invalid filters
     if(dust.helpers[name]) {
       try {
         ret = dust.helpers[name](chunk, context, bodies, params);
-        if (dust.isThenable(ret)) {
-          return this.await(ret, context, bodies);
+        if (ret instanceof Chunk) {
+          return ret;
         }
-        return ret;
+        if(typeof filters === 'string') {
+          filters = filters.split('|');
+        }
+        if (!dust.isEmptyObject(bodies)) {
+          return chunk.section(ret, context, bodies, params);
+        }
+        // Helpers act slightly differently from functions in context in that they will act as
+        // a reference if they are self-closing (due to grammar limitations)
+        // In the Chunk.await function we check to make sure bodies is null before acting as a reference
+        return chunk.reference(ret, context, auto, filters);
       } catch(err) {
         dust.log('Error in helper `' + name + '`: ' + err.message, ERROR);
         return chunk.setError(err);
@@ -928,23 +952,26 @@
    * @param thenable {Thenable} the target thenable to await
    * @param context {Context} context to use to render the deferred chunk
    * @param bodies {Object} must contain a "body", may contain an "error"
+   * @param auto {String} automatically apply this filter if the Thenable is a reference
+   * @param filters {Array} apply these filters if the Thenable is a reference
    * @return {Chunk}
    */
   Chunk.prototype.await = function(thenable, context, bodies, auto, filters) {
-    var body = bodies && bodies.block,
-        errorBody = bodies && bodies.error;
     return this.map(function(chunk) {
       thenable.then(function(data) {
-        if(body) {
-          chunk.render(body, context.push(data)).end();
+        if (bodies) {
+          chunk = chunk.section(data, context, bodies);
         } else {
-          chunk.reference(data, context, auto, filters).end();
+          // Actually a reference. Self-closing sections don't render
+          chunk = chunk.reference(data, context, auto, filters);
         }
+        chunk.end();
       }, function(err) {
+        var errorBody = bodies && bodies.error;
         if(errorBody) {
           chunk.render(errorBody, context.push(err)).end();
         } else {
-          dust.log('Unhandled promise rejection in `' + context.getTemplateName() + '`');
+          dust.log('Unhandled promise rejection in `' + context.getTemplateName() + '`', INFO);
           chunk.end();
         }
       });
@@ -976,8 +1003,8 @@
             chunk = chunk.map(function(chunk) {
               chunk.render(body, context.push(thunk)).end();
             });
-          } else {
-            // Don't fork, just write into the master async chunk
+          } else if(!bodies) {
+            // When actually a reference, don't fork, just write into the master async chunk
             chunk = chunk.reference(thunk, context, auto, filters);
           }
         })
@@ -988,7 +1015,7 @@
           if(errorBody) {
             chunk.render(errorBody, context.push(err));
           } else {
-            dust.log('Unhandled stream error in `' + context.getTemplateName() + '`');
+            dust.log('Unhandled stream error in `' + context.getTemplateName() + '`', INFO);
           }
           if(!ended) {
             ended = true;

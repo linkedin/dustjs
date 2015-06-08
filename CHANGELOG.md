@@ -1,5 +1,14 @@
 ## Change Log
 
+### v2.7.2 (2015/06/08 20:41 +00:00)
+- [#673](https://github.com/linkedin/dustjs/pull/673) Pass the current context to filters (@sethkinast)
+- [#676](https://github.com/linkedin/dustjs/pull/676) If a Promise is resolved with an array, iterate over it instead of rendering the whole array at once.  Closes #674 (@sethkinast)
+- [#647](https://github.com/linkedin/dustjs/pull/647) Allow helpers to return primitives  Previously returning a primitive would crash rendering with no way to recover. You can still return a Chunk and do more complex work if you need to.  Helpers act like references or sections depending on if they have a body. When they have no body, they act like a reference and look in `params.filters` for filters to use. When they have a body, they act like a section. You can return thenables and streams normally.  {@return value="<Hello>" filters="|s" /} {@return value="<Hello>"}{.} World{/return}  Closes #645 (@sethkinast)
+- [#664](https://github.com/linkedin/dustjs/pull/664) Be slightly pickier about what Dust thinks a Stream is.  Closes #663 (@sethkinast)
+- [#661](https://github.com/linkedin/dustjs/pull/661) Add saucelabs integration (@sethkinast)
+- [#658](https://github.com/linkedin/dustjs/pull/658) Refactor testing frameworks  Closes #649  Closes #602  Closes #642 (@sethkinast)
+- [#660](https://github.com/linkedin/dustjs/pull/660) Grammar: s/char/character/ to avoid using a reserved name  Closes #659 (@sethkinast)
+
 ### v2.7.1 (2015/04/30 20:32 +00:00)
 - [#655](https://github.com/linkedin/dustjs/pull/655) Update CommonJS example to make use of new onLoad behavior (@sethkinast)
 - [#653](https://github.com/linkedin/dustjs/pull/653) Fix array iteration when context is undefined (@sethkinast)
