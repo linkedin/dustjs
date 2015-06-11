@@ -93,7 +93,7 @@ However, if Dust doesn't find a reference in a given context, it will look into 
 
 Looping in Dust is easy. In fact, a loop is just a section where the reference of the section is an array.
 
-You can use `{.}` to reference the current item in the loop. Below is an example of an array of strings.
+Inside a loop, you can use `{.}` to reference the current item and the special references `{$idx}` and `{$len}` to show the index of the current item and the length of the array, respectively.
 
 <dust-tutorial templatename="loop">
 <dust-demo-template showtemplatename="true">&lt;ul&gt;
@@ -110,7 +110,7 @@ You can use `{.}` to reference the current item in the loop. Below is an example
 <dust-tutorial-answer>&lt;ul&gt;&lt;li&gt;HTML&lt;/li&gt;&lt;li&gt;CSS&lt;/li&gt;&lt;li&gt;JavaScript&lt;/li&gt;&lt;li&gt;Dust&lt;/li&gt;&lt;/ul&gt;</dust-tutorial-answer>
 </dust-tutorial>
 
-You can use key value references when the array contains objects. Below is an example of an array of objects (with an array inside).
+When an array contains objects, you can access the properties inside the object by name.
 
 <dust-tutorial templatename="loop_references">
 <dust-demo-template showtemplatename="true">&lt;ul&gt;
