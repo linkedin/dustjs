@@ -68,7 +68,7 @@ dust.render('hello', { world: "Saturn" }, function(err, out) {
 
 ### Browser: AMD (Require.js)
 
-First, read the guide on [loading Dust as an AMD module](http://localhost:4000/guides/setup/#amd). You must have Dust version 2.6.0 or higher.
+First, read the guide on [loading Dust as an AMD module](/guides/setup/#amd). You must have Dust version 2.6.0 or higher.
 
 You can compile your templates as AMD modules by setting `dust.config.amd` to `true`. The easiest way to create AMD templates is by using `dustc` with the `--amd` flag. (To learn how to use `dustc`, see the [`dustc` docs](/docs/dustc-api).)
 
