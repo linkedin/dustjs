@@ -150,18 +150,19 @@ A self-closing block is defined as a single opening curly brace `{`, followed by
 
 A partial is used to include one dust template inside of another dust template.
 
-A partials is a single opening brace `{`, followed by a greater than symbol `&gt;`, followed by the name of the template to be included (the name may need to be surrounded by quotes if it includes characters outside of the set used by [references](#reference)), optionally followed by parameters, followed by a forward slash `/`, followed by a single closing brace.
+All characters are valid in a template name. However, if the template name includes characters that aren't allowed in Dust references, you should wrap the template name in quotes when including it as a partial.
 
 Basic example:
 
 ```
-{>my_template/}
+{> my_template /}
+{> "my template name has *special* characters" /}
 ```
 
 With parameters:
 
 ```
-{>my_template_with_params foo="bar" contacts=friends/}
+{> my_template_with_params foo="bar" contacts=friends /}
 ```
 
 <dust-demo templatename="partial">

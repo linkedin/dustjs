@@ -12,6 +12,8 @@ A template includes a partial using Dust's [partial syntax](/docs/syntax/#partia
 {>"template-name"/}
 ```
 
+All characters are valid in a template name. However, if the template name includes characters that aren't allowed in Dust references, you should wrap the template name in quotes when including it as a partial.
+
 A partial relies on the JSON context of the parent template invoking it. Like [sections](/guides/getting-started/#sections), partials also accept parameters that add extra references. By passing more data into the partial using parameters, you can build components that are customized to different contexts without relying on their parent's data. For example, there might be several versions of a header that you wish to include, which can be controlled using parameters:
 
 ```
