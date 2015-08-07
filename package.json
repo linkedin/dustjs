@@ -40,20 +40,20 @@
   ],
   "dependencies": {
     "chokidar": "~1.0.1",
-    "cli": "~0.6.6"
+    "cli": "~0.9.0"
   },
   "devDependencies": {
     "ayepromise": "~1.1.1",
     "grunt": "~0.4.2",
-    "grunt-bump": "0.3.0",
+    "grunt-bump": "~0.3.1",
     "grunt-cli": "~0.1.13",
     "grunt-contrib-clean": "~0.6.0",
     "grunt-contrib-concat": "~0.5.1",
-    "grunt-contrib-connect": "~0.9.0",
+    "grunt-contrib-connect": "~0.11.2",
     "grunt-contrib-copy": "~0.8.0",
-    "grunt-contrib-jasmine": "~0.8.2",
+    "grunt-contrib-jasmine": "~0.9.1",
     "grunt-contrib-jshint": "~0.11.1",
-    "grunt-contrib-uglify": "~0.8.0",
+    "grunt-contrib-uglify": "~0.9.1",
     "grunt-contrib-watch": "~0.6.1",
     "grunt-execute": "~0.2.2",
     "grunt-github-changes": "~0.0.6",
@@ -66,7 +66,7 @@
     "pegjs": "0.8.0",
     "rhino-1_7r3-bin": "~1.0.1",
     "rhino-1_7r5-bin": "~1.0.1",
-    "tmp": "0.0.25"
+    "tmp": "~0.0.25"
   },
   "license": "MIT",
   "engine": {
