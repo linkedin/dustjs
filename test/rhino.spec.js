@@ -5,7 +5,7 @@ var isRhino = true;
 print('Running unit tests with ' + environment['java.class.path']);
 
 var requiredFiles = [
-    'node_modules/grunt-contrib-jasmine/vendor/jasmine-2.0.1/jasmine.js',
+    'node_modules/grunt-contrib-jasmine/node_modules/jasmine-core/lib/jasmine-core/jasmine.js',
     'test/lib/rhino-bootstrap.js',
     'node_modules/ayepromise/ayepromise.js',
     'test/lib/highland.js',
