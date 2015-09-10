@@ -11,7 +11,7 @@ notifications:
     - jchan@linkedin.com
     - skinast@linkedin.com
 before_install:
-  - npm install -g npm
+  - npm install -g npm@2
 before_script:
   - npm update
 sudo: false
