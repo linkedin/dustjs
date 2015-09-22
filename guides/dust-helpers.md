@@ -139,7 +139,9 @@ When a true logic helper condition is found in the `@select`, Dust executes the 
 
 ## Math Helper
 
-Another handy helper is the `@math` helper. It allows you to take different courses of action based on the result of a mathematical expression. You provide it the lefthand operand using the `key` attribute, the operation to perform using the `method` attribute, and the righthand operand using the `operand` attribute. Then you can nest logical operators within the `@math` tag to test the result of the `@math` helper. For example, we can combine a loop's `$idx` with the `@math` helper to add a class to every other item in a list:
+The `{@math}` helper can perform simple math operations in a template and then either output or truth-test the result. It accepts `key` and `method` parameters as well as an `operand` parameter for operations that require two values, like adding or subtracting.
+
+You can nest logic helpers inside a math helper to test the result of the operation.
 
 <dust-demo templatename="helpers_math">
 <dust-demo-template showtemplatename="true">
@@ -147,10 +149,10 @@ Another handy helper is the `@math` helper. It allows you to take different cour
   {#flavors}
     &lt;li
       {@math key=$idx method="mod" operand="2"}
-        {@eq value="0" type="number"} class="alt-row"{/eq}
+        {@eq value="0" type="number"} class="alt"{/eq}
       {/math}&gt;
       {name}
-    &lt;/li&gt;
+    &lt;/li&gt;{~n}
   {/flavors}
 &lt;/ul&gt;
 </dust-demo-template>
@@ -166,11 +168,9 @@ Another handy helper is the `@math` helper. It allows you to take different cour
 </dust-demo-json>
 </dust-demo>
 
-A full list of values that the `method` attribute can take is found in the [Helpers API documentation](/docs/helpers-api/).
-
 ### Printing the Result
 
-To simply output the result of the mathematical expression, use the `@math` helper as a self-closing tag.
+To simply output the result of the mathematical expression, use the `{@math}` helper without a body.
 
 <dust-demo templatename="helpers_math_output">
 <dust-demo-template showtemplatename="true">
@@ -182,6 +182,15 @@ There is {@math key=100 method="subtract" operand=progress/}% left to do.
 }
 </dust-demo-json>
 </dust-demo>
+
+### Allowed Operations
+
+The `{@math}` helper supports these operations as the `method`:
+
+  * add, subtract
+  * multiply, divide, mod
+  * ceil, floor, round, toint
+  * abs
 
 ## Debugging with `@contextDump`
 
