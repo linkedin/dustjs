@@ -3,7 +3,7 @@
     return parseInt(arr.join(''), 10);
   }
   function withPosition(arr) {
-    return arr.concat([['line', line()], ['col', column()]]);
+    return arr.concat([['line', location().start.line], ['col', location().start.column]]);
   }
 }
 
