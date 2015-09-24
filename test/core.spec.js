@@ -18,16 +18,22 @@
     var tmpl = dust.loadSource(dust.compile(source));
     dust.config = extend({ whitespace: false, amd: false, cjs: false, cache: true }, config);
     it(message, function(done) {
-      render(tmpl, context, expected, done);
+      render(tmpl, context, expected)(done);
     });
   }
 
-  function render(tmpl, context, expected, done) {
-    dust.render(tmpl, context, function(err, output) {
-      expect(err).toBe(null);
-      expect(output).toEqual(expected);
-      done();
-    });
+  function render(tmpl, context, expected) {
+    return function(done) {
+      dust.render(tmpl, context, function(err, output) {
+        expect(err).toBe(null);
+        expect(output).toEqual(expected);
+        done();
+      });
+    };
+  }
+
+  function templateName(chunk, context) {
+    return context.getTemplateName();
   }
 
   describe('Context', function() {
@@ -43,6 +49,17 @@
       renderIt("doesn't error if globals are empty", "{sayHello} {foo}", dust.makeBase().push({foo: "bar"}), " bar");
       renderIt("doesn't error if context is undefined", "{sayHello} {foo}", undefined, " ");
       renderIt("can iterate over an array in the globals", "{sayHello} {#names}{.} {/names}", base, "Hello! Alice Bob Dusty ");
+    });
+
+    describe('templateName', function() {
+      var context = {
+        templateName: templateName
+      };
+      var tmpl = dust.loadSource(dust.compile("template name is {templateName}", "templateNameTest"));
+      it("sets the template name on context",
+        render(tmpl, context, "template name is templateNameTest"));
+      it("sets the template name when provided a context",
+        render(tmpl, dust.context(context), "template name is templateNameTest"));
     });
 
     describe('options', function() {
@@ -70,10 +87,8 @@
         cb(null, 'Loaded: ' + name + ', template name {templateName}');
       };
       render("onLoad", {
-        templateName: function(chunk, context) {
-          return context.getTemplateName();
-        }
-      }, "Loaded: onLoad, template name onLoad", done);
+        templateName: templateName
+      }, "Loaded: onLoad, template name onLoad")(done);
     });
     it("calls callback with compiled template", function(done) {
       dust.onLoad = function(name, cb) {
@@ -81,10 +96,8 @@
         cb(null, tmpl);
       };
       render("onLoad", {
-        templateName: function(chunk, context) {
-          return context.getTemplateName();
-        }
-      }, "Loaded: onLoad, template name foobar", done);
+        templateName: templateName
+      }, "Loaded: onLoad, template name foobar")(done);
     });
     it("calls callback with compiled template and can override template name", function(done) {
       dust.onLoad = function(name, cb) {
@@ -93,16 +106,14 @@
         cb(null, dust.cache.foobar);
       };
       render("onLoad", {
-        templateName: function(chunk, context) {
-          return context.getTemplateName();
-        }
-      }, "Loaded: onLoad, template name override", done);
+        templateName: templateName
+      }, "Loaded: onLoad, template name override")(done);
     });
     it("receives context options", function(done) {
       dust.onLoad = function(name, opts, cb) {
         cb(null, 'Loaded: ' + name + ', lang ' + opts.lang);
       };
-      render("onLoad", dust.makeBase(null, { lang: "fr" }), "Loaded: onLoad, lang fr", done);
+      render("onLoad", dust.makeBase(null, { lang: "fr" }), "Loaded: onLoad, lang fr")(done);
     });
   });
 
