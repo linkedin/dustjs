@@ -1782,7 +1782,7 @@ return [
         name:     "error: whitespaces between the opening brace and any of (#,?,@,^,+,%) is not allowed",
         source:   '{ # helper foo="bar" boo="boo" } {/helper}',
         context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
-        error: 'Expected buffer, comment, end of input, partial, raw, reference, section or special but "{" found. At line : 1, column : 1',
+        error: 'Expected buffer, comment, end of input, partial, raw, reference, section or special but "{" found.',
         message: "should show an error for whitespces between the opening brace and any of (#,?,@,^,+,%)"
       },
       {
@@ -1793,10 +1793,10 @@ return [
         message: "should ignore extra whitespaces between the closing brace plus slash and the tag identifier"
       },
       {
-        name:     "error: whitespaces between the openning curly brace and forward slash in the closing tags not supported",
+        name:     "error: whitespaces between the opening curly brace and forward slash in the closing tags not supported",
         source:   '{# helper foo="bar" boo="boo"} { / helper }',
         context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
-        error:    'Expected end tag for helper but it was not found. At line : 1, column : 32',
+        error:    'Expected end tag for helper but it was not found.',
         message: "should show an error because whitespaces between the '{' and the forward slash are not allowed in the closing tags"
       },
       {
@@ -1810,7 +1810,7 @@ return [
         name:     "error: whitespaces between the forward slash and the closing brace in self closing tags",
         source:   '{#helper foo="bar" boo="boo" / }',
         context:  { "helper": function(chunk, context, bodies, params) { return chunk.write(params.boo + " " + params.foo); } },
-        error: 'Expected buffer, comment, end of input, partial, raw, reference, section or special but "{" found. At line : 1, column : 1',
+        error: 'Expected buffer, comment, end of input, partial, raw, reference, section or special but "{" found.',
         message: "should show an error for whitespaces  etween the forward slash and the closing brace in self closing tags"
       },
       {
@@ -1824,7 +1824,7 @@ return [
         name: "error : whitespaces between the '{' plus '>' and partial identifier is not supported",
         source: '{ > partial/} {> "hello_world"/} {> "{ref}"/}',
         context: { "name": "Jim", "count": 42, "ref": "hello_world" },
-        error: 'Expected buffer, comment, end of input, partial, raw, reference, section or special but "{" found. At line : 1, column : 1',
+        error: 'Expected buffer, comment, end of input, partial, raw, reference, section or special but "{" found.',
         message: "should show an error for whitespaces between the '{' plus '>' and partial identifier"
       },
       {
@@ -1924,7 +1924,7 @@ return [
         name: "Dust syntax error",
         source: "RRR {##}",
         context: { name: "Mick", count: 30 },
-        error: 'Expected buffer, comment, end of input, partial, raw, reference, section or special but "{" found. At line : 1, column : 5',
+        error: 'Expected buffer, comment, end of input, partial, raw, reference, section or special but "{" found.',
         message: "should test that the error message shows line and column."
       },
       {
@@ -1933,7 +1933,7 @@ return [
                 "{#&2}",
                 "{/s}"].join("\n"),
         context: {},
-        error: 'Expected end tag for s but it was not found. At line : 2, column : 1',
+        error: 'Expected end tag for s but it was not found.',
         message: "should test the errors message for section with error."
       },
       {
@@ -1946,7 +1946,7 @@ return [
                 "buffer",
                 "{/s}"].join("\n"),
         context: {},
-        error: 'Expected end tag for s but it was not found. At line : 4, column : 1',
+        error: 'Expected end tag for s but it was not found.',
         message: "should test the errors message for section with a buffer and error inside."
       },
       {
@@ -1957,7 +1957,7 @@ return [
                 "a second",
                 "buffer"].join("\n"),
         context: {},
-        error: 'Expected end tag for s but it was not found. At line : 5, column : 7',
+        error: 'Expected end tag for s but it was not found.',
         message: "should test the errors message for section without end tag shows."
       },
       {
@@ -1969,7 +1969,7 @@ return [
                 "default header ",
                 "{/header}"].join("\n"),
         context: {},
-        error: 'Expected end tag for header but it was not found. At line : 4, column : 5',
+        error: 'Expected end tag for header but it was not found.',
         message: "should test the errors message for partials with a buffer inside."
       },
       {
@@ -1980,7 +1980,7 @@ return [
                 "a second",
                 "buffer"].join("\n"),
         context: {},
-        error: 'Expected end tag for header but it was not found. At line : 5, column : 7',
+        error: 'Expected end tag for header but it was not found.',
         message: "should test the errors message for partial without end tag."
       },
       {
@@ -1992,7 +1992,7 @@ return [
                 "false",
                 "{/scalar}"].join("\n"),
         context: {},
-        error: 'Expected end tag for scalar but it was not found. At line : 3, column : 2',
+        error: 'Expected end tag for scalar but it was not found.',
         message: "should test the errors message for Scalar."
       },
       {
@@ -2004,7 +2004,7 @@ return [
                 " {#@#fger}",
                 "{/scalar}"].join("\n"),
         context: {},
-        error: 'Expected end tag for scalar but it was not found. At line : 5, column : 2',
+        error: 'Expected end tag for scalar but it was not found.',
         message: "should test the errors message for Scalar."
       },
       {
@@ -2019,7 +2019,7 @@ return [
                   "No Tags!",
                 "{/tags}"].join("\n"),
         context: {},
-        error: 'Expected end tag for tags but it was not found. At line : 4, column : 5',
+        error: 'Expected end tag for tags but it was not found.',
         message: "should test the errors message for Conditionals."
       },
       {
@@ -2035,7 +2035,7 @@ return [
                   "No Tags!",
                 "{/tags}"].join("\n"),
         context: {},
-        error: 'Expected end tag for tags but it was not found. At line : 8, column : 1',
+        error: 'Expected end tag for tags but it was not found.',
         message: "should test the errors message for Conditional's else."
       },
       {
@@ -2049,7 +2049,7 @@ return [
                 "{:else}",
                   "No Tags!"].join("\n"),
         context: {},
-        error: 'Expected end tag for tags but it was not found. At line : 8, column : 9',
+        error: 'Expected end tag for tags but it was not found.',
         message: "should test the errors message for Conditional without end tag."
       },
       {
