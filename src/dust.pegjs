@@ -127,7 +127,7 @@ identifier "identifier"
   = p:path
   {
     var arr = ["path"].concat(p);
-    arr.text = p[1].join('.').replace(/,line,\d+,col,\d+/g,'');
+    arr.text = p[1].join('.');
     return arr;
   }
   / k:key
