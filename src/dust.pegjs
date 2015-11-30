@@ -26,7 +26,7 @@ part
   = raw / comment / section / partial / special / reference / buffer
 
 /*-------------------------------------------------------------------------------------------------------------------------------------
-   section is defined as matching with with sec_tag_start followed by 0 or more white spaces plus a closing brace plus body
+   section is defined as matching with sec_tag_start followed by 0 or more white spaces plus a closing brace plus body
    plus bodies plus end_tag or sec_tag_start followed by a slash and closing brace
 ---------------------------------------------------------------------------------------------------------------------------------------*/
 section "section"
