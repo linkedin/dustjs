@@ -13,6 +13,17 @@ dust.onLoad = function(tmpl, cb) {
 var app = express();
 
 var position;
+var context = {
+  wait: function(chunk, context, bodies, params) {
+    var delayMilliseconds = parseInt(params.delay, 10) * 1000;
+    // Returning a Promise-- Dust will wait for the promise to resolve
+    var promise = q(position++).delay(delayMilliseconds);
+    promise.then(function(position) {
+      console.log('Rendering', params.name, 'which started in position', position);
+    });
+    return promise;
+  }
+};
 
 app.get('/', function (req, res) {
   dust.render('index', {}, function(err, out) {
@@ -22,40 +33,22 @@ app.get('/', function (req, res) {
 
 app.use(function(req, res, next) {
   console.log('\n\nBeginning the render of', req.path);
+  console.log('Read hello.dust to see the block names and the order in which they appear.');
+  position = 1;
   next();
 });
 
 app.get('/streaming', function(req, res) {
-  position = 1;
-  dust.stream('hello', {
-    'wait': function(chunk, context, bodies, params) {
-      var delayMilliseconds = parseInt(params.delay, 10) * 1000;
-      // Returning a Promise-- Dust will wait for the promise to resolve
-      return q(position++).delay(delayMilliseconds)
-              .then(function(position) {
-                console.log('Rendering', params.name, 'which started in position', position);
-              });
-    }
-  }).pipe(res)
+  dust.stream('hello', context).pipe(res)
     .on('end', function() {
       console.log('Done!');
     });
 });
 
 app.get('/rendering', function(req, res) {
-  position = 1;
-  dust.render('hello', {
-    'wait': function(chunk, context, bodies, params) {
-      var delayMilliseconds = parseInt(params.delay, 10) * 1000;
-      // Returning a Promise-- Dust will wait for the promise to resolve
-      return q(position++).delay(delayMilliseconds)
-              .then(function(position) {
-                console.log('Rendering', params.name, 'which started in position', position);
-              });
-    }
-  }, function(err, out) {
-    console.log('Done!');
+  dust.render('hello', context, function(err, out) {
     res.send(out);
+    console.log('Done!');
   });
 });
 
