@@ -44,7 +44,7 @@ function DreamStream(arr) {
       });
       push(null, highland.nil);
     });
-  }
+  };
 }
 
 return [
@@ -57,7 +57,7 @@ return [
       {
         name:     "streaming render",
         source:   "{#stream}{#delay}{.}{/delay}{/stream}",
-        context:  (function(){
+        context:  function(){
                     var d = 1;
                     return {
                       stream: function() {
@@ -71,7 +71,7 @@ return [
                         });
                       }
                     };
-                  }),
+                  },
         expected: '',
         message: "should test the stream rendering"
       },
@@ -106,7 +106,7 @@ return [
          context:  { "helper": function(chunk, context, bodies, params)
                     {
                       // top of the current stack
-                      currentTemplateName = context.getTemplateName();
+                      var currentTemplateName = context.getTemplateName();
                       return chunk.write(currentTemplateName);
                     }
                    },
@@ -178,7 +178,7 @@ return [
         name:     "functions in context",
         source:   "Hello {type} World!",
         context:  {
-                    type: function(chunk) {
+                    type: function() {
                       return "Sync";
                     }
                   },
@@ -1360,7 +1360,7 @@ return [
 	  {
 		name:	  "partial with async ref as name",
 		source:   '{>"{ref}" /}',
-		context:  { ref: function(chunk, context) { return chunk.map(function(chunk) { setTimeout(function() { chunk.end('hello_world'); }, 0) }); }},
+		context:  { ref: function(chunk, context) { return chunk.map(function(chunk) { setTimeout(function() { chunk.end('hello_world'); }, 0); }); }},
 		expected: "Hello World!",
 		message:  "should test partial with an asynchronously-resolved template name"
 	  },
@@ -1486,7 +1486,7 @@ return [
         source:   '{>partial_print_name/}',
         context:  { "helper": function(chunk, context, bodies, params)
                       {
-                        currentTemplateName = context.getTemplateName();
+                        var currentTemplateName = context.getTemplateName();
                         return chunk.write(currentTemplateName);
                       }
                   },
@@ -1498,7 +1498,7 @@ return [
         source:   '{>"{partial_print_name}"/}',
         context:  { "helper": function(chunk, context, bodies, params)
                       {
-                        currentTemplateName = context.getTemplateName();
+                        var currentTemplateName = context.getTemplateName();
                         return chunk.write(currentTemplateName);
                       },
                     "partial_print_name" : "partial prints the current template name"
@@ -1511,7 +1511,7 @@ return [
         source:   '{>nested_partial_print_name/}',
         context:  { "helper": function(chunk, context, bodies, params)
                         {
-                          currentTemplateName = context.getTemplateName();
+                          var currentTemplateName = context.getTemplateName();
                           return chunk.write(currentTemplateName);
                         }
                     },
@@ -1562,7 +1562,7 @@ return [
           '{>partialTl:contextDoesNotExist/}'
         ].join('\n'),
         context: {
-          loadPartialTl : function(chunk, context, bodies, params) {
+          loadPartialTl: function(chunk) {
             dust.loadSource(dust.compile('{.value}{.value.childValue.anotherChild}{name.nested}{$idx} ', 'partialTl'));
             return chunk;
           }
@@ -2062,7 +2062,7 @@ return [
       {
         name: "Helper syntax error. async TypeError",
         source:"{#hello/}",
-        context: {"hello":function(chunk, context, bodies, params) { return chunk.map(function(chunk) { var a; a.slice(1); chunk.end(); })}},
+        context: {"hello":function(chunk, context, bodies, params) { return chunk.map(function(chunk) { var a; a.slice(1); chunk.end(); }); }},
         error: "undefined",
         message: "should test helper syntax errors inside an async block being handled gracefully"
        }
