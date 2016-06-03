@@ -37,25 +37,33 @@ If you need to reference values within nested objects, you can use dot-notation 
 Learn more about [Dust References](/docs/syntax#reference).
 
 ### Conditionals
-Dust can include content conditionally with `?` (exists) and `^` (not exists). Given a reference, the conditionals check if the value of that reference is truthy or falsy, then output the content accordingly. See the [conditionals syntax documentation](/docs/syntax#exists) for more information on what is truthy and what is falsy in Dust.
+Dust can include content conditionally with `?` (exists) and `^` (not exists). Given a reference, the conditionals check if the value of that reference is truthy or falsy, then output the content accordingly.
 
 <dust-tutorial templatename="conditional">
-<dust-demo-template showtemplatename="true">&lt;input type="checkbox"{^isSelected} selected{/isSelected}&gt;</dust-demo-template>
+<dust-demo-template showtemplatename="true">&lt;input type="checkbox"{?isSelected} selected{/isSelected}&gt;
+{?friends} {friends.length} Friends!{/friends}
+{?enemies} Oh no, enemies!{/enemies}</dust-demo-template>
 <dust-demo-json>{
-  isSelected: true
+  isSelected: false,
+  friends: ["Alice", "Bob"],
+  enemies: ["Oscar"]
 }</dust-demo-json>
-<dust-tutorial-answer>&lt;input type="checkbox" selected&gt;</dust-tutorial-answer>
+<dust-tutorial-answer>&lt;input type="checkbox" selected&gt; 2 Friends!</dust-tutorial-answer>
 </dust-tutorial>
 
 You can also use an `{:else}` statement with conditionals.
 
 <dust-tutorial templatename="else">
-<dust-demo-template showtemplatename="true">&lt;li class="result{?isPrimary} primary{:else} {/isPrimary}"&gt;</dust-demo-template>
+<dust-demo-template showtemplatename="true">&lt;li class="result{?isPrimary} primary{:else} secondary{/isPrimary}"&gt;</dust-demo-template>
 <dust-demo-json>{
-  isPrimary: false
+  isPrimary: true
 }</dust-demo-json>
 <dust-tutorial-answer>&lt;li class="result secondary"&gt;</dust-tutorial-answer>
 </dust-tutorial>
+
+#### Truthiness
+
+Dust uses a slightly different definition of truthiness than Javascript. The only non-truthy values for the purpose of conditional tests are `null`, `undefined`, and an empty Array. Values like the string "false", the number 0, and empty Objects are considered truthy. If you need test for these values, look at the [Dust `{@eq}` and `{@ne}` helpers](/guides/dust-helpers/#logic-helpers).
 
 ### Sections
 

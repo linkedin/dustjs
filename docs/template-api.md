@@ -119,7 +119,7 @@ A not-exists section is a special type of section that outputs its contents if t
 </dust-demo>
 
 <h3 id="helper"><code>{@helper/}</code></h3>
-A helper is special kind of section that executes some JavaScript when it is rendered. For more information on using helpers, see the [Dust helpers guide](/guides/dust-helpers). For more information on writing Dust helpers, see the [writing helpers guide](/guides/writing-helpers).
+A helper is a special kind of section that executes some JavaScript when it is rendered. For more information on using helpers, see the [Dust helpers guide](/guides/dust-helpers). For more information on writing Dust helpers, see the [writing helpers guide](/guides/writing-helpers).
 
 <dust-demo templatename="helper">
 <dust-demo-template showtemplatename="true">The answer is {@eq key=answer value=42}42{:else}wrong{/eq}.</dust-demo-template>
@@ -137,7 +137,7 @@ An inline-partial is defined as a single opening curly brace `{`, follwed by a l
 {<classNames}primary hero{/classNames}
 ```
 
-A self-closing block is defined as a single opening curly brace `{`, followed by a plus sign `+`, followed by the name used in the inline-partial, followed by a forward slash and single closing curly brace `/}`. Alternatively, a block can have content. A block's content is output only if a matching inline-partial is not found. For more info, see the [base and override templates guide](/guides/base-and-override-templates).
+A self-closing block is defined as a single opening curly brace `{`, followed by a plus sign `+`, followed by the name used in the inline-partial, followed by a forward slash and single closing curly brace `/}`. Alternatively, a block can have content. A block's content is output only if a matching inline-partial is not found. For more info, see the [base and override templates guide](/guides/blocks).
 
 <dust-demo templatename="inline_partial">
 <dust-demo-template showtemplatename="true">{+greeting}Hello!{/greeting} world.
