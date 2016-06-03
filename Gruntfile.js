@@ -138,7 +138,7 @@ module.exports = function(grunt) {
         outfile: 'index.html',
         display: 'short',
         specs: ['test/templates/all.js', 'test/helpers/template.helper.js', 'test/templates.spec.js'],
-        vendor: ['node_modules/ayepromise/ayepromise.js', 'test/lib/highland.js', 'test/lib/jsreporter.js']
+        vendor: ['node_modules/ayepromise/ayepromise.js', 'node_modules/highland/dist/highland.js', 'test/lib/jsreporter.js']
       },
       /*tests production (minified) code*/
       testProd: {
