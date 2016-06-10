@@ -25,6 +25,16 @@ function FalsePromise(err, data) {
 }
 
 /**
+  * A naive function factory that adds a thenable that resolves to the given value.
+  * @param resolvesTo {*} The value passed to the `resolve` then argument
+*/
+function createThenableFunction(resolvesTo) {
+  var fn = function () {};
+  fn.then = function (res) { res(resolvesTo) };
+  return fn;
+}
+
+/**
  * A naive Stream constructor that streams the provided array asynchronously
  * @param arr {Array<Object|Error>|String} items to be streamed
  * @return {Stream}
@@ -914,6 +924,20 @@ return [
 		expected: "Eventually magic!",
 		message: "should reserve an async section for a thenable returned from a function"
 	  },
+    {
+      name:     "thenable section from thenable function",
+  		source:   "{#thenable}Eventually poof!{/thenable}",
+  		context: { "thenable": createThenableFunction("poof!") },
+  		expected: "Eventually poof!",
+  		message: "should reserve an async section for a thenable function"
+    },
+    {
+      name:     "thenable reference from thenable function",
+  		source:   "A {thenable} thing",
+  		context: { "thenable": createThenableFunction("real") },
+  		expected: "A real thing",
+  		message: "should reserve an async reference for a thenable function"
+    },
 	  {
 		name:     "thenable deep section",
 		source:   "Eventually my {#magic.ally}{delicious}{/magic.ally} will come",
