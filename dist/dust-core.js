@@ -1,6 +1,6 @@
-/*! Dust - Asynchronous Templating - v2.6.2
+/*! Dust - Asynchronous Templating - v2.6.3
 * http://linkedin.github.io/dustjs/
-* Copyright (c) 2015 Aleksander Williams; Released under the MIT License */
+* Copyright (c) 2016 Aleksander Williams; Released under the MIT License */
 (function (root, factory) {
   /*global define*/
   if (typeof define === 'function' && define.amd && define.amd.dust === true) {
@@ -12,7 +12,7 @@
   }
 }(this, function() {
   var dust = {
-        "version": "2.6.2"
+        "version": "2.6.3"
       },
       NONE = 'NONE', ERROR = 'ERROR', WARN = 'WARN', INFO = 'INFO', DEBUG = 'DEBUG',
       EMPTY_FUNC = function() {};

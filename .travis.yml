@@ -2,7 +2,6 @@ language: node_js
 node_js:
   - "0.12"
   - "0.10"
-  - "0.8"
   - "iojs"
 env:
   - TEST="all"
@@ -15,8 +14,6 @@ matrix:
       env: TEST="all"
     - node_js: "0.10"
       env: TEST="node"
-    - node_js: "0.8"
-      env: TEST="all"
 notifications:
   email:
     - jchan@linkedin.com
