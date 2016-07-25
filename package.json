@@ -1,6 +1,6 @@
 {
   "name": "dustjs-linkedin",
-  "version": "2.7.2",
+  "version": "2.7.3",
   "author": {
     "name": "Aleksander Williams",
     "url": "http://akdubya.github.com/dustjs"
@@ -39,8 +39,8 @@
     "linkedin"
   ],
   "dependencies": {
-    "chokidar": "~1.0.1",
-    "cli": "~0.6.6"
+    "chokidar": "~1.5.1",
+    "cli": "~0.11.2"
   },
   "devDependencies": {
     "ayepromise": "~1.1.1",

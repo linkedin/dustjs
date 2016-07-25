@@ -1,6 +1,6 @@
-/*! dustjs-linkedin - v2.7.2
+/*! dustjs-linkedin - v2.7.3
 * http://dustjs.com/
-* Copyright (c) 2015 Aleksander Williams; Released under the MIT License */
+* Copyright (c) 2016 Aleksander Williams; Released under the MIT License */
 (function (root, factory) {
   if (typeof define === 'function' && define.amd && define.amd.dust === true) {
     define('dust.core', [], factory);
@@ -11,7 +11,7 @@
   }
 }(this, function() {
   var dust = {
-        "version": "2.7.2"
+        "version": "2.7.3"
       },
       NONE = 'NONE', ERROR = 'ERROR', WARN = 'WARN', INFO = 'INFO', DEBUG = 'DEBUG',
       EMPTY_FUNC = function() {};
