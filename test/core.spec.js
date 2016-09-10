@@ -55,6 +55,14 @@
         expect(base.options.lang).toEqual(opts.lang);
       });
     });
+
+    describe('prototype', function() {
+      var base = dust.context({
+        sayHello: function() { return "Hello!"; }
+      }).push({ foo: 'bar' });
+      var context = extend({}, base);
+      renderIt('survives having its prototype destroyed', '{sayHello} {foo}', context, 'Hello! bar');
+    });
   });
 
   it("valid keys", function() {
