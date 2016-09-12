@@ -3,7 +3,8 @@
     return parseInt(arr.join(''), 10);
   }
   function withPosition(arr) {
-    return arr.concat([['line', location().start.line], ['col', location().start.column]]);
+    arr.location = location();
+    return arr;
   }
 }
 
@@ -126,7 +127,7 @@ identifier "identifier"
   = p:path
   {
     var arr = ["path"].concat(p);
-    arr.text = p[1].join('.').replace(/,line,\d+,col,\d+/g,'');
+    arr.text = p[1].join('.');
     return arr;
   }
   / k:key
