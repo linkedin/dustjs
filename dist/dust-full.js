@@ -1,4 +1,4 @@
-/*! dustjs-linkedin - v2.7.3
+/*! dustjs-linkedin - v2.7.4
 * http://dustjs.com/
 * Copyright (c) 2016 Aleksander Williams; Released under the MIT License */
 (function (root, factory) {
@@ -11,7 +11,7 @@
   }
 }(this, function() {
   var dust = {
-        "version": "2.7.3"
+        "version": "2.7.4"
       },
       NONE = 'NONE', ERROR = 'ERROR', WARN = 'WARN', INFO = 'INFO', DEBUG = 'DEBUG',
       EMPTY_FUNC = function() {};
@@ -319,10 +319,15 @@
     this.options = options;
     this.blocks = blocks;
     this.templateName = templateName;
+    this._isContext = true;
   }
 
   dust.makeBase = dust.context = function(global, options) {
     return new Context(undefined, global, options);
+  };
+
+  dust.isContext = function(obj) {
+    return typeof obj === "object" && obj._isContext === true;
   };
 
   /**
@@ -338,7 +343,7 @@
   }
 
   Context.wrap = function(context, name) {
-    if (context instanceof Context) {
+    if (dust.isContext(context)) {
       return context;
     }
     return new Context(context, {}, {}, null, name);
