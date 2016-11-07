@@ -585,6 +585,13 @@ return [
         message:  "empty array is treated as empty in exists"
       },
       {
+        name:     "empty array resolved from a Promise is treated as empty in exists",
+        source:   "{?emptyArrayFromPromise}true{:else}false{/emptyArrayFromPromise}",
+        context:   {"emptyArrayFromPromise": Promise.resolve([])},
+        expected: "false",
+        message:  "empty array resolved from a Promise is treated as empty in exists"
+      },
+      {
         name:     "empty {} is treated as non empty in exists",
         source:   "{?object}true{:else}false{/object}",
         context:  {"object": {}},
