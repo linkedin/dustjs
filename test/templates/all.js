@@ -263,6 +263,18 @@ return [
 
       },
       {
+        name:     "{?exists} supports promises and uses correct context",
+        source:   "{#a}{?b}{test}{/b}{/a}",
+        context:  {
+          a: {
+            b: FalsePromise(null, { test: "BAD" }),
+            test: "GOOD"
+          }
+        },
+        expected: "GOOD",
+        message:  "{?exists} supports promises and uses correct context",      
+      },
+      {
         name:     "issue322 use base template picks up prefix chunk data",
         source:   '{>issue322 name="abc"/}' +
 		   "{<abc}ABC{/abc}",
@@ -583,6 +595,13 @@ return [
         context:   {"array": []},
         expected: "false",
         message:  "empty array is treated as empty in exists"
+      },
+      {
+        name:     "empty array resolved from a Promise is treated as empty in exists",
+        source:   "{?emptyArrayFromPromise}true{:else}false{/emptyArrayFromPromise}",
+        context:   {"emptyArrayFromPromise": FalsePromise(null, [])},
+        expected: "false",
+        message:  "empty array resolved from a Promise is treated as empty in exists"
       },
       {
         name:     "empty {} is treated as non empty in exists",

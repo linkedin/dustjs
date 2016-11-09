@@ -93,7 +93,7 @@ function render(test, dust) {
         expect(messageInLog(dust.logQueue, test.log)).toEqual(true);
       }
       if (typeof test.expected !== 'undefined') {
-        expect(test.expected).toEqual(output);
+        expect(output).toEqual(test.expected);
       }
       done();
     };
@@ -124,7 +124,7 @@ function stream(test, dust) {
         expect(messageInLog(dust.logQueue, test.log)).toEqual(true);
       }
       if (typeof test.expected !== 'undefined') {
-        expect(test.expected).toEqual(result.output);
+        expect(result.output).toEqual(test.expected);
       }
       done();
     };
@@ -196,7 +196,7 @@ function pipe(test, dust) {
         expect(messageInLog(dust.logQueue, test.log)).toEqual(true);
       }
       if (typeof test.expected !== 'undefined') {
-        expect(test.expected).toEqual(result.data);
+        expect(result.data).toEqual(test.expected);
       }
       if(calls === 2) {
         done();
