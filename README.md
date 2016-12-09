@@ -21,6 +21,10 @@ If you want to add the [Dust helpers](https://github.com/linkedin/dustjs-helpers
 
     bower install --save dustjs-linkedin
 
+### Automately
+
+    automately --install-module "admin:dustjs-linkedin:2.7.1"
+
 ## Get Started
 
 * Read [dustjs.com](http://www.dustjs.com/) for guides, tutorials, and documentation.
