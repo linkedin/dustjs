@@ -661,7 +661,14 @@ return [
                   },
         expected: "",
         message: "should output nothing, but no error should fire"
-      }
+      }, 
+      {
+        name: "array properties should not be truthy",
+        source: "{?array.entries}true{:else}false{/array.entries}",
+        context: {"array": []},
+        expected: "false",
+        message: "should test array property treated as non-empty in exists"
+       }
     ]
   },
 /**
