@@ -1,0 +1,37 @@
+{
+  "name": "dustjs-linkedin",
+  "version": "1.2.5",
+  "author": "Aleksander Williams",
+  "description": "Asynchronous templates for the browser and node.js ( LinkedIn fork )",
+  "contributors": [
+    {
+      "name": "Jairo de Morais",
+      "email": "jdemorais@linkedin.com"
+    },
+    {
+      "name": "Veena Basavaraj",
+      "email":"vbasavaraj@linkedin.com"
+    },
+    {
+      "name": "Jimmy Chan",
+      "email": "jchan@linkedin.com"
+    },
+    {
+      "name": "Richard Ragan",
+      "email": "rragan@ebay.com"
+    }
+  ],
+  "main": "lib/dust.js",
+  "scripts": [
+    "lib/compiler.js",
+    "lib/dust.js",
+    "lib/parser.js",
+    "lib/server.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/linkedin/dustjs.git"
+  },
+  "keywords": ["templates", "views"],
+  "license": "MIT"
+}
