@@ -68,6 +68,9 @@
     "rhino-1_7r5-bin": "~1.0.1",
     "tmp": "~0.0.25"
   },
+  "browser": {
+    "./lib/server.js": "./lib/browser.js"
+  },
   "license": "MIT",
   "engine": {
     "node": ">=0.10"
