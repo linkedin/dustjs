@@ -206,7 +206,7 @@ module.exports = function(grunt) {
       },
       lib_test: {
         files: ['<%= jshint.libs.src %>', '<%= jasmine.options.specs %>'],
-        tasks: ['testPhantom']
+        tasks: ['testChrome']
       }
     },
     bump: {
@@ -287,7 +287,7 @@ module.exports = function(grunt) {
   //test tasks
   grunt.registerTask('testNode',       ['jasmine_nodejs:templates', 'jasmine_nodejs:core', 'jasmine_nodejs:cjs']);
   grunt.registerTask('testRhino',      ['build', 'execute:testRhino']);
-  grunt.registerTask('testPhantom',    ['build', 'jasmine:testProd']);
+  grunt.registerTask('testChrome',     ['build', 'jasmine:testProd']);
   grunt.registerTask('testCli',        ['jasmine_nodejs:dustc']);
   grunt.registerTask('test',           ['build', 'jasmine:testProd', 'testCli', 'testNode', 'execute:testRhino', 'jasmine:coverage']);
 
