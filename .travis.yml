@@ -1,11 +1,11 @@
 language: node_js
 node_js:
-  - "0.12"
-  - "5"
-  - "6"
+  - "8"
+  - "9"
+  - "10"
 matrix:
   include:
-    - node_js: "0.10"
+    - node_js: "11"
       env:
         - TEST="all"
         - CXX=g++-4.8
