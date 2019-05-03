@@ -1,0 +1,15 @@
+{
+  "groups": {
+    "default": {
+      "packages": [
+        "examples/amd/package.json",
+        "examples/basic-node/package.json",
+        "examples/commonjs/package.json",
+        "examples/streaming-hoffman/package.json",
+        "examples/streaming-incremental/package.json",
+        "examples/streaming/package.json",
+        "package.json"
+      ]
+    }
+  }
+}
