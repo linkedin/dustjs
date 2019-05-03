@@ -5,7 +5,7 @@
   "main": "app.js",
   "dependencies": {
     "express": "^4.12.3",
-    "hoffman": "^0.1.4",
+    "hoffman": "^0.2.2",
     "request": "^2.53.0"
   },
   "scripts": {
