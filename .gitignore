@@ -6,3 +6,5 @@ tmp
 examples/*/views/**/*.js
 examples/*/lib/*
 !examples/*/lib/main.js
+.vscode
+package-lock.json
