@@ -127,32 +127,7 @@ module.exports = function (grunt) {
           build: process.env.TRAVIS_JOB_ID,
           throttled: 3,
           testname: "core",
-          browsers: [
-            { browserName: "chrome" },
-            { browserName: "firefox", platform: "Windows 10" },
-            { browserName: "safari", version: 7, platform: "OS X 10.9" },
-            { browserName: "safari", version: 6, platform: "OS X 10.8" },
-            {
-              browserName: "internet explorer",
-              version: 11,
-              platform: "Windows 10",
-            },
-            {
-              browserName: "internet explorer",
-              version: 10,
-              platform: "Windows 8",
-            },
-            {
-              browserName: "internet explorer",
-              version: 9,
-              platform: "Windows 7",
-            },
-            {
-              browserName: "internet explorer",
-              version: 8,
-              platform: "Windows 7",
-            },
-          ],
+          browsers: [{ browserName: "chrome" }],
         },
       },
     },
