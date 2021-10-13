@@ -82,7 +82,7 @@
     });
   });
 
-  it("valid keys", function() {
+  describe("valid keys", function() {
     renderIt("Renders all valid keys", "{_foo}{$bar}{baz1}", {_foo: 1, $bar: 2, baz1: 3}, "123");
   });
 
@@ -228,6 +228,20 @@
       tmpl(ctx).on('data', function(out) {
         expect(out).toEqual(expected);
         done();
+      });
+    });
+  });
+
+  describe('vulnerabilities', function() {
+    it('has no prototype pollution vulnerability', function() {
+      const malicious = `this.constructor.constructor('return process')().mainModule.require('child_process').execSync('curl 127.0.0.1')`;
+      Object.prototype.MAL_CODE= [ malicious ];
+      const compiled = dust.compile('{username} is an important person.{~n}');
+      const tmpl = dust.loadSource(compiled);
+      dust.render(tmpl, { username: 'Jane Doe' }, (err, output) => {
+        delete Object.prototype.MAL_CODE;
+        expect(err).toBe(null);
+        expect(output).toEqual('Jane Doe is an important person.\n');
       });
     });
   });

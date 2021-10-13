@@ -1,6 +1,6 @@
 /*! dustjs-linkedin - v2.7.2
 * http://dustjs.com/
-* Copyright (c) 2015 Aleksander Williams; Released under the MIT License */
+* Copyright (c) 2021 Aleksander Williams; Released under the MIT License */
 (function (root, factory) {
   if (typeof define === 'function' && define.amd && define.amd.dust === true) {
     define('dust.core', [], factory);
@@ -70,6 +70,9 @@
       type = type || INFO;
       if (loggingLevels[type] >= loggingLevels[dust.debugLevel]) {
         log('[DUST:' + type + ']', message);
+        if (type === ERROR && dust.debugLevel === DEBUG && message instanceof Error && message.stack) {
+          log('[DUST:' + type + ']', message.stack);
+        }
       }
     };
 
@@ -248,14 +251,23 @@
   };
 
   /**
-   * Decide somewhat-naively if something is a Thenable.
+   * Decide somewhat-naively if something is a Thenable.  Matches Promises A+ Spec, section 1.2 “thenable” is an object or function that defines a then method."
    * @param elem {*} object to inspect
    * @return {Boolean} is `elem` a Thenable?
    */
   dust.isThenable = function(elem) {
-    return elem &&
-           typeof elem === 'object' &&
+    return elem &&  /* Beware: `typeof null` is `object` */
+           (typeof elem === 'object' || typeof elem === 'function') &&
            typeof elem.then === 'function';
+  };
+
+  /**
+   * Decide if an element is a function but not Thenable; it is prefereable to resolve a thenable function by its `.then` method.
+   * @param elem {*} target of inspection
+   * @return {Boolean} is `elem` a function without a `.then` property?
+   */
+  dust.isNonThenableFunction = function(elem) {
+    return typeof elem === 'function' && !dust.isThenable(elem);
   };
 
   /**
@@ -319,10 +331,15 @@
     this.options = options;
     this.blocks = blocks;
     this.templateName = templateName;
+    this._isContext = true;
   }
 
   dust.makeBase = dust.context = function(global, options) {
     return new Context(undefined, global, options);
+  };
+
+  dust.isContext = function(obj) {
+    return typeof obj === "object" && obj._isContext === true;
   };
 
   /**
@@ -338,7 +355,8 @@
   }
 
   Context.wrap = function(context, name) {
-    if (context instanceof Context) {
+    if (dust.isContext(context)) {
+      context.templateName = name;
       return context;
     }
     return new Context(context, {}, {}, null, name);
@@ -429,7 +447,7 @@
       }
     }
 
-    if (typeof ctx === 'function') {
+    if (dust.isNonThenableFunction(ctx)) {
       fn = function() {
         try {
           return ctx.apply(ctxThis, arguments);
@@ -710,6 +728,11 @@
     return this;
   };
 
+  /**
+   * Inserts a new chunk that can be used to asynchronously render or write to it
+   * @param callback {Function} The function that will be called with the new chunk
+   * @returns {Chunk} A copy of this chunk instance in order to further chain function calls on the chunk
+   */
   Chunk.prototype.map = function(callback) {
     var cursor = new Chunk(this.root, this.next, this.taps),
         branch = new Chunk(this.root, cursor, this.taps);
@@ -724,6 +747,35 @@
     }
     return cursor;
   };
+
+  /**
+   * Like Chunk#map but additionally resolves a thenable.  If the thenable succeeds the callback is invoked with
+   * a new chunk that can be used to asynchronously render or write to it, otherwise if the thenable is rejected 
+   * then the error body is rendered if available, an error is logged, and the callback is never invoked.
+   * @param {Chunk} The current chunk to insert a new chunk
+   * @param thenable {Thenable} the target thenable to await
+   * @param context {Context} context to use to render the deferred chunk
+   * @param bodies {Object} may optionally contain an "error" for when the thenable is rejected
+   * @param callback {Function} The function that will be called with the new chunk
+   * @returns {Chunk} A copy of this chunk instance in order to further chain function calls on the chunk
+   */
+  function mapThenable(chunk, thenable, context, bodies, callback) {
+    return chunk.map(function(asyncChunk) {
+      thenable.then(function(data) {
+        try {
+          callback(asyncChunk, data);
+        } catch (err) {
+          // handle errors the same way Chunk#map would.  This logic is only here since the thenable defers 
+          // logic such that the try / catch in Chunk#map would not capture it. 
+          dust.log(err, ERROR);
+          asyncChunk.setError(err);
+        }
+      }, function(err) {
+        dust.log('Unhandled promise rejection in `' + context.getTemplateName() + '`', INFO);
+        asyncChunk.renderError(err, context, bodies).end();
+      });
+    });
+  }
 
   Chunk.prototype.tap = function(tap) {
     var taps = this.taps;
@@ -746,7 +798,7 @@
   };
 
   Chunk.prototype.reference = function(elem, context, auto, filters) {
-    if (typeof elem === 'function') {
+    if (dust.isNonThenableFunction(elem)) {
       elem = elem.apply(context.current(), [this, context, null, {auto: auto, filters: filters}]);
       if (elem instanceof Chunk) {
         return elem;
@@ -771,7 +823,7 @@
         chunk = this,
         i, len, head;
 
-    if (typeof elem === 'function' && !dust.isTemplateFn(elem)) {
+    if (dust.isNonThenableFunction(elem) && !dust.isTemplateFn(elem)) {
       try {
         elem = elem.apply(context.current(), [this, context, bodies, params]);
       } catch(err) {
@@ -846,6 +898,12 @@
     var body = bodies.block,
         skip = bodies['else'];
 
+    if (dust.isThenable(elem)) {
+      return mapThenable(this, elem, context, bodies, function(chunk, data) {
+        chunk.exists(data, context, bodies).end();
+      });
+    }
+
     if (!dust.isEmpty(elem)) {
       if (body) {
         return body(this, context);
@@ -860,6 +918,12 @@
   Chunk.prototype.notexists = function(elem, context, bodies) {
     var body = bodies.block,
         skip = bodies['else'];
+
+    if (dust.isThenable(elem)) {
+      return mapThenable(this, elem, context, bodies, function(chunk, data) {
+        chunk.notexists(data, context, bodies).end();
+      });
+    }
 
     if (dust.isEmpty(elem)) {
       if (body) {
@@ -901,11 +965,9 @@
       // The eventual result of evaluating `elem` is a partial name
       // Load the partial after getting its name and end the async chunk
       return this.capture(elem, context, function(name, chunk) {
-        partialContext.templateName = name;
         load(name, chunk, partialContext).end();
       });
     } else {
-      partialContext.templateName = elem;
       return load(elem, this, partialContext);
     }
   };
@@ -957,25 +1019,29 @@
    * @return {Chunk}
    */
   Chunk.prototype.await = function(thenable, context, bodies, auto, filters) {
-    return this.map(function(chunk) {
-      thenable.then(function(data) {
-        if (bodies) {
-          chunk = chunk.section(data, context, bodies);
-        } else {
-          // Actually a reference. Self-closing sections don't render
-          chunk = chunk.reference(data, context, auto, filters);
-        }
-        chunk.end();
-      }, function(err) {
-        var errorBody = bodies && bodies.error;
-        if(errorBody) {
-          chunk.render(errorBody, context.push(err)).end();
-        } else {
-          dust.log('Unhandled promise rejection in `' + context.getTemplateName() + '`', INFO);
-          chunk.end();
-        }
-      });
+    return mapThenable(this, thenable, context, bodies, function(chunk, data) {
+      if (bodies) {
+        chunk.section(data, context, bodies).end();
+      } else {
+        // Actually a reference. Self-closing sections don't render
+        chunk.reference(data, context, auto, filters).end();
+      }
     });
+  };
+
+  /**
+   * Render an error body if available
+   * @param err {Error} error that occurred
+   * @param context {Context} context to use to render the error
+   * @param bodies {Object} may optionally contain an "error" which will be rendered
+   * @return {Chunk}
+   */
+  Chunk.prototype.renderError = function(err, context, bodies) {
+    var errorBody = bodies && bodies.error;
+    if (errorBody) {
+      return this.render(errorBody, context.push(err));
+    }
+    return this;
   };
 
   /**
@@ -989,8 +1055,7 @@
    * @return {Chunk}
    */
   Chunk.prototype.stream = function(stream, context, bodies, auto, filters) {
-    var body = bodies && bodies.block,
-        errorBody = bodies && bodies.error;
+    var body = bodies && bodies.block;
     return this.map(function(chunk) {
       var ended = false;
       stream
@@ -1012,11 +1077,8 @@
           if(ended) {
             return;
           }
-          if(errorBody) {
-            chunk.render(errorBody, context.push(err));
-          } else {
-            dust.log('Unhandled stream error in `' + context.getTemplateName() + '`', INFO);
-          }
+          chunk.renderError(err, context, bodies);
+          dust.log('Unhandled stream error in `' + context.getTemplateName() + '`', INFO);
           if(!ended) {
             ended = true;
             chunk.end();
@@ -1143,8 +1205,8 @@
 if (typeof define === "function" && define.amd && define.amd.dust === true) {
     define(["require", "dust.core"], function(require, dust) {
         dust.onLoad = function(name, cb) {
-            require([name], function() {
-                cb();
+            require([name], function(tmpl) {
+                cb(null, tmpl);
             });
         };
         return dust;

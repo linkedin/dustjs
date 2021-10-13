@@ -1,11 +1,11 @@
 language: node_js
 node_js:
-  - "0.12"
-  - "5"
-  - "6"
+  - "12"
+  - "14"
+  - "16"
 matrix:
   include:
-    - node_js: "0.10"
+    - node_js: "12"
       env:
         - TEST="all"
         - CXX=g++-4.8
@@ -14,7 +14,7 @@ notifications:
     - jchan@linkedin.com
     - skinast@linkedin.com
 before_install:
-  - npm install -g npm@3
+  - npm install -g npm@6
 before_script:
   - npm update
 sudo: false
