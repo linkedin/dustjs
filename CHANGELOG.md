@@ -1,5 +1,21 @@
 ## Change Log
 
+### v2.7.5 (2016/12/09 13:49 +00:00)
+- [#756](https://github.com/linkedin/dustjs/pull/756) Decrease security vulnerabilities by upgrading cli dependency (#754 #748) (@danactive)
+
+### v2.7.4 (2016/09/13 02:52 +00:00)
+- [#744](https://github.com/linkedin/dustjs/pull/744) Don't use instanceof to determine if a Context is a Context. Instead use a flag on the instance itself so it can survive object merges. (@sethkinast)
+
+### v2.6.3 (2016/07/26 18:03 +00:00)
+- [#736](https://github.com/linkedin/dustjs/pull/736) Prioritize resolution of .then (@brianmhunt)
+- [#734](https://github.com/linkedin/dustjs/pull/734) Bump deps (@sethkinast)
+- [#703](https://github.com/linkedin/dustjs/pull/703) Upgrade to peg.js 0.9 (@sethkinast)
+- [#705](https://github.com/linkedin/dustjs/pull/705) When rendering with a Context object, use the templateName provided by the template (@sethkinast)
+- [#701](https://github.com/linkedin/dustjs/pull/701) Fix stacktrace logging for IE8 (@sethkinast)
+- [#700](https://github.com/linkedin/dustjs/pull/700) At `DEBUG` loglevel, log the full stack trace on errors (@r1b)
+- [#690](https://github.com/linkedin/dustjs/pull/690) Update deps (@sethkinast)
+- [#689](https://github.com/linkedin/dustjs/pull/689) Make the AMD loader pass the template directly rather than communicating via the cache (@aredridel)
+
 ### v2.7.2 (2015/06/08 20:41 +00:00)
 - [#673](https://github.com/linkedin/dustjs/pull/673) Pass the current context to filters (@sethkinast)
 - [#676](https://github.com/linkedin/dustjs/pull/676) If a Promise is resolved with an array, iterate over it instead of rendering the whole array at once.  Closes #674 (@sethkinast)
