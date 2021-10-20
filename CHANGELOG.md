@@ -1,13 +1,18 @@
 ## Change Log
 
-### v2.7.5 (2016/12/09 13:49 +00:00)
+### v3.0.0 (2021/10/20 22:40 +00:00)
+- [#805](https://github.com/linkedin/dustjs/pull/805) fix: Security bug about prototype pollution (@sumeetkakkar)
+
+### list (2016/12/08 20:15 +00:00)
 - [#756](https://github.com/linkedin/dustjs/pull/756) Decrease security vulnerabilities by upgrading cli dependency (#754 #748) (@danactive)
+- [#753](https://github.com/linkedin/dustjs/pull/753) {?exists} and {^exists} resolve Promises and check if the result exists (#753) (@samuelms1)
 
 ### v2.7.4 (2016/09/13 02:52 +00:00)
 - [#744](https://github.com/linkedin/dustjs/pull/744) Don't use instanceof to determine if a Context is a Context. Instead use a flag on the instance itself so it can survive object merges. (@sethkinast)
 
 ### v2.6.3 (2016/07/26 18:03 +00:00)
 - [#736](https://github.com/linkedin/dustjs/pull/736) Prioritize resolution of .then (@brianmhunt)
+- [#735](https://github.com/linkedin/dustjs/pull/735) Prioritize .then on thenable functios (#735) (@brianmhunt)
 - [#734](https://github.com/linkedin/dustjs/pull/734) Bump deps (@sethkinast)
 - [#703](https://github.com/linkedin/dustjs/pull/703) Upgrade to peg.js 0.9 (@sethkinast)
 - [#705](https://github.com/linkedin/dustjs/pull/705) When rendering with a Context object, use the templateName provided by the template (@sethkinast)
@@ -167,7 +172,7 @@
 ### v2.2.2 (2013/11/28 00:10 +00:00)
 - [#368](https://github.com/linkedin/dustjs/pull/368) Add context.getTemplateName. This method now correctly returns the template name even for directly loaded templates being used as partials. For end users please use this api for getting the template name instead of ctx.templatename (@prashn64)
 - [#363](https://github.com/linkedin/dustjs/pull/363) Issue #340. Remove old optimization to avoid looking at arrays in get. (@rragan)
-- [#362](https://github.com/linkedin/dustjs/pull/362) remove node_modules directory (@wizardzloy)
+- [#362](https://github.com/linkedin/dustjs/pull/362) remove node_modules directory (@vovacodes)
 
 ### v2.2.0 (2013/11/08 18:42 +00:00)
 - [#360](https://github.com/linkedin/dustjs/pull/360) Use get for all Dust references (@smfoote)
@@ -210,7 +215,7 @@
 - [#263](https://github.com/linkedin/dustjs/pull/263) Add forward slash and unit tests for j filter (@prashn64)
 
 ### v1.2.3 (2013/04/11 17:47 +00:00)
-- [#253](https://github.com/linkedin/dustjs/pull/253) 2-3000% performance enhancement in IE7 (@jlkonsultab)
+- [#253](https://github.com/linkedin/dustjs/pull/253) 2-3000% performance enhancement in IE7 (@codeability-ab)
 - [#249](https://github.com/linkedin/dustjs/pull/249) Remove debugger in dust-full-1.2.1.js (@sethkinast)
 
 ### v1.2.2 (2013/03/19 20:07 +00:00)

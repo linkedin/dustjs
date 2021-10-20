@@ -1,4 +1,4 @@
-/*! dustjs-linkedin - v2.7.5
+/*! dustjs-linkedin - v3.0.0
 * http://dustjs.com/
 * Copyright (c) 2021 Aleksander Williams; Released under the MIT License */
 (function (root, factory) {
@@ -11,7 +11,7 @@
   }
 }(this, function() {
   var dust = {
-        "version": "2.7.5"
+        "version": "3.0.0"
       },
       NONE = 'NONE', ERROR = 'ERROR', WARN = 'WARN', INFO = 'INFO', DEBUG = 'DEBUG',
       EMPTY_FUNC = function() {};
@@ -750,7 +750,7 @@
 
   /**
    * Like Chunk#map but additionally resolves a thenable.  If the thenable succeeds the callback is invoked with
-   * a new chunk that can be used to asynchronously render or write to it, otherwise if the thenable is rejected 
+   * a new chunk that can be used to asynchronously render or write to it, otherwise if the thenable is rejected
    * then the error body is rendered if available, an error is logged, and the callback is never invoked.
    * @param {Chunk} The current chunk to insert a new chunk
    * @param thenable {Thenable} the target thenable to await
@@ -765,8 +765,8 @@
         try {
           callback(asyncChunk, data);
         } catch (err) {
-          // handle errors the same way Chunk#map would.  This logic is only here since the thenable defers 
-          // logic such that the try / catch in Chunk#map would not capture it. 
+          // handle errors the same way Chunk#map would.  This logic is only here since the thenable defers
+          // logic such that the try / catch in Chunk#map would not capture it.
           dust.log(err, ERROR);
           asyncChunk.setError(err);
         }
