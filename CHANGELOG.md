@@ -1,6 +1,9 @@
 ## Change Log
 
-### v3.0.0 (2021/10/20 22:40 +00:00)
+### v3.0.1 (2021/12/29 18:20 +00:00)
+- [#808](https://github.com/linkedin/dustjs/pull/808) Dependency update: chokidar (@sumeetkakkar)
+
+### v3.0.0 (2021/10/20 22:56 +00:00)
 - [#805](https://github.com/linkedin/dustjs/pull/805) fix: Security bug about prototype pollution (@sumeetkakkar)
 
 ### list (2016/12/08 20:15 +00:00)
