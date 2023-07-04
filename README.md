@@ -15,7 +15,6 @@ Asynchronous Javascript templating for the browser and server. This fork is main
 If you want to add the [Dust helpers](https://github.com/linkedin/dustjs-helpers) or [secure filters](https://github.com/linkedin/dustjs-filters-secure):
 
     npm install --save --production dustjs-helpers
-    npm install --save --production dustjs-filters-secure
 
 ### Bower
 
