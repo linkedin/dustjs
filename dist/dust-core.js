@@ -11,7 +11,7 @@
   }
 }(this, function() {
   var dust = {
-        "version": "3.0.0"
+        "version": "3.5.2"
       },
       NONE = 'NONE', ERROR = 'ERROR', WARN = 'WARN', INFO = 'INFO', DEBUG = 'DEBUG',
       EMPTY_FUNC = function() {};
